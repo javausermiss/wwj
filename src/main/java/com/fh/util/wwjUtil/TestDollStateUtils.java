@@ -10,18 +10,6 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 
 
-
-import net.sf.json.JSONObject;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-
-import java.io.IOException;
-
-
 public class TestDollStateUtils {
 
         public static void main(String[] a) {
