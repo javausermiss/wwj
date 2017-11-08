@@ -33,28 +33,28 @@ public class DollLoginController {
             Doll doll = dollService.getDollBySN(sn);
             String localCode = DollRegUtil.getCode(sn);
             if (!localCode.equals(code)) {
-                return RespStatus.fail("fail");//验证码不匹配 -1
+                return RespStatus.fail("fail");
             }
             if (doll == null) {
                 int a = dollService.regDollBySN(sn);
                 if (a != 1) {
-                    return RespStatus.fail("fail");//注册失败 -1
+                    return RespStatus.fail("fail");
                 }
                 Doll newDoll = dollService.getDollBySN(sn);
                 String dollId = newDoll.getDOLL_ID();
                 String sessionID = MyUUID.getUUID32();
                 RedisUtil.getRu().set("sessionID" + dollId, sessionID);
-                return RespStatus.successs().element("sessionID", sessionID).element("roomID", dollId);//返回 0
+                return RespStatus.successs().element("sessionID", sessionID).element("roomID", dollId);
             } else {
                 String dollId = doll.getDOLL_ID();
                 String sessionID = MyUUID.getUUID32();
                 RedisUtil.getRu().set("sessionID" + dollId, sessionID);
-                return RespStatus.successs().element("sessionID", sessionID).element("roomID", dollId);//返回 0
+                return RespStatus.successs().element("sessionID", sessionID).element("roomID", dollId);
 
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return RespStatus.exception();// 返回 -2
+            return RespStatus.exception();
         }
 
 
