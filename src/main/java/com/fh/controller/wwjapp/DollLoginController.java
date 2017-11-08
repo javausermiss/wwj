@@ -2,7 +2,7 @@ package com.fh.controller.wwjapp;
 
 import com.fh.entity.system.Doll;
 import com.fh.service.system.doll.DollManager;
-import com.fh.util.wwjUtil.RespStatus;
+import com.fh.util.wwjUtil.*;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,10 +11,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
+
 
 /**
- * 娃娃机接口登陆
+ * 网关注册效验接口
+ *
+ * @author wjy
+ * 2017/11/07
  */
 @Controller
 @RequestMapping(value = "/doll")
@@ -22,26 +25,40 @@ public class DollLoginController {
     @Resource(name = "dollService")
     private DollManager dollService;
 
-    @RequestMapping(value = "/login" ,method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public JSONObject dollLogin(@RequestParam("sn") String dollSN, HttpServletRequest httpServletRequest) {
+    public JSONObject dollLogin(@RequestParam("sn") String sn, @RequestParam("code") String code) {
+
         try {
-            Doll doll = dollService.getDollBySN(dollSN);//通过SN号查询娃娃机的信息
-            if (doll != null) {
-                String SessionID = httpServletRequest.getSession().getId();
-                String RoomID = doll.getROOM_ID();
-                return RespStatus.successs().element("SessionID", SessionID).element("RoomID", RoomID);
-            }else {
-                return RespStatus.fail("无此娃娃机！");
+            Doll doll = dollService.getDollBySN(sn);
+            String localCode = DollRegUtil.getCode(sn);
+            if (!localCode.equals(code)) {
+                return RespStatus.fail("fail");//验证码不匹配 -1
             }
-        }catch(Exception e) {
+            if (doll == null) {
+                int a = dollService.regDollBySN(sn);
+                if (a != 1) {
+                    return RespStatus.fail("fail");//注册失败 -1
+                }
+                Doll newDoll = dollService.getDollBySN(sn);
+                String dollId = newDoll.getDOLL_ID();
+                String sessionID = MyUUID.getUUID32();
+                RedisUtil.getRu().set("sessionID" + dollId, sessionID);
+                return RespStatus.successs().element("sessionID", sessionID).element("roomID", dollId);//返回 0
+            } else {
+                String dollId = doll.getDOLL_ID();
+                String sessionID = MyUUID.getUUID32();
+                RedisUtil.getRu().set("sessionID" + dollId, sessionID);
+                return RespStatus.successs().element("sessionID", sessionID).element("roomID", dollId);//返回 0
+
+            }
+        } catch (Exception e) {
             e.printStackTrace();
-            return RespStatus.exception();
+            return RespStatus.exception();// 返回 -2
         }
 
+
     }
-
-
 
 
 }
