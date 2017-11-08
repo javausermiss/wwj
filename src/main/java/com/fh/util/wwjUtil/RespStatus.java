@@ -44,6 +44,18 @@ public class RespStatus {
     }
 
     /**
+     * 娃娃机已注册，返回此错误信息
+     * @param return_msg
+     * @return
+     */
+    public static JSONObject failHave(String return_msg) {
+        JSONObject obj = new JSONObject();
+        obj.element("code", ReturnCode.FAIL_GATEWAY);
+        obj.element("msg", return_msg);
+        return obj;
+    }
+
+    /**
      * 失败
      *
      * @return

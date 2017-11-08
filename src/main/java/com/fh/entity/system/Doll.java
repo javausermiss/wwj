@@ -13,6 +13,14 @@ public class Doll {
     private Integer DOLL_GOLD;
     private String DOLL_URL;
 
+    public Doll() {
+
+    }
+
+    public Doll(String DOLL_ID, String DOLL_SN) {
+        this.DOLL_ID = DOLL_ID;
+        this.DOLL_SN = DOLL_SN;
+    }
 
     public String getDOLL_ID() {
         return DOLL_ID;

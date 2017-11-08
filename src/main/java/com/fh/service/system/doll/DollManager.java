@@ -86,6 +86,14 @@ public interface DollManager{
 	 */
 	public List<Doll>  getDollByStateOnLine()throws Exception;
 
+	/**
+	 * 通过SN注册娃娃机
+	 * @param sn
+	 * @return
+	 * @throws Exception
+	 */
+	public int regDollBySN(String sn)throws Exception;
+
 
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import com.fh.entity.system.AppUser;
+import com.fh.entity.system.Doll;
 import com.fh.util.DateUtil;
 import com.fh.util.wwjUtil.MyUUID;
 import org.springframework.stereotype.Service;
@@ -161,7 +162,7 @@ public class AppuserService implements AppuserManager{
 	 */
 
 	public AppUser getUserByID(String id) throws Exception {
-		return (AppUser) dao.findForObject("AppuserMapper.getUserByID",id);
+		return (AppUser) dao.findForObject("AppuserMapper.getUserByID",new Doll());
 	}
 	
 }

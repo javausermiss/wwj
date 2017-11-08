@@ -5,6 +5,10 @@ package com.fh.util.wwjUtil;
  */
 public class ReturnCode {
     /**
+     * 娃娃机已注册，返回 1
+     */
+    public static final int FAIL_GATEWAY = 1;
+    /**
      * 成功
      */
     public static final int SUCCESS = 0;

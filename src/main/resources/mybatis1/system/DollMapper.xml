@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="DollMapper">
-	
-	<!--表名 -->
-	<sql id="tableName">
+
+    <!--表名 -->
+    <sql id="tableName">
 		SYS_APP_DOLL
 	</sql>
-	
-	<!-- 字段 -->
-	<sql id="Field">
+
+    <!-- 字段 -->
+    <sql id="Field">
 		DOLL_SN,	
 		DOLL_NAME,	
 		ROOM_ID,	
@@ -17,9 +17,9 @@
 		DOLL_GOLD,
 		DOLL_URL
 	</sql>
-	
-	<!-- 字段值 -->
-	<sql id="FieldValue">
+
+    <!-- 字段值 -->
+    <sql id="FieldValue">
 		#{DOLL_SN},	
 		#{DOLL_NAME},	
 		#{ROOM_ID},	
@@ -28,137 +28,140 @@
 		#{DOLL_GOLD},
 		#{DOLL_URL}
 	</sql>
-	
-	<!-- 新增-->
-	<insert id="save" parameterType="pd">
-		insert into 
-	<include refid="tableName"></include>
-		(
-	<include refid="Field"></include>
-		) values (
-	<include refid="FieldValue"></include>
-		)
-	</insert>
-	
-	<!-- 删除-->
-	<delete id="delete" parameterType="pd">
-		delete from
-		<include refid="tableName"></include>
-		where 
-			DOLL_ID = #{DOLL_ID}
-	</delete>
-	
-	<!-- 修改 -->
-	<update id="edit" parameterType="pd">
-		update
-		<include refid="tableName"></include>
-		set 
-			DOLL_SN = #{DOLL_SN},
-			DOLL_NAME = #{DOLL_NAME},
-			ROOM_ID = #{ROOM_ID},
-			DOLL_GOLD = #{DOLL_GOLD},
-		    DOLL_URL = #{DOLL_URL},
-			DOLL_ID = DOLL_ID
-		where 
-		DOLL_ID = #{DOLL_ID}
-	</update>
-	
-	<!-- 通过ID获取数据 -->
-	<select id="findById" parameterType="pd" resultType="pd">
-		select 
-		<include refid="Field"></include>
-		from 
-		<include refid="tableName"></include>
-		where 
-			DOLL_ID = #{DOLL_ID}
-	</select>
-	
-	<!-- 列表 -->
-	<select id="dolllistPage" parameterType="page" resultType="pd">
-		select
-		<include refid="Field"></include>
-		from 
-		<include refid="tableName"></include>
-		where 1=1
-		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
-			and
-					DOLL_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-		</if>
-		<if test="pd.DOLL_STATE != null and pd.DOLL_STATE != ''"><!-- 状态检索 -->
-			and DOLL_STATE = #{pd.DOLL_STATE}
-		</if>
 
-	</select>
-	
-	<!-- 列表(全部) -->
-	<select id="listAlllistPage" parameterType="pd" resultType="pd">
-		select
-		<include refid="Field"></include>
-		from 
-		<include refid="tableName"></include>
-	</select>
-	
-	<!-- 批量删除 -->
-	<delete id="deleteAll" parameterType="String">
-		delete from
-		<include refid="tableName"></include>
-		where 
-			DOLL_ID in
-		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
-                 #{item}
-		</foreach>
-	</delete>
+    <!-- 新增-->
+    <insert id="save" parameterType="pd">
+        insert into
+        <include refid="tableName"></include>
+        (
+        <include refid="Field"></include>
+        ) values (
+        <include refid="FieldValue"></include>
+        )
+    </insert>
 
-	<!--根据娃娃机sn号获取娃娃机对象-->
-	<select id="getDollBySN" parameterType="String" resultType="com.fh.entity.system.Doll">
-		SELECT
-		<include refid="Field"/>
-		FROM
-		<include refid="tableName"/>
-		WHERE
-		DOLL_SN = #{DOLL_SN}
+    <!-- 删除-->
+    <delete id="delete" parameterType="pd">
+        delete from
+        <include refid="tableName"></include>
+        where
+        DOLL_ID = #{DOLL_ID}
+    </delete>
 
-	</select>
+    <!-- 修改 -->
+    <update id="edit" parameterType="pd">
+        update
+        <include refid="tableName"></include>
+        set
+        DOLL_NAME = #{DOLL_NAME},
+        DOLL_GOLD = #{DOLL_GOLD},
+        DOLL_URL = #{DOLL_URL}
+        where
+        DOLL_ID = #{DOLL_ID}
+    </update>
 
-	<!--根据娃娃机状态码获取娃娃机空闲中对象-->
-	<select id="getDollByState" parameterType="String" resultType="com.fh.entity.system.Doll">
-		SELECT
-		<include refid="Field"/>
-		FROM
-		<include refid="tableName"/>
-		WHERE
-		DOLL_STATE =#{DOLL_STATE}
+    <!-- 通过ID获取数据 -->
+    <select id="findById" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where
+        DOLL_ID = #{DOLL_ID}
+    </select>
 
-	</select>
+    <!-- 列表 -->
+    <select id="dolllistPage" parameterType="page" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where 1=1
+        <if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+            and
+            DOLL_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+        </if>
+        <if test="pd.DOLL_STATE != null and pd.DOLL_STATE != ''"><!-- 状态检索 -->
+            and DOLL_STATE = #{pd.DOLL_STATE}
+        </if>
 
-	<!--通过ID获取娃娃机信息-->
-	<select id="getDollByID" parameterType="String" resultType="com.fh.entity.system.Doll">
-		SELECT
-		<include refid="Field"/>
-		FROM
-		<include refid="tableName"/>
-		WHERE
-		DOLL_ID =#{DOLL_ID}
+    </select>
 
-	</select>
+    <!-- 列表(全部) -->
+    <select id="listAlllistPage" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+    </select>
 
-	<!--获取娃娃机在线信息-->
-	<select id="getDollByStateOnLine" parameterType="String" resultType="com.fh.entity.system.Doll">
-		SELECT
-		<include refid="Field"/>
-		FROM
-		<include refid="tableName"/>
-		WHERE
-		DOLL_State != '-1'
+    <!-- 批量删除 -->
+    <delete id="deleteAll" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where
+        DOLL_ID in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
 
-	</select>
+    <!--根据娃娃机sn号获取娃娃机对象-->
+    <select id="getDollBySN" parameterType="String" resultType="com.fh.entity.system.Doll">
+        SELECT
+        <include refid="Field"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE
+        DOLL_SN = #{DOLL_SN}
 
+    </select>
 
+    <!--根据娃娃机状态码获取娃娃机空闲中对象-->
+    <select id="getDollByState" parameterType="String" resultType="com.fh.entity.system.Doll">
+        SELECT
+        <include refid="Field"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE
+        DOLL_STATE =#{DOLL_STATE}
 
+    </select>
 
+    <!--通过ID获取娃娃机信息-->
+    <select id="getDollByID" parameterType="String" resultType="com.fh.entity.system.Doll">
+        SELECT
+        <include refid="Field"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE
+        DOLL_ID =#{DOLL_ID}
 
+    </select>
 
+    <!--获取娃娃机在线信息-->
+    <select id="getDollByStateOnLine" parameterType="String" resultType="com.fh.entity.system.Doll">
+        SELECT
+        <include refid="Field"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE
+        DOLL_State != '-1'
 
+    </select>
+    <!--通过SN号注册娃娃机-->
+    <insert id="regDollBySN" parameterType="String">
+        insert into
+        <include refid="tableName"></include>
+        (
+        DOLL_ID,
+        DOLL_SN
+        ) values (
+        #{DOLL_ID},
+        #{DOLL_SN}
+        )
+
+    </insert>
 
 
 </mapper>

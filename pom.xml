@@ -514,6 +514,14 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+        <!--娃娃机实体类jar包-->
+        <dependency>
+            <groupId>entity</groupId>
+            <artifactId>entity</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/pooh-server-entity-1.0.0.SNAPSHORT-sources.jar</systemPath>
+        </dependency>
 
 
         <!-- 易宝支付以下五个依赖-->

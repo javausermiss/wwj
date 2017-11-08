@@ -189,13 +189,39 @@ public class RedisUtil {
             jedis = pool.getResource();
             res = jedis.setex(key, seconds, value);
         } catch (Exception e) {
-
             e.printStackTrace();
         } finally {
             returnResource(jedis);
         }
         return res;
     }
+
+    /**
+     * <p>
+     * 设置key value并制定这个键值的有效期
+     * </p>
+     *
+     * @param key
+     * @param value
+     * @param seconds
+     *            单位:毫秒
+     * @return 成功返回OK 失败和异常返回null
+     */
+    public String setems(String key, String value, String NX ,String PX, Long seconds) {
+        Jedis jedis = null;
+        String res = null;
+        try {
+            jedis = pool.getResource();
+            res = jedis.set(key,value,NX,PX,seconds);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            returnResource(jedis);
+        }
+        return res;
+    }
+
+
 
     /**
      * <p>

@@ -5,6 +5,7 @@ import javax.annotation.Resource;
 
 import com.fh.entity.system.Doll;
 import com.fh.service.system.doll.DollManager;
+import com.fh.util.wwjUtil.MyUUID;
 import org.springframework.stereotype.Service;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
@@ -113,10 +114,25 @@ public class DollService implements DollManager {
 		return (Doll) dao.findForObject("DollMapper.getDollByState",id);
 	}
 
+	/**
+	 * 获取娃娃机在线的信息
+	 * @return
+	 * @throws Exception
+	 */
 	@Override
 	public List<Doll> getDollByStateOnLine() throws Exception {
 		return (List<Doll> ) dao.findForList("DollMapper.getDollByStateOnLine",null);
 	}
 
+	/**
+	 * 通过SN注册娃娃机
+	 * @param sn
+	 * @return
+	 * @throws Exception
+	 */
+	@Override
+	public int regDollBySN(String sn) throws Exception {
+		return (int)dao.save("DollMapper.regDollBySN",new Doll("room_"+MyUUID.getUUID(),sn));
+	}
 }
 

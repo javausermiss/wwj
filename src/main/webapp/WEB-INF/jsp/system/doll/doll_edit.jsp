@@ -31,18 +31,18 @@
 						<input type="hidden" name="DOLL_ID" id="DOLL_ID" value="${pd.DOLL_ID}"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
-							<tr>
+							<%--<tr>
 								<td style="width:100px;text-align: right;padding-top: 13px;">娃娃机机SN:</td>
 								<td><input type="text" name="DOLL_SN" id="DOLL_SN" value="${pd.DOLL_SN}" maxlength="50" placeholder="这里输入娃娃机SN" title="sn" style="width:98%;"/></td>
-							</tr>
+							</tr>--%>
 							<tr>
 								<td style="width:100px;text-align: right;padding-top: 13px;">娃娃机名字:</td>
 								<td><input type="text" name="DOLL_NAME" id="DOLL_NAME" value="${pd.DOLL_NAME}" maxlength="10" placeholder="这里输入娃娃机名字" title="DOLL_NAME" style="width:98%;"/></td>
 							</tr>
-							<tr>
+							<%--<tr>
 								<td style="width:100px;text-align: right;padding-top: 13px;">娃娃机房间号:</td>
 								<td><input type="text" name="ROOM_ID" id="ROOM_ID" value="${pd.ROOM_ID}" maxlength="10" placeholder="这里输入娃娃机房间号" title="ROOM_ID" style="width:98%;"/></td>
-							</tr>
+							</tr>--%>
 							<tr>
 								<td style="width:100px;text-align: right;padding-top: 13px;">娃娃机金币:</td>
 								<td><input type="text" name="DOLL_GOLD" id="DOLL_GOLD" value="${pd.DOLL_GOLD}" maxlength="10" placeholder="这里输入娃娃机花费金额" title="DOLL_GOLD" style="width:98%;"/></td>
@@ -82,7 +82,7 @@
 		$(top.hangge());
 		//保存
 		function save(){
-			if($("#DOLL_SN").val()==""){
+			/*if($("#DOLL_SN").val()==""){
 				$("#DOLL_SN").tips({
 					side:3,
 		            msg:'请输入sn',
@@ -91,7 +91,7 @@
 		        });
 				$("#DOLL_SN").focus();
 			return false;
-			}
+			}*/
             if($("#DOLL_GOLD").val()==""){
                 $("#DOLL_GOLD").tips({
                     side:3,
@@ -112,7 +112,7 @@
 				$("#DOLL_NAME").focus();
 			return false;
 			}
-			if($("#ROOM_ID").val()==""){
+			/*if($("#ROOM_ID").val()==""){
 				$("#ROOM_ID").tips({
 					side:3,
 		            msg:'请输入ROOM_ID',
@@ -121,7 +121,7 @@
 		        });
 				$("#ROOM_ID").focus();
 			return false;
-			}
+			}*/
 			$("#Form").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();
