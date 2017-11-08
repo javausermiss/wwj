@@ -1,4 +1,4 @@
-package com.fh.controller.gateway.gatewayuser;
+package com.fh.controller.gateway;
 
 import com.fh.controller.base.BaseController;
 import com.fh.service.system.appuser.AppuserManager;
