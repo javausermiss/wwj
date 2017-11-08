@@ -8,6 +8,11 @@ import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.doll.DollManager;
 import com.fh.util.wwjUtil.*;
 import net.sf.json.JSONObject;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.apache.ibatis.annotations.Param;
 import org.apache.poi.util.SystemOutLogger;
 import org.springframework.stereotype.Controller;
@@ -28,6 +33,9 @@ import java.util.*;
 @Controller
 @RequestMapping("/sms")
 public class AppLoginController {
+
+    private static final String AppKey = "081e953ec0c8413c9c218936062de1dc";
+    private static final String Secret = "d094f908d5048ae2c6aebc60e5039916";
 
 
     @Resource(name = "appuserService")
@@ -127,16 +135,19 @@ public class AppLoginController {
             RedisUtil.getRu().del("regSMSCode" + phone);
             AppUser appUser = appuserService.getUserByPhone(phone);
             if (appUser != null) {
+                String accessToken = "";
+                if (RedisUtil.getRu().exists("accessToken")) {
+                    accessToken = RedisUtil.getRu().get("accessToken");
+                } else {
+                    accessToken = CameraUtils.getAccessToken();
+                }
                 String uuid = appUser.getUSER_ID();
                 String token = TokenUtil.getToken(uuid);
                 List<Doll> dollOnLine = dollService.getDollByStateOnLine();
                 RedisUtil.getRu().setex("token" + phone, token, 86400);
-                String SessionID = httpServletRequest.getSession().getId();
-                httpServletRequest.getSession().setMaxInactiveInterval(30 * 60);
-                RedisUtil.getRu().setex("sessionID" + phone, SessionID, 86400);
                 Map<String, Object> map = new LinkedHashMap<>();
-                map.put("token", token);
-                map.put("sessionID", SessionID);
+                map.put("accessToken", accessToken);
+                map.put("sessionID", token);
                 map.put("appUser", getAppUserInfo(appUser.getUSER_ID()));
                 map.put("dollList", dollOnLine);
                 return RespStatus.successs().element("data", map);
@@ -146,50 +157,56 @@ public class AppLoginController {
                     return RespStatus.fail("注册失败");
                 }
                 AppUser appUserNew = appuserService.getUserByPhone(phone);
+                String accessToken = "";
+                if (RedisUtil.getRu().exists("accessToken")) {
+                    accessToken = RedisUtil.getRu().get("accessToken");
+                } else {
+                    accessToken = CameraUtils.getAccessToken();
+                }
                 String uuid = appUserNew.getUSER_ID();
                 String token = TokenUtil.getToken(uuid);
                 List<Doll> dollOnLine = dollService.getDollByStateOnLine();
                 RedisUtil.getRu().setex("token" + phone, token, 86400);
-                String SessionID = httpServletRequest.getSession().getId();
-                httpServletRequest.getSession().setMaxInactiveInterval(30 * 60);
-                System.out.println("sessionID" + SessionID);
-                RedisUtil.getRu().setex("sessionID" + phone, SessionID, 86400);
                 Map<String, Object> map = new LinkedHashMap<>();
-                map.put("token", token);
-                map.put("sessionID", SessionID);
+                map.put("accessToken", accessToken);
+                map.put("sessionID", token);
                 map.put("appUser", getAppUserInfo(appUserNew.getUSER_ID()));
                 map.put("dollList", dollOnLine);
                 return RespStatus.successs().element("data", map);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             return RespStatus.exception();
-
         }
 
     }
 
     /**
      * 手机号码直登获取娃娃机信息
+     *
      * @param aPhone
      * @return
      */
     @RequestMapping(value = "/getDoll")
     @ResponseBody
-    public JSONObject getDoll(@RequestParam("phone") String aPhone ,HttpServletRequest httpServletRequest) {
+    public JSONObject getDoll(@RequestParam("phone") String aPhone, HttpServletRequest httpServletRequest) {
         try {
             String phone = new String(Base64Util.decryptBASE64(aPhone));
             AppUser appUser = appuserService.getUserByPhone(phone);
             if (appUser != null) {
+                String accessToken = "";
+                if (RedisUtil.getRu().exists("accessToken")) {
+                    accessToken = RedisUtil.getRu().get("accessToken");
+                } else {
+                    accessToken = CameraUtils.getAccessToken();
+                }
                 String uuid = appUser.getUSER_ID();
                 String token = TokenUtil.getToken(uuid);
-                String SessionID = httpServletRequest.getSession().getId();
-                httpServletRequest.getSession().setMaxInactiveInterval(30 * 60);
+                RedisUtil.getRu().setex("token" + phone, token, 86400);
                 List<Doll> dollOnLine = dollService.getDollByStateOnLine();
                 Map<String, Object> map = new LinkedHashMap<>();
-                map.put("token", token);
-                map.put("sessionID", SessionID);
+                map.put("accessToken", accessToken);
+                map.put("sessionID", token);
                 map.put("appUser", null);
                 map.put("dollList", dollOnLine);
                 return RespStatus.successs().element("data", map);
