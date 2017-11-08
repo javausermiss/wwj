@@ -164,6 +164,7 @@ public class AppLoginController {
                 } else {
                     accessToken = CameraUtils.getAccessToken();
                 }
+
                 String uuid = appUserNew.getUSER_ID();
                 String token = TokenUtil.getToken(uuid);
                 List<Doll> dollOnLine = dollService.getDollByStateOnLine();

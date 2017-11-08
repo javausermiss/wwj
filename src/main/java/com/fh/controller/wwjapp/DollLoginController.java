@@ -46,6 +46,7 @@ public class DollLoginController {
                 RedisUtil.getRu().set("sessionID" + dollId, sessionID);
                 return RespStatus.successs().element("sessionID", sessionID).element("roomID", dollId);//返回 0
             } else {
+
                 String dollId = doll.getDOLL_ID();
                 String sessionID = MyUUID.getUUID32();
                 RedisUtil.getRu().set("sessionID" + dollId, sessionID);
