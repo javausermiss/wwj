@@ -155,6 +155,7 @@ public class AppLoginController {
                 int a1 = appuserService.reg(phone);
                 if (a1 != 1) {
                     return RespStatus.fail("注册失败");
+
                 }
                 AppUser appUserNew = appuserService.getUserByPhone(phone);
                 String accessToken = "";
