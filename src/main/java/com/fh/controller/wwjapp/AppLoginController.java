@@ -99,7 +99,7 @@ public class AppLoginController {
                 code += String.valueOf(r.nextInt(10));
             }
             SMSUtil.veriCode1(phone, code);
-            RedisUtil.getRu().setex("regSMSCode" + phone, code, 9000);
+            RedisUtil.getRu().setex("regSMSCode" + phone, code, 300);
             return RespStatus.successs();
         } catch (Exception e) {
             e.printStackTrace();
@@ -143,8 +143,8 @@ public class AppLoginController {
                 }
                 String uuid = appUser.getUSER_ID();
                 String token = TokenUtil.getToken(uuid);
-                List<Doll> dollOnLine = dollService.getDollByStateOnLine();
-                RedisUtil.getRu().setex("token" + phone, token, 86400);
+                List<Doll> dollOnLine = dollService.getDollBySessionOnLine();
+                RedisUtil.getRu().set("token" + phone, token);
                 Map<String, Object> map = new LinkedHashMap<>();
                 map.put("accessToken", accessToken);
                 map.put("sessionID", token);
@@ -167,8 +167,8 @@ public class AppLoginController {
 
                 String uuid = appUserNew.getUSER_ID();
                 String token = TokenUtil.getToken(uuid);
-                List<Doll> dollOnLine = dollService.getDollByStateOnLine();
-                RedisUtil.getRu().setex("token" + phone, token, 86400);
+                List<Doll> dollOnLine = dollService.getDollBySessionOnLine();
+                RedisUtil.getRu().set("token" + phone, token);
                 Map<String, Object> map = new LinkedHashMap<>();
                 map.put("accessToken", accessToken);
                 map.put("sessionID", token);
@@ -204,8 +204,8 @@ public class AppLoginController {
                 }
                 String uuid = appUser.getUSER_ID();
                 String token = TokenUtil.getToken(uuid);
-                RedisUtil.getRu().setex("token" + phone, token, 86400);
-                List<Doll> dollOnLine = dollService.getDollByStateOnLine();
+                RedisUtil.getRu().set("token" + phone, token);
+                List<Doll> dollOnLine = dollService.getDollBySessionOnLine();
                 Map<String, Object> map = new LinkedHashMap<>();
                 map.put("accessToken", accessToken);
                 map.put("sessionID", token);

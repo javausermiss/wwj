@@ -7,6 +7,10 @@
 		SYS_APP_DOLL
 	</sql>
 
+    <sql id="gatewayTableName">
+        TBL_GATEWAY_SESSION
+    </sql>
+
     <!-- 字段 -->
     <sql id="Field">
 		DOLL_SN,	
@@ -152,7 +156,7 @@
     <!--通过SN号注册娃娃机-->
     <insert id="regDollBySN" parameterType="String">
         insert into
-        <include refid="tableName"></include>
+        <include refid="tableName"/>
         (
         DOLL_ID,
         DOLL_SN
@@ -162,6 +166,23 @@
         )
 
     </insert>
+    <!--通过doll_id查询娃娃机-->
+    <select id="getDollBySessionOnLine" parameterType="String" resultType="Doll">
+        SELECT
+        d.DOLL_SN,
+        d.DOLL_NAME,
+        d.DOLL_ID,
+        d.DOLL_GOLD,
+        d.DOLL_URL
+        FROM
+        <include refid="tableName"/>
+        d
+        INNER JOIN
+        <include refid="gatewayTableName"/>
+        g
+        ON
+        d.Doll_ID = g.ROOM_ID
+    </select>
 
 
 </mapper>

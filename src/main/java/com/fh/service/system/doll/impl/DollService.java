@@ -134,5 +134,15 @@ public class DollService implements DollManager {
 	public int regDollBySN(String sn) throws Exception {
 		return (int)dao.save("DollMapper.regDollBySN",new Doll("room_"+MyUUID.getUUID(),sn));
 	}
+
+	/**
+	 * 通过网关表获取娃娃机在线的信息
+	 * @return
+	 * @throws Exception
+	 */
+	@Override
+	public List<Doll> getDollBySessionOnLine() throws Exception {
+		return (List<Doll>) dao.findForList("DollMapper.getDollBySessionOnLine",null);
+	}
 }
 

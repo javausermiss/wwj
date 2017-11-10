@@ -94,6 +94,12 @@ public interface DollManager{
 	 */
 	public int regDollBySN(String sn)throws Exception;
 
+	/**
+	 * 通过网关表获取娃娃机在线的信息
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Doll>  getDollBySessionOnLine()throws Exception;
 
 
 }

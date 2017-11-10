@@ -53,5 +53,10 @@ public interface GatewayManager{
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception;
 
+
+
+
+
+
 }
 
