@@ -248,7 +248,7 @@
     <orderEntry type="module-library">
       <library name="Maven: entity:entity:1.0">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/src/main/webapp/WEB-INF/lib/pooh-server-entity-1.0.0.SNAPSHORT-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/src/main/webapp/WEB-INF/lib/pooh-server-entity-1.0.0.SNA.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

@@ -7,8 +7,6 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>pooh-web</name>
     <url>http://maven.apache.org</url>
-
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javax-activation.version>1.1</javax-activation.version>
@@ -520,11 +518,10 @@
             <artifactId>entity</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/pooh-server-entity-1.0.0.SNAPSHORT-sources.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/pooh-server-entity-1.0.0.SNA.jar</systemPath>
         </dependency>
 
-
-        <!-- 易宝支付以下五个依赖-->
+ <!-- 易宝支付以下五个依赖-->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet</artifactId>
@@ -542,5 +539,16 @@
     </dependencies>
     <build>
         <finalName>pooh-web</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 </project>

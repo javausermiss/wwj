@@ -81,4 +81,10 @@ public class CameraUtils {
         return null;
     }
 
+    public static void main(String[] strings){
+
+
+
+    }
+
 }

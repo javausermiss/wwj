@@ -45,7 +45,9 @@
 					/weixin/** = anon
 					/sms/** = anon
 					/uploadFiles/DollImage/** = anon
+					/uploadFiles/appUserImage/** = anon
 					/doll/** = anon
+					/api/** = anon
 					/** = authc
 				</value>
 			</property>

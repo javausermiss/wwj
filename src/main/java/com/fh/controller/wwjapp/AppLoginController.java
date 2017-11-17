@@ -34,10 +34,6 @@ import java.util.*;
 @RequestMapping("/sms")
 public class AppLoginController {
 
-    private static final String AppKey = "081e953ec0c8413c9c218936062de1dc";
-    private static final String Secret = "d094f908d5048ae2c6aebc60e5039916";
-
-
     @Resource(name = "appuserService")
     private AppuserManager appuserService;
 
@@ -99,7 +95,7 @@ public class AppLoginController {
                 code += String.valueOf(r.nextInt(10));
             }
             SMSUtil.veriCode1(phone, code);
-            RedisUtil.getRu().setex("regSMSCode" + phone, code, 300);
+            RedisUtil.getRu().setex("SMSCode:" + phone, code, 300);
             return RespStatus.successs();
         } catch (Exception e) {
             e.printStackTrace();
@@ -128,11 +124,14 @@ public class AppLoginController {
             } else if (code == null || code.trim().length() <= 0) {
                 return RespStatus.fail("验证码不能为空！");
             }
-            String exitCode = RedisUtil.getRu().get("regSMSCode" + phone);
+            if (! RedisUtil.getRu().exists("SMSCode:"+ phone)){
+                return RespStatus.fail("此手机号尚未请求验证码！");
+            }
+            String exitCode = RedisUtil.getRu().get("SMSCode:" + phone);
             if (exitCode.equals(code) == false) {
                 return RespStatus.fail("验证码无效！");
             }
-            RedisUtil.getRu().del("regSMSCode" + phone);
+            RedisUtil.getRu().del("SMSCode:" + phone);
             AppUser appUser = appuserService.getUserByPhone(phone);
             if (appUser != null) {
                 String accessToken = "";
@@ -141,15 +140,14 @@ public class AppLoginController {
                 } else {
                     accessToken = CameraUtils.getAccessToken();
                 }
-                String uuid = appUser.getUSER_ID();
-                String token = TokenUtil.getToken(uuid);
-                List<Doll> dollOnLine = dollService.getDollBySessionOnLine();
-                RedisUtil.getRu().set("token" + phone, token);
+                String sessionID = MyUUID.createSessionId();
+                List<Doll> doll = dollService.getAllDoll();
+                RedisUtil.getRu().set("sessionId:appUser:"+phone, sessionID);
                 Map<String, Object> map = new LinkedHashMap<>();
                 map.put("accessToken", accessToken);
-                map.put("sessionID", token);
+                map.put("sessionID", sessionID);
                 map.put("appUser", getAppUserInfo(appUser.getUSER_ID()));
-                map.put("dollList", dollOnLine);
+                map.put("dollList", doll);
                 return RespStatus.successs().element("data", map);
             } else {
                 int a1 = appuserService.reg(phone);
@@ -164,16 +162,14 @@ public class AppLoginController {
                 } else {
                     accessToken = CameraUtils.getAccessToken();
                 }
-
-                String uuid = appUserNew.getUSER_ID();
-                String token = TokenUtil.getToken(uuid);
-                List<Doll> dollOnLine = dollService.getDollBySessionOnLine();
-                RedisUtil.getRu().set("token" + phone, token);
+                String sessionID = MyUUID.createSessionId();
+                List<Doll> doll = dollService.getAllDoll();
+                RedisUtil.getRu().set("sessionId:appUser:"+phone, sessionID );
                 Map<String, Object> map = new LinkedHashMap<>();
                 map.put("accessToken", accessToken);
-                map.put("sessionID", token);
+                map.put("sessionID", sessionID );
                 map.put("appUser", getAppUserInfo(appUserNew.getUSER_ID()));
-                map.put("dollList", dollOnLine);
+                map.put("dollList", doll);
                 return RespStatus.successs().element("data", map);
             }
         } catch (Exception e) {
@@ -191,7 +187,7 @@ public class AppLoginController {
      */
     @RequestMapping(value = "/getDoll")
     @ResponseBody
-    public JSONObject getDoll(@RequestParam("phone") String aPhone, HttpServletRequest httpServletRequest) {
+    public JSONObject getDoll(@RequestParam("phone") String aPhone) {
         try {
             String phone = new String(Base64Util.decryptBASE64(aPhone));
             AppUser appUser = appuserService.getUserByPhone(phone);
@@ -202,15 +198,14 @@ public class AppLoginController {
                 } else {
                     accessToken = CameraUtils.getAccessToken();
                 }
-                String uuid = appUser.getUSER_ID();
-                String token = TokenUtil.getToken(uuid);
-                RedisUtil.getRu().set("token" + phone, token);
-                List<Doll> dollOnLine = dollService.getDollBySessionOnLine();
+                String sessionID = MyUUID.createSessionId();
+                RedisUtil.getRu().set("sessionId:appUser:"+phone, sessionID);
+                List<Doll> doll = dollService.getAllDoll();
                 Map<String, Object> map = new LinkedHashMap<>();
                 map.put("accessToken", accessToken);
-                map.put("sessionID", token);
-                map.put("appUser", null);
-                map.put("dollList", dollOnLine);
+                map.put("sessionID", sessionID);
+                map.put("appUser", getAppUserInfo(appUser.getUSER_ID()));
+                map.put("dollList", doll);
                 return RespStatus.successs().element("data", map);
             } else {
                 return RespStatus.fail("此用户尚未注册！");
@@ -223,6 +218,7 @@ public class AppLoginController {
 
 
     }
+
 
 
     /**
@@ -256,6 +252,7 @@ public class AppLoginController {
 
         }
     }
+
 
 
 }

@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import com.fh.entity.system.AppUser;
 import com.fh.entity.system.Doll;
 import com.fh.util.DateUtil;
+import com.fh.util.wwjUtil.AppUserNameUtil;
 import com.fh.util.wwjUtil.MyUUID;
 import org.springframework.stereotype.Service;
 
@@ -140,7 +141,7 @@ public class AppuserService implements AppuserManager{
 	 */
 
 	public int reg(String phone) throws Exception {
-		return (int)dao.save("AppuserMapper.reg",new AppUser(MyUUID.getUUID(),null,phone,DateUtil.getTime()));
+		return (int)dao.save("AppuserMapper.reg",new AppUser(MyUUID.createSessionId(),phone,null,phone));
 	}
 
 	/**
@@ -162,8 +163,12 @@ public class AppuserService implements AppuserManager{
 	 */
 
 	public AppUser getUserByID(String id) throws Exception {
-		return (AppUser) dao.findForObject("AppuserMapper.getUserByID",new Doll());
+		return (AppUser) dao.findForObject("AppuserMapper.getUserByID",id);
 	}
-	
+
+	@Override
+	public int updateAppUserImage(AppUser appUser) throws Exception {
+		return (int)dao.update("AppuserMapper.updateAppUserImage",appUser);
+	}
 }
 

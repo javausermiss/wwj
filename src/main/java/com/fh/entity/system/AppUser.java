@@ -19,15 +19,33 @@ public class AppUser {
     private String NUMBER;
     private String EMAIL;
     private String CREATETIME;
+    private String IMAGE_URL;
+    private String ADDRESS;
 
     public AppUser() {
     }
 
-    public AppUser(String USER_ID, String ROLE_ID, String PHONE, String CREATETIME) {
+    public AppUser(String USER_ID, String PHONE, String CREATETIME, String USERNAME) {
         this.USER_ID = USER_ID;
-        this.ROLE_ID = ROLE_ID;
         this.PHONE = PHONE;
         this.CREATETIME = CREATETIME;
+        this.USERNAME = USERNAME;
+    }
+
+    public String getIMAGE_URL() {
+        return IMAGE_URL;
+    }
+
+    public void setIMAGE_URL(String IMAGE_URL) {
+        this.IMAGE_URL = IMAGE_URL;
+    }
+
+    public String getADDRESS() {
+        return ADDRESS;
+    }
+
+    public void setADDRESS(String ADDRESS) {
+        this.ADDRESS = ADDRESS;
     }
 
     public String getUSER_ID() {

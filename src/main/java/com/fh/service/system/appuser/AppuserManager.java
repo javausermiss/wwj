@@ -115,6 +115,9 @@ public interface AppuserManager {
 	 * @throws Exception
 	 */
 	public AppUser getUserByID(String id)throws Exception;
+
+
+	public int  updateAppUserImage(AppUser appUser)throws Exception;
 	
 }
 

@@ -80,11 +80,11 @@ public interface DollManager{
 	public Doll getDollByID(String id)throws Exception;
 
 	/**
-	 * 获取娃娃机在线的信息
+	 * 获取所有娃娃机的信息
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Doll>  getDollByStateOnLine()throws Exception;
+	public List<Doll>  getAllDoll()throws Exception;
 
 	/**
 	 * 通过SN注册娃娃机

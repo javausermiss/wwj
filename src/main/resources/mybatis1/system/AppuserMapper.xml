@@ -25,10 +25,12 @@
 		START_TIME,
 		END_TIME,
 		YEARS,
-		EMAIL,
-
+		IMAGE_URL,
 		NUMBER,
-		CREATETIME
+		CREATETIME,
+		ADDRESS,
+		EMAIL
+
 	</sql>
 	
 	<!-- 字段值 -->
@@ -48,10 +50,12 @@
 		#{START_TIME},
 		#{END_TIME},
 		#{YEARS},
-		#{EMAIL},
-
+		#{IMAGE_URL},
 		#{NUMBER},
-		#{CREATETIME}
+		#{CREATETIME},
+		#{ADDRESS},
+		#{EMAIL}
+
 	</sql>
 	
 	<!-- 角色表 -->
@@ -64,7 +68,7 @@
 		select 
 			USER_ID
 		from 
-		<include refid="tableName"></include>
+		<include refid="tableName"/>
 		where 
 			ROLE_ID = #{ROLE_ID}
 	</select>
@@ -83,12 +87,10 @@
 				u.EMAIL,
 				u.PHONE,
 				u.NUMBER,
-				r.ROLE_ID,
-				r.ROLE_NAME,
-				u.CREATETIME
-		from <include refid="tableName"></include> u, <include refid="roleTableName"></include> r 
-		where u.ROLE_ID = r.ROLE_ID 
-		and r.PARENT_ID = '2'
+				u.CREATETIME,
+				u.IMAGE_URL
+		from <include refid="tableName"/> u
+		where 1 = 1
 		<if test="pd.keywords != null and pd.keywords!= ''"><!-- 关键词检索 -->
 			and (
 				u.USERNAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
@@ -110,15 +112,15 @@
 		<if test="pd.STATUS != null and pd.STATUS != ''"><!-- 状态检索 -->
 			and u.STATUS=#{pd.STATUS} 
 		</if>
-		order by u.CREATETIME
+		order by u.USERNAME
 	</select>
 	
 	<!-- 通过USERNAME获取数据 -->
 	<select id="findByUsername" parameterType="pd" resultType="pd">
 		select 
-			<include refid="Field"></include>
+			<include refid="Field"/>
 		from 
-			<include refid="tableName"></include>
+			<include refid="tableName"/>
 		where 
 			USERNAME = #{USERNAME}
 	</select>
@@ -126,9 +128,9 @@
 	<!-- 通过邮箱获取数据 -->
 	<select id="findByEmail" parameterType="pd" resultType="pd">
 		select 
-			<include refid="Field"></include>
+			<include refid="Field"/>
 		from 
-			<include refid="tableName"></include>
+			<include refid="tableName"/>
 		where 
 			EMAIL = #{EMAIL}
 		<if test="USERNAME != null and USERNAME != ''">
@@ -139,9 +141,9 @@
 	<!-- 通过编号获取数据 -->
 	<select id="findByNumber" parameterType="pd" resultType="pd">
 		select 
-			<include refid="Field"></include>
+			<include refid="Field"/>
 		from 
-			<include refid="tableName"></include>
+			<include refid="tableName"/>
 		where 
 			NUMBER = #{NUMBER}
 		<if test="USERNAME != null and USERNAME != ''">
@@ -151,23 +153,23 @@
 	
 	<!-- 新增会员 -->
 	<insert id="saveU" parameterType="pd">
-		insert into <include refid="tableName"></include> (
-			<include refid="Field"></include>
+		insert into <include refid="tableName"/> (
+			<include refid="Field"/>
 		) values (
-			<include refid="FieldValue"></include>
+			<include refid="FieldValue"/>
 		)
 	</insert>
 	
 	<!-- 删除用户 -->
 	<delete id="deleteU" parameterType="pd">
-		delete from <include refid="tableName"></include> 
+		delete from <include refid="tableName"/>
 		where 
 			USER_ID = #{USER_ID}
 	</delete>
 	
 	<!-- 修改 -->
 	<update id="editU" parameterType="pd">
-		update  <include refid="tableName"></include>
+		update  <include refid="tableName"/>
 		set USERNAME				= #{USERNAME},
 			NAME					= #{NAME},
 			ROLE_ID 				= #{ROLE_ID},
@@ -191,9 +193,9 @@
 	<!-- 通过ID获取数据 -->
 	<select id="findByUiId" parameterType="pd" resultType="pd">
 		select 
-			<include refid="Field"></include>
+			<include refid="Field"/>
 		from 
-			<include refid="tableName"></include>
+			<include refid="tableName"/>
 		where 
 			USER_ID = #{USER_ID}
 	</select>
@@ -216,9 +218,9 @@
 				r.ROLE_ID,
 				r.ROLE_NAME,
 				u.CREATETIME
-		from <include refid="tableName"></include> u, <include refid="roleTableName"></include> r 
+		from <include refid="tableName"/> u, <include refid="roleTableName"/> r
 		where u.ROLE_ID = r.ROLE_ID 
-		and r.PARENT_ID = '2'
+		and /*r.PARENT_ID = '2'*/
 		<if test="keywords != null and keywords!= ''"><!-- 关键词检索 -->
 			and (
 				u.USERNAME LIKE CONCAT(CONCAT('%', #{keywords}),'%')
@@ -245,7 +247,7 @@
 	
 	<!-- 批量删除用户 -->
 	<delete id="deleteAllU" parameterType="String">
-		delete from <include refid="tableName"></include>
+		delete from <include refid="tableName"/>
 		where 
 			USER_ID in
   			 <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
@@ -258,23 +260,23 @@
 		select 
 			count(USER_ID) appUserCount
 		from 
-		<include refid="tableName"></include>
+		<include refid="tableName"/>
 	</select>
 	<!-- 通过手机号码获取用户信息 2017/10/12-->
 	<select id="getUserByPhone" parameterType="String" resultType="com.fh.entity.system.AppUser">
 		select
-		<include refid="Field"></include>
+		<include refid="Field"/>
 		from
-		<include refid="tableName"></include>
+		<include refid="tableName"/>
 		where
 		PHONE = #{PHONE}	
 	</select>
 	<!-- 通过id获取用户信息 2017/10/12-->
 	<select id="getUserByID" parameterType="String" resultType="com.fh.entity.system.AppUser">
 		select
-		<include refid="Field"></include>
+		<include refid="Field"/>
 		from
-		<include refid="tableName"></include>
+		<include refid="tableName"/>
 		where
 		USER_ID = #{USER_ID}
 	</select>
@@ -284,23 +286,35 @@
 		<include refid="tableName"/>
 		(
 		USER_ID,
-		ROLE_ID,
 		PHONE,
-		CREATETIME
+		CREATETIME,
+		USERNAME
 		) values (
 		#{USER_ID},
-		'8b70a7e67f2841e7aaba8a4d92e5ff6f',
 		#{PHONE},
-		now()
+		now(),
+		#{USERNAME}
 		)
 	</insert>
+   <!--更改App用户信息-->
+	<update  id="updateAppUser" parameterType="String" >
+		update
+		<include refid="tableName"/>
+		set
+		USERNAME = #{USERNAME},
+		ADDRESS  = #{ADDRESS}
+		WHERE
+		PHONE = #{PHONE}
+	</update>
+	<!--更改App头像信息-->
+	<update  id="updateAppUserImage" parameterType = "com.fh.entity.system.AppUser" >
+		update
+		<include refid="tableName"/>
+		set
+		IMAGE_URL = #{IMAGE_URL}
+		WHERE
+		PHONE = #{PHONE}
+	</update>
 
-
-
-
-
-
-
-	
 	
 </mapper>

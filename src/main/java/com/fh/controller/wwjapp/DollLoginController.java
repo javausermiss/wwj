@@ -42,13 +42,13 @@ public class DollLoginController {
                 }
                 Doll newDoll = dollService.getDollBySN(sn);
                 String dollId = newDoll.getDOLL_ID();
-                String sessionID = MyUUID.getUUID32();
-                RedisUtil.getRu().set("sessionID" + dollId, sessionID);
+                String sessionID = MyUUID.createSessionId();
+                RedisUtil.getRu().set("sessionId:gateway:"+ dollId, sessionID);
                 return RespStatus.successs().element("sessionID", sessionID).element("roomID", dollId);
             } else {
                 String dollId = doll.getDOLL_ID();
-                String sessionID = MyUUID.getUUID32();
-                RedisUtil.getRu().set("sessionID" + dollId, sessionID);
+                String sessionID = MyUUID.createSessionId();
+                RedisUtil.getRu().set("sessionId:gateway:" + dollId, sessionID);
                 return RespStatus.successs().element("sessionID", sessionID).element("roomID", dollId);
 
             }

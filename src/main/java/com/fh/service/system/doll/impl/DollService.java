@@ -115,13 +115,13 @@ public class DollService implements DollManager {
 	}
 
 	/**
-	 * 获取娃娃机在线的信息
+	 * 获取所有娃娃机的信息
 	 * @return
 	 * @throws Exception
 	 */
 	@Override
-	public List<Doll> getDollByStateOnLine() throws Exception {
-		return (List<Doll> ) dao.findForList("DollMapper.getDollByStateOnLine",null);
+	public List<Doll> getAllDoll() throws Exception {
+		return (List<Doll> ) dao.findForList("DollMapper.getAllDoll",null);
 	}
 
 	/**

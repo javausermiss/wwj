@@ -144,14 +144,11 @@
     </select>
 
     <!--获取娃娃机在线信息-->
-    <select id="getDollByStateOnLine" parameterType="String" resultType="com.fh.entity.system.Doll">
+    <select id="getAllDoll" parameterType="String" resultType="com.fh.entity.system.Doll">
         SELECT
         <include refid="Field"/>
         FROM
         <include refid="tableName"/>
-        WHERE
-        DOLL_State != '-1'
-
     </select>
     <!--通过SN号注册娃娃机-->
     <insert id="regDollBySN" parameterType="String">
