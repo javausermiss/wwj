@@ -51,13 +51,16 @@ public class DollRegUtil {
 
 
     public static void main(String[] a) {
-        String sn = "00:CA:2E:04:02:2B";
-        String[] s = sn.trim().split("\\:");
-        String newSn = s[2] + ":" + s[4] + ":" + s[0] + ":" + s[5] + ":" + s[1] + ":" + s[3];
-        String md5Two = MD5.md5(MD5.md5(newSn));
-        System.out.println(md5Two);
-        String code = md5Two.substring(md5Two.length() - 6, md5Two.length());
-        System.out.println(code);
+        String sn = "尹聪,13687632490,上海市虹口区欧阳路196号";
+        String[] s = sn.trim().split("\\,");
+        String newSn = s[0];
+        String s2 = s[1];
+        String s3 = s[2];
+
+        System.out.println(newSn);
+        System.out.println(s2);
+        System.out.println(s3);
+
 
     }
 

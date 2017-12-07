@@ -102,7 +102,8 @@
                                     <th class="center">娃娃机SN号</th>
                                     <th class="center">娃娃机名字</th>
                                     <th class="center">娃娃机房间号</th>
-                                    <%--<th class="center">娃娃机状态</th>--%>
+                                    <th class="center">娃娃金币</th>
+                                    <th class="center">娃娃可兑换金币</th>>
                                     <th class="center">操作</th>
                                 </tr>
                                 </thead>
@@ -124,6 +125,8 @@
                                                     <td class='center'>${var.DOLL_SN}</td>
                                                     <td class='center'>${var.DOLL_NAME}</td>
                                                     <td class='center'>${var.DOLL_ID}</td>
+                                                    <td class="center">${var.DOLL_GOLD}</td>
+                                                    <td class="center">${var.DOLL_CONVERSIONGOLD}</td>
                                                     <td style="width: 200px;" class='center'>
                                                         <c:if test="${var.DOLL_STATE == '1' }"><span
                                                                 class="label label-success arrowed">游戏</span></c:if>

@@ -39,14 +39,15 @@
 								<td style="width:100px;text-align: right;padding-top: 13px;">娃娃机名字:</td>
 								<td><input type="text" name="DOLL_NAME" id="DOLL_NAME" value="${pd.DOLL_NAME}" maxlength="10" placeholder="这里输入娃娃机名字" title="DOLL_NAME" style="width:98%;"/></td>
 							</tr>
-							<%--<tr>
-								<td style="width:100px;text-align: right;padding-top: 13px;">娃娃机房间号:</td>
-								<td><input type="text" name="ROOM_ID" id="ROOM_ID" value="${pd.ROOM_ID}" maxlength="10" placeholder="这里输入娃娃机房间号" title="ROOM_ID" style="width:98%;"/></td>
-							</tr>--%>
+
 							<tr>
 								<td style="width:100px;text-align: right;padding-top: 13px;">娃娃机金币:</td>
 								<td><input type="text" name="DOLL_GOLD" id="DOLL_GOLD" value="${pd.DOLL_GOLD}" maxlength="10" placeholder="这里输入娃娃机花费金额" title="DOLL_GOLD" style="width:98%;"/></td>
 							</tr>
+								<tr>
+									<td style="width:100px;text-align: right;padding-top: 13px;">可兑换金币数:</td>
+									<td><input type="text" name="DOLL_CONVERSIONGOLD" id="DOLL_CONVERSIONGOLD" value="${pd.DOLL_CONVERSIONGOLD}" maxlength="10" placeholder="这里输入可兑换金币数" title="DOLL_CONVERSIONGOLD" style="width:98%;"/></td>
+								</tr>
 							<tr>
 								<td style="text-align: center;" colspan="10">
 									<a class="btn btn-mini btn-primary" onclick="save();">保存</a>
@@ -95,7 +96,7 @@
             if($("#DOLL_GOLD").val()==""){
                 $("#DOLL_GOLD").tips({
                     side:3,
-                    msg:'请输入DOLL_GOLD',
+                    msg:'请输入金币数',
                     bg:'#AE81FF',
                     time:2
                 });
@@ -105,23 +106,23 @@
 			if($("#DOLL_NAME").val()==""){
 				$("#DOLL_NAME").tips({
 					side:3,
-		            msg:'请输入DOLL_NAME',
+		            msg:'请输入娃娃名字',
 		            bg:'#AE81FF',
 		            time:2
 		        });
 				$("#DOLL_NAME").focus();
 			return false;
 			}
-			/*if($("#ROOM_ID").val()==""){
-				$("#ROOM_ID").tips({
+			if($("#DOLL_CONVERSIONGOLD").val()==""){
+				$("#DOLL_CONVERSIONGOLD").tips({
 					side:3,
-		            msg:'请输入ROOM_ID',
+		            msg:'请输入兑换金币数',
 		            bg:'#AE81FF',
 		            time:2
 		        });
-				$("#ROOM_ID").focus();
+				$("#DOLL_CONVERSIONGOLD").focus();
 			return false;
-			}*/
+			}
 			$("#Form").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();

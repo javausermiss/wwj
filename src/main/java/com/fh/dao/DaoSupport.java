@@ -33,7 +33,7 @@ public class DaoSupport implements DAO {
 	/**
 	 * 批量更新
 	 * @param str
-	 * @param obj
+	 * @param objs
 	 * @return
 	 * @throws Exception
 	 */
@@ -55,7 +55,7 @@ public class DaoSupport implements DAO {
 	/**
 	 * 批量更新
 	 * @param str
-	 * @param obj
+	 * @param objs
 	 * @return
 	 * @throws Exception
 	 */
@@ -121,7 +121,7 @@ public class DaoSupport implements DAO {
 		return sqlSessionTemplate.selectList(str, obj);
 	}
 	
-	public Object findForMap(String str, Object obj, String key, String value) throws Exception {
+	public Object findForMap(String str, Object obj, String key) throws Exception {
 		return sqlSessionTemplate.selectMap(str, obj, key);
 	}
 	

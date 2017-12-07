@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sendGoodsMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+        TB_SEND_GOODS
+    </sql>
+    <sql id="Field">
+        ID,
+        PLAYBACK_ID,
+        USER_ID,
+        GOODS_NUM,
+        CNEE_NAME,
+        CNEE_ADDRESS,
+        CNEE_PHONE,
+        CREATE_TIME,
+        REMARK,
+        UPDATE_TIME
+    </sql>
+
+    <sql id="FieldValue">
+        #{ID},
+        #{PLAYBACK_ID},
+        #{USER_ID},
+        #{GOODS_NUM},
+        #{CNEE_NAME},
+        #{CNEE_ADDRESS},
+        #{CNEE_PHONE},
+        #{CREATE_TIME},
+        #{REMARK},
+        #{UPDATE_TIME}
+    </sql>
+
+    <insert id="regSendGoods" parameterType="com.fh.entity.system.SendGoods">
+        INSERT INTO
+        TB_SEND_GOODS
+        (
+        PLAYBACK_ID,
+        USER_ID,
+        GOODS_NUM,
+        CNEE_NAME,
+        CNEE_ADDRESS,
+        CNEE_PHONE,
+        CREATE_TIME,
+        REMARK
+        )
+        VALUES
+        (
+        #{PLAYBACK_ID},
+        #{USER_ID},
+        #{GOODS_NUM},
+        #{CNEE_NAME},
+        #{CNEE_ADDRESS},
+        #{CNEE_PHONE},
+        #{CREATE_TIME},
+        #{REMARK}
+        )
+    </insert>
+    <!--根据playId查询发货信息-->
+    <select id=" getSendGoodsByPlayId" parameterType="java.lang.Integer" resultType="com.fh.entity.system.SendGoods">
+        SELECT * FROM
+        TB_SEND_GOODS
+        WHERE
+        PLAYBACK_ID = #{PLAYBACK_ID}
+    </select>
+
+
+
+
+</mapper>

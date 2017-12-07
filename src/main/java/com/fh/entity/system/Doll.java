@@ -12,6 +12,9 @@ public class Doll {
     private String DOLL_SN;
     private Integer DOLL_GOLD;
     private String DOLL_URL;
+    private String CAMERA_NAME_01;
+    private String CAMERA_NAME_02;
+    private String DOLL_CONVERSIONGOLD;
 
     public Doll() {
 
@@ -20,6 +23,30 @@ public class Doll {
     public Doll(String DOLL_ID, String DOLL_SN) {
         this.DOLL_ID = DOLL_ID;
         this.DOLL_SN = DOLL_SN;
+    }
+
+    public String getDOLL_CONVERSIONGOLD() {
+        return DOLL_CONVERSIONGOLD;
+    }
+
+    public void setDOLL_CONVERSIONGOLD(String DOLL_CONVERSIONGOLD) {
+        this.DOLL_CONVERSIONGOLD = DOLL_CONVERSIONGOLD;
+    }
+
+    public String getCAMERA_NAME_01() {
+        return CAMERA_NAME_01;
+    }
+
+    public void setCAMERA_NAME_01(String CAMERA_NAME_01) {
+        this.CAMERA_NAME_01 = CAMERA_NAME_01;
+    }
+
+    public String getCAMERA_NAME_02() {
+        return CAMERA_NAME_02;
+    }
+
+    public void setCAMERA_NAME_02(String CAMERA_NAME_02) {
+        this.CAMERA_NAME_02 = CAMERA_NAME_02;
     }
 
     public String getDOLL_ID() {

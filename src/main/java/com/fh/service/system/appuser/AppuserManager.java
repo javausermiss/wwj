@@ -116,8 +116,83 @@ public interface AppuserManager {
 	 */
 	public AppUser getUserByID(String id)throws Exception;
 
-
+	/**
+	 * 更改用户头像
+	 * @param appUser
+	 * @return
+	 * @throws Exception
+	 */
 	public int  updateAppUserImage(AppUser appUser)throws Exception;
+
+	/**
+	 * 更改用户昵称
+	 * @param appUser
+	 * @return
+	 * @throws Exception
+	 */
+	public int updateAppUserName(AppUser appUser)throws Exception;
+
+	/**
+	 * 通过用户名查询用户信息
+	 * @param name
+	 * @return
+	 * @throws Exception
+	 */
+	public AppUser getAppUserByUserName(String name)throws Exception;
+
+
+	/**
+	 * 通过昵称来查询用户信息
+	 * @param nickName
+	 * @return
+	 * @throws Exception
+	 */
+	public AppUser getAppUserByNickName(String nickName)throws Exception;
+
+	/**
+	 *获取用户更新的的账户余额
+	 * @param appUser
+	 * @return
+	 * @throws Exception
+	 */
+	public int updateAppUserBalanceByPhone(AppUser appUser)throws Exception;
+
+	/**
+	 * rank榜单
+	 * @return
+	 * @throws Exception
+	 */
+	public List<AppUser> rankList()throws Exception;
+
+	/**
+	 * 更新用户的抓娃娃数量
+	 * @return
+	 * @throws Exception
+	 */
+	public int updateAppUserDollTotalByName(AppUser appUser)throws Exception;
+
+	/**
+	 * 根据ID修改余额
+	 * @param appUser
+	 * @return
+	 * @throws Exception
+	 */
+	public int updateAppUserBalanceById(AppUser appUser)throws Exception;
+
+	/**
+	 * 更改用户昵称
+	 * @param appUser
+	 * @return
+	 * @throws Exception
+	 */
+	public int updateAppUsernickName(AppUser appUser)throws Exception;
+
+	public int updateAppUserCnee(AppUser appUser)throws Exception;
+
+
+
+
+
 	
 }
 

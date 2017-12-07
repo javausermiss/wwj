@@ -21,15 +21,70 @@ public class AppUser {
     private String CREATETIME;
     private String IMAGE_URL;
     private String ADDRESS;
+    private String BALANCE;
+    private Integer DOLLTOTAL;
+    private String NICKNAME;
+    private String CNEE_NAME;
+    private String CNEE_ADDRESS;
+    private String CNEE_PHONE;
 
     public AppUser() {
     }
 
-    public AppUser(String USER_ID, String PHONE, String CREATETIME, String USERNAME) {
+    public AppUser(String USER_ID, String PHONE, String CREATETIME, String USERNAME, String NICKNAME) {
         this.USER_ID = USER_ID;
         this.PHONE = PHONE;
         this.CREATETIME = CREATETIME;
         this.USERNAME = USERNAME;
+        this.NICKNAME = NICKNAME;
+    }
+
+    public String getCNEE_NAME() {
+        return CNEE_NAME;
+    }
+
+    public void setCNEE_NAME(String CNEE_NAME) {
+        this.CNEE_NAME = CNEE_NAME;
+    }
+
+    public String getCNEE_ADDRESS() {
+        return CNEE_ADDRESS;
+    }
+
+    public void setCNEE_ADDRESS(String CNEE_ADDRESS) {
+        this.CNEE_ADDRESS = CNEE_ADDRESS;
+    }
+
+    public String getCNEE_PHONE() {
+        return CNEE_PHONE;
+    }
+
+    public void setCNEE_PHONE(String CNEE_PHONE) {
+        this.CNEE_PHONE = CNEE_PHONE;
+    }
+
+    public String getNICKNAME() {
+        return NICKNAME;
+    }
+
+    public void setNICKNAME(String NICKNAME) {
+        this.NICKNAME = NICKNAME;
+    }
+
+    public Integer getDOLLTOTAL() {
+        return DOLLTOTAL;
+    }
+
+    public void setDOLLTOTAL(Integer DOLLTOTAL) {
+        this.DOLLTOTAL = DOLLTOTAL;
+    }
+
+    public String getBALANCE() {
+        return BALANCE;
+    }
+
+    public void setBALANCE(String BALANCE) {
+        this.BALANCE = BALANCE;
     }
 
     public String getIMAGE_URL() {

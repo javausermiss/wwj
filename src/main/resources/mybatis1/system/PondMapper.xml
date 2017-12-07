@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PondMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+        TB_DOLL_GUESS_POND
+    </sql>
+
+
+    <sql id="Field">
+        POND_ID,
+        PLAYBACK_ID,
+        GUESS_Y,
+        GUESS_N,
+        GUESS_GOLD,
+        CREATE_DATE,
+        UPDATA_DATE
+
+    </sql>
+
+    <sql id="FieldValue">
+        #{POND_ID},
+        #{PLAYBACK_ID},
+        #{GUESS_Y},
+        #{GUESS_N},
+        #{GUESS_GOLD},
+        #{CREATE_DATE},
+        #{UPDATE_DATE}
+    </sql>
+
+    <insert id="regPond" parameterType="com.fh.entity.system.Pond">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        PLAYBACK_ID,
+        CREATE_DATE
+        )
+        VALUES
+        (
+        #{PLAYBACK_ID},
+        now()
+        )
+
+    </insert>
+
+    <update id="updatePondY" parameterType="com.fh.entity.system.Pond">
+        UPDATE
+        <include refid="tableName"/>
+        SET
+        GUESS_Y = #{GUESS_Y},
+        GUESS_GOLD = #{GUESS_GOLD},
+        UPDATE_DATE = now()
+        WHERE
+        POND_ID = #{POND_ID}
+    </update>
+
+    <update id="updatePondN" parameterType="com.fh.entity.system.Pond">
+        UPDATE
+        <include refid="tableName"/>
+        SET
+        GUESS_N = #{GUESS_N},
+        GUESS_GOLD = #{GUESS_GOLD},
+        UPDATE_DATE = now()
+        WHERE
+        POND_ID = #{POND_ID}
+    </update>
+
+    <select id="getPondByPlayId" parameterType="java.lang.Integer"
+    resultType="com.fh.entity.system.Pond">
+
+        SELECT * FROM
+        <include refid="tableName"/>
+        WHERE
+        PLAYBACK_ID = #{PLAYBACK_ID}
+
+    </select>
+
+    <select id="getPondById" parameterType="java.lang.Integer"
+            resultType="com.fh.entity.system.Pond">
+        SELECT * FROM
+        <include refid="tableName"/>
+        WHERE
+        POND_ID = #{POND_ID}
+    </select>
+
+
+</mapper>

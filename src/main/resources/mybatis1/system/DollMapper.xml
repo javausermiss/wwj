@@ -19,7 +19,10 @@
 		DOLL_STATE,	
 		DOLL_ID,
 		DOLL_GOLD,
-		DOLL_URL
+		DOLL_URL,
+		DOLL_CONVERSIONGOLD,
+		CAMERA_NAME_01,
+		CAMERA_NAME_02
 	</sql>
 
     <!-- 字段值 -->
@@ -30,7 +33,10 @@
 		#{DOLL_STATE},	
 		#{DOLL_ID},
 		#{DOLL_GOLD},
-		#{DOLL_URL}
+		#{DOLL_URL},
+		#{DOLL_CONVERSIONGOLD},
+		#{CAMERA_NAME_01},
+		#{CAMERA_NAME_02}
 	</sql>
 
     <!-- 新增-->
@@ -179,6 +185,16 @@
         g
         ON
         d.Doll_ID = g.ROOM_ID
+    </select>
+
+    <!-- 通过娃娃机的名字获取娃娃信息-->
+    <select id="getDollByDollName" parameterType="String" resultType="Doll">
+        SELECT
+        *
+        FROM
+        <include refid="tableName"/>
+        WHERE
+        DOLL_NAME = #{DOLL_NAME}
     </select>
 
 

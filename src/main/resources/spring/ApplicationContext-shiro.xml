@@ -48,6 +48,9 @@
 					/uploadFiles/appUserImage/** = anon
 					/doll/** = anon
 					/api/** = anon
+					/pay/** = anon
+					/rank/** = anon
+					/play/** = anon
 					/** = authc
 				</value>
 			</property>

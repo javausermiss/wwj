@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PlayBackMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+        SYS_APP_PLAYBACK
+    </sql>
+
+    <sql id="dollName">
+        SYS_APP_DOLL
+    </sql>
+
+    <sql id="userTable">
+        SYS_APP_USER
+    </sql>
+    <!--字段-->
+    <sql id="Field">
+        ID,
+        DOLLNAME,
+        USERNAME,
+        CREATETIME,
+        STATE,
+        DOLL_URL,
+        DOLLTOTAL,
+        POSTSTATE,
+        CONVERSIONGOLD,
+        COUNT,
+        UPDATETIME,
+        SENDGOODS,
+        GUESS_TIME
+    </sql>
+    <!--字段值-->
+    <sql id="FieldValue">
+        #{ID},
+        #{DOLLNAME},
+        #{USERNAME},
+        #{CREATETIME},
+        #{STATE},
+        #{DOLL_URL},
+        #{DOLLTOTAL},
+        #{POSTSTATE},
+        #{CONVERSIONGOLD},
+        #{COUNT},
+        #{UPDATETIME},
+        #{SENDGOODS},
+        #{GUESS_TIME}
+
+    </sql>
+    <!--增加记录信息-->
+    <insert id="regPlayBack">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        ID,
+        DOLLNAME,
+        USERNAME,
+        CREATETIME,
+        CONVERSIONGOLD,
+        STATE
+        )
+        VALUES
+        (
+        #{ID},
+        #{DOLLNAME},
+        #{USERNAME},
+        #{CREATETIME},
+        #{CONVERSIONGOLD},
+        #{STATE}
+        )
+    </insert>
+
+    <!--增加游戏记录信息 扣费接口用-->
+    <insert id="regPlaydx" parameterType="com.fh.entity.system.PlayBack" useGeneratedKeys="true"
+            keyProperty="ID">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        DOLLNAME,
+        USERNAME,
+        GUESS_TIME
+        )
+        VALUES
+        (
+        #{DOLLNAME},
+        #{USERNAME},
+        #{GUESS_TIME}
+        )
+    </insert>
+
+    <!--查询最近抓取成功的10条记录-->
+    <select id="getPlayRecord10" parameterType="String" resultType="com.fh.entity.system.PlayBack">
+        select
+        <include refid="Field"/>
+        from
+        <include refid="tableName"/>
+        p
+        inner join
+        <include refid="dollName"/>
+        d
+        on
+        p.DOLLNAME = d.DOLL_NAME
+        INNER JOIN
+        <include refid="userTable"/>
+        u
+        ON
+        u.USERNAME = P.USERNAME
+        where
+        p.USERNAME = #{USERNAME}
+        ORDER BY
+        p.CREATETIME
+        DESC
+        limit
+        0,10;
+    </select>
+
+    <!--查询全部的抓取记录-->
+    <select id="getPlayRecord" parameterType="String" resultType="com.fh.entity.system.PlayBack">
+        select * from
+        sys_app_playback p
+        inner join
+        sys_app_doll d
+        on
+        p.dollname = d.doll_name
+        inner join
+        sys_app_user u
+        on
+        p.username = u.nickname
+        where
+        p.username = #{USERNAME}
+        and
+        state = '1'
+        order by
+        p.createtime
+        desc
+    </select>
+
+    <!--查询最近抓取成功的10条记录-->
+    <select id="getPlayRecordPM1" parameterType="String" resultType="com.fh.entity.system.PlayBack">
+        select
+        <include refid="Field"/>
+        from
+        <include refid="tableName"/>
+        p
+        inner join
+        <include refid="dollName"/>
+        d
+        on
+        p.DOLLNAME = d.DOLL_NAME
+        WHERE
+        p.STATE = '1'
+        ORDER BY
+        p.CREATETIME
+        DESC
+        limit
+        0,10
+    </select>
+    <!--获取某个房间最新的视频列表-->
+    <select id="getPlayBackLatest" parameterType="String" resultType="com.fh.entity.system.PlayBack">
+        select
+        *
+        from
+        <include refid="tableName"/>
+        p
+        WHERE
+        p.DOLLNAME = #{DOLLNAME}
+        ORDER BY
+        p.GUESS_TIME
+        DESC
+        limit
+        1
+    </select>
+
+    <!--查询最近抓取成功的10条记录-->
+    <select id="getPlayRecordPM" parameterType="String" resultType="com.fh.entity.system.PlayBack">
+        select
+        *
+        from
+        <include refid="tableName"/>
+        p
+        WHERE
+        p.STATE = '1'
+        ORDER BY
+        p.CREATETIME
+        DESC
+        limit
+        0,10
+    </select>
+
+    <!--查询该用户全部抓取记录-->
+    <select id="getAllPlayRecord1" parameterType="String" resultType="com.fh.entity.system.PlayBack">
+        select
+        <include refid="Field"/>
+        FROM
+        <include refid="tableName"/>
+        p
+        INNER JOIN
+        <include refid="dollName"/>
+        d
+        ON
+        p.DOLLNAME = d.DOLL_NAME
+        WHERE
+        p.USERNAME = #{USERNAME}
+        ORDER BY
+        p.CREATETIME
+        DESC
+    </select>
+    <select id="getAllPlayRecord" parameterType="String" resultType="com.fh.entity.system.PlayBack">
+        select * from
+        sys_app_playback p
+        inner join
+        sys_app_doll d
+        on
+        p.dollname = d.doll_name
+        where
+        p.username = #{USERNAME}
+        order by
+        p.createtime
+        desc;
+    </select>
+    <!--查询用户分组抓到的娃娃的数量-->
+    <select id="getDollCount" parameterType="String" resultType="com.fh.entity.system.PlayBack">
+         select
+         CONVERSIONGOLD ,username,dollname,count(*) AS COUNT
+         from
+         sys_app_playback
+         where username = #{USERNAME}
+         and state = '1'
+         and dollname
+         in
+         (
+         select dollname
+         from sys_app_playback
+         where username = #{USERNAME}
+         group by dollname
+         )
+         group by
+         dollname
+    </select>
+
+    <select id="getPlayBackByUserName" parameterType="String" resultType="com.fh.entity.system.PlayBack">
+        SELECT
+        *
+        FROM
+        sys_app_playback
+        WHERE
+        username = #{username}
+    </select>
+
+    <update id="updatePlayBack" parameterType="com.fh.entity.system.PlayBack">
+        UPDATE
+        sys_app_playback
+        SET
+        STATE = #{STATE},
+        CREATETIME = #{CREATETIME},
+        CONVERSIONGOLD = #{CONVERSIONGOLD}
+        WHERE
+        ID = #{ID}
+    </update>
+    <update id="updatePostState" parameterType="com.fh.entity.system.PlayBack">
+        UPDATE
+        sys_app_playback
+        SET
+        SENDGOODS = #{SENDGOODS},
+        POSTSTATE = #{POSTSTATE}
+        WHERE
+        ID = #{ID}
+
+    </update>
+
+    <update id="updatePlayBackSG" parameterType="com.fh.entity.system.PlayBack">
+        UPDATE
+        sys_app_playback
+        SET
+        SeNDGOODS = #{SeNDGOODS}
+        WHERE
+        ID = #{ID}
+    </update>
+
+
+    <!-- 通过id获取游戏列表信息 -->
+    <select id="getPlayBackById" parameterType="java.lang.Integer" resultType="com.fh.entity.system.PlayBack">
+        select
+        *
+        from
+        sys_app_playback
+        WHERE
+        id = #{id}
+    </select>
+
+    <select id="getPlayBackSGById" parameterType="java.lang.Integer" resultType="com.fh.entity.system.PlayBack">
+        select * from
+        sys_app_playback p
+        inner join
+        sys_app_doll d
+        on
+        p.dollname = d.doll_name
+        where
+        p.ID = #{ID}
+    </select>
+
+
+
+
+</mapper>

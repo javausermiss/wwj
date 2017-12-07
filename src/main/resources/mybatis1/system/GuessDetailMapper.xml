@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="GuessDetailMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+        TB_DOLL_GUESS_DETAIL
+    </sql>
+    <sql id="Field">
+        GUESS_ID,
+        APP_USER_ID,
+        DOLL_ID,
+        GUESS_TYPE,
+        GUESS_KEY,
+        GUESS_GOLD,
+        CREATE_DATE,
+        PLAYBACK_ID,
+        SETTLEMENT_FLAG,
+        SETTLEMENT_DATE
+    </sql>
+    <sql id="FieldValue">
+        #{GUESS_ID},
+        #{APP_USER_ID},
+        #{DOLL_ID},
+        #{GUESS_TYPE},
+        #{GUESS_KEY},
+        #{GUESS_GOLD},
+        #{CREATE_DATE},
+        #{PLAYBACK_ID},
+        #{SETTLEMENT_FLAG},
+        #{SETTLEMENT_DATE}
+    </sql>
+    
+    
+    <insert id="regGuessDetail" parameterType="com.fh.entity.system.GuessDetail">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        APP_USER_ID,
+        DOLL_ID,
+        GUESS_KEY,
+        GUESS_GOLD,
+        CREATE_DATE,
+        PLAYBACK_ID
+        )
+        VALUES (
+        #{APP_USER_ID},
+        #{DOLL_ID},
+        #{GUESS_KEY},
+        #{GUESS_GOLD},
+        now(),
+        #{PLAYBACK_ID}
+        )
+    </insert>
+
+    <update id="updateGuessDetail" parameterType="com.fh.entity.system.GuessDetail">
+        UPDATE
+        <include refid="tableName"/>
+        SET
+        SETTLEMENT_FLAG = #{SETTLEMENT_FLAG},
+        SETTLEMENT_DATE = now()
+        WHERE
+        GUESS_ID = #{GUESS_ID}
+    </update>
+
+    <select id="getFailer" parameterType="com.fh.entity.system.GuessDetail" resultType="com.fh.entity.system.GuessDetail">
+       select
+       *
+       from
+       tb_doll_guess_detail d
+       where
+       d.GUESS_KEY  = #{GUESS_KEY}
+       AND
+       d.PLAYBACK_ID = #{PLAYBACK_ID}
+
+    </select>
+
+    <select id="getWinner" parameterType="com.fh.entity.system.GuessDetail" resultType="com.fh.entity.system.GuessDetail">
+       select
+       *
+       from
+       tb_doll_guess_detail d
+       where
+       d.GUESS_KEY  = #{GUESS_KEY}
+       AND
+       d.PLAYBACK_ID = #{PLAYBACK_ID}
+    </select>
+
+
+
+
+
+
+</mapper>

@@ -1,9 +1,11 @@
 package com.fh.service.system.doll.impl;
 
 import java.util.List;
+import java.util.Map;
 import javax.annotation.Resource;
 
 import com.fh.entity.system.Doll;
+import com.fh.entity.system.PlayBack;
 import com.fh.service.system.doll.DollManager;
 import com.fh.util.wwjUtil.MyUUID;
 import org.springframework.stereotype.Service;
@@ -144,5 +146,12 @@ public class DollService implements DollManager {
 	public List<Doll> getDollBySessionOnLine() throws Exception {
 		return (List<Doll>) dao.findForList("DollMapper.getDollBySessionOnLine",null);
 	}
+
+	@Override
+	public Doll getDollByDollName(String dollName) throws Exception {
+		return (Doll)dao.findForObject("DollMapper.getDollByDollName",dollName);
+	}
+
+
 }
 

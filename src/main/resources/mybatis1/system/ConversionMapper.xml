@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ConversionMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+    TB_APPUSER_CONVERSION
+    </sql>
+    <!-- 字段 -->
+    <sql id="Field">
+        ID,
+        DOLLNAME,
+        CREATETIME,
+        NUMBER,
+        USERID,
+        PLAYID,
+        CONMONEY
+    </sql>
+    <sql id="FieldValue">
+        #{ID},
+        #{DOLLNAME},
+        #{CREATETIME},
+        #{NUMBER},
+        #{USERID},
+        #{PLAYID},
+        #{CONMONEY}
+    </sql>
+
+
+    <insert id="reg" parameterType="com.fh.entity.system.Conversion">
+        INSERT INTO
+        TB_APPUSER_CONVERSION
+        (
+            DOLLNAME,
+            CREATETIME,
+            NUMBER,
+            USERID,
+            PLAYID,
+            CONMONEY
+        
+        )
+        VALUES (
+        
+            #{DOLLNAME},
+            #{CREATETIME},
+            #{NUMBER},
+            #{USERID},
+            #{PLAYID},
+            #{CONMONEY}
+        
+        )
+
+    </insert>
+    
+    <select id="getList" parameterType="com.fh.entity.system.Conversion" resultType="com.fh.entity.system.Conversion">
+        SELECT
+        *
+        FROM
+        TB_APPUSER_CONVERSION
+        WHERE
+        USERID = #{USERID}
+        ORDER
+        BY
+        CREATETIME
+        DESC
+
+    </select>
+
+
+</mapper>

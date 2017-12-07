@@ -16,8 +16,8 @@ import java.io.IOException;
  */
 
 public class CameraUtils {
-    private static final String AppKey = "081e953ec0c8413c9c218936062de1dc";
-    private static final String Secret = "d094f908d5048ae2c6aebc60e5039916";
+    private static final String AppKey = "06fb051f38cb43d8b3d18397e006d13d";
+    private static final String Secret = "9b544119a2a9dbfd8adf4f263f0dd565";
 
     public static String getAccessToken() {
         String accessToken = "";

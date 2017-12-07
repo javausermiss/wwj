@@ -1,8 +1,11 @@
 package com.fh.service.system.doll;
 
 import java.util.List;
+import java.util.Map;
+
 import com.fh.entity.Page;
 import com.fh.entity.system.Doll;
+import com.fh.entity.system.PlayBack;
 import com.fh.util.PageData;
 
 /** 
@@ -100,6 +103,16 @@ public interface DollManager{
 	 * @throws Exception
 	 */
 	public List<Doll>  getDollBySessionOnLine()throws Exception;
+
+	/**
+	 * 通过娃娃机的名字获取娃娃机信息
+	 * @param dollName
+	 * @return
+	 * @throws Exception
+	 */
+	public Doll getDollByDollName(String dollName)throws Exception;
+
+
 
 
 }

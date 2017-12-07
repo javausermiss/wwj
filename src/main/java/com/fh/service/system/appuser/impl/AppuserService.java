@@ -141,7 +141,7 @@ public class AppuserService implements AppuserManager{
 	 */
 
 	public int reg(String phone) throws Exception {
-		return (int)dao.save("AppuserMapper.reg",new AppUser(MyUUID.createSessionId(),phone,null,phone));
+		return (int)dao.save("AppuserMapper.reg",new AppUser(MyUUID.createSessionId(),phone,null,phone,phone));
 	}
 
 	/**
@@ -166,9 +166,94 @@ public class AppuserService implements AppuserManager{
 		return (AppUser) dao.findForObject("AppuserMapper.getUserByID",id);
 	}
 
+	/**
+	 * 更改用户头像
+	 * @param appUser
+	 * @return
+	 * @throws Exception
+	 */
 	@Override
 	public int updateAppUserImage(AppUser appUser) throws Exception {
 		return (int)dao.update("AppuserMapper.updateAppUserImage",appUser);
+	}
+
+	/**
+	 * 更改用户昵称
+	 * @param appUser
+	 * @return
+	 * @throws Exception
+	 */
+	@Override
+	public int updateAppUserName(AppUser appUser) throws Exception {
+		return (int)dao.update("AppuserMapper.updateAppUserName",appUser);
+	}
+
+	/**
+	 * 根据用户名获取用户信息
+	 * @param name
+	 * @return
+	 * @throws Exception
+	 */
+	@Override
+	public AppUser getAppUserByUserName(String name) throws Exception {
+		return (AppUser) dao.findForObject("AppuserMapper.getAppUserByNickName",name);
+	}
+
+	/**
+	 * 根据昵称获取用户信息
+	 * @param nickName
+	 * @return
+	 * @throws Exception
+	 */
+	@Override
+	public AppUser getAppUserByNickName(String nickName) throws Exception {
+		return (AppUser)dao.findForObject("AppuserMapper.getAppUserByNickName",nickName);
+	}
+
+	/**
+	 * 获取用户更新的的账户余额
+	 * @param appUser
+	 * @return
+	 * @throws Exception
+	 */
+	@Override
+	public int updateAppUserBalanceByPhone(AppUser appUser) throws Exception {
+		return (int) dao.update("AppuserMapper.updateAppUserBalanceByPhone",appUser);
+	}
+
+	/**
+	 * rank榜单
+	 * @return
+	 * @throws Exception
+	 */
+	@Override
+	public List<AppUser> rankList() throws Exception {
+		return (List<AppUser>) dao.findForList("AppuserMapper.rankList",null);
+	}
+
+	/**
+	 * 更新用户的抓娃娃数量
+	 * @return
+	 * @throws Exception
+	 */
+	@Override
+	public int updateAppUserDollTotalByName(AppUser appUser) throws Exception {
+		return (int) dao.update("AppuserMapper.updateAppUserDollTotalByName",appUser);
+	}
+
+	@Override
+	public int updateAppUserBalanceById(AppUser appUser) throws Exception {
+		return (int)dao.update("AppuserMapper.updateAppUserBalanceById",appUser);
+	}
+
+	@Override
+	public int updateAppUsernickName(AppUser appUser) throws Exception {
+		return (int) dao.update("AppuserMapper.updateNickName",appUser);
+	}
+
+	@Override
+	public int updateAppUserCnee(AppUser appUser) throws Exception {
+		return (int) dao.update("AppuserMapper.updateAppUserCnee",appUser);
 	}
 }
 

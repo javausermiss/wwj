@@ -8,13 +8,8 @@ import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.doll.DollManager;
 import com.fh.util.wwjUtil.*;
 import net.sf.json.JSONObject;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.apache.ibatis.annotations.Param;
-import org.apache.poi.util.SystemOutLogger;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
+
 import java.util.*;
 
 /**
@@ -79,7 +74,7 @@ public class AppLoginController {
      */
     @RequestMapping(value = "/getRegSMSCode", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public JSONObject getRegSMSCode(@RequestParam("phone") String aPhone, HttpServletRequest httpServletRequest) {
+    public JSONObject getRegSMSCode(@RequestParam("phone") String aPhone) {
         try {
             String phone = new String(Base64Util.decryptBASE64(aPhone));
             if (phone == null || phone.trim().length() <= 0) {
@@ -112,7 +107,7 @@ public class AppLoginController {
      */
     @RequestMapping(value = "/getSMSCodeLogin", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public JSONObject getSMSCodeLogin(@RequestParam("phone") String aPhone, @RequestParam("code") String aCode, HttpServletRequest httpServletRequest) {
+    public JSONObject getSMSCodeLogin(@RequestParam("phone") String aPhone, @RequestParam("code") String aCode) {
 
         try {
             String phone = new String(Base64Util.decryptBASE64(aPhone));
@@ -124,11 +119,11 @@ public class AppLoginController {
             } else if (code == null || code.trim().length() <= 0) {
                 return RespStatus.fail("验证码不能为空！");
             }
-            if (! RedisUtil.getRu().exists("SMSCode:"+ phone)){
+            if (!RedisUtil.getRu().exists("SMSCode:" + phone)) {
                 return RespStatus.fail("此手机号尚未请求验证码！");
             }
             String exitCode = RedisUtil.getRu().get("SMSCode:" + phone);
-            if (exitCode.equals(code) == false) {
+            if (!exitCode.equals(code)) {
                 return RespStatus.fail("验证码无效！");
             }
             RedisUtil.getRu().del("SMSCode:" + phone);
@@ -140,9 +135,10 @@ public class AppLoginController {
                 } else {
                     accessToken = CameraUtils.getAccessToken();
                 }
+
                 String sessionID = MyUUID.createSessionId();
                 List<Doll> doll = dollService.getAllDoll();
-                RedisUtil.getRu().set("sessionId:appUser:"+phone, sessionID);
+                RedisUtil.getRu().set("sessionId:appUser:" + phone, sessionID);
                 Map<String, Object> map = new LinkedHashMap<>();
                 map.put("accessToken", accessToken);
                 map.put("sessionID", sessionID);
@@ -164,10 +160,10 @@ public class AppLoginController {
                 }
                 String sessionID = MyUUID.createSessionId();
                 List<Doll> doll = dollService.getAllDoll();
-                RedisUtil.getRu().set("sessionId:appUser:"+phone, sessionID );
+                RedisUtil.getRu().set("sessionId:appUser:" + phone, sessionID);
                 Map<String, Object> map = new LinkedHashMap<>();
                 map.put("accessToken", accessToken);
-                map.put("sessionID", sessionID );
+                map.put("sessionID", sessionID);
                 map.put("appUser", getAppUserInfo(appUserNew.getUSER_ID()));
                 map.put("dollList", doll);
                 return RespStatus.successs().element("data", map);
@@ -185,7 +181,7 @@ public class AppLoginController {
      * @param aPhone
      * @return
      */
-    @RequestMapping(value = "/getDoll")
+    @RequestMapping(value = "/getDoll" ,method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject getDoll(@RequestParam("phone") String aPhone) {
         try {
@@ -199,7 +195,7 @@ public class AppLoginController {
                     accessToken = CameraUtils.getAccessToken();
                 }
                 String sessionID = MyUUID.createSessionId();
-                RedisUtil.getRu().set("sessionId:appUser:"+phone, sessionID);
+                RedisUtil.getRu().set("sessionId:appUser:" + phone, sessionID);
                 List<Doll> doll = dollService.getAllDoll();
                 Map<String, Object> map = new LinkedHashMap<>();
                 map.put("accessToken", accessToken);
@@ -216,9 +212,36 @@ public class AppLoginController {
 
         }
 
-
     }
 
+    /**
+     * 访客模式，只允许查看房间
+     * @return
+     */
+
+    @RequestMapping(value = "/autoLogin",method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public JSONObject autoLogin (){
+        try{
+            String accessToken = "";
+            if (RedisUtil.getRu().exists("accessToken")) {
+                accessToken = RedisUtil.getRu().get("accessToken");
+            } else {
+                accessToken = CameraUtils.getAccessToken();
+            }
+            String sessionID = MyUUID.createSessionId();
+            RedisUtil.getRu().setex("sessionId:autoVistor:" + sessionID, sessionID,3600);
+            List<Doll> doll = dollService.getAllDoll();
+            Map<String, Object> map = new LinkedHashMap<>();
+            map.put("accessToken", accessToken);
+            map.put("sessionID", sessionID);
+            map.put("dollList", doll);
+            return RespStatus.successs().element("data", map);
+        }catch (Exception e){
+            e.printStackTrace();
+            return RespStatus.fail();
+        }
+    }
 
 
     /**
@@ -252,7 +275,6 @@ public class AppLoginController {
 
         }
     }
-
 
 
 }

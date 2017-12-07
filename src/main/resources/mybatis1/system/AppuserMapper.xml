@@ -29,7 +29,13 @@
 		NUMBER,
 		CREATETIME,
 		ADDRESS,
-		EMAIL
+		EMAIL,
+		BALANCE,
+		DOLLTOTAL,
+		NICKNAME,
+		CNEE_PHONE,
+		CNEE_ADDRESS,
+		CNEE_NAME
 
 	</sql>
 	
@@ -54,8 +60,13 @@
 		#{NUMBER},
 		#{CREATETIME},
 		#{ADDRESS},
-		#{EMAIL}
-
+		#{EMAIL},
+		#{BALANCE},
+		#{DOLLTOTAL},
+		#{NICKNAME},
+		#{CNEE_PHONE},
+		#{CNEE_ADDRESS},
+		#{CNEE_NAME}
 	</sql>
 	
 	<!-- 角色表 -->
@@ -271,6 +282,16 @@
 		where
 		PHONE = #{PHONE}	
 	</select>
+	<!--修改昵称-->
+	<update id="updateNickName" parameterType="com.fh.entity.system.AppUser">
+		UPDATE
+		sys_app_user
+		SET
+		NICKNAME = #{NICKNAME}
+		WHERE
+		PHONE  = #{PHONE}
+	</update>
+
 	<!-- 通过id获取用户信息 2017/10/12-->
 	<select id="getUserByID" parameterType="String" resultType="com.fh.entity.system.AppUser">
 		select
@@ -280,6 +301,17 @@
 		where
 		USER_ID = #{USER_ID}
 	</select>
+
+	<!--根据用户昵称获取用户信息-->
+	<select id="getAppUserByNickName" parameterType="String" resultType="com.fh.entity.system.AppUser">
+		SELECT
+		*
+		FROM
+		sys_app_user
+		where
+		NICKNAME = #{NICKNAME}
+	</select>
+
 	<!-- 用户注册 2017/10/12-->
 	<insert id="reg">
 		insert into
@@ -288,12 +320,14 @@
 		USER_ID,
 		PHONE,
 		CREATETIME,
-		USERNAME
+		USERNAME,
+		NICKNAME
 		) values (
 		#{USER_ID},
 		#{PHONE},
 		now(),
-		#{USERNAME}
+		#{PHONE},
+		#{NICKNAME}
 		)
 	</insert>
    <!--更改App用户信息-->
@@ -316,5 +350,74 @@
 		PHONE = #{PHONE}
 	</update>
 
-	
+	<!--更改App用户昵称信息(废弃)-->
+	<update  id="updateAppUserName" parameterType = "com.fh.entity.system.AppUser" >
+		update
+		<include refid="tableName"/>
+		set
+		USERNAME = #{USERNAME}
+		WHERE
+		PHONE = #{PHONE}
+	</update>
+
+	<!--用户余额更改-->
+	<update  id="updateAppUserBalanceByPhone" parameterType = "com.fh.entity.system.AppUser" >
+		update
+		<include refid="tableName"/>
+		set
+		BALANCE = #{BALANCE}
+		WHERE
+		PHONE = #{PHONE}
+	</update>
+
+	<!--用户抓取娃娃数量更改-->
+	<update  id="updateAppUserDollTotalByName" parameterType = "com.fh.entity.system.AppUser">
+		update
+		<include refid="tableName"/>
+		set
+		DOLLTOTAL = #{DOLLTOTAL}
+		WHERE
+		NICKNAME = #{NICKNAME}
+	</update>
+
+
+
+	<!-- 查询前10名抓娃娃最多的用户 -->
+	<select id="rankList"  resultType="com.fh.entity.system.AppUser">
+		select
+		<include refid="Field"/>
+		from
+		<include refid="tableName"/>
+		where
+		DOLLTOTAL >= 0
+		ORDER  BY
+		DOLLTOTAL
+		DESC
+		limit
+		0,10
+	</select>
+	<!--更改用户信息通过ID-->
+	<update  id="updateAppUserBalanceById" parameterType = "com.fh.entity.system.AppUser" >
+		update
+		<include refid="tableName"/>
+		set
+		BALANCE = #{BALANCE}
+		WHERE
+		USER_ID = #{USER_ID}
+	</update>
+<!--更新收货人信息地址-->
+	<update  id="updateAppUserCnee" parameterType = "com.fh.entity.system.AppUser" >
+		update
+		<include refid="tableName"/>
+		set
+		CNEE_PHONE = #{CNEE_PHONE},
+		CNEE_ADDRESS = #{CNEE_ADDRESS},
+		CNEE_NAME = #{CNEE_NAME}
+		WHERE
+		USER_ID = #{USER_ID}
+	</update>
+
+
+
+
 </mapper>

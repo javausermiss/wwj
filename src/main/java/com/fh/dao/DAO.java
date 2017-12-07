@@ -57,6 +57,6 @@ public interface DAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public Object findForMap(String sql, Object obj, String key , String value) throws Exception;
+	public Object findForMap(String sql, Object obj, String key ) throws Exception;
 	
 }
