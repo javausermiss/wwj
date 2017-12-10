@@ -256,5 +256,14 @@ public class SendGoodsController {
         }
     }
 
+    public static void main(String[] ad){
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        String dateString = formatter.format(currentTime);
+        long l = Long.parseLong(dateString);
+        System.out.println(l);
+
+    }
+
 
 }

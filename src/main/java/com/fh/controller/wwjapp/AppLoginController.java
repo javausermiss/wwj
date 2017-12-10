@@ -6,6 +6,7 @@ import com.fh.entity.system.Doll;
 import com.fh.service.system.appuser.AppuserManager;
 
 import com.fh.service.system.doll.DollManager;
+import com.fh.util.MD5;
 import com.fh.util.wwjUtil.*;
 import net.sf.json.JSONObject;
 import org.apache.ibatis.annotations.Param;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -129,6 +131,16 @@ public class AppLoginController {
             RedisUtil.getRu().del("SMSCode:" + phone);
             AppUser appUser = appuserService.getUserByPhone(phone);
             if (appUser != null) {
+               /* boolean b = RedisUtil.getRu().exists("sessionId:appUser:" + phone);
+                if (b){
+                    return RespStatus.fail("该用户已经登录");
+                }*/
+                Date date = new Date();
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String time = format.format(date);
+                String token = MD5.md5("");
+
+
                 String accessToken = "";
                 if (RedisUtil.getRu().exists("accessToken")) {
                     accessToken = RedisUtil.getRu().get("accessToken");

@@ -31,9 +31,9 @@ public class MyUUID {
     }
 
     public static void main(String[] args) {
-
         System.out.println(createSessionId());
         System.out.println(getUUID32());
+
 
     }
 }

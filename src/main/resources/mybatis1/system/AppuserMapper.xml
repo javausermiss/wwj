@@ -417,7 +417,4 @@
 		USER_ID = #{USER_ID}
 	</update>
 
-
-
-
 </mapper>
