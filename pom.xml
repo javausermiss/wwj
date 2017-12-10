@@ -521,7 +521,7 @@
             <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/pooh-server-entity-1.0.0.SNA.jar</systemPath>
         </dependency>
 
- <!-- 易宝支付以下五个依赖-->
+        <!-- 易宝支付以下五个依赖-->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet</artifactId>
@@ -534,8 +534,41 @@
             <artifactId>javax.ws.rs-api</artifactId>
             <version>2.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>2.8.4</version>
+        </dependency>
 
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>3.4.6</version>
+        </dependency>
 
+        <dependency>
+            <groupId>com.github.sgroschupf</groupId>
+            <artifactId>zkclient</artifactId>
+            <version>0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.iot.game.pooh.wwj</groupId>
+            <artifactId>wwj-rpc-interface</artifactId>
+            <version>1.0.0.SNAPSHORT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.18.1-GA</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.iot.game.pooh.server</groupId>
+            <artifactId>pooh-server-rpc-interface</artifactId>
+            <version>1.0.0.SNAPSHORT</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>pooh-web</finalName>
