@@ -11,6 +11,8 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
 	 */
 	@Override
 	public String startLottery(String roomId) {
+		
+		//
 		return null;
 	}
 
@@ -19,6 +21,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
 	 */
 	@Override
 	public String endLottery(String roomId) {
+		
 		return null;
 	}
 
@@ -27,6 +30,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
 	 */
 	@Override
 	public String drawLottery(String roomId) {
+		
 		return null;
 	}
 }
