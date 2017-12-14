@@ -17,8 +17,8 @@ public class SignAsciiUtil {
 	 * 根据传入对象生成签名 值支持三级继承..
 	 * 
 	 * @param obj
-	 * @param signKey
-	 * @param signVal
+	 * @param signKey 签名属性名称
+	 * @param signVal 签名属性VAL
 	 * @return
 	 */
 	public static String genSign(Object obj,String signKey,String signVal) {
@@ -110,7 +110,7 @@ public class SignAsciiUtil {
 		for (String key : items.keySet()) {
 			forSign.append(key).append("=").append(items.get(key)).append("&");
 		}
-		forSign.append(signKey).append("ckey=").append(signVal);
+		forSign.append(signKey).append(signKey).append("=").append(signVal);
 		String result = MD5Encode(forSign.toString());
 		return result.toUpperCase();
 	}
