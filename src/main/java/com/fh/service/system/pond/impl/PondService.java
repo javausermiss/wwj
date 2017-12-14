@@ -26,12 +26,17 @@ public class PondService implements PondManager {
     }
 
     @Override
-    public Pond getPondByPlayId(Integer id) throws Exception {
-        return (Pond) dao.findForObject("PondMapper.getPondByPlayId",id);
+    public Pond getPondByPlayId(String guessId) throws Exception {
+        return (Pond) dao.findForObject("PondMapper.getPondByPlayId",guessId);
     }
 
     @Override
     public Pond getPondById(Integer id) throws Exception {
         return (Pond) dao.findForObject("PondMapper.getPondById",id);
+    }
+
+    @Override
+    public int updatePondFlag(Pond pond) throws Exception {
+        return (int)dao.update("PondMapper.updatePondFlag",pond);
     }
 }

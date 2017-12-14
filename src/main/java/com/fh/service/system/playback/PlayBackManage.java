@@ -10,6 +10,8 @@ import java.util.List;
  */
 public interface PlayBackManage {
 
+    public int reg(PlayBack playBack)throws Exception;
+
     public int regPlayBack(String dollname, String username, String time, int gold, String state) throws Exception;
 
     public int regPlayBackBalance(PlayBack playBack) throws Exception;

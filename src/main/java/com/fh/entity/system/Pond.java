@@ -5,20 +5,29 @@ package com.fh.entity.system;
  */
 public class Pond {
     private Integer POND_ID;
-    private Integer PLAYBACK_ID;
+    private String GUESS_ID;
     private Integer GUESS_Y;
     private Integer GUESS_N;
     private Integer GUESS_GOLD;
     private String CREATE_DATE;
     private String UPDATE_DATE;
+    private String POND_FLAG;
 
     public Pond() {
 
     }
 
-    public Pond(Integer PLAYBACK_ID, String CREATE_DATE) {
-        this.PLAYBACK_ID = PLAYBACK_ID;
+    public Pond(String GUESS_ID, String CREATE_DATE) {
+        this.GUESS_ID = GUESS_ID;
         this.CREATE_DATE = CREATE_DATE;
+    }
+
+    public String getPOND_FLAG() {
+        return POND_FLAG;
+    }
+
+    public void setPOND_FLAG(String POND_FLAG) {
+        this.POND_FLAG = POND_FLAG;
     }
 
     public Integer getPOND_ID() {
@@ -29,12 +38,12 @@ public class Pond {
         this.POND_ID = POND_ID;
     }
 
-    public Integer getPLAYBACK_ID() {
-        return PLAYBACK_ID;
+    public String getGUESS_ID() {
+        return GUESS_ID;
     }
 
-    public void setPLAYBACK_ID(Integer PLAYBACK_ID) {
-        this.PLAYBACK_ID = PLAYBACK_ID;
+    public void setGUESS_ID(String GUESS_ID) {
+        this.GUESS_ID = GUESS_ID;
     }
 
     public Integer getGUESS_Y() {

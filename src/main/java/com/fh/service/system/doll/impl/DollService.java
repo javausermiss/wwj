@@ -113,7 +113,7 @@ public class DollService implements DollManager {
 	 */
 	@Override
 	public Doll getDollByID(String id) throws Exception {
-		return (Doll) dao.findForObject("DollMapper.getDollByState",id);
+		return (Doll) dao.findForObject("DollMapper.getDollByID",id);
 	}
 
 	/**

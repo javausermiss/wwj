@@ -10,7 +10,7 @@
 
     <sql id="Field">
         POND_ID,
-        PLAYBACK_ID,
+        GUESS_ID,
         GUESS_Y,
         GUESS_N,
         GUESS_GOLD,
@@ -21,7 +21,7 @@
 
     <sql id="FieldValue">
         #{POND_ID},
-        #{PLAYBACK_ID},
+        #{GUESS_ID},
         #{GUESS_Y},
         #{GUESS_N},
         #{GUESS_GOLD},
@@ -33,12 +33,12 @@
         INSERT INTO
         <include refid="tableName"/>
         (
-        PLAYBACK_ID,
+        GUESS_ID,
         CREATE_DATE
         )
         VALUES
         (
-        #{PLAYBACK_ID},
+        #{GUESS_ID},
         now()
         )
 
@@ -66,13 +66,13 @@
         POND_ID = #{POND_ID}
     </update>
 
-    <select id="getPondByPlayId" parameterType="java.lang.Integer"
+    <select id="getPondByPlayId" parameterType="String"
     resultType="com.fh.entity.system.Pond">
 
         SELECT * FROM
         <include refid="tableName"/>
         WHERE
-        PLAYBACK_ID = #{PLAYBACK_ID}
+        GUESS_ID = #{GUESS_ID}
 
     </select>
 
@@ -83,6 +83,21 @@
         WHERE
         POND_ID = #{POND_ID}
     </select>
+
+    <update id="updatePondFlag" parameterType="com.fh.entity.system.Pond">
+
+        UPDATE
+        <include refid="tableName"/>
+        SET
+        POND_FLAG = #{POND_FLAG},
+        WHERE
+        POND_ID = #{POND_ID}
+    </update>
+
+
+
+
+
 
 
 </mapper>

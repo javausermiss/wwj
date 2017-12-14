@@ -19,6 +19,7 @@ public class PlayBack {
     private String UPDATETIME;//结算时间
     private String SENDGOODS;
     private String GUESS_TIME;//场次生成时间
+    private String IMAGE_URL;//用户头像信息
 
 
     public PlayBack() {
@@ -35,6 +36,14 @@ public class PlayBack {
     public PlayBack(String DOLLNAME, String USERNAME) {
         this.DOLLNAME = DOLLNAME;
         this.USERNAME = USERNAME;
+    }
+
+    public String getIMAGE_URL() {
+        return IMAGE_URL;
+    }
+
+    public void setIMAGE_URL(String IMAGE_URL) {
+        this.IMAGE_URL = IMAGE_URL;
     }
 
     public String getGUESS_TIME() {

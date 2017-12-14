@@ -30,11 +30,11 @@ public interface PondManager {
 
     /**
      * 根据游戏记录ID获取对应奖池信息
-     * @param id
+     * @param guessId
      * @return
      * @throws Exception
      */
-    public Pond getPondByPlayId(Integer id)throws Exception;
+    public Pond getPondByPlayId(String guessId)throws Exception;
 
 
     /**
@@ -44,4 +44,12 @@ public interface PondManager {
      * @throws Exception
      */
     public Pond getPondById(Integer id)throws Exception;
+
+    /**
+     * 修改结算标签
+     * @param pond
+     * @return
+     * @throws Exception
+     */
+    public int updatePondFlag(Pond pond)throws Exception;
 }

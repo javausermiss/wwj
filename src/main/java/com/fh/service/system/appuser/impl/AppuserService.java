@@ -255,5 +255,10 @@ public class AppuserService implements AppuserManager{
 	public int updateAppUserCnee(AppUser appUser) throws Exception {
 		return (int) dao.update("AppuserMapper.updateAppUserCnee",appUser);
 	}
+
+	@Override
+	public int regwx(AppUser appUser) throws Exception {
+		return (int) dao.save("AppuserMapper.regwx",appUser);
+	}
 }
 

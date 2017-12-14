@@ -393,8 +393,6 @@
 		ORDER  BY
 		DOLLTOTAL
 		DESC
-		limit
-		0,10
 	</select>
 	<!--更改用户信息通过ID-->
 	<update  id="updateAppUserBalanceById" parameterType = "com.fh.entity.system.AppUser" >
@@ -416,5 +414,26 @@
 		WHERE
 		USER_ID = #{USER_ID}
 	</update>
+
+	<insert id="regwx" parameterType="com.fh.entity.system.AppUser">
+		INSERT INTO
+		<include refid="tableName"/>
+		(
+		USER_ID,
+		CREATETIME,
+		NICKNAME,
+		IMAGE_URL,
+		) values (
+		#{USER_ID},
+		now(),
+		#{NICKNAME},
+		#{IMAGE_URL}
+		)
+
+
+
+
+
+	</insert>
 
 </mapper>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="playDetailMapper">
+
+    <insert id="reg" parameterType="com.fh.entity.system.PlayDetail">
+        INSERT INTO
+        TB_DOLL_PLAY_DETAIL
+        (
+        DOLLNAME,
+        NICKNAME,
+        CREATE_DATE,
+        GUESS_ID,
+        GOLD,
+        STOP_FLAG
+        )
+        VALUES (
+        #{DOLLNAME},
+        #{NICKNAME},
+        now(),
+        #{GUESS_ID},
+        #{GOLD},
+        #{STOP_FLAG}
+        )
+    </insert>
+
+    <select id="getPlayDetailByGuessID" parameterType="String" resultType="com.fh.entity.system.PlayDetail">
+        SELECT * FROM
+        TB_DOLL_PLAY_DETAIL
+        WHERE
+        GUESS_ID = #{GUESS_ID}
+    </select>
+
+    <select id="getPlayDetailLast" parameterType="com.fh.entity.system.PlayDetail"
+            resultType="com.fh.entity.system.PlayDetail">
+        SELECT * from
+        TB_DOLL_PLAY_DETAIL
+        WHERE
+        NICKNAME = #{NICKNAME} AND DOLLNAME = #{DOLLNAME}
+        ORDER BY
+        CREATE_DATE
+        DESC
+        limit
+        1
+    </select>
+
+    <select id="getPlayIdForPeople" parameterType="String" resultType="com.fh.entity.system.PlayDetail">
+        SELECT * from
+        TB_DOLL_PLAY_DETAIL
+        WHERE
+        DOLLNAME = #{DOLLNAME}
+        ORDER BY
+        CREATE_DATE
+        DESC
+        limit
+        0,1
+    </select>
+
+    <update id="updatePlayDetailStopFlag" parameterType="com.fh.entity.system.PlayDetail">
+        UPDATE
+        TB_DOLL_PLAY_DETAIL
+        SET
+        STOP_FLAG = #{STOP_FLAG}
+        WHERE
+        GUESS_ID = #{GUESS_ID}
+
+    </update>
+
+    <update id="updatePlayDetailState" parameterType="com.fh.entity.system.PlayDetail">
+        UPDATE
+        TB_DOLL_PLAY_DETAIL
+        SET
+        STATE = #{STATE}
+        WHERE
+        GUESS_ID = #{GUESS_ID}
+    </update>
+
+
+
+
+
+
+</mapper>

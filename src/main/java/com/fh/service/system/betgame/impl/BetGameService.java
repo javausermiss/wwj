@@ -51,4 +51,14 @@ public class BetGameService implements BetGameManager {
     public List<GuessDetail> getWinner(GuessDetail guessDetail) throws Exception {
         return (List<GuessDetail>) dao.findForList("GuessDetailMapper.getWinner",guessDetail);
     }
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<GuessDetail> getAllGuesser(String guessid) throws Exception {
+        return (List<GuessDetail>) dao.findForList("GuessDetailMapper.getAllGuesser",guessid);
+    }
+
+    @Override
+    public int updateGuessDetailGuessType(GuessDetail guessDetail) throws Exception {
+        return (int)dao.update("GuessDetailMapper.updateGuessDetailGuessType",guessDetail);
+    }
 }

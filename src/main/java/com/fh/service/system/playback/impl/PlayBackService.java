@@ -16,6 +16,11 @@ public class PlayBackService implements PlayBackManage {
 
 
     @Override
+    public int reg(PlayBack playBack) throws Exception {
+        return (int) dao.save("PlayBackMapper.reg",playBack);
+    }
+
+    @Override
     public int regPlayBack(String dollname, String username, String time, int gold, String state) throws Exception {
         return (int) dao.save("PlayBackMapper.regPlayBack", new PlayBack(dollname, username, time, gold, state));
     }

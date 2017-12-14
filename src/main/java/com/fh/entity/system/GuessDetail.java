@@ -7,11 +7,11 @@ public class GuessDetail {
     private Integer GUESS_ID;
     private String APP_USER_ID;
     private String DOLL_ID;
-    private String GUESS_TYPE;
+    private String GUESS_TYPE;//最终竞猜结果
     private String GUESS_KEY;//1中 0不中
     private Integer GUESS_GOLD;
     private String CREATE_DATE;
-    private Integer PLAYBACK_ID;
+    private String PLAYBACK_ID;
     private String SETTLEMENT_FLAG;//Y 清算 N 未清算
     private String SETTLEMENT_DATE;
 
@@ -19,7 +19,7 @@ public class GuessDetail {
 
     }
 
-    public GuessDetail(String APP_USER_ID, String DOLL_ID, String GUESS_KEY, Integer GUESS_GOLD, Integer PLAYBACK_ID) {
+    public GuessDetail(String APP_USER_ID, String DOLL_ID, String GUESS_KEY, Integer GUESS_GOLD, String PLAYBACK_ID) {
         this.APP_USER_ID = APP_USER_ID;
         this.DOLL_ID = DOLL_ID;
         this.GUESS_KEY = GUESS_KEY;
@@ -27,7 +27,7 @@ public class GuessDetail {
         this.PLAYBACK_ID = PLAYBACK_ID;
     }
 
-    public GuessDetail(String GUESS_KEY, Integer PLAYBACK_ID) {
+    public GuessDetail(String GUESS_KEY, String PLAYBACK_ID) {
         this.GUESS_KEY = GUESS_KEY;
         this.PLAYBACK_ID = PLAYBACK_ID;
     }
@@ -88,11 +88,11 @@ public class GuessDetail {
         this.CREATE_DATE = CREATE_DATE;
     }
 
-    public Integer getPLAYBACK_ID() {
+    public String getPLAYBACK_ID() {
         return PLAYBACK_ID;
     }
 
-    public void setPLAYBACK_ID(Integer PLAYBACK_ID) {
+    public void setPLAYBACK_ID(String PLAYBACK_ID) {
         this.PLAYBACK_ID = PLAYBACK_ID;
     }
 

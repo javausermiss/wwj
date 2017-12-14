@@ -57,6 +57,7 @@
         UPDATE
         <include refid="tableName"/>
         SET
+        GUESS_TYPE=#{GUESS_TYPE},
         SETTLEMENT_FLAG = #{SETTLEMENT_FLAG},
         SETTLEMENT_DATE = now()
         WHERE
@@ -85,6 +86,24 @@
        AND
        d.PLAYBACK_ID = #{PLAYBACK_ID}
     </select>
+
+    <select id="getAllGuesser" parameterType="String" resultType="com.fh.entity.system.GuessDetail">
+     SELECT * FROM
+     tb_doll_guess_detail
+     WHERE
+     PLAYBACK_ID = #{PLAYBACK_ID}
+    </select>
+
+    <update id="updateGuessDetailGuessType" parameterType="com.fh.entity.system.GuessDetail">
+        UPDATE
+        tb_doll_guess_detail
+        SET
+        GUESS_TYPE=#{GUESS_TYPE},
+        SETTLEMENT_FLAG = #{SETTLEMENT_FLAG},
+        SETTLEMENT_DATE = now()
+        WHERE
+        GUESS_ID = #{GUESS_ID}
+    </update>
 
 
 

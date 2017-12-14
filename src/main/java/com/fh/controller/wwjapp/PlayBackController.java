@@ -40,7 +40,9 @@ public class PlayBackController {
     @Resource(name = "betGameService")
     private BetGameManager betGameService;
 
-  /*  *//**
+  /*  */
+
+    /**
      * 视频记录存储&抓取成功记录增加
      * 竞猜结算
      * (无论成功失败均存储)
@@ -152,26 +154,24 @@ public class PlayBackController {
         }
     }*/
 
+    /**
+     *
+     * @param
+     * @param time
+     * @param username
+     * @param state
+     * @param dollname
+     * @return
+     */
     @RequestMapping(value = "/regPlayBack", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject regPlayBack(
-            @RequestParam("id") Integer id,//视频列表ID
             @RequestParam("time") String time,
             @RequestParam("nickName") String username,
             @RequestParam("state") String state,//1 成功 0 失败
             @RequestParam("dollName") String dollname
     ) {
         try {
-            AppUser appUser = appuserService.getAppUserByNickName(username);
-            int oldCount = appUser.getDOLLTOTAL();
-            if (state.trim().equals("1")) {
-                appUser.setDOLLTOTAL(oldCount + 1);
-                int n = appuserService.updateAppUserDollTotalByName(appUser);
-                if (n == 0) {
-                    return RespStatus.fail("更新抓娃娃总数失败");
-                }
-            }
-
             Doll doll = dollService.getDollByDollName(dollname);
             int gold = doll.getDOLL_GOLD();//抓娃娃所需金币数
             int conversionGold;//可兑换金币数
@@ -185,60 +185,16 @@ public class PlayBackController {
                 default:
                     conversionGold = 180;
             }
-            PlayBack playBack = playBackService.getPlayBackById(id);
+            //增加视频列表
+            PlayBack playBack = new PlayBack();
+            playBack.setDOLLNAME(dollname);
+            playBack.setUSERNAME(username);
+            playBack.setCONVERSIONGOLD(conversionGold);
             playBack.setSTATE(state);
             playBack.setCREATETIME(time);
-            playBack.setCONVERSIONGOLD(conversionGold);
-           int n = playBackService.updatePlayBack(playBack);
-           if (n==0){
-               return RespStatus.fail("更新play列表失败");
-           }
-            //开始结算
-            Pond pond = pondService.getPondByPlayId(id);
-            int allGold = pond.getGUESS_GOLD();
-            int y = pond.getGUESS_Y();//猜1
-            int cn = pond.getGUESS_N();//猜0
-            int avg; //结算获胜者的平均金额
-            String s = playBack.getSTATE();//取得压中的状态
-            String file = "";//失败状态
-            if (s.equals("1")) {
-                avg = (int) Math.round(allGold * 1.0 / y);
-                file = "0";
-            } else {
-                avg = (int) Math.round(allGold * 1.0 / cn);
-                file = "1";
-            }
-            List<GuessDetail> filler = betGameService.getFailer(new GuessDetail(file, id));//获取失败者
-            if (filler.size() != 0) {
-                for (int k = 0; k < filler.size(); k++) {
-                    GuessDetail filePerson = filler.get(k);
-                    filePerson.setSETTLEMENT_FLAG("Y");
-                    int filenum = betGameService.updateGuessDetail(filePerson);
-                    if (filenum == 0) {
-                        return RespStatus.fail("更新结算标签失败");
-                    }
-                }
-            }
-            List<GuessDetail> winner = betGameService.getWinner(new GuessDetail(s, id));//获取成功者
-            if (winner.size() != 0) {
-                for (int f = 0; f < winner.size(); f++) {
-                    GuessDetail winPerson = winner.get(f);
-                    String userId = winPerson.getAPP_USER_ID();
-                    AppUser appUser1 = appuserService.getUserByID(userId);
-                    int balance = Integer.parseInt(appUser1.getBALANCE());
-                    appUser1.setBALANCE(String.valueOf(balance + avg));
-                    int cb = appuserService.updateAppUserBalanceById(appUser1);
-                    if (cb == 0) {
-                        return RespStatus.fail("返奖失败");
-                    }
-                    winPerson.setSETTLEMENT_FLAG("Y");
-                    int fc = betGameService.updateGuessDetail(winPerson);
-                    if (fc == 0) {
-                        return RespStatus.fail("更新结算标签失败");
-                    }
-                }
-            }
-            return RespStatus.successs().element("winner",winner).element("failer",filler);
+            playBackService.reg(playBack);
+            return RespStatus.successs();
+
         } catch (Exception e) {
             e.printStackTrace();
             return RespStatus.fail();
@@ -314,30 +270,7 @@ public class PlayBackController {
 
     }
 
-
-    /**
-     * 查询最新的10人抓取成功记录
-     *
-     * @return
-     */
-    @RequestMapping(value = "/gettest", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    @ResponseBody
-    public JSONObject gettest() {
-        try {
-            List<GuessDetail> winner = betGameService.getWinner(new GuessDetail("1", 46));
-            Map<String, Object> map = new LinkedHashMap<>();
-            map.put("playback", winner);
-            return RespStatus.successs().element("data", map);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return RespStatus.fail();
-        }
-
-    }
-
-
     public static void main(String[] strings) {
-
         String sendGoods = "wqe,sda, ";
         String[] s = sendGoods.split("\\,");
         String name = s[0];
@@ -347,11 +280,11 @@ public class PlayBackController {
         System.out.println(phone);
         System.out.println("空格" + address);
 
-
         int a = 38, b = 7;
         double b1 = (a * 1.0 / b);
         Math.round(38 * 1.0 / 7);
-        System.out.println(Math.round(38 * 1.0 / 7));
+        Math.floor(b1);
+        System.out.println((int) Math.floor(34 / 7));
     }
 
 

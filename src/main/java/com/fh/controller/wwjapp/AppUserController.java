@@ -43,6 +43,17 @@ public class AppUserController {
 
     }
 
+    public JSONObject getAppUserInfoByID(String id) {
+        try {
+            AppUser appUser = appuserService.getUserByID(id);
+            return JSONObject.fromObject(appUser);
+        } catch (Exception e) {
+            return null;
+        }
+
+    }
+
+
     /**
      * 通过昵称获取个人信息
      * @param nickname
@@ -174,6 +185,25 @@ public class AppUserController {
         }
 
     }
+
+    @RequestMapping(value = "/getUserInfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public JSONObject getUserInfo(
+            @RequestParam("userId") String userId
+    ){
+        try{
+          Map<String,Object> map = new HashMap<>();
+          map.put("appUser",getAppUserInfoByID(userId));
+          return RespStatus.successs().element("data",map);
+        }catch (Exception e){
+            e.printStackTrace();
+            return RespStatus.fail();
+        }
+
+    }
+
+
+
 
     /**
      * 通过昵称获取用户信息

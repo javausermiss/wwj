@@ -29,7 +29,8 @@
         COUNT,
         UPDATETIME,
         SENDGOODS,
-        GUESS_TIME
+        GUESS_TIME,
+        IMAGE_URL
     </sql>
     <!--字段值-->
     <sql id="FieldValue">
@@ -45,9 +46,31 @@
         #{COUNT},
         #{UPDATETIME},
         #{SENDGOODS},
-        #{GUESS_TIME}
+        #{GUESS_TIME},
+        #{IMAGE_URL}
 
     </sql>
+    <insert id="reg" parameterType="com.fh.entity.system.PlayBack">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        DOLLNAME,
+        USERNAME,
+        CONVERSIONGOLD,
+        STATE,
+        CREATETIME
+        )
+        VALUES
+        (
+        #{DOLLNAME},
+        #{USERNAME},
+        #{CONVERSIONGOLD},
+        #{STATE},
+        #{CREATETIME}
+        )
+    </insert>
+
+
     <!--增加记录信息-->
     <insert id="regPlayBack">
         INSERT INTO
@@ -175,11 +198,17 @@
     <!--查询最近抓取成功的10条记录-->
     <select id="getPlayRecordPM" parameterType="String" resultType="com.fh.entity.system.PlayBack">
         select
-        *
+        p.username,u.IMAGE_URL,p.dollname
         from
         <include refid="tableName"/>
         p
+        INNER JOIN
+        sys_app_user u
+        ON
+        p.USERNAME = U.NICKNAME
         WHERE
+        p.username = u.nickname
+        AND
         p.STATE = '1'
         ORDER BY
         p.CREATETIME

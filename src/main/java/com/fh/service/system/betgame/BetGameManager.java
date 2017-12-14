@@ -1,6 +1,7 @@
 package com.fh.service.system.betgame;
 
 import com.fh.entity.system.GuessDetail;
+import org.apache.tools.ant.taskdefs.GUnzip;
 
 import java.util.List;
 
@@ -45,4 +46,21 @@ public interface BetGameManager {
      */
 
     public List<GuessDetail> getWinner(GuessDetail guessDetail)throws Exception;
+
+
+    /**
+     * 获取所有参与竞猜的人
+     * @param guessid
+     * @return
+     * @throws Exception
+     */
+    public List<GuessDetail> getAllGuesser(String guessid)throws Exception;
+
+    /**
+     * 更新竞猜结果
+     * @param guessDetail
+     * @return
+     * @throws Exception
+     */
+    public int updateGuessDetailGuessType(GuessDetail guessDetail)throws Exception;
 }
