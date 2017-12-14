@@ -135,11 +135,6 @@ public class AppLoginController {
                 if (b){
                     return RespStatus.fail("该用户已经登录");
                 }*/
-                Date date = new Date();
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String time = format.format(date);
-                String token = MD5.md5("");
-
 
                 String accessToken = "";
                 if (RedisUtil.getRu().exists("accessToken")) {
@@ -147,8 +142,14 @@ public class AppLoginController {
                 } else {
                     accessToken = CameraUtils.getAccessToken();
                 }
-
                 String sessionID = MyUUID.createSessionId();
+                //srstoken
+                Date date = new Date();
+                SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+                String time = format.format(date);
+                String token = MD5.md5(time+sessionID+"Pooh4token"+"3600");
+                RedisUtil.getRu().setex("SRStoken",token,3600);
+
                 List<Doll> doll = dollService.getAllDoll();
                 RedisUtil.getRu().set("sessionId:appUser:" + phone, sessionID);
                 Map<String, Object> map = new LinkedHashMap<>();
@@ -156,6 +157,9 @@ public class AppLoginController {
                 map.put("sessionID", sessionID);
                 map.put("appUser", getAppUserInfo(appUser.getUSER_ID()));
                 map.put("dollList", doll);
+                map.put("SRStoken",token);
+                map.put("time",time);
+                map.put("expire","3600");
                 return RespStatus.successs().element("data", map);
             } else {
                 int a1 = appuserService.reg(phone);

@@ -231,5 +231,7 @@ public interface AppuserManager {
     public int regwx(AppUser appUser) throws Exception;
 
 
+
+
 }
 

@@ -280,7 +280,7 @@ public class AppUserBalanceController {
                     payment.setGOLD(cost);
                     paymentService.reg(payment);
                     appUser.setBALANCE(String.valueOf(a - b));
-                    int c = appuserService.updateAppUserBalanceByPhone(appUser);
+                    int c = appuserService.updateAppUserBalanceById(appUser);
                     if (c != 0) {
                         Map<String, Object> map = new LinkedHashMap<>();
                         map.put("appUser", getAppUserInfoById(userId));

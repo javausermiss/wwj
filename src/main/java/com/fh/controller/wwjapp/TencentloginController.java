@@ -4,8 +4,7 @@ import com.fh.entity.system.AppUser;
 import com.fh.entity.system.Doll;
 import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.doll.DollManager;
-import com.fh.util.wwjUtil.RespStatus;
-import com.fh.util.wwjUtil.TokenVerify;
+import com.fh.util.wwjUtil.*;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -59,6 +59,7 @@ public class TencentloginController {
 
     /**
      * 微信 QQ登录接口
+     *
      * @param userId
      * @param token
      * @param imageUrl
@@ -68,35 +69,48 @@ public class TencentloginController {
     @RequestMapping(value = "/tencentLogin", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject tencentLogin(
-            @RequestParam("uid ") String userId,
-            @RequestParam("token") String token,
-            @RequestParam("imageUrl ") String imageUrl,
+            @RequestParam("uid") String userId,
+            @RequestParam("accessToken") String token,
+            @RequestParam("imageUrl") String imageUrl,
             @RequestParam("nickName") String nickname
-    ){
+    ) {
         try {
-            String code =  TokenVerify.verify(token);
-            if (code.equals("200")){
-                AppUser appUser =  new AppUser();
+            String code = TokenVerify.verify(token);
+            if (code.equals("SUCCESS")) {
+                AppUser appUser = new AppUser();
+                if (imageUrl.equals("") || imageUrl == null) {
+                    imageUrl = "/default.png";
+                }
+                String accessToken = "";
+                if (RedisUtil.getRu().exists("accessToken")) {
+                    accessToken = RedisUtil.getRu().get("accessToken");
+                } else {
+                    accessToken = CameraUtils.getAccessToken();
+                }
                 appUser.setNICKNAME(nickname);
                 appUser.setIMAGE_URL(imageUrl);
                 appUser.setUSER_ID(userId);
                 appuserService.regwx(appUser);
-                Map<String,Object> map = new HashMap<>();
-                map.put("data",getAppUserInfo(userId));
-                return RespStatus.successs();
-            }else {
+                String sessionID = MyUUID.createSessionId();
+                List<Doll> doll = dollService.getAllDoll();
+                RedisUtil.getRu().set("sessionId:appUser:" + userId, sessionID);
+                Map<String, Object> map = new HashMap<>();
+                map.put("appUser", getAppUserInfo(userId));
+                map.put("sessionID", sessionID);
+                map.put("dollList", doll);
+                map.put("accessToken",accessToken);
+                return RespStatus.successs().element("data", map);
+            } else {
                 return RespStatus.fail("token不合法");
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return RespStatus.fail();
         }
 
 
     }
-
-
 
 
 }

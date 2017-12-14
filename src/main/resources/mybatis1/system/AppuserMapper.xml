@@ -370,6 +370,15 @@
 		PHONE = #{PHONE}
 	</update>
 
+	<update id="updateAppUserBalanceById" parameterType="com.fh.entity.system.AppUser">
+		update
+		<include refid="tableName"/>
+		set
+		BALANCE = #{BALANCE}
+		WHERE
+		USER_ID = #{USER_ID}
+	</update>
+
 	<!--用户抓取娃娃数量更改-->
 	<update  id="updateAppUserDollTotalByName" parameterType = "com.fh.entity.system.AppUser">
 		update
@@ -394,15 +403,7 @@
 		DOLLTOTAL
 		DESC
 	</select>
-	<!--更改用户信息通过ID-->
-	<update  id="updateAppUserBalanceById" parameterType = "com.fh.entity.system.AppUser" >
-		update
-		<include refid="tableName"/>
-		set
-		BALANCE = #{BALANCE}
-		WHERE
-		USER_ID = #{USER_ID}
-	</update>
+
 <!--更新收货人信息地址-->
 	<update  id="updateAppUserCnee" parameterType = "com.fh.entity.system.AppUser" >
 		update
@@ -416,24 +417,20 @@
 	</update>
 
 	<insert id="regwx" parameterType="com.fh.entity.system.AppUser">
-		INSERT INTO
+		insert into
 		<include refid="tableName"/>
 		(
 		USER_ID,
 		CREATETIME,
 		NICKNAME,
-		IMAGE_URL,
+		IMAGE_URL
+
 		) values (
 		#{USER_ID},
 		now(),
 		#{NICKNAME},
 		#{IMAGE_URL}
 		)
-
-
-
-
-
 	</insert>
 
 </mapper>
