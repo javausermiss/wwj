@@ -194,15 +194,15 @@ public class AppLoginController {
     /**
      * 手机号码直登获取娃娃机信息
      *
-     * @param aPhone
+     * @param userId
      * @return
      */
     @RequestMapping(value = "/getDoll" ,method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public JSONObject getDoll(@RequestParam("phone") String aPhone) {
+    public JSONObject getDoll(@RequestParam("userId") String userId) {
         try {
-            String phone = new String(Base64Util.decryptBASE64(aPhone));
-            AppUser appUser = appuserService.getUserByPhone(phone);
+           // String phone = new String(Base64Util.decryptBASE64(aPhone));
+            AppUser appUser = appuserService.getUserByID(userId);
             if (appUser != null) {
                 String accessToken = "";
                 if (RedisUtil.getRu().exists("accessToken")) {
@@ -211,6 +211,7 @@ public class AppLoginController {
                     accessToken = CameraUtils.getAccessToken();
                 }
                 String sessionID = MyUUID.createSessionId();
+                String phone =  appUser.getPHONE();
                 RedisUtil.getRu().set("sessionId:appUser:" + phone, sessionID);
                 List<Doll> doll = dollService.getAllDoll();
                 Map<String, Object> map = new LinkedHashMap<>();
