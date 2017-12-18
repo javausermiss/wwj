@@ -260,5 +260,10 @@ public class AppuserService implements AppuserManager{
 	public int regwx(AppUser appUser) throws Exception {
 		return (int) dao.save("AppuserMapper.regwx",appUser);
 	}
+
+	@Override
+	public int updateTencentUser(AppUser appUser) throws Exception {
+		return (int)dao.update("AppuserMapper.updateTencentUser",appUser);
+	}
 }
 

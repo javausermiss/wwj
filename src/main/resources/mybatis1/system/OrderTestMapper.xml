@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OrderMapper">
+
+    <insert id="regmount" parameterType="com.fh.entity.system.Ordertest">
+        INSERT INTO
+        SYS_APP_ORDER
+        (
+        REC_ID,
+        ORDER_ID,
+        USER_ID,
+        CREATETIME ,
+        REGAMOUNT
+        )
+        VALUES
+        (
+        #{REC_ID},
+        #{ORDER_ID},
+        #{USER_ID},
+        now(),
+        #{REGAMOUNT}
+        )
+    </insert>
+
+
+    <update id="update" parameterType="com.fh.entity.system.Ordertest">
+
+        UPDATE sys_app_order
+        SET
+        STATUS=#{STATUS}
+        WHERE
+        ORDER_ID = #{ORDER_ID}
+    </update>
+
+    <select id="getOrderById" parameterType="String" resultType="com.fh.entity.system.Ordertest">
+        SELECT
+        *
+        FROM
+        sys_app_order
+        WHERE
+        ORDER_ID = #{ORDER_ID}
+    </select>
+
+
+</mapper>

@@ -137,10 +137,10 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
             playDetail.setSTATE("-1");
             playDetailService.updatePlayDetailState(playDetail);
             //给玩家退回该场游戏金币
-         /*   String balance = appuserService.getAppUserByNickName(playDetail.getNICKNAME()).getBALANCE() + playDetail.getGOLD();
+            String balance = appuserService.getAppUserByNickName(playDetail.getNICKNAME()).getBALANCE() + playDetail.getGOLD();
             AppUser appUser = appuserService.getAppUserByNickName(playDetail.getNICKNAME());
             appUser.setBALANCE(balance);
-            appuserService.updateAppUserBalanceById(appUser);*/
+            appuserService.updateAppUserBalanceById(appUser);
             //给竞猜用户退回本场竞猜金币,更新本次竞猜记录为异常-1
             List<GuessDetail> list = betGameService.getAllGuesser(playDetail.getGUESS_ID());
             for (int i = 0; i < list.size(); i++) {
@@ -161,6 +161,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                 paymentService.reg(payment);
             }
         } catch (Exception e) {
+
             e.printStackTrace();
         }
         return null;

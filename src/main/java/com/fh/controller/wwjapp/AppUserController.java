@@ -99,16 +99,16 @@ public class AppUserController {
     /**
      * 更改用户头像信息
      *
-     * @param aPhone
+     * @param userId
      * @return
      */
     @RequestMapping(value = "/updateUser", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public JSONObject updateUser(@RequestParam("phone") String aPhone,
+    public JSONObject updateUser(@RequestParam("userId") String userId,
                                  @RequestParam("base64Image") String base64Image) {
         try {
-            String phone = new String(Base64Util.decryptBASE64(aPhone));
-            AppUser appUser = appuserService.getUserByPhone(phone);
+            //String phone = new String(Base64Util.decryptBASE64(aPhone));
+            AppUser appUser = appuserService.getUserByID(userId);
             if (appUser != null) {
                 String faceName = MyUUID.createSessionId();
                 if (!Base64Image.GenerateImage(base64Image, "/usr/local/tomcat/webapps/faceImage/" + faceName + ".png")) {
@@ -118,7 +118,7 @@ public class AppUserController {
                 int n = appuserService.updateAppUserImage(appUser);
                 if (n != 0) {
                     Map<String, Object> map = new LinkedHashMap<>();
-                    map.put("appUser", getAppUserInfoByPhone(phone));
+                    map.put("appUser", getAppUserInfoByID(userId));
                     return RespStatus.successs().element("data", map);
                 } else {
                     return RespStatus.fail("更新头像失败");
@@ -144,12 +144,12 @@ public class AppUserController {
      */
     @RequestMapping(value = "/updateUserName", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public JSONObject updateUserName(@RequestParam("phone") String aPhone,
+    public JSONObject updateUserName(@RequestParam("userId") String userId,
                                      @RequestParam("nickName") String name) {
 
         try {
-            String phone = new String(Base64Util.decryptBASE64(aPhone));
-            AppUser user = appuserService.getUserByPhone(phone);
+           // String phone = new String(Base64Util.decryptBASE64(aPhone));
+            AppUser user = appuserService.getUserByID(userId);
             if (user == null) {
                 return RespStatus.fail("此用户没有注册！");
             }
@@ -186,6 +186,11 @@ public class AppUserController {
 
     }
 
+    /**
+     * 通过ID获取用户信息
+     * @param userId
+     * @return
+     */
     @RequestMapping(value = "/getUserInfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject getUserInfo(

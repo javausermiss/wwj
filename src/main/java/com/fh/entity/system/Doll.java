@@ -1,8 +1,11 @@
 package com.fh.entity.system;
 
+import lombok.*;
+
 /**
  * 娃娃机实体类
  */
+
 public class Doll {
 
     private String DOLL_ID;

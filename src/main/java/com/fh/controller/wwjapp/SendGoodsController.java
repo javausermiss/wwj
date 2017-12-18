@@ -31,14 +31,8 @@ import javax.annotation.Resource;
 public class SendGoodsController {
     @Resource(name = "appuserService")
     private AppuserManager appuserService;
-    @Resource(name = "dollService")
-    private DollManager dollService;
     @Resource(name = "playBackService")
     private PlayBackManage playBackService;
-    @Resource(name = "pondService")
-    private PondManager pondService;
-    @Resource(name = "betGameService")
-    private BetGameManager betGameService;
     @Resource(name = "sendGoodsService")
     private SendGoodsManager sendGoodsService;
     @Resource(name = "conversionService")

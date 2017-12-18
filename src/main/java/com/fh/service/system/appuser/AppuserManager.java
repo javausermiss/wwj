@@ -227,8 +227,22 @@ public interface AppuserManager {
 
     public int updateAppUserCnee(AppUser appUser) throws Exception;
 
-    /********************************************************************************/
+    /***********************************************************************************************************/
+    /**
+     * 注册腾讯用户
+     * @param appUser
+     * @return
+     * @throws Exception
+     */
     public int regwx(AppUser appUser) throws Exception;
+
+    /**
+     * 二次登录修改用户
+     * @param appUser
+     * @return
+     * @throws Exception
+     */
+    public int updateTencentUser(AppUser appUser)throws Exception;
 
 
 

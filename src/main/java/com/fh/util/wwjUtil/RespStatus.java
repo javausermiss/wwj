@@ -31,6 +31,19 @@ public class RespStatus {
     }
 
     /**
+     * 支付返回
+     * @return
+     */
+
+    public static JSONObject pay_SUCCESS() {
+        JSONObject obj = new JSONObject();
+        obj.element("code", ReturnCode.SUCCESS);
+        obj.element("msg", "SUCCESS");
+        return obj;
+    }
+
+
+    /**
      * 失败
      *
      * @param return_msg

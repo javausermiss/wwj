@@ -75,41 +75,111 @@ public class TencentloginController {
             @RequestParam("nickName") String nickname
     ) {
         try {
-            String code = TokenVerify.verify(token);
-            if (code.equals("SUCCESS")) {
-                AppUser appUser = new AppUser();
-                if (imageUrl.equals("") || imageUrl == null) {
-                    imageUrl = "/default.png";
-                }
-                String accessToken = "";
-                if (RedisUtil.getRu().exists("accessToken")) {
-                    accessToken = RedisUtil.getRu().get("accessToken");
+            AppUser appUser = appuserService.getUserByID(userId);
+            String accessToken = "";
+            if (appUser == null) {
+                String code = TokenVerify.verify(token);
+                if (code.equals("SUCCESS")) {
+                    AppUser appUser1 = new AppUser();
+                    if (imageUrl.equals("") || imageUrl == null) {
+                        imageUrl = "/default.png";
+                    }
+
+                    if (RedisUtil.getRu().exists("accessToken")) {
+                        accessToken = RedisUtil.getRu().get("accessToken");
+                    } else {
+                        accessToken = CameraUtils.getAccessToken();
+                    }
+                    appUser1.setNICKNAME(nickname);
+                    appUser1.setIMAGE_URL(imageUrl);
+                    appUser1.setUSER_ID(userId);
+                    appuserService.regwx(appUser1);
+                    String sessionID = MyUUID.createSessionId();
+                    List<Doll> doll = dollService.getAllDoll();
+                    RedisUtil.getRu().set("sessionId:appUser:" + userId, sessionID);
+                    RedisUtil.getRu().set("tencentToken:" + userId, token);
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("appUser", getAppUserInfo(userId));
+                    map.put("sessionID", sessionID);
+                    map.put("dollList", doll);
+                    map.put("accessToken", accessToken);
+                    return RespStatus.successs().element("data", map);
                 } else {
-                    accessToken = CameraUtils.getAccessToken();
+                    return RespStatus.fail("token不合法");
                 }
-                appUser.setNICKNAME(nickname);
-                appUser.setIMAGE_URL(imageUrl);
-                appUser.setUSER_ID(userId);
-                appuserService.regwx(appUser);
+            } else {
+                String code = TokenVerify.verify(token);
+                if (code.equals("SUCCESS")) {
+                    AppUser appUser1 = new AppUser();
+                    if (imageUrl.equals("") || imageUrl == null) {
+                        imageUrl = "/default.png";
+                    }
+                    if (RedisUtil.getRu().exists("accessToken")) {
+                        accessToken = RedisUtil.getRu().get("accessToken");
+                    } else {
+                        accessToken = CameraUtils.getAccessToken();
+                    }
+                    appUser1.setNICKNAME(nickname);
+                    appUser1.setIMAGE_URL(imageUrl);
+                    appuserService.updateTencentUser(appUser1);
+                    String sessionID = MyUUID.createSessionId();
+                    List<Doll> doll = dollService.getAllDoll();
+                    RedisUtil.getRu().set("tencentToken:" + userId, token);
+                    RedisUtil.getRu().set("sessionId:appUser:" + userId, sessionID);
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("appUser", getAppUserInfo(userId));
+                    map.put("sessionID", sessionID);
+                    map.put("dollList", doll);
+                    map.put("accessToken", accessToken);
+                    return RespStatus.successs().element("data", map);
+                } else {
+                    return RespStatus.fail("token不合法");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return RespStatus.fail();
+        }
+
+    }
+
+    /**
+     * 自动登录
+     * @param userId
+     * @param accessToken
+     * @return
+     */
+    @RequestMapping(value = "/tencentAutoLogin", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public JSONObject tencentAutoLogin(
+            @RequestParam("userId") String userId,
+            @RequestParam("accessToken") String accessToken
+    ) {
+        try {
+            String a = TokenVerify.verify(accessToken.trim());//请求sdk后台效验token是否合法
+            System.out.println("------------------------------------"+accessToken+"--------------------------------------");
+            if (a.equals("SUCCESS")) {
+                if (appuserService.getUserByID(userId)==null){
+                    return RespStatus.fail("用户不存在");
+                }
                 String sessionID = MyUUID.createSessionId();
                 List<Doll> doll = dollService.getAllDoll();
+                RedisUtil.getRu().set("tencentToken:" + userId, accessToken);
                 RedisUtil.getRu().set("sessionId:appUser:" + userId, sessionID);
                 Map<String, Object> map = new HashMap<>();
                 map.put("appUser", getAppUserInfo(userId));
                 map.put("sessionID", sessionID);
                 map.put("dollList", doll);
-                map.put("accessToken",accessToken);
+                map.put("accessToken", accessToken);
                 return RespStatus.successs().element("data", map);
-            } else {
-                return RespStatus.fail("token不合法");
+            }else {
+                return RespStatus.fail("token 失效");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
             return RespStatus.fail();
         }
-
-
     }
 
 

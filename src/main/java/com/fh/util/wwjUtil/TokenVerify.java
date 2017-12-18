@@ -10,8 +10,11 @@ import com.fh.util.MD5;
 import net.sf.json.JSONObject;
 import org.apache.http.client.HttpClient;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
@@ -27,33 +30,37 @@ public class TokenVerify {
 
 
     public static String verify(String acctoken) {
-        String code = null;
+
         try {
+            CloseableHttpClient httpClient = HttpClients.createDefault();
+            String code = null;
             String timestamp = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
             System.out.println(timestamp);
             String signatrue = md5(TokenVerify.getSignature(timestamp, ckey, cid, acctoken));
             System.out.println(signatrue);
-            HttpClient httpclient = new DefaultHttpClient();
+            //HttpClient httpclient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost("http://test.api.hxwolf.com:7002/userVisit?"+"cid=" + cid +
                     "&timestamp=" + timestamp+ "&access_token=" + acctoken + "&signatrue=" + signatrue );
             httpPost.addHeader("Content-type", "application/x-www-form-urlencoded");
-            HttpResponse response = httpclient.execute(httpPost);
+            CloseableHttpResponse response = httpClient.execute(httpPost);
             if (response.getStatusLine().getStatusCode() == 200) {
                 //读返回数据
                 String conResult = EntityUtils.toString(response.getEntity());
                 JSONObject object = new JSONObject();
                 object = object.fromObject(conResult);//将字符串转化为json对象
                 code = String.valueOf(object.get("msg"));
-                System.out.println("right!!!!!!!!!!!!!!");
+                System.out.println(code);
             } else {
                 System.out.println("error!!!!!!!!!!!!!!");
                 return RespStatus.fail().toString();
             }
-
+            response.close();
+            httpClient.close();
+            return code;
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
-        return code;
 
     }
 
