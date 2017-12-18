@@ -110,7 +110,7 @@ public class SignAsciiUtil {
 		for (String key : items.keySet()) {
 			forSign.append(key).append("=").append(items.get(key)).append("&");
 		}
-		forSign.append(signKey).append(signKey).append("=").append(signVal);
+		forSign.append(signKey).append("=").append(signVal);
 		String result = MD5Encode(forSign.toString());
 		return result.toUpperCase();
 	}
