@@ -577,6 +577,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.iot.game.pooh.admin</groupId>
+            <artifactId>pooh-admin-srs</artifactId>
+            <version>1.0.0.SNAPSHORT</version>
+        </dependency>
+        
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.16.10</version>
