@@ -391,13 +391,13 @@
     </update>
 
     <!--用户抓取娃娃数量更改-->
-    <update id="updateAppUserDollTotalByName" parameterType="com.fh.entity.system.AppUser">
+    <update id="updateAppUserDollTotalById" parameterType="com.fh.entity.system.AppUser">
         update
         <include refid="tableName"/>
         set
         DOLLTOTAL = #{DOLLTOTAL}
         WHERE
-        NICKNAME = #{NICKNAME}
+        USER_ID = #{USER_ID}
     </update>
 
 

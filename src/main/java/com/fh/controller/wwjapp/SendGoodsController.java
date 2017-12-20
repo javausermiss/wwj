@@ -11,6 +11,7 @@ import com.fh.service.system.sendgoods.SendGoodsManager;
 import com.fh.util.wwjUtil.RespStatus;
 import net.sf.json.JSONObject;
 
+import java.net.URL;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -255,7 +256,8 @@ public class SendGoodsController {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmssSSS");
         String dateString = formatter.format(currentTime);
         long l = Long.parseLong(dateString);
-        System.out.println(l);
+        System.out.println(1/10);
+
 
     }
 

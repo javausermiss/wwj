@@ -147,19 +147,18 @@ public class AppLoginController {
                 Date date = new Date();
                 SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
                 String time = format.format(date);
+
                 String token = MD5.md5(time+sessionID+"Pooh4token"+"3600");
                 RedisUtil.getRu().setex("SRStoken",token,3600);
 
                 List<Doll> doll = dollService.getAllDoll();
-                RedisUtil.getRu().set("sessionId:appUser:" + phone, sessionID);
+                RedisUtil.getRu().set("sessionId:appUser:" + appUser.getUSER_ID(), sessionID);
                 Map<String, Object> map = new LinkedHashMap<>();
                 map.put("accessToken", accessToken);
                 map.put("sessionID", sessionID);
                 map.put("appUser", getAppUserInfo(appUser.getUSER_ID()));
                 map.put("dollList", doll);
                 map.put("SRStoken",token);
-                map.put("time",time);
-                map.put("expire","3600");
                 return RespStatus.successs().element("data", map);
             } else {
                 int a1 = appuserService.reg(phone);
@@ -176,7 +175,7 @@ public class AppLoginController {
                 }
                 String sessionID = MyUUID.createSessionId();
                 List<Doll> doll = dollService.getAllDoll();
-                RedisUtil.getRu().set("sessionId:appUser:" + phone, sessionID);
+                RedisUtil.getRu().set("sessionId:appUser:" + appUserNew.getUSER_ID(), sessionID);
                 Map<String, Object> map = new LinkedHashMap<>();
                 map.put("accessToken", accessToken);
                 map.put("sessionID", sessionID);

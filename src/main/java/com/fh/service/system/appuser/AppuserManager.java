@@ -205,7 +205,7 @@ public interface AppuserManager {
      * @return
      * @throws Exception
      */
-    public int updateAppUserDollTotalByName(AppUser appUser) throws Exception;
+    public int updateAppUserDollTotalById(AppUser appUser) throws Exception;
 
     /**
      * 根据ID修改余额

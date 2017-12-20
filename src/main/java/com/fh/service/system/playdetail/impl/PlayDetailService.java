@@ -28,8 +28,8 @@ public class PlayDetailService implements PlayDetailManage {
     }
 
     @Override
-    public PlayDetail getPlayIdForPeople(String dollname) throws Exception {
-        return (PlayDetail)dao.findForObject("playDetailMapper.getPlayIdForPeople",dollname);
+    public PlayDetail getPlayIdForPeople(String dollId) throws Exception {
+        return (PlayDetail)dao.findForObject("playDetailMapper.getPlayIdForPeople",dollId);
     }
 
     @Override

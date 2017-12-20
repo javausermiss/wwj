@@ -7,20 +7,20 @@
         INSERT INTO
         TB_DOLL_PLAY_DETAIL
         (
-        DOLLNAME,
-        NICKNAME,
+        DOLLID,
+        USERID,
         CREATE_DATE,
         GUESS_ID,
         GOLD,
-        STOP_FLAG
+        CONVERSIONGOLD
         )
         VALUES (
-        #{DOLLNAME},
-        #{NICKNAME},
+        #{DOLLID},
+        #{USERID},
         now(),
         #{GUESS_ID},
         #{GOLD},
-        #{STOP_FLAG}
+        #{CONVERSIONGOLD}
         )
     </insert>
 
@@ -36,7 +36,7 @@
         SELECT * from
         TB_DOLL_PLAY_DETAIL
         WHERE
-        NICKNAME = #{NICKNAME} AND DOLLNAME = #{DOLLNAME}
+        DOLLID = #{DOLLID}
         ORDER BY
         CREATE_DATE
         DESC
@@ -48,7 +48,7 @@
         SELECT * from
         TB_DOLL_PLAY_DETAIL
         WHERE
-        DOLLNAME = #{DOLLNAME}
+        DOLLID= #{DOLLID}
         ORDER BY
         CREATE_DATE
         DESC

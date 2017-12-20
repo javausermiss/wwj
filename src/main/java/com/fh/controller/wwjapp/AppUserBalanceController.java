@@ -266,7 +266,13 @@ public class AppUserBalanceController {
             @RequestParam("sign") String sign
     ) {
         try {
-            if (trade_status.equals("FAILURE")){
+            Ordertest o = orderTestService.getOrderById(out_trade_no);
+            if (o == null) {
+                return "there is no order";
+            }
+            if (trade_status.equals("FAILURE")) {
+                o.setSTATUS("-1");
+                orderTestService.update(o);
                 return "SUCCESS";
             }
             String decodeStr = URLDecoder.decode(extra, "utf-8");
@@ -291,13 +297,11 @@ public class AppUserBalanceController {
                     map.put(key, "null");
                 }
             }
-            Ordertest o = orderTestService.getOrderById(out_trade_no);
-            if (o == null) {
-                return "无此订单";
-            }
+
+
             String tb_amount = o.getREGAMOUNT();
             if (!tb_amount.equals(String.valueOf(amount))) {
-              return "充值金额不匹配";
+                return "充值金额不匹配";
             }
             Map<String, Object> sortedParams = new TreeMap<String, Object>(map);
             Set<Map.Entry<String, Object>> entrys = sortedParams.entrySet();
@@ -385,9 +389,21 @@ public class AppUserBalanceController {
                 return RespStatus.fail("余额不足");
             }
             PlayDetail playDetail = new PlayDetail();
-            playDetail.setDOLLNAME(dollService.getDollByID(dollId).getDOLL_NAME());
-            playDetail.setNICKNAME(appuserService.getUserByID(userId).getNICKNAME());
+            playDetail.setDOLLID(dollId);
+            //  playDetail.setNICKNAME(appuserService.getUserByID(userId).getNICKNAME());
             PlayDetail p = playDetailService.getPlayDetailLast(playDetail);//获取最新的场次
+            String conversionGold = "";
+            int gold = dollService.getDollByID(dollId).getDOLL_GOLD();
+            switch (gold) {
+                case 19:
+                    conversionGold = "80";
+                    break;
+                case 29:
+                    conversionGold = "120";
+                    break;
+                default:
+                    conversionGold = "180";
+            }
             if (p == null) {
                 Date currentTime1 = new Date();
                 SimpleDateFormat formatter1 = new SimpleDateFormat("yyyyMMdd");
@@ -396,10 +412,10 @@ public class AppUserBalanceController {
                 String guessId = dateString1 + num;
                 PlayDetail newPlayDetail = new PlayDetail();
                 newPlayDetail.setGUESS_ID(guessId);
-                newPlayDetail.setNICKNAME(appuserService.getUserByID(userId).getNICKNAME());
-                newPlayDetail.setDOLLNAME(dollService.getDollByID(dollId).getDOLL_NAME());
+                newPlayDetail.setDOLLID(dollId);
+                newPlayDetail.setUSERID(userId);
+                newPlayDetail.setCONVERSIONGOLD(conversionGold);
                 newPlayDetail.setGOLD(String.valueOf(dollService.getDollByID(dollId).getDOLL_GOLD()));
-                newPlayDetail.setSTOP_FLAG("1");//允许竞猜
                 int n = playDetailService.reg(newPlayDetail);
                 if (n == 0) {
                     return RespStatus.fail("增加场次失败");
@@ -416,10 +432,10 @@ public class AppUserBalanceController {
                     String newGuessId = String.valueOf(Long.parseLong(guessid) + 1);
                     PlayDetail newp = new PlayDetail();
                     newp.setGUESS_ID(newGuessId);
-                    newp.setDOLLNAME(dollService.getDollByID(dollId).getDOLL_NAME());
-                    newp.setNICKNAME(appuserService.getUserByID(userId).getNICKNAME());
+                    newp.setUSERID(userId);
+                    newp.setDOLLID(dollId);
+                    newp.setCONVERSIONGOLD(conversionGold);
                     newp.setGOLD(String.valueOf(dollService.getDollByID(dollId).getDOLL_GOLD()));
-                    newp.setSTOP_FLAG("1");
                     int c = playDetailService.reg(newp);
                     if (c == 0) {
                         return RespStatus.fail("当天增加游戏记录失败");
@@ -432,11 +448,11 @@ public class AppUserBalanceController {
                     String date = format.format(current);
                     String newGuessID = date + "0001";
                     PlayDetail playDetail1 = new PlayDetail();
-                    playDetail1.setDOLLNAME(dollService.getDollByID(dollId).getDOLL_NAME());
-                    playDetail1.setNICKNAME(appuserService.getUserByID(userId).getNICKNAME());
+                    playDetail1.setDOLLID(dollId);
+                    playDetail1.setUSERID(userId);
+                    playDetail1.setCONVERSIONGOLD(conversionGold);
                     playDetail1.setGUESS_ID(newGuessID);
                     playDetail1.setGOLD(String.valueOf(dollService.getDollByID(dollId).getDOLL_GOLD()));
-                    playDetail1.setSTOP_FLAG("1");
                     int c1 = playDetailService.reg(playDetail1);
                     if (c1 == 0) {
                         return RespStatus.fail("隔天增加游戏记录失败");
@@ -461,45 +477,45 @@ public class AppUserBalanceController {
      * 消费金币接口 2017/12/13
      *
      * @param userId
-     * @param cost
+     * @param dollId
      * @return
      */
     @RequestMapping(value = "/costBalance", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject costBalance(@RequestParam("userId") String userId,
-                                  @RequestParam("gold") String cost,
+                                  @RequestParam("gode") String co,//废弃
                                   @RequestParam("dollId") String dollId
     ) {
         try {
-            //String phone = new String(Base64Util.decryptBASE64(aPhone));
-            //AppUser appUser = appuserService.getUserByPhone(phone);
             AppUser appUser = appuserService.getUserByID(userId);
-            if (appUser != null) {
-                String balance = appUser.getBALANCE();
-                int a = Integer.parseInt(balance);
-                int b = Integer.parseInt(cost);
-                if (a < b) {
-                    return RespStatus.fail("余额不足");
-                } else {
-                    Payment payment = new Payment();
-                    payment.setCOST_TYPE("0");
-                    payment.setDOLLID(dollId);
-                    payment.setUSERID(userId);
-                    payment.setGOLD(cost);
-                    paymentService.reg(payment);
-                    appUser.setBALANCE(String.valueOf(a - b));
-                    int c = appuserService.updateAppUserBalanceById(appUser);
-                    if (c != 0) {
-                        Map<String, Object> map = new LinkedHashMap<>();
-                        map.put("appUser", getAppUserInfoById(userId));
-                        return RespStatus.successs().element("data", map);
-                    } else {
-                        return RespStatus.fail("扣款失败");
-                    }
-
-                }
+            if (appUser == null) {
+                return RespStatus.fail("不存在该用户");
+            }
+            Doll doll = dollService.getDollByID(dollId);
+            if (doll == null) {
+                return RespStatus.fail("不存在该房间");
+            }
+            String balance = appUser.getBALANCE();
+            int a = Integer.parseInt(balance);
+            int b = doll.getDOLL_GOLD();
+            if (a < b) {
+                return RespStatus.fail("余额不足");
             } else {
-                return RespStatus.fail("无此用户");
+                Payment payment = new Payment();
+                payment.setCOST_TYPE("0");
+                payment.setDOLLID(dollId);
+                payment.setUSERID(userId);
+                payment.setGOLD(String.valueOf(doll.getDOLL_GOLD()));
+                paymentService.reg(payment);
+                appUser.setBALANCE(String.valueOf(a - b));
+                int c = appuserService.updateAppUserBalanceById(appUser);
+                if (c != 0) {
+                    Map<String, Object> map = new LinkedHashMap<>();
+                    map.put("appUser", getAppUserInfoById(userId));
+                    return RespStatus.successs().element("data", map);
+                } else {
+                    return RespStatus.fail("扣款失败");
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -6,13 +6,13 @@ package com.fh.entity.system;
 public class PlayDetail {
 
     private String ID;//主键
-    private String NICKNAME;//用户昵称
+    private String USERID;//用户昵称
     private String GUESS_ID;//场次ID
-    private String DOLLNAME;//房间昵称
+    private String DOLLID;//房间昵称
     private String STATE;//是否抓取成功'1'抓取成功 '0'抓取失败
     private String CREATE_DATE;//创建时间
     private String GOLD;
-    private String STOP_FLAG;
+    private String STOP_FLAG;//0可以下注 -1禁止下注
     private String CONVERSIONGOLD;
 
 
@@ -51,20 +51,20 @@ public class PlayDetail {
         this.CONVERSIONGOLD = CONVERSIONGOLD;
     }
 
-    public String getNICKNAME() {
-        return NICKNAME;
+    public String getUSERID() {
+        return USERID;
     }
 
-    public void setNICKNAME(String NICKNAME) {
-        this.NICKNAME = NICKNAME;
+    public void setUSERID(String USERID) {
+        this.USERID = USERID;
     }
 
-    public String getDOLLNAME() {
-        return DOLLNAME;
+    public String getDOLLID() {
+        return DOLLID;
     }
 
-    public void setDOLLNAME(String DOLLNAME) {
-        this.DOLLNAME = DOLLNAME;
+    public void setDOLLID(String DOLLID) {
+        this.DOLLID = DOLLID;
     }
 
     public String getGUESS_ID() {

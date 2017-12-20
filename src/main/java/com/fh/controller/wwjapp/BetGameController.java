@@ -97,7 +97,7 @@ public class BetGameController {
      */
     public JSONObject getPlayDetailInfo(String dollID) {
         try {
-            PlayDetail p = playDetailService.getPlayIdForPeople(dollService.getDollByID(dollID).getDOLL_NAME());
+            PlayDetail p = playDetailService.getPlayIdForPeople(dollID);
             return JSONObject.fromObject(p);
         } catch (Exception e) {
             return null;
@@ -132,7 +132,7 @@ public class BetGameController {
      * @param gold
      * @param guessKey
      * @return
-     */
+     *//*
     @RequestMapping(value = "/newbets1", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject newbets1(
@@ -286,7 +286,7 @@ public class BetGameController {
         }
         return RespStatus.successs();
     }
-
+*/
     /**
      * 2017/12/12
      * 玩家点击竞猜，然后围观群众进行投注
@@ -310,7 +310,8 @@ public class BetGameController {
         try {
             PlayDetail p = playDetailService.getPlayDetailByGuessID(guessId);
             String s = p.getSTOP_FLAG();
-            if (!s.equals("1")) {
+            //默认0可以投注，-1 机器已经下抓，禁止投注
+            if (!s.equals("0")) {
                 return RespStatus.fail("禁止投注！");
             }
             AppUser appUser = appuserService.getUserByID(userId);

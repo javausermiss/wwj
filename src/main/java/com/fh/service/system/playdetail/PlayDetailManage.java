@@ -29,11 +29,11 @@ public interface PlayDetailManage {
 
     /**
      * 查询出最新的场次分发给围观群众
-     * @param dollname
+     * @param dollId
      * @return
      * @throws Exception
      */
-    public PlayDetail getPlayIdForPeople(String dollname)throws Exception;
+    public PlayDetail getPlayIdForPeople(String dollId)throws Exception;
 
 
     /**

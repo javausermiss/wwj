@@ -237,8 +237,8 @@ public class AppuserService implements AppuserManager{
 	 * @throws Exception
 	 */
 	@Override
-	public int updateAppUserDollTotalByName(AppUser appUser) throws Exception {
-		return (int) dao.update("AppuserMapper.updateAppUserDollTotalByName",appUser);
+	public int updateAppUserDollTotalById(AppUser appUser) throws Exception {
+		return (int) dao.update("AppuserMapper.updateAppUserDollTotalById",appUser);
 	}
 
 	@Override
