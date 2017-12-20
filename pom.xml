@@ -578,7 +578,7 @@
 
         <dependency>
             <groupId>com.iot.game.pooh.admin</groupId>
-            <artifactId>pooh-admin-srs</artifactId>
+            <artifactId>pooh-admin-srs-interface</artifactId>
             <version>1.0.0.SNAPSHORT</version>
         </dependency>
         

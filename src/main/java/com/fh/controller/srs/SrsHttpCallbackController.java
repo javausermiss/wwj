@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fh.controller.base.BaseController;
-import com.iot.game.pooh.admin.srs.entity.httpback.HttpOnClose;
-import com.iot.game.pooh.admin.srs.entity.httpback.HttpOnConnect;
-import com.iot.game.pooh.admin.srs.entity.httpback.HttpOnDvr;
-import com.iot.game.pooh.admin.srs.entity.httpback.HttpOnPlay;
-import com.iot.game.pooh.admin.srs.entity.httpback.HttpOnPublish;
-import com.iot.game.pooh.admin.srs.entity.httpback.HttpOnStop;
-import com.iot.game.pooh.admin.srs.entity.httpback.HttpOnUnpublish;
-import com.iot.game.pooh.admin.srs.vaild.SrsHttpCallbackValid;
+import com.iot.game.pooh.admin.srs.core.entity.httpback.HttpOnClose;
+import com.iot.game.pooh.admin.srs.core.entity.httpback.HttpOnConnect;
+import com.iot.game.pooh.admin.srs.core.entity.httpback.HttpOnDvr;
+import com.iot.game.pooh.admin.srs.core.entity.httpback.HttpOnPlay;
+import com.iot.game.pooh.admin.srs.core.entity.httpback.HttpOnPublish;
+import com.iot.game.pooh.admin.srs.core.entity.httpback.HttpOnStop;
+import com.iot.game.pooh.admin.srs.core.entity.httpback.HttpOnUnpublish;
+import com.iot.game.pooh.admin.srs.core.vaild.SrsHttpCallbackValid;
 
 
 
