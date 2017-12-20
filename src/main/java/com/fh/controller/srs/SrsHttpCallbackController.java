@@ -36,7 +36,6 @@ import com.iot.game.pooh.admin.srs.vaild.SrsHttpCallbackValid;
 @RequestMapping(value="/srs/httpback")
 public class SrsHttpCallbackController extends BaseController{
 
-	com.iot.game.pooh.server.entity.rpc.RpcCommandResult r=new com.iot.game.pooh.server.entity.rpc.RpcCommandResult();
 
     /**
      * on_connect 当客户端连接到指定的vhost和app时
