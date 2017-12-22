@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">   
+        
+        
+
+	<!-- 服务消费者缺省值配置 --> 
+	<dubbo:consumer check="false" timeout="2000" />
+
+	<dubbo:registry  address="zookeeper://47.100.32.153:2181"/>
+	
+	<!-- 服务消费者应用名称 --> 
+	<dubbo:reference id="srsServerService" interface="com.iot.game.pooh.admin.srs.interfaces.SrsServerService"></dubbo:reference>
+</beans>
