@@ -12,18 +12,28 @@ public class Pond {
     private String CREATE_DATE;
     private String UPDATE_DATE;
     private String POND_FLAG;
+    private String DOLL_ID;
 
     public Pond() {
 
     }
 
-    public Pond(String GUESS_ID, String CREATE_DATE) {
+    public Pond(String GUESS_ID, String DOLLID, String CREATE_DATE) {
         this.GUESS_ID = GUESS_ID;
         this.CREATE_DATE = CREATE_DATE;
+        this.DOLL_ID = DOLLID;
     }
 
     public String getPOND_FLAG() {
         return POND_FLAG;
+    }
+
+    public String getDOLLID() {
+        return DOLL_ID;
+    }
+
+    public void setDOLLID(String DOLL_ID) {
+        this.DOLL_ID = DOLL_ID;
     }
 
     public void setPOND_FLAG(String POND_FLAG) {

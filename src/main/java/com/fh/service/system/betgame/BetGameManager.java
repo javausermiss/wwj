@@ -62,4 +62,13 @@ public interface BetGameManager {
      * @throws Exception
      */
     public int updateGuessDetailGuessType(GuessDetail guessDetail)throws Exception;
+
+    /**
+     * 通过playId userId 查询
+     * @param guessDetail
+     * @return
+     * @throws Exception
+     */
+    public GuessDetail getGuessDetail(GuessDetail guessDetail) throws Exception;
+
 }

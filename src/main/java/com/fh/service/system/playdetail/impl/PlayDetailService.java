@@ -18,8 +18,8 @@ public class PlayDetailService implements PlayDetailManage {
     }
 
     @Override
-    public PlayDetail getPlayDetailByGuessID(String guessId) throws Exception {
-        return (PlayDetail)dao.findForObject("playDetailMapper.getPlayDetailByGuessID",guessId);
+    public PlayDetail getPlayDetailByGuessID(PlayDetail playDetail) throws Exception {
+        return (PlayDetail)dao.findForObject("playDetailMapper.getPlayDetailByGuessID",playDetail);
     }
 
     @Override

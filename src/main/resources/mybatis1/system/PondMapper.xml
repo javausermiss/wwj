@@ -15,7 +15,9 @@
         GUESS_N,
         GUESS_GOLD,
         CREATE_DATE,
-        UPDATA_DATE
+        UPDATA_DATE,
+        POND_FLAG,
+        DOLLID
 
     </sql>
 
@@ -26,7 +28,9 @@
         #{GUESS_N},
         #{GUESS_GOLD},
         #{CREATE_DATE},
-        #{UPDATE_DATE}
+        #{UPDATE_DATE},
+        #{POND_FLAG},
+        #{DOLL_ID}
     </sql>
 
     <insert id="regPond" parameterType="com.fh.entity.system.Pond">
@@ -34,11 +38,13 @@
         <include refid="tableName"/>
         (
         GUESS_ID,
+        DOLL_ID,
         CREATE_DATE
         )
         VALUES
         (
         #{GUESS_ID},
+        #{DOLL_ID},
         now()
         )
 
@@ -66,13 +72,15 @@
         POND_ID = #{POND_ID}
     </update>
 
-    <select id="getPondByPlayId" parameterType="String"
+    <select id="getPondByPlayId" parameterType="com.fh.entity.system.Pond"
     resultType="com.fh.entity.system.Pond">
 
         SELECT * FROM
         <include refid="tableName"/>
         WHERE
         GUESS_ID = #{GUESS_ID}
+        AND
+        DOLL_ID = #{DOLL_ID}
 
     </select>
 
@@ -89,7 +97,7 @@
         UPDATE
         <include refid="tableName"/>
         SET
-        POND_FLAG = #{POND_FLAG},
+        POND_FLAG = #{POND_FLAG}
         WHERE
         POND_ID = #{POND_ID}
     </update>

@@ -26,8 +26,8 @@ public class PondService implements PondManager {
     }
 
     @Override
-    public Pond getPondByPlayId(String guessId) throws Exception {
-        return (Pond) dao.findForObject("PondMapper.getPondByPlayId",guessId);
+    public Pond getPondByPlayId(Pond pond) throws Exception {
+        return (Pond) dao.findForObject("PondMapper.getPondByPlayId",pond);
     }
 
     @Override

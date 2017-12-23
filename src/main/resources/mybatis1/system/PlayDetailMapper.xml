@@ -24,11 +24,14 @@
         )
     </insert>
 
-    <select id="getPlayDetailByGuessID" parameterType="String" resultType="com.fh.entity.system.PlayDetail">
+    <select id="getPlayDetailByGuessID" parameterType="com.fh.entity.system.PlayDetail" resultType="com.fh.entity.system.PlayDetail">
         SELECT * FROM
         TB_DOLL_PLAY_DETAIL
         WHERE
         GUESS_ID = #{GUESS_ID}
+        AND
+        DOLLID = #{DOLLID}
+
     </select>
 
     <select id="getPlayDetailLast" parameterType="com.fh.entity.system.PlayDetail"
@@ -73,7 +76,11 @@
         STATE = #{STATE}
         WHERE
         GUESS_ID = #{GUESS_ID}
+        AND
+        DOLLID = #{DOLLID}
     </update>
+
+
 
 
 

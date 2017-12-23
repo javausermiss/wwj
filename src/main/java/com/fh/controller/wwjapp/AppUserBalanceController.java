@@ -102,15 +102,6 @@ public class AppUserBalanceController {
         }
     }
 
-    public JSONObject getPondInfo(String guessID) {
-        try {
-            Pond p = pondService.getPondByPlayId(guessID);
-            return JSONObject.fromObject(p);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
     /**
      * 游戏记录信息
      *
@@ -368,110 +359,6 @@ public class AppUserBalanceController {
         }
 
     }
-
-    /**
-     * 用户点击开始按钮创建游戏记录表和奖池表
-     *
-     * @param userId
-     * @param dollId
-     * @return
-     */
-    @RequestMapping(value = "/creatPlayList", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    @ResponseBody
-
-    public JSONObject creatPlayList(@RequestParam("userId") String userId,
-                                    @RequestParam("dollId") String dollId) {
-        try {
-            AppUser appUser = appuserService.getUserByID(userId);
-            String b1 = appUser.getBALANCE();
-            int b2 = dollService.getDollByID(dollId).getDOLL_GOLD();
-            if (Integer.valueOf(b1) < b2) {
-                return RespStatus.fail("余额不足");
-            }
-            PlayDetail playDetail = new PlayDetail();
-            playDetail.setDOLLID(dollId);
-            //  playDetail.setNICKNAME(appuserService.getUserByID(userId).getNICKNAME());
-            PlayDetail p = playDetailService.getPlayDetailLast(playDetail);//获取最新的场次
-            String conversionGold = "";
-            int gold = dollService.getDollByID(dollId).getDOLL_GOLD();
-            switch (gold) {
-                case 19:
-                    conversionGold = "80";
-                    break;
-                case 29:
-                    conversionGold = "120";
-                    break;
-                default:
-                    conversionGold = "180";
-            }
-            if (p == null) {
-                Date currentTime1 = new Date();
-                SimpleDateFormat formatter1 = new SimpleDateFormat("yyyyMMdd");
-                String dateString1 = formatter1.format(currentTime1);
-                String num = "0001";
-                String guessId = dateString1 + num;
-                PlayDetail newPlayDetail = new PlayDetail();
-                newPlayDetail.setGUESS_ID(guessId);
-                newPlayDetail.setDOLLID(dollId);
-                newPlayDetail.setUSERID(userId);
-                newPlayDetail.setCONVERSIONGOLD(conversionGold);
-                newPlayDetail.setGOLD(String.valueOf(dollService.getDollByID(dollId).getDOLL_GOLD()));
-                int n = playDetailService.reg(newPlayDetail);
-                if (n == 0) {
-                    return RespStatus.fail("增加场次失败");
-                }
-                Pond pond = new Pond(newPlayDetail.getGUESS_ID(), null);
-                pondService.regPond(pond);
-            } else {
-                String guessid = p.getGUESS_ID();//获取到场次ID 201712100001
-                Date currentTime = new Date();
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-                String dateString = formatter.format(currentTime);
-                String x = guessid.substring(0, 8);//取前八位进行判断
-                if (x.equals(dateString)) {
-                    String newGuessId = String.valueOf(Long.parseLong(guessid) + 1);
-                    PlayDetail newp = new PlayDetail();
-                    newp.setGUESS_ID(newGuessId);
-                    newp.setUSERID(userId);
-                    newp.setDOLLID(dollId);
-                    newp.setCONVERSIONGOLD(conversionGold);
-                    newp.setGOLD(String.valueOf(dollService.getDollByID(dollId).getDOLL_GOLD()));
-                    int c = playDetailService.reg(newp);
-                    if (c == 0) {
-                        return RespStatus.fail("当天增加游戏记录失败");
-                    }
-                    Pond pond = new Pond(newp.getGUESS_ID(), null);
-                    pondService.regPond(pond);
-                } else {
-                    Date current = new Date();
-                    SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-                    String date = format.format(current);
-                    String newGuessID = date + "0001";
-                    PlayDetail playDetail1 = new PlayDetail();
-                    playDetail1.setDOLLID(dollId);
-                    playDetail1.setUSERID(userId);
-                    playDetail1.setCONVERSIONGOLD(conversionGold);
-                    playDetail1.setGUESS_ID(newGuessID);
-                    playDetail1.setGOLD(String.valueOf(dollService.getDollByID(dollId).getDOLL_GOLD()));
-                    int c1 = playDetailService.reg(playDetail1);
-                    if (c1 == 0) {
-                        return RespStatus.fail("隔天增加游戏记录失败");
-                    }
-                    Pond pond = new Pond(playDetail1.getGUESS_ID(), null);
-                    pondService.regPond(pond);
-                }
-            }
-            Map<String, Object> map = new LinkedHashMap<>();
-            map.put("playDetail", getPlayDetailInfo(dollService.getDollByID(dollId).getDOLL_NAME()));
-            map.put("pond", getPondInfo(playDetailService.getPlayDetailLast(playDetail).getGUESS_ID()));
-            return RespStatus.successs().element("data", map);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return RespStatus.fail();
-        }
-
-    }
-
 
     /**
      * 消费金币接口 2017/12/13

@@ -512,15 +512,15 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-        <!--娃娃机实体类jar包-->
-      <!--  <dependency>
-            <groupId>entity</groupId>
-            <artifactId>entity</artifactId>
+
+   <dependency>
+            <groupId>SRS</groupId>
+            <artifactId>SRS</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/pooh-server-entity-1.0.0.SNA.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/pooh-admin-srs-core-1.0.0.SNAPSHORT.jar</systemPath>
         </dependency>
--->
+
         <!-- 易宝支付以下五个依赖-->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -576,11 +576,11 @@
             <version>1.0.0.SNAPSHORT</version>
         </dependency>
 
-        <dependency>
+        <!--<dependency>
             <groupId>com.iot.game.pooh.admin</groupId>
             <artifactId>pooh-admin-srs-interface</artifactId>
             <version>1.0.0.SNAPSHORT</version>
-        </dependency>
+        </dependency>-->
         
         <dependency>
             <groupId>org.projectlombok</groupId>

@@ -38,6 +38,8 @@ public class SendGoodsController {
     private SendGoodsManager sendGoodsService;
     @Resource(name = "conversionService")
     private ConversionManager conversionService;
+    @Resource(name = "betGameService")
+    private BetGameManager betGameService;
 
 
     public JSONObject getSendGoodsInfo(String playId) {
@@ -257,6 +259,10 @@ public class SendGoodsController {
         String dateString = formatter.format(currentTime);
         long l = Long.parseLong(dateString);
         System.out.println(1/10);
+
+
+
+
 
 
     }

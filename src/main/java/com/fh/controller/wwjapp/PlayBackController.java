@@ -283,8 +283,8 @@ public class PlayBackController {
         int a = 38, b = 7;
         double b1 = (a * 1.0 / b);
         Math.round(38 * 1.0 / 7);
-        Math.floor(b1);
-        System.out.println((int) Math.floor(34 / 7));
+        int n =  (int) Math.floor(29/1);
+        System.out.println(n);
     }
 
 

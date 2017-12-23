@@ -265,5 +265,10 @@ public class AppuserService implements AppuserManager{
 	public int updateTencentUser(AppUser appUser) throws Exception {
 		return (int)dao.update("AppuserMapper.updateTencentUser",appUser);
 	}
+
+	@Override
+	public AppUser testuser(AppUser appUser) throws Exception {
+		return (AppUser)dao.findForObject("AppuserMapper.testuser",appUser);
+	}
 }
 

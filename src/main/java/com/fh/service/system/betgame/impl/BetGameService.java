@@ -61,4 +61,9 @@ public class BetGameService implements BetGameManager {
     public int updateGuessDetailGuessType(GuessDetail guessDetail) throws Exception {
         return (int)dao.update("GuessDetailMapper.updateGuessDetailGuessType",guessDetail);
     }
+
+    @Override
+    public GuessDetail getGuessDetail(GuessDetail guessDetail) throws Exception {
+        return (GuessDetail) dao.findForObject("GuessDetailMapper.getGuessDetail",guessDetail);
+    }
 }

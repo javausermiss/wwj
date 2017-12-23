@@ -453,4 +453,10 @@
 		USER_ID = #{USER_ID}
 	</update>
 
+    <select id="testuser" parameterType="com.fh.entity.system.AppUser" resultType="com.fh.entity.system.AppUser">
+        SELECT * FROM sys_app_user where nickname = #{NICKNAME} AND phone = #{PHONE}
+
+
+    </select>
+
 </mapper>

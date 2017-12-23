@@ -246,4 +246,37 @@ public class AppUser {
     public void setCREATETIME(String CREATETIME) {
         this.CREATETIME = CREATETIME;
     }
+
+
+    @Override
+    public String toString() {
+        return "AppUser{" +
+                "USER_ID='" + USER_ID + '\'' +
+                ", USERNAME='" + USERNAME + '\'' +
+                ", PASSWORD='" + PASSWORD + '\'' +
+                ", NAME='" + NAME + '\'' +
+                ", RIGHTS='" + RIGHTS + '\'' +
+                ", ROLE_ID='" + ROLE_ID + '\'' +
+                ", LAST_LOGIN='" + LAST_LOGIN + '\'' +
+                ", IP='" + IP + '\'' +
+                ", STATUS='" + STATUS + '\'' +
+                ", BZ='" + BZ + '\'' +
+                ", PHONE='" + PHONE + '\'' +
+                ", SFID='" + SFID + '\'' +
+                ", START_TIME='" + START_TIME + '\'' +
+                ", END_TIME='" + END_TIME + '\'' +
+                ", YEARS=" + YEARS +
+                ", NUMBER='" + NUMBER + '\'' +
+                ", EMAIL='" + EMAIL + '\'' +
+                ", CREATETIME='" + CREATETIME + '\'' +
+                ", IMAGE_URL='" + IMAGE_URL + '\'' +
+                ", ADDRESS='" + ADDRESS + '\'' +
+                ", BALANCE='" + BALANCE + '\'' +
+                ", DOLLTOTAL=" + DOLLTOTAL +
+                ", NICKNAME='" + NICKNAME + '\'' +
+                ", CNEE_NAME='" + CNEE_NAME + '\'' +
+                ", CNEE_ADDRESS='" + CNEE_ADDRESS + '\'' +
+                ", CNEE_PHONE='" + CNEE_PHONE + '\'' +
+                '}';
+    }
 }

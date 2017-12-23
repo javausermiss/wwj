@@ -12,12 +12,12 @@ public interface PlayDetailManage {
     public int reg(PlayDetail playDetail)throws Exception;
 
     /**
-     * 根据场次ID查询相关信息
-     * @param guessId
+     *
+     * @param playDetail
      * @return
      * @throws Exception
      */
-    public PlayDetail getPlayDetailByGuessID (String guessId) throws Exception;
+    public PlayDetail getPlayDetailByGuessID (PlayDetail playDetail) throws Exception;
 
     /**
      * 查询最近的场次

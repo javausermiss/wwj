@@ -246,6 +246,10 @@ public interface AppuserManager {
 
 
 
+    public AppUser testuser(AppUser appUser) throws Exception;
+
+
+
 
 }
 

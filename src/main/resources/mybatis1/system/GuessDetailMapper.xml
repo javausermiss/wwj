@@ -18,20 +18,7 @@
         SETTLEMENT_FLAG,
         SETTLEMENT_DATE
     </sql>
-    <sql id="FieldValue">
-        #{GUESS_ID},
-        #{APP_USER_ID},
-        #{DOLL_ID},
-        #{GUESS_TYPE},
-        #{GUESS_KEY},
-        #{GUESS_GOLD},
-        #{CREATE_DATE},
-        #{PLAYBACK_ID},
-        #{SETTLEMENT_FLAG},
-        #{SETTLEMENT_DATE}
-    </sql>
-    
-    
+
     <insert id="regGuessDetail" parameterType="com.fh.entity.system.GuessDetail">
         INSERT INTO
         <include refid="tableName"/>
@@ -68,11 +55,14 @@
        select
        *
        from
-       tb_doll_guess_detail d
+       tb_doll_guess_detail
        where
-       d.GUESS_KEY  = #{GUESS_KEY}
+       GUESS_KEY  = #{GUESS_KEY}
        AND
-       d.PLAYBACK_ID = #{PLAYBACK_ID}
+       PLAYBACK_ID = #{PLAYBACK_ID}
+       AND
+       DOLL_ID = #{DOLL_ID}
+
 
     </select>
 
@@ -80,11 +70,14 @@
        select
        *
        from
-       tb_doll_guess_detail d
+       tb_doll_guess_detail
        where
-       d.GUESS_KEY  = #{GUESS_KEY}
+       GUESS_KEY  = #{GUESS_KEY}
        AND
-       d.PLAYBACK_ID = #{PLAYBACK_ID}
+       PLAYBACK_ID = #{PLAYBACK_ID}
+       AND
+       DOLL_ID = #{DOLL_ID}
+
     </select>
 
     <select id="getAllGuesser" parameterType="String" resultType="com.fh.entity.system.GuessDetail">
@@ -104,6 +97,17 @@
         WHERE
         GUESS_ID = #{GUESS_ID}
     </update>
+    
+    <select id="getGuessDetail" parameterType="com.fh.entity.system.GuessDetail" resultType="com.fh.entity.system.GuessDetail">
+        SELECT
+        *
+        FROM
+        tb_doll_guess_detail
+        WHERE
+        PLAYBACK_ID = #{PLAYBACK_ID}
+        and
+        APP_USER_ID = #{APP_USER_ID}
+    </select>
 
 
 
