@@ -2,6 +2,7 @@ package com.fh.controller.srs;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fh.controller.base.BaseController;
+import com.iot.game.pooh.admin.srs.core.entity.api.Client;
 import com.iot.game.pooh.admin.srs.core.entity.httpback.HttpOnClose;
 import com.iot.game.pooh.admin.srs.core.entity.httpback.HttpOnConnect;
 import com.iot.game.pooh.admin.srs.core.entity.httpback.HttpOnDvr;
@@ -17,6 +19,8 @@ import com.iot.game.pooh.admin.srs.core.entity.httpback.HttpOnPublish;
 import com.iot.game.pooh.admin.srs.core.entity.httpback.HttpOnStop;
 import com.iot.game.pooh.admin.srs.core.entity.httpback.HttpOnUnpublish;
 import com.iot.game.pooh.admin.srs.core.vaild.SrsHttpCallbackValid;
+import com.iot.game.pooh.admin.srs.core.vo.ClientVo;
+import com.iot.game.pooh.admin.srs.interfaces.SrsServerService;
 
 
 
@@ -37,6 +41,9 @@ import com.iot.game.pooh.admin.srs.core.vaild.SrsHttpCallbackValid;
 @RequestMapping(value="/srs/httpback")
 public class SrsHttpCallbackController extends BaseController{
 
+	
+    @Autowired
+    private SrsServerService srsServerService;
 
     /**
      * on_connect 当客户端连接到指定的vhost和app时
@@ -47,14 +54,16 @@ public class SrsHttpCallbackController extends BaseController{
 	@RequestMapping(value="/onConnect")
 	@ResponseBody
 	public String onConnect(HttpServletRequest req,@RequestBody HttpOnConnect httpOnConnect){
-		logger.info("srs on_connect events params is "+JSONObject.toJSONString(httpOnConnect));
-		boolean valid=SrsHttpCallbackValid.onConnectVaild(httpOnConnect);
-		logger.info("srs onConnect valid response val is "+valid);
-		if(valid){
-			return "0";
-		}else{
-			return "9999";
-		}
+//		logger.info("srs on_connect events params is "+JSONObject.toJSONString(httpOnConnect));
+//		boolean valid=SrsHttpCallbackValid.onConnectVaild(httpOnConnect);
+//		logger.info("srs onConnect valid response val is "+valid);
+//		if(valid){
+//			return "0";
+//		}else{
+//			return "9999";
+//		}
+		
+		return "0";
 	}
 	
 	/**
@@ -82,9 +91,28 @@ public class SrsHttpCallbackController extends BaseController{
 	@ResponseBody
 	public String onPublish(HttpServletRequest req,@RequestBody HttpOnPublish httpOnPublish){
 		
-		logger.info(JSONObject.toJSON(httpOnPublish).toString());
+//		logger.info(JSONObject.toJSON(httpOnPublish).toString());
+		boolean valid=true;
+//		try{
+//			String trmpUrl=httpOnPublish.getTcUrl().split("\\?")[0];
+//			int operNum=trmpUrl.lastIndexOf("/");
+//			String addrUrl=trmpUrl.substring(7,operNum);
+////			
+//			Client clt=srsServerService.getClientByClientId(addrUrl+":1985",httpOnPublish.getClient_id());
+//			ClientVo clt=srsServerService.getSrsClients(addrUrl, "1985");
+////			TODO 更新摄像头表server_id
+//			logger.info(JSONObject.toJSONString(clt));
+//			valid=true;
+//		}catch(Exception ex){
+//			logger.info(ex.getLocalizedMessage(), ex);
+//			valid=false;
+//		}
 		
-		return "0";
+		if(valid){
+			return "0";
+		}else{
+			return "9999";
+		}
 	}
 	
 	/**
