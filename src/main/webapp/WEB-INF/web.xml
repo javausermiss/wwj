@@ -11,9 +11,10 @@
 			classpath:spring/ApplicationContext-dataSource.xml,
 			classpath:spring/ApplicationContext-dubbo.xml,
 			classpath:spring/ApplicationContext-srs-dubbo-service.xml,
+			classpath:spring/ApplicationContext-job.xml,
 			classpath:spring/ApplicationContext-shiro.xml
 			<!--classpath:spring/ApplicationContext-redis.xml-->
-</param-value>
+		</param-value>
 		</context-param>
 	<context-param>
 		<param-name>log4jConfigLocation</param-name>
