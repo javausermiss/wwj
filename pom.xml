@@ -384,6 +384,12 @@
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-all</artifactId>
             <version>1.4.0</version>
+            <exclusions>
+            	<exclusion>
+            		<artifactId>quartz</artifactId>
+            		<groupId>org.opensymphony.quartz</groupId>
+            	</exclusion>
+            </exclusions>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver -->
         <dependency>
@@ -513,13 +519,6 @@
             <scope>test</scope>
         </dependency>
 
-   <dependency>
-            <groupId>SRS</groupId>
-            <artifactId>SRS</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/pooh-admin-srs-core-1.0.0.SNAPSHORT.jar</systemPath>
-        </dependency>
 
         <!-- 易宝支付以下五个依赖-->
         <dependency>
@@ -576,11 +575,11 @@
             <version>1.0.0.SNAPSHORT</version>
         </dependency>
 
-        <!--<dependency>
+        <dependency>
             <groupId>com.iot.game.pooh.admin</groupId>
             <artifactId>pooh-admin-srs-interface</artifactId>
             <version>1.0.0.SNAPSHORT</version>
-        </dependency>-->
+        </dependency>
         
         <dependency>
             <groupId>org.projectlombok</groupId>
