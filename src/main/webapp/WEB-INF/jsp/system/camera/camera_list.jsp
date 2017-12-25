@@ -73,16 +73,13 @@
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
 									<th class="center" style="width:50px;">序号</th>
-									<th class="center">娃娃机主键ID</th>
 									<th class="center">设备名称</th>
+									
 									<th class="center">设备编号</th>
 									<th class="center">推流地址</th>
 									<th class="center">推流服务名称</th>
 									<th class="center">流媒体名称</th>
 									<th class="center">流媒体进程ID</th>
-									<th class="center">创建时间</th>
-									<th class="center">最后修改时间</th>
-									<th class="center">乐观锁版本号</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -98,16 +95,12 @@
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.CAMERA_ID}" class="ace" /><span class="lbl"></span></label>
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center'>${var.DOLL_ID}</td>
 											<td class='center'>${var.CAMERA_NAME}</td>
 											<td class='center'>${var.CAMERA_NUM}</td>
 											<td class='center'>${var.RTMP_URL}</td>
 											<td class='center'>${var.SERVER_NAME}</td>
 											<td class='center'>${var.LIVESTREAM}</td>
 											<td class='center'>${var.SERVER_ID}</td>
-											<td class='center'>${var.CREATE_DATE}</td>
-											<td class='center'>${var.UPDATE_DATE}</td>
-											<td class='center'>${var.LOCK_VERSION}</td>
 											<td style="width: 200px;" class='center'>
                                                         <c:if test="${var.DEVICE_STATE == '1' }"><span
                                                                 class="label label-success arrowed">可用</span></c:if>
@@ -120,12 +113,15 @@
 											
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
-												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
+												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i 
+													class="ace-icon fa fa-lock" title="无权限"></i></span>
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
 													<c:if test="${QX.edit == 1 }">
-													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.CAMERA_ID}');">
-														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
+													<a class="btn btn-xs btn-success" title="编辑" 
+														onclick="edit('${var.CAMERA_ID}');">
+														<i class="ace-icon fa fa-pencil-square-o bigger-120" 
+															title="编辑"></i>
 													</a>
 													</c:if>
 													<c:if test="${QX.del == 1 }">
@@ -143,7 +139,8 @@
 														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 															<c:if test="${QX.edit == 1 }">
 															<li>
-																<a style="cursor:pointer;" onclick="edit('${var.CAMERA_ID}');" class="tooltip-success" data-rel="tooltip" title="修改">
+																<a style="cursor:pointer;" onclick="edit('${var.CAMERA_ID}');" 
+																class="tooltip-success" data-rel="tooltip" title="修改">
 																	<span class="green">
 																		<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
 																	</span>
@@ -152,7 +149,10 @@
 															</c:if>
 															<c:if test="${QX.del == 1 }">
 															<li>
-																<a style="cursor:pointer;" onclick="del('${var.CAMERA_ID}');" class="tooltip-error" data-rel="tooltip" title="删除">
+																<a style="cursor:pointer;" 
+																onclick="del('${var.CAMERA_ID}');" 
+																class="tooltip-error" data-rel="tooltip" 
+																title="删除">
 																	<span class="red">
 																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
 																	</span>
@@ -189,10 +189,13 @@
 									<a class="btn btn-mini btn-success" onclick="add();">新增</a>
 									</c:if>
 									<c:if test="${QX.del == 1 }">
-									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
+									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" 
+										title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
 									</c:if>
 								</td>
-								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
+								<td style="vertical-align:top;">
+								<div class="pagination" 
+									 style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>
 						</table>
 						</div>

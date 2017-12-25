@@ -31,10 +31,8 @@
 						<input type="hidden" name="CAMERA_ID" id="CAMERA_ID" value="${pd.CAMERA_ID}"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">娃娃机主键ID:</td>
-								<td><input type="text" name="DOLL_ID" id="DOLL_ID" value="${pd.DOLL_ID}" maxlength="50" placeholder="这里输入娃娃机主键ID" title="DOLL_ID" style="width:98%;"/></td>
-							</tr>
+							
+						
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">设备名称:</td>
 								<td><input type="text" name="CAMERA_NAME" id="CAMERA_NAME" value="${pd.CAMERA_NAME}" maxlength="50" placeholder="这里输入设备名称" title="CAMERA_NAME" style="width:98%;"/></td>
@@ -60,16 +58,8 @@
 								<td><input type="text" name="SERVER_ID" id="SERVER_ID" value="${pd.SERVER_ID}" maxlength="8" placeholder="这里输入流媒体进程ID" title="SERVER_ID" style="width:98%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">创建时间:</td>
-								<td><input class="span10 date-picker" name="CREATE_DATE" id="CREATE_DATE" value="${pd.CREATE_DATE}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" placeholder="创建时间" title="CREATE_DATE" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">最后修改时间:</td>
-								<td><input class="span10 date-picker" name="UPDATE_DATE" id="UPDATE_DATE" value="${pd.UPDATE_DATE}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" placeholder="最后修改时间" title="UPDATE_DATE" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">乐观锁版本号:</td>
-								<td><input type="number" name="LOCK_VERSION" id="LOCK_VERSION" value="${pd.LOCK_VERSION}" maxlength="32" placeholder="这里输入乐观锁版本号" title="LOCK_VERSION" style="width:98%;"/></td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">状态:</td>
+								<td><input type="text" name="DEVICE_STATE" id="DEVICE_STATE" value="${pd.DEVICE_STATE}" maxlength="50" placeholder="这里输入状态" title="DEVICE_STATE" style="width:98%;"/></td>
 							</tr>
 							<tr>
 								<td style="text-align: center;" colspan="10">
@@ -106,16 +96,7 @@
 		$(top.hangge());
 		//保存
 		function save(){
-			if($("#DOLL_ID").val()==""){
-				$("#DOLL_ID").tips({
-					side:3,
-		            msg:'请输入娃娃机主键ID',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#DOLL_ID").focus();
-			return false;
-			}
+			
 			if($("#CAMERA_NAME").val()==""){
 				$("#CAMERA_NAME").tips({
 					side:3,
@@ -176,34 +157,14 @@
 				$("#SERVER_ID").focus();
 			return false;
 			}
-			if($("#CREATE_DATE").val()==""){
-				$("#CREATE_DATE").tips({
+			if($("#DEVICE_STATE").val()==""){
+				$("#DEVICE_STATE").tips({
 					side:3,
-		            msg:'请输入创建时间',
+		            msg:'请输入状态',
 		            bg:'#AE81FF',
 		            time:2
 		        });
-				$("#CREATE_DATE").focus();
-			return false;
-			}
-			if($("#UPDATE_DATE").val()==""){
-				$("#UPDATE_DATE").tips({
-					side:3,
-		            msg:'请输入最后修改时间',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#UPDATE_DATE").focus();
-			return false;
-			}
-			if($("#LOCK_VERSION").val()==""){
-				$("#LOCK_VERSION").tips({
-					side:3,
-		            msg:'请输入乐观锁版本号',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#LOCK_VERSION").focus();
+				$("#DEVICE_STATE").focus();
 			return false;
 			}
 			$("#Form").submit();
