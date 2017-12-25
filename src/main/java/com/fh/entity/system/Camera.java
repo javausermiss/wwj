@@ -6,7 +6,7 @@ import java.sql.Timestamp;
  * 摄像头实体类
  */
 public class Camera {
-    private String C_ID;
+    private String CAMERA_ID;
     private String DOLL_ID;
     private String CAMERA_NAME;
     private String CAMERA_NUM;
@@ -14,6 +14,7 @@ public class Camera {
     private String SERVER_NAME;
     private String LIVESTREAM;
     private String SERVER_ID;
+    private String CLIENT_ID;
     private String DEVICE_STATE;
     private Timestamp CREATE_DATE;
     private Timestamp UPDATE_DATE;
@@ -23,15 +24,15 @@ public class Camera {
 
     }
 
-    public String getC_ID() {
-        return C_ID;
-    }
+    public String getCAMERA_ID() {
+		return CAMERA_ID;
+	}
 
-    public void setC_ID(String c_ID) {
-        C_ID = c_ID;
-    }
+	public void setCAMERA_ID(String cAMERA_ID) {
+		CAMERA_ID = cAMERA_ID;
+	}
 
-    public String getDOLL_ID() {
+	public String getDOLL_ID() {
         return DOLL_ID;
     }
 
@@ -86,8 +87,15 @@ public class Camera {
     public void setSERVER_ID(String SERVER_ID) {
         this.SERVER_ID = SERVER_ID;
     }
+    public String getCLIENT_ID() {
+		return CLIENT_ID;
+	}
 
-    public String getDEVICE_STATE() {
+	public void setCLIENT_ID(String cLIENT_ID) {
+		CLIENT_ID = cLIENT_ID;
+	}
+
+	public String getDEVICE_STATE() {
         return DEVICE_STATE;
     }
 
