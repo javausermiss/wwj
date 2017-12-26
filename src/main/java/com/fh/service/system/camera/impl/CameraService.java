@@ -78,5 +78,13 @@ public class CameraService implements CameraManager{
 		dao.delete("CameraMapper.deleteAll", ArrayDATA_IDS);
 	}
 	
+	/**通过推流名称获取数据
+	 * @param liveStream
+	 * @throws Exception
+	 */
+	public PageData findByLiveStream(String liveStream)throws Exception{
+		return (PageData)dao.delete("CameraMapper.findByLiveStream", liveStream);
+	}
+	
 }
 

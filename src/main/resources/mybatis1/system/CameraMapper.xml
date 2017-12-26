@@ -19,6 +19,7 @@
 		LIVESTREAM,	
 		SERVER_ID,
 		CLIENT_ID,
+		DEVICE_STATE,
 		CREATE_DATE,	
 		UPDATE_DATE,	
 		LOCK_VERSION,	
@@ -35,6 +36,7 @@
 		#{LIVESTREAM},	
 		#{SERVER_ID},
 		#{CLIENT_ID},
+		#{DEVICE_STATE},
 		#{CREATE_DATE},	
 		#{UPDATE_DATE},	
 		#{LOCK_VERSION},	
@@ -73,6 +75,7 @@
 			LIVESTREAM = #{LIVESTREAM},
 			SERVER_ID = #{SERVER_ID},
 			CLIENT_ID =#{CLIENT_ID},
+			DEVICE_STATE=#{DEVICE_STATE},
 			CREATE_DATE = #{CREATE_DATE},
 			UPDATE_DATE = #{UPDATE_DATE},
 			LOCK_VERSION = #{LOCK_VERSION},
@@ -125,5 +128,13 @@
 		</foreach>
 	</delete>
 	
-	<!-- fh313596790qq(青苔) -->
+	<!-- 通过ID获取数据 -->
+	<select id="findByLiveStream" parameterType="String" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			LIVESTREAM = #{LIVESTREAM}
+	</select>
 </mapper>

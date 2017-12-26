@@ -54,5 +54,12 @@ public interface CameraManager{
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception;
 	
+	
+	/**通过推流名称获取数据
+	 * @param pd
+	 * @throws Exception
+	 */
+	public PageData findByLiveStream(String liveStream)throws Exception;
+	
 }
 
