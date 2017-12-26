@@ -204,11 +204,6 @@ public class AppLoginController {
             AppUser appUser = appuserService.getUserByID(userId);
             if (appUser != null) {
                 String accessToken = "";
-                if (RedisUtil.getRu().exists("accessToken")) {
-                    accessToken = RedisUtil.getRu().get("accessToken");
-                } else {
-                    accessToken = CameraUtils.getAccessToken();
-                }
                 String sessionID = MyUUID.createSessionId();
                 String phone =  appUser.getPHONE();
                 RedisUtil.getRu().set("sessionId:appUser:" + phone, sessionID);

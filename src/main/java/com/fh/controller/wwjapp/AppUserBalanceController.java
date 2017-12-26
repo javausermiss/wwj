@@ -301,6 +301,13 @@ public class AppUserBalanceController {
                 o.setSTATUS("1");
                 orderTestService.update(o);
                 Paycard paycard =  paycardService.getGold(String.valueOf(amount/100));
+                if (paycard==null){
+                    AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
+                    int a = Integer.valueOf(appUser.getBALANCE()) + Integer.valueOf(o.getREGAMOUNT()) / 10;
+                    appUser.setBALANCE(String.valueOf(a));
+                    appuserService.updateAppUserBalanceById(appUser);
+                    return "SUCCESS";
+                }
                 int gold =  Integer.valueOf(paycard.getGOLD());
                 AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
                 int a = Integer.valueOf(appUser.getBALANCE()) + gold;

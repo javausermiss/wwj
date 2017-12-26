@@ -173,7 +173,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
     public RpcCommandResult drawLottery(String roomId, Integer gifinumber) {
         try {
             PlayDetail playDetail = playDetailService.getPlayIdForPeople(roomId);
-            String gold =  playDetail.getGOLD();//获取下注金币，即竞猜用户扣除的金币数
+            String gold = playDetail.getGOLD();//获取下注金币，即竞猜用户扣除的金币数
             String state = playDetail.getPOST_STATE();
             //网关自检发送多次free进入此判断逻辑,POST_STATE初始值为"-1"，判断是否已经结算过
             //STOP_FLAG 初始值为"0",下抓后为"-1",判断流程是否走完
@@ -220,10 +220,10 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                         List<GuessDetailL> filler = betGameService.getFailer(new GuessDetailL(file, playDetail.getGUESS_ID(), roomId));//获取失败者
                         for (int i = 0; i < filler.size(); i++) {
                             GuessDetailL guessDetailL = filler.get(i);
-                            String uid =  guessDetailL.getAPP_USER_ID();
-                             AppUser appUser1 =  appuserService.getUserByID(uid);
-                            String old =   appUser1.getBALANCE();
-                            int k =  Integer.valueOf(old)+Integer.valueOf(gold);
+                            String uid = guessDetailL.getAPP_USER_ID();
+                            AppUser appUser1 = appuserService.getUserByID(uid);
+                            String old = appUser1.getBALANCE();
+                            int k = Integer.valueOf(old) + Integer.valueOf(gold);
                             appUser1.setBALANCE(String.valueOf(k));
                             appuserService.updateAppUserBalanceById(appUser1);
                         }
@@ -255,10 +255,10 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                         List<GuessDetailL> filler = betGameService.getFailer(new GuessDetailL(file, playDetail.getGUESS_ID(), roomId));//获取失败者
                         for (int i = 0; i < filler.size(); i++) {
                             GuessDetailL guessDetailL = filler.get(i);
-                            String uid =  guessDetailL.getAPP_USER_ID();
-                            AppUser appUser1 =  appuserService.getUserByID(uid);
-                            String old =   appUser1.getBALANCE();
-                            int k =  Integer.valueOf(old)+Integer.valueOf(gold);
+                            String uid = guessDetailL.getAPP_USER_ID();
+                            AppUser appUser1 = appuserService.getUserByID(uid);
+                            String old = appUser1.getBALANCE();
+                            int k = Integer.valueOf(old) + Integer.valueOf(gold);
                             appUser1.setBALANCE(String.valueOf(k));
                             appuserService.updateAppUserBalanceById(appUser1);
                         }

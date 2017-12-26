@@ -47,6 +47,7 @@
 					/sms/** = anon
 					/uploadFiles/DollImage/** = anon
 					/uploadFiles/appUserImage/** = anon
+					/uploadFiles/paycard/** = anon
 					/doll/** = anon
 					/api/** = anon
 					/pay/** = anon

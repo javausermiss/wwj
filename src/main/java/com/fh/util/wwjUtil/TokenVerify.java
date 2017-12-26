@@ -30,8 +30,8 @@ import java.security.MessageDigest;
  */
 
 public class TokenVerify {
-    private final static String ckey = "rcWhucD6efT=";
-    private final static String cid = "aed34f22d80e430a868c083da0e4de07";
+    private final static String ckey = "y3WfBKF1FY4=";
+    private final static String cid = "6f456783a0fe44e28771c08ab63a52f7";
     private final static String key = "Pooh4token";
 
 
