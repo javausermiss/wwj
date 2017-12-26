@@ -1,7 +1,7 @@
 package com.fh.service.system.betgame.impl;
 
 import com.fh.dao.DaoSupport;
-import com.fh.entity.system.GuessDetail;
+import com.fh.entity.system.GuessDetailL;
 import com.fh.service.system.betgame.BetGameManager;
 import org.springframework.stereotype.Service;
 
@@ -15,55 +15,55 @@ public class BetGameService implements BetGameManager {
     private DaoSupport dao;
     /**
      * 增加竞猜记录
-     * @param guessDetail
+     * @param guessDetailL
      * @return
      * @throws Exception
      */
     @Override
-    public int regGuessDetail(GuessDetail guessDetail) throws Exception {
-        return (int)dao.save("GuessDetailMapper.regGuessDetail",guessDetail);
+    public int regGuessDetail(GuessDetailL guessDetailL) throws Exception {
+        return (int)dao.save("GuessDetailMapper.regGuessDetail", guessDetailL);
     }
     /**
      * 修改竞猜记录
-     * @param guessDetail
+     * @param guessDetailL
      * @return
      * @throws Exception
      */
     @Override
-    public int updateGuessDetail(GuessDetail guessDetail) throws Exception {
-        return (int)dao.update("GuessDetailMapper.updateGuessDetail",guessDetail);
+    public int updateGuessDetail(GuessDetailL guessDetailL) throws Exception {
+        return (int)dao.update("GuessDetailMapper.updateGuessDetail", guessDetailL);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<GuessDetail> getWin(Integer playID) throws Exception {
-        return (List<GuessDetail>) dao.findForList("GuessDetailMapper.getWin",playID);
+    public List<GuessDetailL> getWin(Integer playID) throws Exception {
+        return (List<GuessDetailL>) dao.findForList("GuessDetailMapper.getWin",playID);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<GuessDetail> getFailer(GuessDetail guessDetail) throws Exception {
-        return (List<GuessDetail>) dao.findForList("GuessDetailMapper.getFailer",guessDetail);
+    public List<GuessDetailL> getFailer(GuessDetailL guessDetailL) throws Exception {
+        return (List<GuessDetailL>) dao.findForList("GuessDetailMapper.getFailer", guessDetailL);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<GuessDetail> getWinner(GuessDetail guessDetail) throws Exception {
-        return (List<GuessDetail>) dao.findForList("GuessDetailMapper.getWinner",guessDetail);
+    public List<GuessDetailL> getWinner(GuessDetailL guessDetailL) throws Exception {
+        return (List<GuessDetailL>) dao.findForList("GuessDetailMapper.getWinner", guessDetailL);
     }
     @SuppressWarnings("unchecked")
     @Override
-    public List<GuessDetail> getAllGuesser(String guessid) throws Exception {
-        return (List<GuessDetail>) dao.findForList("GuessDetailMapper.getAllGuesser",guessid);
+    public List<GuessDetailL> getAllGuesser(String guessid) throws Exception {
+        return (List<GuessDetailL>) dao.findForList("GuessDetailMapper.getAllGuesser",guessid);
     }
 
     @Override
-    public int updateGuessDetailGuessType(GuessDetail guessDetail) throws Exception {
-        return (int)dao.update("GuessDetailMapper.updateGuessDetailGuessType",guessDetail);
+    public int updateGuessDetailGuessType(GuessDetailL guessDetailL) throws Exception {
+        return (int)dao.update("GuessDetailMapper.updateGuessDetailGuessType", guessDetailL);
     }
 
     @Override
-    public GuessDetail getGuessDetail(GuessDetail guessDetail) throws Exception {
-        return (GuessDetail) dao.findForObject("GuessDetailMapper.getGuessDetail",guessDetail);
+    public GuessDetailL getGuessDetail(GuessDetailL guessDetailL) throws Exception {
+        return (GuessDetailL) dao.findForObject("GuessDetailMapper.getGuessDetail", guessDetailL);
     }
 }

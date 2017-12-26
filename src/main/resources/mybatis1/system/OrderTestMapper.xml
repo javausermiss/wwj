@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="OrderMapper">
 
-    <insert id="regmount" parameterType="com.fh.entity.system.Ordertest">
+    <insert id="regmount" parameterType="com.fh.entity.system.Order">
         INSERT INTO
         SYS_APP_ORDER
         (
@@ -24,7 +24,7 @@
     </insert>
 
 
-    <update id="update" parameterType="com.fh.entity.system.Ordertest">
+    <update id="update" parameterType="com.fh.entity.system.Order">
 
         UPDATE sys_app_order
         SET
@@ -33,7 +33,7 @@
         ORDER_ID = #{ORDER_ID}
     </update>
 
-    <select id="getOrderById" parameterType="String" resultType="com.fh.entity.system.Ordertest">
+    <select id="getOrderById" parameterType="String" resultType="com.fh.entity.system.Order">
         SELECT
         *
         FROM

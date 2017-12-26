@@ -12,11 +12,91 @@ public class PlayDetail {
     private String STATE;//是否抓取成功'1'抓取成功 '0'抓取失败
     private String CREATE_DATE;//创建时间
     private String GOLD;
+    private String CAMERA_DATE;//视频日期
     private String STOP_FLAG;//0可以下注 -1禁止下注
     private String CONVERSIONGOLD;
-
+    private String POST_STATE; //0 寄存  1 发货  2 兑换
+    private String SENDGOODS; //发货信息
+    private String NICKNAME;//用户昵称
+    private String IMAGE_URL;//用户头像
+    private String DOLL_URL;//娃娃头像
+    private String DOLL_NAME;//娃娃名称
+    private String COUNT;
+    private String VIEW_STATE;
 
     public PlayDetail() {
+    }
+
+    public String getVIEW_STATE() {
+        return VIEW_STATE;
+    }
+
+    public void setVIEW_STATE(String VIEW_STATE) {
+        this.VIEW_STATE = VIEW_STATE;
+    }
+
+    public String getSENDGOODS() {
+        return SENDGOODS;
+    }
+
+    public void setSENDGOODS(String SENDGOODS) {
+        this.SENDGOODS = SENDGOODS;
+    }
+
+    public String getPOST_STATE() {
+        return POST_STATE;
+    }
+
+    public void setPOST_STATE(String POST_STATE) {
+        this.POST_STATE = POST_STATE;
+    }
+
+    public String getCOUNT() {
+        return COUNT;
+    }
+
+    public void setCOUNT(String COUNT) {
+        this.COUNT = COUNT;
+    }
+
+    public String getCAMERA_DATE() {
+        return CAMERA_DATE;
+    }
+
+    public void setCAMERA_DATE(String CAMERA_DATE) {
+        this.CAMERA_DATE = CAMERA_DATE;
+    }
+
+    public String getNICKNAME() {
+        return NICKNAME;
+    }
+
+    public void setNICKNAME(String NICKNAME) {
+        this.NICKNAME = NICKNAME;
+    }
+
+    public String getIMAGE_URL() {
+        return IMAGE_URL;
+    }
+
+    public void setIMAGE_URL(String IMAGE_URL) {
+        this.IMAGE_URL = IMAGE_URL;
+    }
+
+    public String getDOLL_URL() {
+        return DOLL_URL;
+    }
+
+    public void setDOLL_URL(String DOLL_URL) {
+        this.DOLL_URL = DOLL_URL;
+    }
+
+    public String getDOLL_NAME() {
+        return DOLL_NAME;
+    }
+
+    public void setDOLL_NAME(String DOLL_NAME) {
+        this.DOLL_NAME = DOLL_NAME;
     }
 
     public String getSTOP_FLAG() {

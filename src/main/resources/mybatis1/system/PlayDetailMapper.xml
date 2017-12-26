@@ -24,7 +24,8 @@
         )
     </insert>
 
-    <select id="getPlayDetailByGuessID" parameterType="com.fh.entity.system.PlayDetail" resultType="com.fh.entity.system.PlayDetail">
+    <select id="getPlayDetailByGuessID" parameterType="com.fh.entity.system.PlayDetail"
+            resultType="com.fh.entity.system.PlayDetail">
         SELECT * FROM
         TB_DOLL_PLAY_DETAIL
         WHERE
@@ -73,18 +74,119 @@
         UPDATE
         TB_DOLL_PLAY_DETAIL
         SET
-        STATE = #{STATE}
+        STATE = #{STATE},
+        POST_STATE = #{POST_STATE}
         WHERE
         GUESS_ID = #{GUESS_ID}
         AND
         DOLLID = #{DOLLID}
     </update>
 
+    <select id="getPlayDetailForCamera" parameterType="com.fh.entity.system.PlayDetail"
+            resultType="com.fh.entity.system.PlayDetail">
+       SELECT * FROM
+       TB_DOLL_PLAY_DETAIL
+       WHERE
+       GUESS_ID = #{GUESS_ID}
+       and
+       DOLLID = #{DOLLID}
+       and
+       USERID = #{USERID}
+   </select>
+    <update id="updatePlayDetailForCamera" parameterType="com.fh.entity.system.PlayDetail">
+        UPDATE
+        TB_DOLL_PLAY_DETAIL
+        SET
+        CAMERA_DATE = #{CAMERA_DATE}
+        WHERE
+        ID = #{ID}
+    </update>
+        <!--获取玩家的抓中记录信息-->
+    <select id="getPlaylist" parameterType="String" resultType="com.fh.entity.system.PlayDetail">
+            select
+            d.DOLL_NAME, d.doll_url, dd.ID, dd.USERID, dd.GUESS_ID, dd.DOLLID, dd.STATE, dd.CREATE_DATE, dd.GOLD, dd.CAMERA_DATE,
+            dd.STOP_FLAG,dd.CONVERSIONGOLD,dd.POST_STATE,dd.SENDGOODS,u.NICKNAME,u.IMAGE_URL
+            from
+            tb_doll_play_detail as dd
+            inner join  sys_app_doll as d on d.doll_id = dd.dollid
+            inner join sys_app_user as u on u.user_id = dd.userid
+            where u.user_id = #{USERID}
+            and dd.state = '1'
+            order by
+            dd.create_date
+            desc
+    </select>
+
+    <!--查询用户分组抓到的娃娃的数量-->
+    <select id="getDollCount" parameterType="String" resultType="com.fh.entity.system.PlayDetail">
+        select
+        dd.userid ,dd.conversiongold ,u.nickname,d.doll_name,count(*) AS COUNT
+        from
+        tb_doll_play_detail as dd
+        inner join  sys_app_doll as d on d.doll_id = dd.dollid
+        inner join sys_app_user as u on u.user_id = dd.userid
+        where u.user_id = #{USERID}
+        and state = '1'
+        and DOLLID
+        in
+        (
+        select DOLLID
+        from tb_doll_play_detail
+        where  USERID = #{ USERID}
+        group by DOLLID
+        )
+        group by
+        DOLLID
+    </select>
 
 
+    <!--查询最近抓取成功的10条记录-->
+    <select id="getPlayRecordPM" resultType="com.fh.entity.system.PlayDetail">
+        select
+        u.nickname,u.IMAGE_URL,d.doll_name
+        from
+        tb_doll_play_detail as dd
+        inner join  sys_app_doll as d on d.doll_id = dd.dollid
+        inner join sys_app_user as u on u.user_id = dd.userid
+        WHERE
+        dd.STATE = '1'
+        ORDER BY
+        dd.CREATE_DATE
+        DESC
+        limit
+        0,10
+    </select>
 
 
+    <update id="updatePostState" parameterType="com.fh.entity.system.PlayDetail" >
+        UPDATE
+        tb_doll_play_detail
+        SET
+        SENDGOODS = #{SENDGOODS},
+        POST_STATE = #{POST_STATE}
+        WHERE
+        ID = #{ID}
+    </update>
 
+    <update id="updatePostStateForCon" parameterType="com.fh.entity.system.PlayDetail">
+        UPDATE
+        tb_doll_play_detail
+        SET
+        POST_STATE = #{POST_STATE}
+        WHERE
+        ID = #{ID}
+    </update>
 
+    <select id="getPlayDetailById" parameterType="java.lang.Integer" resultType="com.fh.entity.system.PlayDetail">
+        SELECT
+        d.DOLL_NAME, d.doll_url, dd.ID, dd.USERID, dd.GUESS_ID, dd.DOLLID, dd.STATE, dd.CREATE_DATE, dd.GOLD, dd.CAMERA_DATE,
+        dd.STOP_FLAG,dd.CONVERSIONGOLD,dd.POST_STATE,dd.SENDGOODS,u.NICKNAME,u.IMAGE_URL
+        from
+        tb_doll_play_detail as dd
+        inner join  sys_app_doll as d on d.doll_id = dd.dollid
+        inner join sys_app_user as u on u.user_id = dd.userid
+        WHERE
+        dd.ID=#{ID}
+    </select>
 
 </mapper>

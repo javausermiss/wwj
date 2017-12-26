@@ -1,23 +1,23 @@
 package com.fh.service.system.ordertest;
 
-import com.fh.entity.system.Ordertest;
+import com.fh.entity.system.Order;
 
 public interface OrderTestManager {
     /**
      * 创建订单记录
-     * @param ordertest
+     * @param order
      * @return
      * @throws Exception
      */
-    public int regmount(Ordertest ordertest)throws Exception;
+    public int regmount(Order order)throws Exception;
 
     /**
      * 修改支付状态
-     * @param ordertest
+     * @param order
      * @return
      * @throws Exception
      */
-    public int update(Ordertest ordertest)throws Exception;
+    public int update(Order order)throws Exception;
 
     /**
      * 通过ID查询订单信息
@@ -25,6 +25,6 @@ public interface OrderTestManager {
      * @return
      * @throws Exception
      */
-    public Ordertest getOrderById(String id) throws Exception;
+    public Order getOrderById(String id) throws Exception;
 
 }

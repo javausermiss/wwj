@@ -4,6 +4,7 @@ import com.fh.entity.system.*;
 import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.doll.DollManager;
 import com.fh.service.system.ordertest.OrderTestManager;
+import com.fh.service.system.paycard.PaycardManager;
 import com.fh.service.system.payment.PaymentManager;
 import com.fh.service.system.playback.PlayBackManage;
 import com.fh.service.system.playdetail.PlayDetailManage;
@@ -13,7 +14,6 @@ import com.fh.util.wwjUtil.RedisUtil;
 import com.fh.util.wwjUtil.RespStatus;
 import com.fh.util.wwjUtil.TokenVerify;
 import net.sf.json.JSONObject;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,6 +50,9 @@ public class AppUserBalanceController {
 
     @Resource(name = "orderTestService")
     private OrderTestManager orderTestService;
+
+    @Resource(name = "paycardService")
+    private PaycardManager paycardService;
 
 
     /**
@@ -88,38 +91,6 @@ public class AppUserBalanceController {
 
 
     /**
-     * 游戏记录信息
-     *
-     * @param dollname
-     * @return
-     */
-    public JSONObject getPlayDetailInfo(String dollname) {
-        try {
-            PlayDetail p = playDetailService.getPlayIdForPeople(dollname);
-            return JSONObject.fromObject(p);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    /**
-     * 游戏记录信息
-     *
-     * @param id
-     * @return
-     */
-
-    public JSONObject getPlayBackInfo(int id) {
-        try {
-            PlayBack playBack = playBackService.getPlayBackById(id);
-            return JSONObject.fromObject(playBack);
-        } catch (Exception e) {
-            return null;
-        }
-
-    }
-
-    /**
      * 订单信息
      *
      * @param id
@@ -128,7 +99,7 @@ public class AppUserBalanceController {
 
     public JSONObject getOrderInfo(String id) {
         try {
-            Ordertest o = orderTestService.getOrderById(id);
+            Order o = orderTestService.getOrderById(id);
             return JSONObject.fromObject(o);
         } catch (Exception e) {
             return null;
@@ -136,13 +107,31 @@ public class AppUserBalanceController {
 
     }
 
+    /**
+     * 获取动态充值卡信息
+     * @return
+     */
+    @RequestMapping(value = "/getPaycard",method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject getPaycard(){
+        try {
+           List<Paycard> list =   paycardService.getPayCard();
+            Map<String,Object> map = new HashMap<>();
+            map.put("paycard",list);
+            return RespStatus.successs().element("data",map);
+        }catch (Exception e){
+            e.printStackTrace();
+            return RespStatus.fail();
+        }
+
+    }
 
     /**
      * 获取订单信息
      *
      * @param userId
      * @param accessToken
-     * @param amounr
+     * @param amounr     金额
      * @return
      */
     @RequestMapping(value = "/getTradeOrder", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -153,7 +142,7 @@ public class AppUserBalanceController {
             @RequestParam("amount") String amounr
     ) {
         try {
-            String datetime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+            String datetime = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
             boolean a = RedisUtil.getRu().exists("tradeOrder");
             if (a) {
                 String tradeOrder = RedisUtil.getRu().get("tradeOrder");
@@ -163,39 +152,39 @@ public class AppUserBalanceController {
                     String newsix = String.format("%06d", (Integer.valueOf(six) + 1));
                     String newOrder = datetime + newsix;//新的订单编号
                     RedisUtil.getRu().set("tradeOrder", newOrder);
-                    Ordertest ordertest = new Ordertest();
-                    ordertest.setUSER_ID(userId);
-                    ordertest.setREC_ID(MyUUID.getUUID32());
-                    ordertest.setREGAMOUNT(amounr);
-                    ordertest.setORDER_ID(newOrder);
-                    orderTestService.regmount(ordertest);
+                    Order order = new Order();
+                    order.setUSER_ID(userId);
+                    order.setREC_ID(MyUUID.getUUID32());
+                    order.setREGAMOUNT(amounr);
+                    order.setORDER_ID(newOrder);
+                    orderTestService.regmount(order);
                     Map<String, Object> map = new HashMap<>();
-                    map.put("Order", getOrderInfo(ordertest.getORDER_ID()));
+                    map.put("Order", getOrderInfo(order.getORDER_ID()));
                     return RespStatus.successs().element("data", map);
                 } else {
                     String newOrder = datetime + "000001";//新的订单编号
                     RedisUtil.getRu().set("tradeOrder", newOrder);
-                    Ordertest ordertest = new Ordertest();
-                    ordertest.setUSER_ID(userId);
-                    ordertest.setREC_ID(MyUUID.getUUID32());
-                    ordertest.setREGAMOUNT(amounr);
-                    ordertest.setORDER_ID(newOrder);
-                    orderTestService.regmount(ordertest);
+                    Order order = new Order();
+                    order.setUSER_ID(userId);
+                    order.setREC_ID(MyUUID.getUUID32());
+                    order.setREGAMOUNT(amounr);
+                    order.setORDER_ID(newOrder);
+                    orderTestService.regmount(order);
                     Map<String, Object> map = new HashMap<>();
-                    map.put("Order", getOrderInfo(ordertest.getORDER_ID()));
+                    map.put("Order", getOrderInfo(order.getORDER_ID()));
                     return RespStatus.successs().element("data", map);
                 }
             } else {
                 String newOrder = datetime + "000001";//新的订单编号
                 RedisUtil.getRu().set("tradeOrder", newOrder);
-                Ordertest ordertest = new Ordertest();
-                ordertest.setUSER_ID(userId);
-                ordertest.setREC_ID(MyUUID.getUUID32());
-                ordertest.setREGAMOUNT(amounr);
-                ordertest.setORDER_ID(newOrder);
-                orderTestService.regmount(ordertest);
+                Order order = new Order();
+                order.setUSER_ID(userId);
+                order.setREC_ID(MyUUID.getUUID32());
+                order.setREGAMOUNT(amounr);
+                order.setORDER_ID(newOrder);
+                orderTestService.regmount(order);
                 Map<String, Object> map = new HashMap<>();
-                map.put("Order", getOrderInfo(ordertest.getORDER_ID()));
+                map.put("Order", getOrderInfo(order.getORDER_ID()));
                 return RespStatus.successs().element("data", map);
             }
         } catch (Exception e) {
@@ -257,7 +246,7 @@ public class AppUserBalanceController {
             @RequestParam("sign") String sign
     ) {
         try {
-            Ordertest o = orderTestService.getOrderById(out_trade_no);
+            Order o = orderTestService.getOrderById(out_trade_no);
             if (o == null) {
                 return "there is no order";
             }
@@ -289,7 +278,6 @@ public class AppUserBalanceController {
                 }
             }
 
-
             String tb_amount = o.getREGAMOUNT();
             if (!tb_amount.equals(String.valueOf(amount))) {
                 return "充值金额不匹配";
@@ -312,8 +300,10 @@ public class AppUserBalanceController {
                 }
                 o.setSTATUS("1");
                 orderTestService.update(o);
+                Paycard paycard =  paycardService.getGold(String.valueOf(amount/100));
+                int gold =  Integer.valueOf(paycard.getGOLD());
                 AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
-                int a = Integer.valueOf(appUser.getBALANCE()) + Integer.valueOf(o.getREGAMOUNT()) / 10;
+                int a = Integer.valueOf(appUser.getBALANCE()) + gold;
                 appUser.setBALANCE(String.valueOf(a));
                 appuserService.updateAppUserBalanceById(appUser);
             }

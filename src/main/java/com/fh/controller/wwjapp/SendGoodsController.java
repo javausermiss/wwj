@@ -6,6 +6,8 @@ import com.fh.service.system.betgame.BetGameManager;
 import com.fh.service.system.conversion.ConversionManager;
 import com.fh.service.system.doll.DollManager;
 import com.fh.service.system.playback.PlayBackManage;
+import com.fh.service.system.playdetail.PlayDetailManage;
+import com.fh.service.system.playdetail.impl.PlayDetailService;
 import com.fh.service.system.pond.PondManager;
 import com.fh.service.system.sendgoods.SendGoodsManager;
 import com.fh.util.wwjUtil.RespStatus;
@@ -40,6 +42,10 @@ public class SendGoodsController {
     private ConversionManager conversionService;
     @Resource(name = "betGameService")
     private BetGameManager betGameService;
+    @Resource(name = "playDetailService")
+    private PlayDetailManage playDetailService;
+    @Resource(name = "dollService")
+    private DollManager dollService;
 
 
     public JSONObject getSendGoodsInfo(String playId) {
@@ -56,6 +62,16 @@ public class SendGoodsController {
     public JSONObject getPlayBackInfo(String playId) {
         try {
             PlayBack playBack = playBackService.getPlayBackSGById(Integer.parseInt(playId));
+            return JSONObject.fromObject(playBack);
+        } catch (Exception e) {
+            return null;
+        }
+
+    }
+
+    public JSONObject getPlayDetailInfo(Integer playId) {
+        try {
+            PlayDetail playBack = playDetailService.getPlayDetailByID(playId);
             return JSONObject.fromObject(playBack);
         } catch (Exception e) {
             return null;
@@ -128,15 +144,15 @@ public class SendGoodsController {
     @RequestMapping(value = "/sendGoods", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject sendGoods(
-            @RequestParam("id") String playId,
+            @RequestParam("id") String playId,//抓取编号
             @RequestParam("number") String number,
             @RequestParam("consignee") String consignee,
             @RequestParam("remark") String remark,
             @RequestParam("userId") String userId
     ) {
         try {
-            PlayBack playBack = playBackService.getPlayBackById(Integer.parseInt(playId));
-            if (playBack.getPOSTSTATE().equals("0")) {
+            PlayDetail playBack = playDetailService.getPlayDetailByID(Integer.parseInt(playId));
+            if (playBack.getPOST_STATE().equals("0")) {
                 SendGoods sendGoods = new SendGoods();
                 String[] s = consignee.split("\\,");
                 String name = s[0];
@@ -157,19 +173,18 @@ public class SendGoodsController {
                 if (sg == 0) {
                     return RespStatus.fail("增加记录失败");
                 }
-                playBack.setPOSTSTATE("1");
+                playBack.setPOST_STATE("1");//寄出
                 playBack.setSENDGOODS(consignee + "," + remark);
-                int p = playBackService.updatePostState(playBack);
+                int p = playDetailService.updatePostState(playBack);
                 if (p == 0) {
                     return RespStatus.fail("更新寄存状态失败");
                 }
                 Map<String, Object> map = new HashMap<>();
-                map.put("playBack", getPlayBackInfo(playId));
+                map.put("playBack", getPlayDetailInfo(Integer.parseInt(playId)));
                 return RespStatus.successs().element("data", map);
             } else {
                 return RespStatus.fail("该娃娃已被兑换或者发货");
             }
-
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -181,7 +196,7 @@ public class SendGoodsController {
      * 兑换娃娃币
      *
      * @param id
-     * @param dollName
+     * @param dollId
      * @param number
      * @param userId
      * @return
@@ -190,28 +205,28 @@ public class SendGoodsController {
     @ResponseBody
     public JSONObject conversionGoods(
             @RequestParam("id") String id,
-            @RequestParam("dollName") String dollName,
+            @RequestParam("dollId") String dollId,
             @RequestParam("number") String number,
             @RequestParam("userId") String userId
     ) {
 
         try {
-            PlayBack playBack = playBackService.getPlayBackById(Integer.parseInt(id));
-            if (playBack.getPOSTSTATE().equals("0")) {
+            PlayDetail playBack = playDetailService.getPlayDetailByID(Integer.parseInt(id));
+            if (playBack.getPOST_STATE().equals("0")) {
                 AppUser appUser = appuserService.getUserByID(userId);
                 int balance = Integer.parseInt(appUser.getBALANCE());
-                int money = playBack.getCONVERSIONGOLD() * Integer.parseInt(number);
+                int money = Integer.valueOf(playBack.getCONVERSIONGOLD()) * Integer.parseInt(number);
                 String newBalance = String.valueOf(balance + money);
-                playBack.setPOSTSTATE("2");
+                playBack.setPOST_STATE("2");//兑换
                 appUser.setBALANCE(newBalance);
                 appuserService.updateAppUserBalanceById(appUser);
-                playBackService.updatePostState(playBack);
+                playDetailService.updatePostStateForCon(playBack);
                 Conversion conversion = new Conversion();
                 Date date = new Date();
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String time = format.format(date);
                 conversion.setCREATETIME(time);
-                conversion.setDOLLNAME(dollName);
+                conversion.setDOLLNAME(dollService.getDollByID(dollId).getDOLL_NAME());
                 conversion.setNUMBER(number);
                 conversion.setUSERID(userId);
                 conversion.setPLAYID(id);
@@ -253,16 +268,12 @@ public class SendGoodsController {
         }
     }
 
-    public static void main(String[] ad){
+    public static void main(String[] ad) {
         Date currentTime = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmssSSS");
         String dateString = formatter.format(currentTime);
         long l = Long.parseLong(dateString);
-        System.out.println(1/10);
-
-
-
-
+        System.out.println(dateString);
 
 
     }

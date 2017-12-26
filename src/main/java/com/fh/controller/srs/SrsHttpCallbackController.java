@@ -42,8 +42,8 @@ import com.iot.game.pooh.admin.srs.interfaces.SrsServerService;
 public class SrsHttpCallbackController extends BaseController{
 
 	
-    @Autowired
-    private SrsServerService srsServerService;
+   // @Autowired
+   // private SrsServerService srsServerService;
 
     /**
      * on_connect 当客户端连接到指定的vhost和app时

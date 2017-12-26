@@ -17,8 +17,6 @@ import javax.servlet.ServletResponse;
 
 import org.java_websocket.WebSocketImpl;
 
-import com.fh.plugin.websocketInstantMsg.ChatServer;
-import com.fh.plugin.websocketOnline.OnlineChatServer;
 import com.fh.util.Const;
 import com.fh.util.DbFH;
 import com.fh.util.Tools;
@@ -30,20 +28,20 @@ import com.fh.controller.base.BaseController;
  * 创建时间：2014年2月17日
  * @version
  */
-public class startFilter extends BaseController implements Filter{
+public class startFilter extends BaseController{
 	
-	/**
+/*	*//**
 	 * 初始化
-	 */
+	 *//*
 	public void init(FilterConfig fc) throws ServletException {
 		this.startWebsocketInstantMsg();
 		this.startWebsocketOnline();
 		this.reductionDbBackupQuartzState();
 	}
-	
+	*/
 	/**
 	 * 启动即时聊天服务
-	 */
+	 *//*
 	public void startWebsocketInstantMsg(){
 		WebSocketImpl.DEBUG = false;
 		ChatServer s;
@@ -60,11 +58,11 @@ public class startFilter extends BaseController implements Filter{
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	/**
+	}*/
+	/*
+	*//**
 	 * 启动在线管理服务
-	 */
+	 *//*
 	public void startWebsocketOnline(){
 		WebSocketImpl.DEBUG = false;
 		OnlineChatServer s;
@@ -82,7 +80,7 @@ public class startFilter extends BaseController implements Filter{
 			e.printStackTrace();
 		}
 	}
-	
+	*/
 	/**
 	 * web容器重启时，所有定时备份状态关闭
 	 */

@@ -1,7 +1,7 @@
 package com.fh.service.system.ordertest.impl;
 
 import com.fh.dao.DaoSupport;
-import com.fh.entity.system.Ordertest;
+import com.fh.entity.system.Order;
 import com.fh.service.system.ordertest.OrderTestManager;
 import org.springframework.stereotype.Service;
 
@@ -13,17 +13,17 @@ public class OrderTestService  implements OrderTestManager{
     private DaoSupport dao;
 
     @Override
-    public int regmount(Ordertest ordertest) throws Exception {
-        return (int)dao.save("OrderMapper.regmount",ordertest);
+    public int regmount(Order order) throws Exception {
+        return (int)dao.save("OrderMapper.regmount", order);
     }
 
     @Override
-    public int update(Ordertest ordertest) throws Exception {
-        return (int)dao.update("OrderMapper.update",ordertest);
+    public int update(Order order) throws Exception {
+        return (int)dao.update("OrderMapper.update", order);
     }
 
     @Override
-    public Ordertest getOrderById(String id) throws Exception {
-        return (Ordertest)dao.findForObject("OrderMapper.getOrderById",id);
+    public Order getOrderById(String id) throws Exception {
+        return (Order)dao.findForObject("OrderMapper.getOrderById",id);
     }
 }

@@ -25,7 +25,7 @@ import com.fh.util.PageData;
 import com.fh.util.SmsUtil;
 import com.fh.util.Tools;
 import com.fh.util.Watermark;
-import com.fh.util.mail.SimpleMailSender;
+
 
 /** 
  * 类名称：HeadController
@@ -238,7 +238,7 @@ public class HeadController extends BaseController {
 	
 	/**发送电子邮件
 	 * @return
-	 */
+	 *//*
 	@RequestMapping(value="/sendEmail")
 	@ResponseBody
 	public Object sendEmail(){
@@ -312,7 +312,7 @@ public class HeadController extends BaseController {
 		map.put("list", pdList);
 		return AppUtil.returnObject(pd, map);
 	}
-	
+	*/
 	/**去系统设置页面
 	 * @return
 	 * @throws Exception

@@ -1,32 +1,23 @@
 package com.fh.controller.wwjapp;
 
 import com.fh.entity.system.*;
-import com.fh.rpc.LotteryWebServiceImpl;
 import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.betgame.BetGameManager;
 import com.fh.service.system.doll.DollManager;
-import com.fh.service.system.gateway.GatewayManager;
 import com.fh.service.system.payment.PaymentManager;
 import com.fh.service.system.playback.PlayBackManage;
 import com.fh.service.system.playdetail.PlayDetailManage;
 import com.fh.service.system.pond.PondManager;
 import com.fh.util.wwjUtil.RespStatus;
-import com.iot.game.pooh.web.rpc.interfaces.LotteryWebRpcService;
-import com.sun.org.apache.regexp.internal.RE;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.iot.game.pooh.*;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -171,8 +162,8 @@ public class BetGameController {
             payment.setGOLD(String.valueOf(wager));
             paymentService.reg(payment);
             //增加竞猜记录
-            GuessDetail guessDetail = new GuessDetail(userId, dollId, guessKey, wager, guessId);
-            betGameService.regGuessDetail(guessDetail);
+            GuessDetailL guessDetailL = new GuessDetailL(userId, dollId, guessKey, wager, guessId);
+            betGameService.regGuessDetail(guessDetailL);
             //更新奖池信息
             Pond pond1 = new Pond();
             pond1.setGUESS_ID(guessId);
