@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TransLogMapper">
+		<resultMap type="TransLog" id="TransLogResultMap">
+			<result column="TRANS_ID" property="transId"/>
+			<result column="ORG_TRANS_ID" property="orgTransId"/>
+			<result column="DMS_RELATED_KEY" property="dmsRelatedKey"/>
+			<result column="ORG_DMS_RELATED_KEY" property="orgDmsRelatedKey"/>
+			<result column="ORDER_ST" property="orderSt"/>
+			<result column="TRANS_ST" property="transSt"/>
+			<result column="TRANS_CODE" property="transCode"/>
+			<result column="RESP_CODE" property="respCode"/>
+			<result column="PRI_ACC_ID" property="priAccId"/>
+			<result column="DMS_USER_ID" property="dmsUserId"/>
+			<result column="DMS_USER_UNION_ID" property="dmsUserUnionId"/>
+			<result column="TRANS_AMT" property="transAmt"/>
+			<result column="ORG_TRANS_AMT" property="orgTransAmt"/>
+			<result column="TRANS_CURR_CD" property="transCurrCd"/>
+			<result column="TRANS_CHNL" property="transChnl"/>
+			<result column="TRANS_FEE" property="transFee"/>
+			<result column="TRANS_FEE_TYPE" property="transFeeType"/>
+			<result column="TFR_IN_ACC_ID" property="tfrInAccId"/>
+			<result column="TFR_OUT_ACC_ID" property="tfrOutAccId"/>
+			<result column="ADD_INFO" property="addInfo"/>
+			<result column="REMARKS" property="remarks"/>
+			<result column="CREATE_USER" property="createUser"/>	
+			<result column="CREATE_DATE" property="createDate"/>	
+			<result column="UPDATE_USER" property="updateUser"/>	
+			<result column="UPDATE_DATE" property="updateDate"/>	
+			<result column="LOCK_VERSION" property="lockVersion"/>	
+			<result column="MCHNT_ID" property="mchntId"/>	
+	</resultMap>
+	
+	<!--表名 -->
+	<sql id="tableName">
+		TB_TRANS_LOG
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		TRANS_ID,
+		ORG_TRANS_ID,
+		DMS_RELATED_KEY,
+		ORG_DMS_RELATED_KEY,
+		ORDER_ST,
+		TRANS_ST,	
+		TRANS_CODE,	
+		RESP_CODE,	
+		PRI_ACC_ID,	
+		DMS_USER_ID,	
+		DMS_USER_UNION_ID,	
+		TRANS_AMT,	
+		ORG_TRANS_AMT,	
+		TRANS_CURR_CD,	
+		TRANS_CHNL,	
+		TRANS_FEE,	
+		TRANS_FEE_TYPE,	
+		TFR_IN_ACC_ID,	
+		TFR_OUT_ACC_ID,	
+		ADD_INFO,	
+		REMARKS,	
+		CREATE_USER,	
+		CREATE_DATE,	
+		UPDATE_USER,	
+		UPDATE_DATE,	
+		LOCK_VERSION,	
+		MCHNT_ID
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{transId},
+		#{orgTransId},
+		#{dmsRelatedKey},
+		#{orgDmsRelatedKey},
+		#{orderSt},
+		#{transSt},
+		#{transCode},
+		#{respCode},
+		#{priAccId},
+		#{dmsUserId},
+		#{dmsUserUnionId},
+		#{transAmt},
+		#{orgTransAmt},
+		#{transCurrCd},
+		#{transChnl},
+		#{transFee},
+		#{transFeeType},
+		#{tfrInAccId},
+		#{tfrOutAccId},
+		#{addInfo},
+		#{remarks},
+		#{createUser},
+		#{createDate},
+		#{updateUser},
+		#{updateDate},
+		0,
+		#{mchntId}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="TransLog" useGeneratedKeys="true" keyProperty="transId">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			TRANS_ID = #{transId}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="TransLog">
+		UPDATE
+		<include refid="tableName"></include>
+		SET 
+			ORG_TRANS_ID = #{orgTransId},
+			DMS_RELATED_KEY = #{dmsRelatedKey},
+			ORG_DMS_RELATED_KEY = #{orgDmsRelatedKey},
+			ORDER_ST = #{orderSt},
+			TRANS_ST = #{transSt},
+			TRANS_CODE = #{transCode},
+			RESP_CODE = #{respCode},
+			PRI_ACC_ID = #{priAccId},
+			DMS_USER_ID = #{dmsUserId},
+			DMS_USER_UNION_ID = #{dmsUserUnionId},
+			TRANS_AMT = #{transAmt},
+			ORG_TRANS_AMT = #{orgTransAmt},
+			TRANS_CURR_CD = #{transCurrCd},
+			TRANS_CHNL = #{transChnl},
+			TRANS_FEE = #{transFee},
+			TRANS_FEE_TYPE = #{transFeeType},
+			TFR_IN_ACC_ID = #{tfrInAccId},
+			TFR_OUT_ACC_ID = #{tfrOutAccId},
+			ADD_INFO = #{addInfo},
+			REMARKS = #{remarks},
+			UPDATE_USER = #{updateUser},
+			UPDATE_DATE = now(),
+			LOCK_VERSION = LOCK_VERSION+1,
+			MCHNT_ID = #{mchntId}
+		WHERE 
+		TRANS_ID = #{transId}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="TransLog" resultMap="TransLogResultMap">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			TRANS_ID = #{TRANS_ID}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+				<!--	根据需求自己加检索条件
+					字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or 
+					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+				-->
+				)
+		</if>
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			TRANS_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>
