@@ -17,6 +17,7 @@
 		<typeAlias type="com.fh.entity.system.Department" alias="Department"/>
 		<typeAlias type="com.fh.entity.system.Doll" alias="Doll"/>
 		<typeAlias type="com.fh.entity.system.Gateway" alias="Gateway"/>
+		<typeAlias type="com.fh.entity.system.Camera" alias="Camera"/>
 		<!-- 这里添加生成的实体类 -->
 		
 		
