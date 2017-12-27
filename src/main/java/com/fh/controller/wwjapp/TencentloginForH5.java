@@ -15,11 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
 @Controller
 @RequestMapping("/app")
-public class TencentloginController {
-
+public class TencentloginForH5 {
     @Resource(name = "appuserService")
     private AppuserManager appuserService;
 
@@ -76,10 +74,10 @@ public class TencentloginController {
         try {
             AppUser appUser = appuserService.getUserByID(userId);
             if (appUser == null) {
-                String code = TokenVerify.verify(token);
+                String code = TokenVerify.verifyForH5(token);
                 if (code.equals("SUCCESS")) {
                     AppUser appUser1 = new AppUser();
-                    if (imageUrl == null || imageUrl.equals("") ) {
+                    if (imageUrl == null||imageUrl.equals("") ) {
                         imageUrl = "/default.png";
                     }
                     String newFace = FaceImageUtil.downloadImage(imageUrl);
@@ -127,7 +125,7 @@ public class TencentloginController {
                     return RespStatus.fail("token不合法");
                 }
             } else {
-                String code = TokenVerify.verify(token);
+                String code = TokenVerify.verifyForH5(token);
                 if (code.equals("SUCCESS")) {
                     if ( imageUrl == null||imageUrl.equals("")  ) {
                         imageUrl = "/default.png";
@@ -183,6 +181,7 @@ public class TencentloginController {
 
     }
 
+
     /**
      * 自动登录
      *
@@ -197,7 +196,7 @@ public class TencentloginController {
             @RequestParam("accessToken") String accessToken
     ) {
         try {
-            String a = TokenVerify.verify(accessToken.trim());//请求sdk后台效验token是否合法
+            String a = TokenVerify.verifyForH5(accessToken.trim());//请求sdk后台效验token是否合法
             System.out.println("------------------------------------" + accessToken + "--------------------------------------");
             if (a.equals("SUCCESS")) {
                 if (appuserService.getUserByID(userId) == null) {
@@ -250,31 +249,8 @@ public class TencentloginController {
         }
     }
 
-    public static void main(String[] a){
-        Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-        String dateString = formatter.format(currentTime);
-        String tid = "123";
-        String type = "U";
-        String time = dateString;
-        Map<String,Object> map = new HashMap<>();
-        map.put("expire",3600);
-        map.put("type",type);
-        map.put("tid",tid);
-        map.put("time",dateString);
 
-        Map<String, Object> sortedParams = new TreeMap<String, Object>(map);
-        Set<Map.Entry<String, Object>> entrys = sortedParams.entrySet();
-        // 遍历排序后的字典，将所有参数按"key=value"格式拼接在一起
-        StringBuilder basestring = new StringBuilder();
-        for (Map.Entry<String, Object> param : entrys) {
-            basestring.append(param.getKey()).append('=').append(param.getValue()).append('&');
-        }
-        basestring.append("key=").append("Pooh4token");
-        System.out.println(basestring);
-        String SRStoken =  TokenVerify.md5(basestring.toString());
-        System.out.println(SRStoken);
-    }
+
 
 
 }

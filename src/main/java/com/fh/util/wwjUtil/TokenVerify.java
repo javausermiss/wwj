@@ -32,7 +32,49 @@ import java.security.MessageDigest;
 public class TokenVerify {
     private final static String ckey = "y3WfBKF1FY4=";
     private final static String cid = "6f456783a0fe44e28771c08ab63a52f7";
+    private final static String ckeyH5 = "rcWhucD6efT=";
+    private final static String cidH5 = "aed34f22d80e430a868c083da0e4de07";
+
+
+
     private final static String key = "Pooh4token";
+
+
+    public static String verifyForH5(String acctoken) {
+
+        try {
+            CloseableHttpClient httpClient = HttpClients.createDefault();
+            String code = null;
+            String timestamp = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
+            System.out.println(timestamp);
+            String signatrue = md5(TokenVerify.getSignature(timestamp, ckeyH5, cidH5, acctoken));
+            System.out.println(signatrue);
+            //HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost("http://test.api.hxwolf.com:7002/userVisit?" + "cid=" + cidH5 +
+                    "&timestamp=" + timestamp + "&access_token=" + acctoken + "&signatrue=" + signatrue);
+            httpPost.addHeader("Content-type", "application/x-www-form-urlencoded");
+            CloseableHttpResponse response = httpClient.execute(httpPost);
+            if (response.getStatusLine().getStatusCode() == 200) {
+                //读返回数据
+                String conResult = EntityUtils.toString(response.getEntity());
+                JSONObject object = new JSONObject();
+                object = object.fromObject(conResult);//将字符串转化为json对象
+                code = String.valueOf(object.get("msg"));
+                System.out.println(code);
+            } else {
+                System.out.println("error!!!!!!!!!!!!!!");
+                return RespStatus.fail().toString();
+            }
+            response.close();
+            httpClient.close();
+            return code;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
 
 
     public static String verify(String acctoken) {
@@ -138,7 +180,7 @@ public class TokenVerify {
         Map<String, Object> map = new HashMap<>();
         map.put("expire", 3600);
         map.put("sdasd", "sadasdasdasdw");
-        String a1 = TokenVerify.getSRStoken(map);
+        String a1 = TokenVerify.md5("123");
         System.out.println(a1);
         String S = "http://wx.qlogo.cn/mmopen/vi_32/ZQTY6hsXAECWXNic3416yKEfAuyHaWWcZ4rMAvw2DpHEEacG9g6bmXpPia5HraHdnn1P965JILptY02Sd7yUamDQ/46";
 
