@@ -28,7 +28,7 @@ import java.util.*;
 @Controller
 @RequestMapping(value = "/pay")
 public class AppUserBalanceController {
-    private final String ckey = "rcWhucD6efT=";
+    private final String ckey = "y3WfBKF1FY4=";
 
     @Resource(name = "appuserService")
     private AppuserManager appuserService;
@@ -313,6 +313,9 @@ public class AppUserBalanceController {
                 int a = Integer.valueOf(appUser.getBALANCE()) + gold;
                 appUser.setBALANCE(String.valueOf(a));
                 appuserService.updateAppUserBalanceById(appUser);
+            }else {
+                o.setSTATUS("-1");//支付失败
+                orderTestService.update(o);
             }
             return "SUCCESS";
         } catch (Exception e) {
