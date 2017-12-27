@@ -2,30 +2,23 @@ package com.fh.entity.system;
 
 import java.util.Date;
 
-/**
- * 账户余额信息实体类
- */
-public class AccountInf{
-	
+public class AccountLog implements java.io.Serializable {
+
+	private String logId;
+
 	private String accId;
-	
-	private String mchntId;
-	
-	private String userId;
-	
-	private String accType;
-	
-	private String accState; //账户状态 10：正常、20：挂失、40：冻结、99：销户
-	
-	private String accBal;
-	
-	private String accBalCode;
-	
-	private String freezeAmt;
-	
+
 	private String lastTxnDate;
 
 	private String lastTxnTime;
+
+	private String transId;
+
+	private String transAmt;
+
+	private String accAmt;
+
+	private String accTotalAmt;
 
 	private String resColumn1;
 
@@ -43,60 +36,20 @@ public class AccountInf{
 
 	private String lockVersion;
 
+	public String getLogId() {
+		return logId;
+	}
+
+	public void setLogId(String logId) {
+		this.logId = logId;
+	}
+
 	public String getAccId() {
 		return accId;
 	}
 
 	public void setAccId(String accId) {
 		this.accId = accId;
-	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	public String getAccType() {
-		return accType;
-	}
-
-	public void setAccType(String accType) {
-		this.accType = accType;
-	}
-
-	public String getAccState() {
-		return accState;
-	}
-
-	public void setAccState(String accState) {
-		this.accState = accState;
-	}
-
-	public String getAccBal() {
-		return accBal;
-	}
-
-	public void setAccBal(String accBal) {
-		this.accBal = accBal;
-	}
-
-	public String getAccBalCode() {
-		return accBalCode;
-	}
-
-	public void setAccBalCode(String accBalCode) {
-		this.accBalCode = accBalCode;
-	}
-
-	public String getFreezeAmt() {
-		return freezeAmt;
-	}
-
-	public void setFreezeAmt(String freezeAmt) {
-		this.freezeAmt = freezeAmt;
 	}
 
 	public String getLastTxnDate() {
@@ -113,6 +66,38 @@ public class AccountInf{
 
 	public void setLastTxnTime(String lastTxnTime) {
 		this.lastTxnTime = lastTxnTime;
+	}
+
+	public String getTransId() {
+		return transId;
+	}
+
+	public void setTransId(String transId) {
+		this.transId = transId;
+	}
+
+	public String getTransAmt() {
+		return transAmt;
+	}
+
+	public void setTransAmt(String transAmt) {
+		this.transAmt = transAmt;
+	}
+
+	public String getAccAmt() {
+		return accAmt;
+	}
+
+	public void setAccAmt(String accAmt) {
+		this.accAmt = accAmt;
+	}
+
+	public String getAccTotalAmt() {
+		return accTotalAmt;
+	}
+
+	public void setAccTotalAmt(String accTotalAmt) {
+		this.accTotalAmt = accTotalAmt;
 	}
 
 	public String getResColumn1() {
@@ -178,4 +163,5 @@ public class AccountInf{
 	public void setLockVersion(String lockVersion) {
 		this.lockVersion = lockVersion;
 	}
+
 }

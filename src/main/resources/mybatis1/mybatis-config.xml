@@ -19,7 +19,11 @@
 		<typeAlias type="com.fh.entity.system.Gateway" alias="Gateway"/>
 		<typeAlias type="com.fh.entity.system.Camera" alias="Camera"/>
 		<!-- 这里添加生成的实体类 -->
+		
+		<!-- 账户信息 -->
 		<typeAlias type="com.fh.entity.system.TransLog" alias="TransLog"/>
+		<typeAlias type="com.fh.entity.system.AccountInf" alias="AccountInf"/>
+		<typeAlias type="com.fh.entity.system.AccountLog" alias="AccountLog"/>
 		
 		<typeAlias type="com.fh.util.PageData" alias="pd"/>
 		<!-- 分页 -->

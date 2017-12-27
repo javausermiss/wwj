@@ -19,6 +19,8 @@ public class DateUtil {
 	private final static SimpleDateFormat sdfDays = new SimpleDateFormat("yyyyMMdd");
 	private final static SimpleDateFormat sdfTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private final static SimpleDateFormat sdfTimes = new SimpleDateFormat("yyyyMMddHHmmss");
+	
+	private final static SimpleDateFormat sdf_hhmmss = new SimpleDateFormat("HHmmss");
 
 	/**
 	 * 获取YYYY格式
@@ -58,6 +60,14 @@ public class DateUtil {
 	 */
 	public static String getTime() {
 		return sdfTime.format(new Date());
+	}
+	
+	/**
+	 * 获取HHmmss格式
+	 * @return
+	 */
+	public static String getTimeHHmmss() {
+		return sdf_hhmmss.format(new Date());
 	}
 
 	/**
