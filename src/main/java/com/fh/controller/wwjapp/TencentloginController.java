@@ -129,7 +129,7 @@ public class TencentloginController {
             } else {
                 String code = TokenVerify.verify(token);
                 if (code.equals("SUCCESS")) {
-                    if (imageUrl.equals("") || imageUrl == null) {
+                    if ( imageUrl == null||imageUrl.equals("")  ) {
                         imageUrl = "/default.png";
                     }
                     String newFace = FaceImageUtil.downloadImage(imageUrl);
@@ -274,8 +274,6 @@ public class TencentloginController {
         System.out.println(basestring);
         String SRStoken =  TokenVerify.md5(basestring.toString());
         System.out.println(SRStoken);
-
-
     }
 
 
