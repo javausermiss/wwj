@@ -34,14 +34,10 @@ public class TokenVerify {
     private final static String cid = "6f456783a0fe44e28771c08ab63a52f7";
     private final static String ckeyH5 = "rcWhucD6efT=";
     private final static String cidH5 = "aed34f22d80e430a868c083da0e4de07";
-
-
-
     private final static String key = "Pooh4token";
 
 
     public static String verifyForH5(String acctoken) {
-
         try {
             CloseableHttpClient httpClient = HttpClients.createDefault();
             String code = null;

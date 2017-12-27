@@ -207,36 +207,56 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
 
             if (String.valueOf(gifinumber).equals("1")) {
                 file = "0";
-                if (y == 0) {
-                    //用户抓中，更新抓中总数
-                    AppUser appUser = appuserService.getUserByID(userid);
-                    System.out.println("================================appuser:" + appUser);
-                    int oldCount = appUser.getDOLLTOTAL();
-                    System.out.println("===================================oldcount:" + oldCount);
-                    appUser.setDOLLTOTAL(oldCount + 1);
-                    int n = appuserService.updateAppUserDollTotalById(appUser);
-                    System.out.println(n);
-                    if (cn != 0) {
-                        List<GuessDetailL> filler = betGameService.getFailer(new GuessDetailL(file, playDetail.getGUESS_ID(), roomId));//获取失败者
-                        for (int i = 0; i < filler.size(); i++) {
-                            GuessDetailL guessDetailL = filler.get(i);
-                            String uid = guessDetailL.getAPP_USER_ID();
-                            AppUser appUser1 = appuserService.getUserByID(uid);
-                            String old = appUser1.getBALANCE();
-                            int k = Integer.valueOf(old) + Integer.valueOf(gold);
-                            appUser1.setBALANCE(String.valueOf(k));
-                            appuserService.updateAppUserBalanceById(appUser1);
-                        }
-                        RpcCommandResult rpcCommandResult = new RpcCommandResult();
-                        RpcReturnCode result = lotteryServerRpcService.noticeDrawLottery(roomId, playDetail.getGUESS_ID(), null);
-                        if (RpcReturnCode.SUCCESS == rpcCommandResult.getRpcReturnCode()) {
-                            log.info("通知成功");
-                        } else {
-                            log.info("通知失败");
-                        }
-                        rpcCommandResult.setRpcReturnCode(result);
-                        return rpcCommandResult;
+                //用户抓中，更新抓中总数
+                AppUser appUser = appuserService.getUserByID(userid);
+                System.out.println("================================appuser:" + appUser);
+                int oldCount = appUser.getDOLLTOTAL();
+                System.out.println("===================================oldcount:" + oldCount);
+                appUser.setDOLLTOTAL(oldCount + 1);
+                appuserService.updateAppUserDollTotalById(appUser);
+                if (y == 0 && cn != 0) {
+                    List<GuessDetailL> filler = betGameService.getFailer(new GuessDetailL(file, playDetail.getGUESS_ID(), roomId));//获取失败者
+                    for (int i = 0; i < filler.size(); i++) {
+                        GuessDetailL guessDetailL = filler.get(i);
+                        String uid = guessDetailL.getAPP_USER_ID();
+                        AppUser appUser1 = appuserService.getUserByID(uid);
+                        String old = appUser1.getBALANCE();
+                        int k = Integer.valueOf(old) + Integer.valueOf(gold);
+                        appUser1.setBALANCE(String.valueOf(k));
+                        appuserService.updateAppUserBalanceById(appUser1);
                     }
+                    RpcCommandResult rpcCommandResult = new RpcCommandResult();
+                    RpcReturnCode result = lotteryServerRpcService.noticeDrawLottery(roomId, playDetail.getGUESS_ID(), null);
+                    if (RpcReturnCode.SUCCESS == rpcCommandResult.getRpcReturnCode()) {
+                        log.info("通知成功");
+                    } else {
+                        log.info("通知失败");
+                    }
+                    rpcCommandResult.setRpcReturnCode(result);
+                    return rpcCommandResult;
+                }
+                if (y != 0 && cn == 0) {
+                    List<GuessDetailL> winner = betGameService.getWinner(new GuessDetailL(s, playDetail.getGUESS_ID(), roomId));//获取成功者
+                    for (int i = 0; i < winner.size(); i++) {
+                        GuessDetailL guessDetailL = winner.get(i);
+                        String uid = guessDetailL.getAPP_USER_ID();
+                        AppUser appUser1 = appuserService.getUserByID(uid);
+                        String old = appUser1.getBALANCE();
+                        int k = Integer.valueOf(old) + Integer.valueOf(gold);
+                        appUser1.setBALANCE(String.valueOf(k));
+                        appuserService.updateAppUserBalanceById(appUser1);
+                    }
+                    RpcCommandResult rpcCommandResult = new RpcCommandResult();
+                    RpcReturnCode result = lotteryServerRpcService.noticeDrawLottery(roomId, playDetail.getGUESS_ID(), null);
+                    if (RpcReturnCode.SUCCESS == rpcCommandResult.getRpcReturnCode()) {
+                        log.info("通知成功");
+                    } else {
+                        log.info("通知失败");
+                    }
+                    rpcCommandResult.setRpcReturnCode(result);
+                    return rpcCommandResult;
+                }
+                if (y == 0 && cn == 0) {
                     RpcCommandResult rpcCommandResult = new RpcCommandResult();
                     RpcReturnCode result = lotteryServerRpcService.noticeDrawLottery(roomId, playDetail.getGUESS_ID(), null);
                     if (RpcReturnCode.SUCCESS == rpcCommandResult.getRpcReturnCode()) {
@@ -250,28 +270,50 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                 avg = (int) Math.floor(allGold / y);
             } else {
                 file = "1";
-                if (cn == 0) {
-                    if (y != 0) {
-                        List<GuessDetailL> filler = betGameService.getFailer(new GuessDetailL(file, playDetail.getGUESS_ID(), roomId));//获取失败者
-                        for (int i = 0; i < filler.size(); i++) {
-                            GuessDetailL guessDetailL = filler.get(i);
-                            String uid = guessDetailL.getAPP_USER_ID();
-                            AppUser appUser1 = appuserService.getUserByID(uid);
-                            String old = appUser1.getBALANCE();
-                            int k = Integer.valueOf(old) + Integer.valueOf(gold);
-                            appUser1.setBALANCE(String.valueOf(k));
-                            appuserService.updateAppUserBalanceById(appUser1);
-                        }
-                        RpcCommandResult rpcCommandResult = new RpcCommandResult();
-                        RpcReturnCode result = lotteryServerRpcService.noticeDrawLottery(roomId, playDetail.getGUESS_ID(), null);
-                        if (RpcReturnCode.SUCCESS == rpcCommandResult.getRpcReturnCode()) {
-                            log.info("通知成功");
-                        } else {
-                            log.info("通知失败");
-                        }
-                        rpcCommandResult.setRpcReturnCode(result);
-                        return rpcCommandResult;
+                if (y == 0 && cn != 0) {
+                    List<GuessDetailL> winner = betGameService.getWinner(new GuessDetailL(s, playDetail.getGUESS_ID(), roomId));//获取成功者
+                    for (int i = 0; i < winner.size(); i++) {
+                        GuessDetailL guessDetailL = winner.get(i);
+                        String uid = guessDetailL.getAPP_USER_ID();
+                        AppUser appUser1 = appuserService.getUserByID(uid);
+                        String old = appUser1.getBALANCE();
+                        int k = Integer.valueOf(old) + Integer.valueOf(gold);
+                        appUser1.setBALANCE(String.valueOf(k));
+                        appuserService.updateAppUserBalanceById(appUser1);
                     }
+                    RpcCommandResult rpcCommandResult = new RpcCommandResult();
+                    RpcReturnCode result = lotteryServerRpcService.noticeDrawLottery(roomId, playDetail.getGUESS_ID(), null);
+                    if (RpcReturnCode.SUCCESS == rpcCommandResult.getRpcReturnCode()) {
+                        log.info("通知成功");
+                    } else {
+                        log.info("通知失败");
+                    }
+                    rpcCommandResult.setRpcReturnCode(result);
+                    return rpcCommandResult;
+
+                }
+                if (y != 0 && cn == 0) {
+                    List<GuessDetailL> filler = betGameService.getFailer(new GuessDetailL(file, playDetail.getGUESS_ID(), roomId));//获取失败者
+                    for (int i = 0; i < filler.size(); i++) {
+                        GuessDetailL guessDetailL = filler.get(i);
+                        String uid = guessDetailL.getAPP_USER_ID();
+                        AppUser appUser1 = appuserService.getUserByID(uid);
+                        String old = appUser1.getBALANCE();
+                        int k = Integer.valueOf(old) + Integer.valueOf(gold);
+                        appUser1.setBALANCE(String.valueOf(k));
+                        appuserService.updateAppUserBalanceById(appUser1);
+                    }
+                    RpcCommandResult rpcCommandResult = new RpcCommandResult();
+                    RpcReturnCode result = lotteryServerRpcService.noticeDrawLottery(roomId, playDetail.getGUESS_ID(), null);
+                    if (RpcReturnCode.SUCCESS == rpcCommandResult.getRpcReturnCode()) {
+                        log.info("通知成功");
+                    } else {
+                        log.info("通知失败");
+                    }
+                    rpcCommandResult.setRpcReturnCode(result);
+                    return rpcCommandResult;
+                }
+                if (y == 0 && cn == 0) {
                     RpcCommandResult rpcCommandResult = new RpcCommandResult();
                     RpcReturnCode result = lotteryServerRpcService.noticeDrawLottery(roomId, playDetail.getGUESS_ID(), null);
                     if (RpcReturnCode.SUCCESS == rpcCommandResult.getRpcReturnCode()) {

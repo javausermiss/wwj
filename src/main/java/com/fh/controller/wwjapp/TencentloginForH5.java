@@ -80,9 +80,9 @@ public class TencentloginForH5 {
                     if (imageUrl == null||imageUrl.equals("") ) {
                         imageUrl = "/default.png";
                     }
-                    String newFace = FaceImageUtil.downloadImage(imageUrl);
+                   // String newFace = FaceImageUtil.downloadImage(imageUrl);
                     appUser1.setNICKNAME(nickname);
-                    appUser1.setIMAGE_URL(newFace);
+                    appUser1.setIMAGE_URL(imageUrl);
                     appUser1.setUSER_ID(userId);
                     appuserService.regwx(appUser1);
                     //SRS推流
