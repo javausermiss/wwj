@@ -63,7 +63,7 @@ public class TencentloginForH5 {
      * @param nickname
      * @return
      */
-    @RequestMapping(value = "/tencentLogin", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/tencentLoginH5", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject tencentLogin(
             @RequestParam("uid") String userId,
@@ -189,7 +189,7 @@ public class TencentloginForH5 {
      * @param accessToken
      * @return
      */
-    @RequestMapping(value = "/tencentAutoLogin", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/tencentAutoLoginH5", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject tencentAutoLogin(
             @RequestParam("userId") String userId,
