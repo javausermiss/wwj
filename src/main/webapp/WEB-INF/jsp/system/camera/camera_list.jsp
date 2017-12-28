@@ -136,11 +136,7 @@
 													</a>
 													</c:if>
 													
-													<c:if test="${QX.del == 1 }">
-													<a class="btn btn-xs btn-danger2" onclick="goEdit('${var.LIVESTREAM}');">
-														<i class="ace-icon fa fa-trash-o bigger-120" title="令牌"></i>
-													</a>
-													</c:if>
+													
 													
 												</div>
 												<div class="hidden-md hidden-lg">
@@ -173,18 +169,7 @@
 															</li>
 															</c:if>
 															
-															<c:if test="${QX.del == 1 }">
-															<li>
-																<a style="cursor:pointer;" 
-																onclick="goEdit('${sbf}');"
-																class="tooltip-error2" data-rel="tooltip" 
-																title="令牌">
-																	<span class="blue">
-																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																	</span>
-																</a>
-															</li>
-															</c:if>
+															
 															
 														</ul>
 													</div>
@@ -350,31 +335,6 @@
 					});
 				}
 			});
-		}
-		
-		//令牌
-		function goEdit(LIVESTREAM){
-			 top.jzts();
-			 var diag = new top.Dialog();
-			 diag.Drag=true;
-			 diag.Title ="新增";
-			 diag.URL = '<%=basePath%>camera/goEdit.do';
-			 diag.Width = 450;
-			 diag.Height = 355;
-			 diag.Modal = true;				//有无遮罩窗口
-			 diag. ShowMaxButton = true;	//最大化按钮
-		     diag.ShowMinButton = true;		//最小化按钮
-			 diag.CancelEvent = function(){ //关闭事件
-				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-					 if('${page.currentPage}' == '0'){
-						 tosearch();
-					 }else{
-						 tosearch();
-					 }
-				}
-				diag.close();
-			 };
-			 diag.show();
 		}
 		
 		
