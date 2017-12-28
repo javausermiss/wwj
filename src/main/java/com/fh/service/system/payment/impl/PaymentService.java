@@ -1,9 +1,14 @@
 package com.fh.service.system.payment.impl;
 
 import com.fh.dao.DaoSupport;
+import com.fh.entity.Page;
 import com.fh.entity.system.Payment;
 import com.fh.service.system.payment.PaymentManager;
+import com.fh.util.PageData;
+
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -17,4 +22,22 @@ public class PaymentService implements PaymentManager {
     public int reg(Payment payment) throws Exception {
         return (int)dao.save("paymentMapper.reg",payment);
     }
+    
+    /**用户游戏收支明细
+	 * @param page
+	 * @throws Exception
+	 */
+    public List<PageData> findUserGameGoldDetaillist(Page page)throws Exception{
+    	return (List<PageData>)dao.findForList("paymentMapper.findGoldDetaillistPage", page);
+    }
+    
+	 /**
+	  * 用户充值明细
+	  * @param page
+	  * @return
+	  * @throws Exception
+	  */
+    public List<PageData> findRegDetaillistPage(Page page)throws Exception{
+		 return (List<PageData>)dao.findForList("paymentMapper.findRegDetaillistPage", page);
+	 }
 }

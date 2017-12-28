@@ -1,10 +1,28 @@
 package com.fh.service.system.payment;
 
+import java.util.List;
+
+import com.fh.entity.Page;
 import com.fh.entity.system.Payment;
+import com.fh.util.PageData;
 
 public interface PaymentManager {
 
     public int reg(Payment payment)throws Exception;
 
-
+    
+    
+	/**用户游戏收支明细
+	 * @param page
+	 * @throws Exception
+	 */
+	 List<PageData> findUserGameGoldDetaillist(Page page)throws Exception;
+	 
+	 /**
+	  * 用户充值明细
+	  * @param page
+	  * @return
+	  * @throws Exception
+	  */
+	 List<PageData> findRegDetaillistPage(Page page)throws Exception;
 }
