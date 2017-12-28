@@ -2,6 +2,8 @@ package com.fh.service.system.pond;
 
 import com.fh.entity.system.Pond;
 
+import java.util.List;
+
 public interface PondManager {
     /**
      * 创建奖池表
@@ -52,4 +54,14 @@ public interface PondManager {
      * @throws Exception
      */
     public int updatePondFlag(Pond pond)throws Exception;
+
+    /**
+     * 查询最近的10场竞猜记录
+     * @param dollId
+     * @return
+     * @throws Exception
+     */
+    public List<Pond> getGuessList (String dollId) throws Exception;
+
+
 }

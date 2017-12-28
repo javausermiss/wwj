@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -159,7 +161,7 @@ public class BetGameController {
             payment.setCOST_TYPE("1");
             payment.setDOLLID(dollId);
             payment.setUSERID(userId);
-            payment.setGOLD(String.valueOf(wager));
+            payment.setGOLD("-"+String.valueOf(wager));
             paymentService.reg(payment);
             //增加竞猜记录
             GuessDetailL guessDetailL = new GuessDetailL(userId, dollId, guessKey, wager, guessId);
@@ -201,6 +203,19 @@ public class BetGameController {
 
     }
 
+    @RequestMapping(value = "/betList", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public JSONObject betList(@RequestParam("dollId") String dollId) {
+        try {
+            List<Pond> list =  pondService.getGuessList(dollId);
+            Map<String,Object> map = new LinkedHashMap<>();
+            map.put("pondList",list);
+            return RespStatus.successs().element("data",map);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return RespStatus.fail();
+        }
+    }
 
 
     /**
@@ -214,13 +229,13 @@ public class BetGameController {
     @ResponseBody
     public JSONObject getPond(@RequestParam("playId") String guessid,
                               @RequestParam("dollId") String dollId
-                              ) {
+    ) {
 
         try {
             Pond pond = new Pond();
             pond.setDOLLID(dollId);
             pond.setGUESS_ID(guessid);
-            Pond pond1 =  pondService.getPondByPlayId(pond);
+            Pond pond1 = pondService.getPondByPlayId(pond);
             if (pond1 == null) {
                 return RespStatus.fail("该奖池不存在");
             }

@@ -10,8 +10,26 @@ public class Order {
     private String CREATETIME;
     private String  REGAMOUNT;
     private String STATUS;
+    private String REGGOLD;
+    private String ORDER_NO;//外部订单
 
     public Order() {
+    }
+
+    public String getORDER_NO() {
+        return ORDER_NO;
+    }
+
+    public void setORDER_NO(String ORDER_NO) {
+        this.ORDER_NO = ORDER_NO;
+    }
+
+    public String getREGGOLD() {
+        return REGGOLD;
+    }
+
+    public void setREGGOLD(String REGGOLD) {
+        this.REGGOLD = REGGOLD;
     }
 
     public String getREC_ID() {

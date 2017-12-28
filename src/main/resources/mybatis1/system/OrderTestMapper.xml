@@ -28,7 +28,9 @@
 
         UPDATE sys_app_order
         SET
-        STATUS=#{STATUS}
+        ORDER_NO = #{ORDER_NO},
+        STATUS=#{STATUS},
+        REGGOLD = #{REGGOLD}
         WHERE
         ORDER_ID = #{ORDER_ID}
     </update>

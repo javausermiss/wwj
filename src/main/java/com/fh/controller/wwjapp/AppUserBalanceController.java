@@ -109,17 +109,18 @@ public class AppUserBalanceController {
 
     /**
      * 获取动态充值卡信息
+     *
      * @return
      */
-    @RequestMapping(value = "/getPaycard",method = RequestMethod.GET)
+    @RequestMapping(value = "/getPaycard", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject getPaycard(){
+    public JSONObject getPaycard() {
         try {
-           List<Paycard> list =   paycardService.getPayCard();
-            Map<String,Object> map = new HashMap<>();
-            map.put("paycard",list);
-            return RespStatus.successs().element("data",map);
-        }catch (Exception e){
+            List<Paycard> list = paycardService.getPayCard();
+            Map<String, Object> map = new HashMap<>();
+            map.put("paycard", list);
+            return RespStatus.successs().element("data", map);
+        } catch (Exception e) {
             e.printStackTrace();
             return RespStatus.fail();
         }
@@ -131,7 +132,7 @@ public class AppUserBalanceController {
      *
      * @param userId
      * @param accessToken
-     * @param amounr     金额
+     * @param amounr      金额
      * @return
      */
     @RequestMapping(value = "/getTradeOrder", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -255,6 +256,7 @@ public class AppUserBalanceController {
                 orderTestService.update(o);
                 return "SUCCESS";
             }
+            o.setORDER_NO(order_no);
             String decodeStr = URLDecoder.decode(extra, "utf-8");
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("chid", chid);
@@ -298,22 +300,43 @@ public class AppUserBalanceController {
                 if (o.getSTATUS().equals("1")) {
                     return "SUCCESS";
                 }
-                o.setSTATUS("1");
-                orderTestService.update(o);
-                Paycard paycard =  paycardService.getGold(String.valueOf(amount/100));
-                if (paycard==null){
+
+                Paycard paycard = paycardService.getGold(String.valueOf(amount / 100));
+                int gold = Integer.valueOf(paycard.getGOLD());
+                if (paycard == null) {
                     AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
                     int a = Integer.valueOf(appUser.getBALANCE()) + Integer.valueOf(o.getREGAMOUNT()) / 10;
                     appUser.setBALANCE(String.valueOf(a));
                     appuserService.updateAppUserBalanceById(appUser);
+                    Payment payment = new Payment();
+                    payment.setGOLD(String.valueOf(gold));
+                    payment.setUSERID(o.getUSER_ID());
+                    payment.setDOLLID(null);
+                    payment.setCOST_TYPE("5");
+                    payment.setREMARK("充值");
+                    paymentService.reg(payment);
+                    o.setREGGOLD(String.valueOf(gold));
+                    o.setSTATUS("1");
+                    orderTestService.update(o);
                     return "SUCCESS";
                 }
-                int gold =  Integer.valueOf(paycard.getGOLD());
+
                 AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
                 int a = Integer.valueOf(appUser.getBALANCE()) + gold;
                 appUser.setBALANCE(String.valueOf(a));
                 appuserService.updateAppUserBalanceById(appUser);
-            }else {
+                //更新收支表
+                Payment payment = new Payment();
+                payment.setGOLD(String.valueOf(gold));
+                payment.setUSERID(o.getUSER_ID());
+                payment.setDOLLID(null);
+                payment.setCOST_TYPE("5");
+                payment.setREMARK("充值");
+                paymentService.reg(payment);
+                o.setREGGOLD(String.valueOf(gold));
+                o.setSTATUS("1");
+                orderTestService.update(o);
+            } else {
                 o.setSTATUS("-1");//支付失败
                 orderTestService.update(o);
             }
@@ -322,94 +345,6 @@ public class AppUserBalanceController {
             e.printStackTrace();
             return "SYSTEM ERROR";
         }
-    }
-
-    /**
-     * 充值充值接口
-     *
-     * @param userId
-     * @param money
-     * @return
-     */
-    @RequestMapping(value = "/balance", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    @ResponseBody
-    public JSONObject appUserPay(@RequestParam("userId") String userId, @RequestParam("money") String money) {
-        try {
-            AppUser appUser = appuserService.getUserByID(userId);
-            if (appUser != null) {
-                String balance = appUser.getBALANCE();
-                int bal = Integer.parseInt(balance);
-                int mon = Integer.parseInt(money);
-                appUser.setBALANCE(String.valueOf(bal + mon));
-                int n = appuserService.updateAppUserBalanceByPhone(appUser);
-                if (n != 0) {
-                    Map<String, Object> map = new LinkedHashMap<>();
-                    map.put("appUser", getAppUserInfoById(userId));
-                    return RespStatus.successs().element("data", map);
-                } else {
-                    return RespStatus.fail("更新余额失败");
-                }
-            } else {
-                return RespStatus.fail("此用户不存在");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return RespStatus.fail();
-        }
-
-    }
-
-    /**
-     * 消费金币接口 2017/12/13
-     *
-     * @param userId
-     * @param dollId
-     * @return
-     */
-    @RequestMapping(value = "/costBalance", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    @ResponseBody
-    public JSONObject costBalance(@RequestParam("userId") String userId,
-                                  @RequestParam("gode") String co,//废弃
-                                  @RequestParam("dollId") String dollId
-    ) {
-        try {
-            AppUser appUser = appuserService.getUserByID(userId);
-            if (appUser == null) {
-                return RespStatus.fail("不存在该用户");
-            }
-            Doll doll = dollService.getDollByID(dollId);
-            if (doll == null) {
-                return RespStatus.fail("不存在该房间");
-            }
-            String balance = appUser.getBALANCE();
-            int a = Integer.parseInt(balance);
-            int b = doll.getDOLL_GOLD();
-            if (a < b) {
-                return RespStatus.fail("余额不足");
-            } else {
-                Payment payment = new Payment();
-                payment.setCOST_TYPE("0");
-                payment.setDOLLID(dollId);
-                payment.setUSERID(userId);
-                payment.setGOLD(String.valueOf(doll.getDOLL_GOLD()));
-                paymentService.reg(payment);
-                appUser.setBALANCE(String.valueOf(a - b));
-                int c = appuserService.updateAppUserBalanceById(appUser);
-                if (c != 0) {
-                    Map<String, Object> map = new LinkedHashMap<>();
-                    map.put("appUser", getAppUserInfoById(userId));
-                    return RespStatus.successs().element("data", map);
-                } else {
-                    return RespStatus.fail("扣款失败");
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return RespStatus.fail();
-
-        }
-
     }
 
 

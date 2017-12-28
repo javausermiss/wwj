@@ -9,10 +9,14 @@ public class Pond {
     private Integer GUESS_Y;
     private Integer GUESS_N;
     private Integer GUESS_GOLD;
+    private Integer GOLD_Y;
+    private Integer GOLD_N;
     private String CREATE_DATE;
     private String UPDATE_DATE;
     private String POND_FLAG;
     private String DOLL_ID;
+    private String GUESS_STATE;//实际抓取结果
+    private Integer ALLPEOPLE;//竞猜总人数
 
     public Pond() {
 
@@ -22,6 +26,46 @@ public class Pond {
         this.GUESS_ID = GUESS_ID;
         this.CREATE_DATE = CREATE_DATE;
         this.DOLL_ID = DOLLID;
+    }
+
+    public Integer getALLPEOPLE() {
+        return ALLPEOPLE;
+    }
+
+    public void setALLPEOPLE(Integer ALLPEOPLE) {
+        this.ALLPEOPLE = ALLPEOPLE;
+    }
+
+    public Integer getGOLD_Y() {
+        return GOLD_Y;
+    }
+
+    public void setGOLD_Y(Integer GOLD_Y) {
+        this.GOLD_Y = GOLD_Y;
+    }
+
+    public Integer getGOLD_N() {
+        return GOLD_N;
+    }
+
+    public void setGOLD_N(Integer GOLD_N) {
+        this.GOLD_N = GOLD_N;
+    }
+
+    public String getDOLL_ID() {
+        return DOLL_ID;
+    }
+
+    public void setDOLL_ID(String DOLL_ID) {
+        this.DOLL_ID = DOLL_ID;
+    }
+
+    public String getGUESS_STATE() {
+        return GUESS_STATE;
+    }
+
+    public void setGUESS_STATE(String GUESS_STATE) {
+        this.GUESS_STATE = GUESS_STATE;
     }
 
     public String getPOND_FLAG() {

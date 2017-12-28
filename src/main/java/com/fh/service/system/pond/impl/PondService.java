@@ -6,6 +6,8 @@ import com.fh.service.system.pond.PondManager;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
+
 @Service("pondService")
 public class PondService implements PondManager {
     @Resource(name = "daoSupport")
@@ -38,5 +40,10 @@ public class PondService implements PondManager {
     @Override
     public int updatePondFlag(Pond pond) throws Exception {
         return (int)dao.update("PondMapper.updatePondFlag",pond);
+    }
+
+    @Override
+    public List<Pond> getGuessList(String dollId) throws Exception {
+        return (List<Pond>)dao.findForList("PondMapper.getGuessList",dollId);
     }
 }

@@ -128,4 +128,5 @@ public interface PlayDetailManage {
     public int updatePostStateForCon (PlayDetail playDetail) throws Exception;
 
 
+
 }

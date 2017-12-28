@@ -8,6 +8,7 @@ import com.fh.service.system.doll.DollManager;
 import com.fh.service.system.payment.PaymentManager;
 import com.fh.service.system.playdetail.PlayDetailManage;
 import com.fh.service.system.pond.PondManager;
+import com.fh.util.Logger;
 import com.iot.game.pooh.server.entity.json.enums.PoohAbnormalStatus;
 import com.iot.game.pooh.server.entity.json.enums.PoohNormalStatus;
 import com.iot.game.pooh.server.rpc.interfaces.LotteryServerRpcService;
@@ -59,7 +60,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
             payment.setCOST_TYPE("0");
             payment.setDOLLID(dollId);
             payment.setUSERID(userId);
-            payment.setGOLD(String.valueOf(dollService.getDollByID(dollId).getDOLL_GOLD()));
+            payment.setGOLD("-"+String.valueOf(dollService.getDollByID(dollId).getDOLL_GOLD()));
             paymentService.reg(payment);
             appUser.setBALANCE(String.valueOf(old - b2));
             appuserService.updateAppUserBalanceById(appUser);
@@ -172,9 +173,9 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
     @Override
     public RpcCommandResult drawLottery(String roomId, Integer gifinumber) {
         try {
-            PlayDetail playDetail = playDetailService.getPlayIdForPeople(roomId);
+            PlayDetail playDetail = playDetailService.getPlayIdForPeople(roomId);//根据房间取得最新的游戏记录
             String gold = playDetail.getGOLD();//获取下注金币，即竞猜用户扣除的金币数
-            String state = playDetail.getPOST_STATE();
+            String state = playDetail.getPOST_STATE();//获取娃娃发送状态
             //网关自检发送多次free进入此判断逻辑,POST_STATE初始值为"-1"，判断是否已经结算过
             //STOP_FLAG 初始值为"0",下抓后为"-1",判断流程是否走完
             if (playDetail.getSTOP_FLAG().equals("0")
@@ -191,11 +192,17 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
             Pond p = new Pond();
             p.setDOLLID(roomId);
             p.setGUESS_ID(playDetail.getGUESS_ID());
-            Pond pond = pondService.getPondByPlayId(p);
+            Pond pond = pondService.getPondByPlayId(p);//查询对应奖池信息
             if (!pond.getPOND_FLAG().equals("0")) {
                 return null;
             }
             pond.setPOND_FLAG("-1");//此标签代表禁止再次结算
+            pond.setALLPEOPLE(pond.getGUESS_N()+pond.getGUESS_Y());//获取竞猜总人数
+            int an = pond.getGUESS_N()*Integer.valueOf(gold);
+            int ay = pond.getGUESS_Y()*Integer.valueOf(gold);
+            pond.setGOLD_N(an);//猜不中人下注总金额
+            pond.setGOLD_Y(ay);//猜中的人下注总金额
+            pond.setGUESS_STATE(String.valueOf(gifinumber));//本局抓中状态
             pondService.updatePondFlag(pond);//更新标签
             int allGold = pond.getGUESS_GOLD();
             int y = pond.getGUESS_Y();//猜1
@@ -204,7 +211,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
             String s = playDetail.getSTATE();//取得压中的状态
             String file = "";//失败状态
             String userid = playDetail.getUSERID();
-
+            //判断是否抓中
             if (String.valueOf(gifinumber).equals("1")) {
                 file = "0";
                 //用户抓中，更新抓中总数
@@ -214,6 +221,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                 System.out.println("===================================oldcount:" + oldCount);
                 appUser.setDOLLTOTAL(oldCount + 1);
                 appuserService.updateAppUserDollTotalById(appUser);
+                //以下2种判断为单向竞猜 统统返还给用户竞猜金币
                 if (y == 0 && cn != 0) {
                     List<GuessDetailL> filler = betGameService.getFailer(new GuessDetailL(file, playDetail.getGUESS_ID(), roomId));//获取失败者
                     for (int i = 0; i < filler.size(); i++) {
@@ -224,6 +232,14 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                         int k = Integer.valueOf(old) + Integer.valueOf(gold);
                         appUser1.setBALANCE(String.valueOf(k));
                         appuserService.updateAppUserBalanceById(appUser1);
+                        //更新收支表
+                        Payment payment = new Payment();
+                        payment.setGOLD("+"+gold);
+                        payment.setUSERID(uid);
+                        payment.setDOLLID(roomId);
+                        payment.setCOST_TYPE("4");
+                        paymentService.reg(payment);
+
                     }
                     RpcCommandResult rpcCommandResult = new RpcCommandResult();
                     RpcReturnCode result = lotteryServerRpcService.noticeDrawLottery(roomId, playDetail.getGUESS_ID(), null);
@@ -245,6 +261,13 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                         int k = Integer.valueOf(old) + Integer.valueOf(gold);
                         appUser1.setBALANCE(String.valueOf(k));
                         appuserService.updateAppUserBalanceById(appUser1);
+                        //更新收支表
+                        Payment payment = new Payment();
+                        payment.setGOLD("+"+gold);
+                        payment.setUSERID(uid);
+                        payment.setDOLLID(roomId);
+                        payment.setCOST_TYPE("4");
+                        paymentService.reg(payment);
                     }
                     RpcCommandResult rpcCommandResult = new RpcCommandResult();
                     RpcReturnCode result = lotteryServerRpcService.noticeDrawLottery(roomId, playDetail.getGUESS_ID(), null);
@@ -256,6 +279,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                     rpcCommandResult.setRpcReturnCode(result);
                     return rpcCommandResult;
                 }
+                //没人竞猜
                 if (y == 0 && cn == 0) {
                     RpcCommandResult rpcCommandResult = new RpcCommandResult();
                     RpcReturnCode result = lotteryServerRpcService.noticeDrawLottery(roomId, playDetail.getGUESS_ID(), null);
@@ -269,7 +293,9 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                 }
                 avg = (int) Math.floor(allGold / y);
             } else {
+                //没有抓中的情况
                 file = "1";
+                //以下2种判断为单向竞猜 统统返还给用户竞猜金币
                 if (y == 0 && cn != 0) {
                     List<GuessDetailL> winner = betGameService.getWinner(new GuessDetailL(s, playDetail.getGUESS_ID(), roomId));//获取成功者
                     for (int i = 0; i < winner.size(); i++) {
@@ -280,6 +306,13 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                         int k = Integer.valueOf(old) + Integer.valueOf(gold);
                         appUser1.setBALANCE(String.valueOf(k));
                         appuserService.updateAppUserBalanceById(appUser1);
+                        //更新收支表
+                        Payment payment = new Payment();
+                        payment.setGOLD("+"+gold);
+                        payment.setUSERID(uid);
+                        payment.setDOLLID(roomId);
+                        payment.setCOST_TYPE("4");
+                        paymentService.reg(payment);
                     }
                     RpcCommandResult rpcCommandResult = new RpcCommandResult();
                     RpcReturnCode result = lotteryServerRpcService.noticeDrawLottery(roomId, playDetail.getGUESS_ID(), null);
@@ -302,6 +335,13 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                         int k = Integer.valueOf(old) + Integer.valueOf(gold);
                         appUser1.setBALANCE(String.valueOf(k));
                         appuserService.updateAppUserBalanceById(appUser1);
+                        //更新收支表
+                        Payment payment = new Payment();
+                        payment.setGOLD("+"+gold);
+                        payment.setUSERID(uid);
+                        payment.setDOLLID(roomId);
+                        payment.setCOST_TYPE("4");
+                        paymentService.reg(payment);
                     }
                     RpcCommandResult rpcCommandResult = new RpcCommandResult();
                     RpcReturnCode result = lotteryServerRpcService.noticeDrawLottery(roomId, playDetail.getGUESS_ID(), null);
@@ -313,6 +353,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                     rpcCommandResult.setRpcReturnCode(result);
                     return rpcCommandResult;
                 }
+                //无人竞猜
                 if (y == 0 && cn == 0) {
                     RpcCommandResult rpcCommandResult = new RpcCommandResult();
                     RpcReturnCode result = lotteryServerRpcService.noticeDrawLottery(roomId, playDetail.getGUESS_ID(), null);
@@ -335,21 +376,20 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                     betGameService.updateGuessDetail(filePerson);
                 }
             }
+
             List<GuessDetailL> winner = betGameService.getWinner(new GuessDetailL(s, playDetail.getGUESS_ID(), roomId));//获取成功者
-            System.out.println("=============================winner size:" + winner.size() + "===================================");
+           log.info("winner size:"+winner.size());
             List<GuessDetail> win = new LinkedList<>();
             if (winner.size() != 0) {
                 for (int f = 0; f < winner.size(); f++) {
                     GuessDetailL winPerson = winner.get(f);
-                    System.out.println("=========================localG:" + winPerson + "==========================================");
-                    System.out.println(winPerson);
+                    log.info("localG:"+winPerson);
                     GuessDetail guessDetail1 = new GuessDetail();
                     guessDetail1.setAppUserId(winPerson.getAPP_USER_ID());
                     AppUser appUser = appuserService.getUserByID(winPerson.getAPP_USER_ID());
-                    System.out.println(appUser);
                     guessDetail1.setNickname(appUser.getNICKNAME());
                     win.add(guessDetail1);
-                    System.out.println("========================DubboG:" + guessDetail1 + "=========================================");
+                    log.info("DubboG:"+guessDetail1);
                     String userId = winPerson.getAPP_USER_ID();
                     AppUser appUser1 = appuserService.getUserByID(userId);
                     int balance = Integer.parseInt(appUser1.getBALANCE());

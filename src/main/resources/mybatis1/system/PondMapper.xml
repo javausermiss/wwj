@@ -97,10 +97,23 @@
         UPDATE
         <include refid="tableName"/>
         SET
+        GOLD_N = #{GOLD_N},
+        GOLD_Y = #{GOLD_Y},
+        GUESS_STATE = #{GUESS_STATE},
         POND_FLAG = #{POND_FLAG}
         WHERE
         POND_ID = #{POND_ID}
     </update>
+
+    <select id="getGuessList" parameterType="String" resultType="com.fh.entity.system.Pond">
+     SELECT * FROM
+     ( SELECT * FROM tb_doll_guess_pond  AS h WHERE h.DOLL_ID = #{DOLL_ID} ORDER BY h.CREATE_DATE DESC LIMIT 0,10)
+     as m
+     ORDER BY
+      m.CREATE_DATE
+      ASC
+
+    </select>
 
 
 

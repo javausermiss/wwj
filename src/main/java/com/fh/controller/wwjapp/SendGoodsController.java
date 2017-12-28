@@ -11,6 +11,7 @@ import com.fh.service.system.playdetail.impl.PlayDetailService;
 import com.fh.service.system.pond.PondManager;
 import com.fh.service.system.sendgoods.SendGoodsManager;
 import com.fh.util.wwjUtil.RespStatus;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 
 import java.net.URL;
@@ -28,7 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 
-
+@Slf4j
 @RequestMapping("/app")
 @Controller
 public class SendGoodsController {
