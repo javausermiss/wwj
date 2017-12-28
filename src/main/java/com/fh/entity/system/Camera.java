@@ -15,16 +15,25 @@ public class Camera {
     private String LIVESTREAM;
     private String SERVER_ID;
     private String CLIENT_ID;
+    private String CAMERA_TYPE; //M or S
     private String DEVICE_STATE;
     private Timestamp CREATE_DATE;
     private Timestamp UPDATE_DATE;
     private Integer LOCK_VERSION;
-
+    
     public Camera() {
 
     }
 
-    public String getCAMERA_ID() {
+    public String getCAMERA_TYPE() {
+		return CAMERA_TYPE;
+	}
+
+	public void setCAMERA_TYPE(String cAMERA_TYPE) {
+		CAMERA_TYPE = cAMERA_TYPE;
+	}
+
+	public String getCAMERA_ID() {
 		return CAMERA_ID;
 	}
 

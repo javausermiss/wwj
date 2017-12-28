@@ -21,9 +21,15 @@ import com.fh.entity.Page;
 import com.fh.util.AppUtil;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
+import com.iot.game.pooh.admin.srs.core.entity.httpback.SrsConnectModel;
+import com.iot.game.pooh.admin.srs.core.util.SrsConstants;
+import com.iot.game.pooh.admin.srs.core.util.SrsSignUtil;
+
+import antlr.Token;
+
 import com.fh.util.Jurisdiction;
-import com.fh.util.Tools;
 import com.fh.service.system.camera.CameraManager;
+import com.fh.service.system.doll.DollManager;
 
 /** 
  * 说明：摄像头处理类
@@ -38,6 +44,9 @@ public class CameraController extends BaseController {
 	@Resource(name="cameraService")
 	private CameraManager cameraService;
 	
+	@Resource(name="dollService")
+	private DollManager dollService;
+	
 	/**保存
 	 * @param
 	 * @throws Exception
@@ -50,7 +59,7 @@ public class CameraController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd.put("CAMERA_ID", this.get32UUID());	//主键
-		pd.put("DEVICE_STATE", "2");	//DEVICE_STATE
+		pd.put("DEVICE_STATE", "2");
 		cameraService.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
@@ -106,6 +115,7 @@ public class CameraController extends BaseController {
 		}
 		page.setPd(pd);
 		List<PageData>	varList = cameraService.list(page);	//列出Camera列表
+		
 		mv.setViewName("system/camera/camera_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
@@ -139,6 +149,8 @@ public class CameraController extends BaseController {
 		pd = this.getPageData();
 		pd = cameraService.findById(pd);	//根据ID读取
 		mv.setViewName("system/camera/camera_edit");
+		StringBuffer sbf=CameraToken();
+		mv.addObject("sbf",sbf);
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
 		return mv;
@@ -221,4 +233,21 @@ public class CameraController extends BaseController {
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
 	}
-}
+	
+	public StringBuffer  CameraToken()throws Exception
+	{
+		SrsConnectModel sc=new SrsConnectModel();
+		long time=System.currentTimeMillis();
+		sc.setType("C");
+		sc.setTid("num-0005-M");
+		sc.setExpire(0);
+		sc.setTime(0);
+		sc.setToken(SrsSignUtil.genSign(sc,SrsConstants.SRS_CONNECT_KEY));
+		StringBuffer sbf=new StringBuffer
+				("?expire=0&time=0&type=C&tid=").
+				append("num-0005-M").append("&token=").append(sc.getToken());
+		
+		return sbf;
+	}
+
+}	
