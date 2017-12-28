@@ -83,8 +83,8 @@
          <if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
             and  u.CNEE_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
         </if>
-        <if test="pd.COST_TYPE != null and pd.COST_TYPE != ''"><!-- 状态检索 -->
-            and o.COST_TYPE = #{pd.COST_TYPE}
+        <if test="pd.STATUS != null and pd.STATUS != ''"><!-- 状态检索 -->
+            and o.`STATUS` = #{pd.STATUS}
         </if>
 		
 		ORDER BY o.CREATETIME desc
