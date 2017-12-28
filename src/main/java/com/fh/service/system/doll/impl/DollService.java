@@ -1,17 +1,18 @@
 package com.fh.service.system.doll.impl;
 
 import java.util.List;
-import java.util.Map;
+
 import javax.annotation.Resource;
 
-import com.fh.entity.system.Doll;
-import com.fh.entity.system.PlayBack;
-import com.fh.service.system.doll.DollManager;
-import com.fh.util.wwjUtil.MyUUID;
 import org.springframework.stereotype.Service;
+
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
+import com.fh.entity.system.Doll;
+import com.fh.service.system.doll.DollManager;
 import com.fh.util.PageData;
+import com.fh.util.wwjUtil.MyUUID;
+import com.fh.vo.system.DollVo;
 
 /** 
  * 说明： 娃娃机处理类
@@ -152,6 +153,15 @@ public class DollService implements DollManager {
 		return (Doll)dao.findForObject("DollMapper.getDollByDollName",dollName);
 	}
 
+	
+	/** 娃娃机列表 （包含摄像信息）
+	 * getDollList
+	 * @return DollVo
+	 * @throws Exception
+	 */
+	public List<DollVo>  getDollVoList()throws Exception{
+		return (List<DollVo>) dao.findForList("DollMapper.getDollVoList",null);
+	}
 
 }
 

@@ -1,12 +1,11 @@
 package com.fh.service.system.doll;
 
 import java.util.List;
-import java.util.Map;
 
 import com.fh.entity.Page;
 import com.fh.entity.system.Doll;
-import com.fh.entity.system.PlayBack;
 import com.fh.util.PageData;
+import com.fh.vo.system.DollVo;
 
 /** 
  * 说明： 娃娃机处理类接口
@@ -113,6 +112,13 @@ public interface DollManager{
 	public Doll getDollByDollName(String dollName)throws Exception;
 
 
+	
+	/** 娃娃机列表 （包含摄像信息）
+	 * getDollList
+	 * @return DollVo
+	 * @throws Exception
+	 */
+	public List<DollVo>  getDollVoList()throws Exception;
 
 
 }

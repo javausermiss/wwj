@@ -2,6 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="DollMapper">
 
+
+	<resultMap type="DollVo" id="DollVoResultMap">
+		<result column="DOLL_ID" property="dollId"/>
+		<result column="DOLL_SN" property="dollSn"/>	
+		<result column="DOLL_NAME" property="dollName"/>	
+		<result column="ROOM_ID" property="roomId"/>
+		<result column="DOLL_STATE" property="dollState"/>
+		<result column="DOLL_GOLD" property="dollGold"/>
+		<result column="DOLL_URL" property="dollUrl"/>
+		<result column="DOLL_CONVERSIONGOLD" property="dollConversiongold"/>
+		<result column="CAMERA_NAME_01" property="cameraName01"/>
+		<result column="CAMERA_NAME_02" property="cameraName02"/>
+			
+		<collection property="cameras" column="DOLL_ID" ofType="com.fh.vo.system.CameraVo">
+	        <id property="cameraId" column="CAMERA_ID"/>
+	        <result property="rtmpUrl" column="RTMP_URL"/>
+	        <result property="serverName" column="SERVER_NAME"/>
+	        <result property="livestream" column="LIVESTREAM"/>
+	        <result property="cameraType" column="CAMERA_TYPE"/>
+	        <result property="deviceState" column="DEVICE_STATE"/>
+	    </collection>
+	</resultMap>
+
     <!--表名 -->
     <sql id="tableName">
 		SYS_APP_DOLL
@@ -197,5 +220,25 @@
         DOLL_NAME = #{DOLL_NAME}
     </select>
 
+
+    <!-- 通过娃娃机的名字获取娃娃信息-->
+    <select id="getDollVoList" resultMap="DollVoResultMap">
+        SELECT
+	    	d.DOLL_SN,	
+			d.DOLL_NAME,	
+			d.ROOM_ID,	
+			d.DOLL_STATE,	
+			d.DOLL_ID,
+			d.DOLL_GOLD,
+			d.DOLL_URL,
+			d.DOLL_CONVERSIONGOLD,
+			c.CAMERA_ID,
+			c.CAMERA_TYPE,
+			c.RTMP_URL,
+			c.SERVER_NAME,
+			c.LIVESTREAM,
+			c.DEVICE_STATE from
+			SYS_APP_DOLL d LEFT JOIN TB_DEVICE_CAMERA c ON d.DOLL_ID=c.DOLL_ID
+    </select>
 
 </mapper>
