@@ -72,18 +72,18 @@
 									<th class="center" style="width:35px;">
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
-									<th class="center" style="width:50px;">序号</th>
+									<th class="center">娃娃机名称</th>
 									<th class="center">设备名称</th>
-									
 									<th class="center">设备编号</th>
 									<th class="center">推流地址</th>
 									<th class="center">推流服务名称</th>
 									<th class="center">流媒体名称</th>
-									<th class="center">流媒体进程ID</th>
+									<th class="center">状态</th>
+									<th class="center">摄像头位置</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
-													
+												
 							<tbody>
 							<!-- 开始循环 -->	
 							<c:choose>
@@ -94,19 +94,25 @@
 											<td class='center'>
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.CAMERA_ID}" class="ace" /><span class="lbl"></span></label>
 											</td>
-											<td class='center' style="width: 30px;">${vs.index+1}</td>
+											<td class='center'>${var.DOLL_ID}</td>
 											<td class='center'>${var.CAMERA_NAME}</td>
 											<td class='center'>${var.CAMERA_NUM}</td>
 											<td class='center'>${var.RTMP_URL}</td>
 											<td class='center'>${var.SERVER_NAME}</td>
 											<td class='center'>${var.LIVESTREAM}</td>
-											<td class='center'>${var.SERVER_ID}</td>
-											<td style="width: 200px;" class='center'>
+											<td style="width: 100px;" class='center'>
                                                         <c:if test="${var.DEVICE_STATE == '1' }"><span
-                                                                class="label label-success arrowed">可用</span></c:if>
+                                                                class="label label-success arrowed">不可用</span></c:if>
                                                         
                                                         <c:if test="${var.DEVICE_STATE == '0' }"><span
                                                                 class="label label-success arrowed">正常</span></c:if>
+                                                    </td>
+											<td style="width: 100px;" class='center'>
+                                                        <c:if test="${var.CAMERA_TYPE == '1' }"><span
+                                                                class="label label-success arrowed">S</span></c:if>
+                                                        
+                                                        <c:if test="${var.CAMERA_TYPE == '2' }"><span
+                                                                class="label label-success arrowed">M</span></c:if>
                                                     </td>
 											
 											
@@ -116,7 +122,7 @@
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i 
 													class="ace-icon fa fa-lock" title="无权限"></i></span>
 												</c:if>
-												<div class="hidden-sm hidden-xs btn-group">
+												<div class="hidden-sm hidden-xs btn-group" >
 													<c:if test="${QX.edit == 1 }">
 													<a class="btn btn-xs btn-success" title="编辑" 
 														onclick="edit('${var.CAMERA_ID}');">
@@ -129,6 +135,9 @@
 														<i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i>
 													</a>
 													</c:if>
+													
+													
+													
 												</div>
 												<div class="hidden-md hidden-lg">
 													<div class="inline pos-rel">
@@ -159,6 +168,9 @@
 																</a>
 															</li>
 															</c:if>
+															
+															
+															
 														</ul>
 													</div>
 												</div>
@@ -166,6 +178,7 @@
 										</tr>
 									
 									</c:forEach>
+									
 									</c:if>
 									<c:if test="${QX.cha == 0 }">
 										<tr>
@@ -262,7 +275,7 @@
 					if(event_name != 'sidebar_collapsed') return;
 					$('.chosen-select').each(function() {
 						 var $this = $(this);
-						 $this.next().css({'width': $this.parent().width()});
+						 $this.next().css	({'width': $this.parent().width()});
 					});
 				});
 				$('#chosen-multiple-style .btn').on('click', function(e){
@@ -323,6 +336,7 @@
 				}
 			});
 		}
+		
 		
 		//修改
 		function edit(Id){

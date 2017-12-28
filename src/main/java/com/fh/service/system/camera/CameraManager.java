@@ -61,5 +61,6 @@ public interface CameraManager{
 	 */
 	public PageData findByLiveStream(String liveStream)throws Exception;
 	
+	
 }
 
