@@ -19,6 +19,7 @@
 		<typeAlias type="com.fh.entity.system.Gateway" alias="Gateway"/>
 		<typeAlias type="com.fh.entity.system.Camera" alias="Camera"/>
 		
+		
 		<typeAlias type="com.fh.vo.system.DollVo" alias="DollVo"/>
 		<typeAlias type="com.fh.vo.system.CameraVo" alias="CameraVo"/>
 		<!-- 这里添加生成的实体类 -->

@@ -3,6 +3,7 @@
 <mapper namespace="DollMapper">
 
 
+
 	<resultMap type="DollVo" id="DollVoResultMap">
 		<result column="DOLL_ID" property="dollId"/>
 		<result column="DOLL_SN" property="dollSn"/>	

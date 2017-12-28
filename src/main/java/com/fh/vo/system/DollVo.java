@@ -1,7 +1,6 @@
 package com.fh.vo.system;
 
 import java.util.List;
-
 /**
  * 娃娃机实体类
  */
