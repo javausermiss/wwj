@@ -8,7 +8,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
+
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -16,14 +18,14 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.service.system.doll.DollToyManager;
 import com.fh.util.AppUtil;
+import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
-import com.fh.util.Jurisdiction;
-import com.fh.util.Tools;
-import com.fh.service.system.doll.DollToyManager;
 
 /** 
  * 说明：SYS_APP_DOLL_TOY
@@ -49,14 +51,6 @@ public class DollToyController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd.put("DOLLTOY_ID", this.get32UUID());	//主键
-		pd.put("TOY_NAME", "");	//玩具名称
-		pd.put("TOY_NUM", "0");	//库存数量
-		pd.put("BUY_PRICE", "");	//采购价格
-		pd.put("DOOL_GOLD", "0");	//抓取金币
-		pd.put("REMARK", "");	//备注
-		pd.put("CREATE_TIME", Tools.date2Str(new Date()));	//创建时间
-		pd.put("UPDATE_TIME", Tools.date2Str(new Date()));	//更新时间
 		dolltoyService.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");

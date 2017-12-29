@@ -9,7 +9,7 @@
 	
 	<!-- 字段 -->
 	<sql id="Field">
-		TOY_ID
+		TOY_ID,
 		TOY_NAME,	
 		TOY_NUM,	
 		BUY_PRICE,	
@@ -32,13 +32,22 @@
 	</sql>
 	
 	<!-- 新增-->
-	<insert id="save" parameterType="pd">
+	<insert id="save" parameterType="pd" useGeneratedKeys="true" keyProperty="TOY_ID">
 		insert into 
 	<include refid="tableName"></include>
 		(
-	<include refid="Field"></include>
+			TOY_NAME,	
+			TOY_NUM,	
+			BUY_PRICE,	
+			DOOL_GOLD,	
+			REMARK
+	
 		) values (
-	<include refid="FieldValue"></include>
+			#{TOY_NAME},	
+			#{TOY_NUM},	
+			#{BUY_PRICE},	
+			#{DOOL_GOLD},	
+			#{REMARK}
 		)
 	</insert>
 	
@@ -56,7 +65,7 @@
 		<include refid="tableName"></include>
 		set 
 			TOY_NAME=#{TOY_NAME},
-			TOY_NUM=#{TOY_NUM},
+			TOY_NUM=TOY_NUM+#{TOY_NUM},
 			BUY_PRICE=#{BUY_PRICE},
 			DOOL_GOLD=#{DOOL_GOLD},
 			REMARK=#{REMARK}
