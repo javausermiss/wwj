@@ -157,10 +157,8 @@ public class SendGoodsController {
             //增加发货记录
             SendGoods sendGoods = new SendGoods();
             //免邮
-            if (mode.equals("0") && Integer.valueOf(number) >= 2) {
+            if (mode.equals("0") ) {
                 sendGoods.setMODE_DESPATCH("0");
-            } else {
-                return RespStatus.fail("error!");
             }
             //货到付款
             if (mode.equals("2")) {
@@ -333,6 +331,16 @@ public class SendGoodsController {
         String dateString = formatter.format(currentTime);
         long l = Long.parseLong(dateString);
         System.out.println(dateString);
+        String id = "121";
+        String[] pd = id.split("\\,");//获取需要兑换的抓中娃娃编号
+        for (int i = 0; i <pd.length ; i++) {
+
+            String aa =  pd[i];
+            System.out.println(aa);
+        }
+
+
+
 
 
     }
