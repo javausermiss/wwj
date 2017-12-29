@@ -8,6 +8,7 @@ import com.fh.service.system.payment.PaymentManager;
 import com.fh.service.system.playback.PlayBackManage;
 import com.fh.service.system.playdetail.PlayDetailManage;
 import com.fh.service.system.pond.PondManager;
+import com.fh.util.PageData;
 import com.fh.util.wwjUtil.RespStatus;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -242,6 +243,28 @@ public class BetGameController {
             Map<String, Object> map = new HashMap<>();
             map.put("pond", getPondInfo(pond1.getPOND_ID()));
             return RespStatus.successs().element("data", map);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return RespStatus.fail();
+        }
+
+    }
+    
+    
+    /**
+     * 根据用户Id获取当前用户的竞猜最新10条记录
+     *
+     * @param guessid
+     * @param dollId
+     * @return
+     */
+    @RequestMapping(value = "/getGuessDetailTop10", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public JSONObject getPond( @RequestParam("userId") String userId) {
+
+        try {
+        	List<PageData> datList=betGameService.getGuessDetailTop10ByUserId(userId);
+            return RespStatus.successs().element("data", datList);
         } catch (Exception e) {
             e.printStackTrace();
             return RespStatus.fail();

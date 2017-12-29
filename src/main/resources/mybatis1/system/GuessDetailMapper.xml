@@ -112,7 +112,21 @@
 
 
 
-
+	<select id="getGuessDetailTop10ByUserId" parameterType="String" resultType="pd">
+			SELECT  dgd.APP_USER_ID,
+				    dgd.GUESS_TYPE,
+        			dgd.GUESS_KEY,
+                    dgd.GUESS_GOLD,
+			        dgd.CREATE_DATE,
+			        dgd.SETTLEMENT_FLAG,
+					dgd.SETTLEMENT_GOLD,
+					dpd.GUESS_ID
+					from TB_DOLL_GUESS_DETAIL dgd ,TB_DOLL_PLAY_DETAIL dpd 
+				WHERE dpd.GUESS_ID=dgd.PLAYBACK_ID
+				AND dgd.APP_USER_ID=#{userId}
+			 	ORDER BY dgd.CREATE_DATE DESC
+				LIMIT 0,10
+	</select>
 
 
 </mapper>

@@ -3,6 +3,8 @@ package com.fh.service.system.betgame.impl;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.system.GuessDetailL;
 import com.fh.service.system.betgame.BetGameManager;
+import com.fh.util.PageData;
+
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -65,5 +67,15 @@ public class BetGameService implements BetGameManager {
     @Override
     public GuessDetailL getGuessDetail(GuessDetailL guessDetailL) throws Exception {
         return (GuessDetailL) dao.findForObject("GuessDetailMapper.getGuessDetail", guessDetailL);
+    }
+    
+    /**
+     * 通过 userId 查询 最新10条竞猜记录
+     * @param guessDetailL
+     * @return
+     * @throws Exception
+     */
+    public List<PageData> getGuessDetailTop10ByUserId(String userId) throws Exception{
+    	 return (List<PageData>) dao.findForList("GuessDetailMapper.getGuessDetailTop10ByUserId",userId);
     }
 }
