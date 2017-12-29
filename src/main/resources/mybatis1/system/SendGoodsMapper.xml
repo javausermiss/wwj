@@ -43,7 +43,9 @@
         CNEE_ADDRESS,
         CNEE_PHONE,
         CREATE_TIME,
-        REMARK
+        REMARK,
+        POST_REMARK,
+        MODE_DESPATCH
         )
         VALUES
         (
@@ -54,7 +56,9 @@
         #{CNEE_ADDRESS},
         #{CNEE_PHONE},
         #{CREATE_TIME},
-        #{REMARK}
+        #{REMARK},
+        #{POST_REMARK},
+        #{MODE_DESPATCH}
         )
     </insert>
     <!--根据playId查询发货信息-->

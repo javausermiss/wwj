@@ -11,6 +11,8 @@ public class SendGoods {
     private String CREATE_TIME;
     private String REMARK;
     private String UPDATE_TIME;
+    private String POST_REMARK;//发货备注
+    private String MODE_DESPATCH;//发货方式
 
 
 
@@ -25,6 +27,22 @@ public class SendGoods {
         this.CNEE_PHONE = CNEE_PHONE;
         this.CREATE_TIME = CREATE_TIME;
         this.REMARK = REMARK;
+    }
+
+    public String getMODE_DESPATCH() {
+        return MODE_DESPATCH;
+    }
+
+    public void setMODE_DESPATCH(String MODE_DESPATCH) {
+        this.MODE_DESPATCH = MODE_DESPATCH;
+    }
+
+    public String getPOST_REMARK() {
+        return POST_REMARK;
+    }
+
+    public void setPOST_REMARK(String POST_REMARK) {
+        this.POST_REMARK = POST_REMARK;
     }
 
     public Integer getID() {
