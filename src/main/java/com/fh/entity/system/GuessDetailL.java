@@ -15,7 +15,7 @@ public class GuessDetailL implements Serializable {
     private Integer GUESS_GOLD;
     private String CREATE_DATE;
     private String PLAYBACK_ID;
-
+    private Integer SETTLEMENT_GOLD;//获取竞猜金额
     private String SETTLEMENT_FLAG;//Y 清算 N 未清算
     private String SETTLEMENT_DATE;
 
@@ -34,6 +34,14 @@ public class GuessDetailL implements Serializable {
         this.DOLL_ID = DOLL_ID;
         this.GUESS_KEY = GUESS_KEY;
         this.PLAYBACK_ID = PLAYBACK_ID;
+    }
+
+    public Integer getSETTLEMENT_GOLD() {
+        return SETTLEMENT_GOLD;
+    }
+
+    public void setSETTLEMENT_GOLD(Integer SETTLEMENT_GOLD) {
+        this.SETTLEMENT_GOLD = SETTLEMENT_GOLD;
     }
 
     public Integer getGUESS_ID() {

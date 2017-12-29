@@ -302,25 +302,26 @@ public class AppUserBalanceController {
                 }
 
                 Paycard paycard = paycardService.getGold(String.valueOf(amount / 100));
-                int gold = Integer.valueOf(paycard.getGOLD());
                 if (paycard == null) {
                     AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
-                    int a = Integer.valueOf(appUser.getBALANCE()) + Integer.valueOf(o.getREGAMOUNT()) / 10;
+                    int reggold = Integer.valueOf(o.getREGAMOUNT()) / 10;
+                    int a = Integer.valueOf(appUser.getBALANCE()) + reggold;
                     appUser.setBALANCE(String.valueOf(a));
                     appuserService.updateAppUserBalanceById(appUser);
                     Payment payment = new Payment();
-                    payment.setGOLD(String.valueOf(gold));
+                    payment.setGOLD(String.valueOf(reggold));
                     payment.setUSERID(o.getUSER_ID());
                     payment.setDOLLID(null);
                     payment.setCOST_TYPE("5");
                     payment.setREMARK("充值");
                     paymentService.reg(payment);
-                    o.setREGGOLD(String.valueOf(gold));
+                    o.setORDER_NO(order_no);
+                    o.setREGGOLD(String.valueOf(reggold));
                     o.setSTATUS("1");
                     orderTestService.update(o);
                     return "SUCCESS";
                 }
-
+                int gold = Integer.valueOf(paycard.getGOLD());
                 AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
                 int a = Integer.valueOf(appUser.getBALANCE()) + gold;
                 appUser.setBALANCE(String.valueOf(a));
@@ -334,6 +335,7 @@ public class AppUserBalanceController {
                 payment.setREMARK("充值");
                 paymentService.reg(payment);
                 o.setREGGOLD(String.valueOf(gold));
+                o.setORDER_NO(order_no);
                 o.setSTATUS("1");
                 orderTestService.update(o);
             } else {

@@ -173,7 +173,11 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
     @Override
     public RpcCommandResult drawLottery(String roomId, Integer gifinumber) {
         try {
+
             PlayDetail playDetail = playDetailService.getPlayIdForPeople(roomId);//根据房间取得最新的游戏记录
+            if (playDetail==null){
+                return null;
+            }
             String gold = playDetail.getGOLD();//获取下注金币，即竞猜用户扣除的金币数
             String state = playDetail.getPOST_STATE();//获取娃娃发送状态
             //网关自检发送多次free进入此判断逻辑,POST_STATE初始值为"-1"，判断是否已经结算过
@@ -239,7 +243,11 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                         payment.setDOLLID(roomId);
                         payment.setCOST_TYPE("4");
                         paymentService.reg(payment);
-
+                        //更改竞猜记录
+                        guessDetailL.setGUESS_TYPE("-1");//流局标识 -1
+                        guessDetailL.setSETTLEMENT_FLAG("Y");//结算
+                        guessDetailL.setSETTLEMENT_GOLD(Integer.valueOf(gold));
+                        betGameService.updateGuessDetail(guessDetailL);
                     }
                     RpcCommandResult rpcCommandResult = new RpcCommandResult();
                     RpcReturnCode result = lotteryServerRpcService.noticeDrawLottery(roomId, playDetail.getGUESS_ID(), null);
@@ -268,6 +276,11 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                         payment.setDOLLID(roomId);
                         payment.setCOST_TYPE("4");
                         paymentService.reg(payment);
+                        //更改竞猜记录
+                        guessDetailL.setGUESS_TYPE("-1");//流局标识 -1
+                        guessDetailL.setSETTLEMENT_FLAG("Y");//结算
+                        guessDetailL.setSETTLEMENT_GOLD(Integer.valueOf(gold));
+                        betGameService.updateGuessDetail(guessDetailL);
                     }
                     RpcCommandResult rpcCommandResult = new RpcCommandResult();
                     RpcReturnCode result = lotteryServerRpcService.noticeDrawLottery(roomId, playDetail.getGUESS_ID(), null);
@@ -313,6 +326,11 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                         payment.setDOLLID(roomId);
                         payment.setCOST_TYPE("4");
                         paymentService.reg(payment);
+                        //更改竞猜记录
+                        guessDetailL.setGUESS_TYPE("-1");//流局标识 -1
+                        guessDetailL.setSETTLEMENT_FLAG("Y");//结算
+                        guessDetailL.setSETTLEMENT_GOLD(Integer.valueOf(gold));
+                        betGameService.updateGuessDetail(guessDetailL);
                     }
                     RpcCommandResult rpcCommandResult = new RpcCommandResult();
                     RpcReturnCode result = lotteryServerRpcService.noticeDrawLottery(roomId, playDetail.getGUESS_ID(), null);
@@ -342,6 +360,11 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                         payment.setDOLLID(roomId);
                         payment.setCOST_TYPE("4");
                         paymentService.reg(payment);
+                        //更改竞猜记录
+                        guessDetailL.setGUESS_TYPE("-1");//流局标识 -1
+                        guessDetailL.setSETTLEMENT_FLAG("Y");//结算
+                        guessDetailL.setSETTLEMENT_GOLD(Integer.valueOf(gold));
+                        betGameService.updateGuessDetail(guessDetailL);
                     }
                     RpcCommandResult rpcCommandResult = new RpcCommandResult();
                     RpcReturnCode result = lotteryServerRpcService.noticeDrawLottery(roomId, playDetail.getGUESS_ID(), null);
@@ -372,7 +395,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                 for (int k = 0; k < filler.size(); k++) {
                     GuessDetailL filePerson = filler.get(k);
                     filePerson.setSETTLEMENT_FLAG("Y");
-                    filePerson.setGUESS_TYPE("0");
+                    filePerson.setGUESS_TYPE(String.valueOf(gifinumber));
                     betGameService.updateGuessDetail(filePerson);
                 }
             }
@@ -395,12 +418,13 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                     int balance = Integer.parseInt(appUser1.getBALANCE());
                     appUser1.setBALANCE(String.valueOf(balance + avg));
                     appuserService.updateAppUserBalanceById(appUser1);
+                    winPerson.setSETTLEMENT_GOLD(avg);
                     winPerson.setSETTLEMENT_FLAG("Y");
-                    winPerson.setGUESS_TYPE("1");
+                    winPerson.setGUESS_TYPE(String.valueOf(gifinumber));
                     betGameService.updateGuessDetail(winPerson);
                     //更新收支表
                     Payment payment = new Payment();
-                    payment.setGOLD(String.valueOf(avg));
+                    payment.setGOLD("+"+String.valueOf(avg));
                     payment.setUSERID(userId);
                     payment.setDOLLID(roomId);
                     payment.setCOST_TYPE("3");

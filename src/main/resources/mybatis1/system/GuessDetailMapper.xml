@@ -44,9 +44,10 @@
         UPDATE
         <include refid="tableName"/>
         SET
-        GUESS_TYPE=#{GUESS_TYPE},
+        GUESS_TYPE = #{GUESS_TYPE},
         SETTLEMENT_FLAG = #{SETTLEMENT_FLAG},
-        SETTLEMENT_DATE = now()
+        SETTLEMENT_DATE = now(),
+        SETTLEMENT_GOLD = #{SETTLEMENT_GOLD}
         WHERE
         GUESS_ID = #{GUESS_ID}
     </update>

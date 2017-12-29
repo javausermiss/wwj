@@ -17,7 +17,6 @@ public class DollVo {
     private String cameraName01;
     private String cameraName02;
     private String dollCnversiongold;
-    
     private List<CameraVo> cameras;
 
 	public String getDollId() {
