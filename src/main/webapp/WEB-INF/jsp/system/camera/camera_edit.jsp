@@ -48,15 +48,18 @@
 								
 								
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">娃娃机名称:</td>
-								<td><input type="text" name="DOLL_ID" id="DOLL_ID" value="${pd.DOLL_ID}" 
-								maxlength="50" placeholder="这里输入设备名称" title="DOLL_ID" style="width:98%;"/></td>
-							</tr>
-						
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">设备名称:</td>
-								<td><input type="text" name="CAMERA_NAME" id="CAMERA_NAME" value="${pd.CAMERA_NAME}" 
-								maxlength="50" placeholder="这里输入设备名称" title="CAMERA_NAME" style="width:98%;"/></td>
+								<td style="text-align: right;padding-top: 13px;">娃娃机名称:</td>
+								<td>
+									<select class="chosen-select" name="DOLL_ID" id="DOLL_ID" data-placeholder="请选择娃娃机" style="width:320px;">
+											<c:forEach items="${dollList}" var="var" varStatus="vs">
+											  <option value="${var.DOLL_ID}"  
+											  			<c:if test="${pd.DOLL_ID == var.DOLL_ID }">selected</c:if> >
+	                                            		${var.DOLL_NAME}(${var.DOLL_ID})
+	                                            </option>
+                                            </c:forEach>
+								  	</select>
+							
+								</td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">设备编号:</td>
@@ -79,32 +82,17 @@
 								maxlength="50" placeholder="这里输入流媒体名称" title="LIVESTREAM" style="width:98%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">流媒体进程ID:</td>
-								<td><input type="text" name="SERVER_ID" id="SERVER_ID" value="${pd.SERVER_ID}" 
-								maxlength="8" placeholder="这里输入流媒体进程ID" title="SERVER_ID" style="width:98%;"/></td>
-							</tr>
-							<tr>
 							<td style="width:75px;text-align: right;padding-top: 13px;">摄像头位置:</td>
 								<td>
 								<span style="font-size:12px;">
 									<select id="CAMERA_TYPE" name="CAMERA_TYPE">
-										<option value="1">S</option>
-										<option value="2">M</option>
+										<option value="S" <c:if test="${pd.CAMERA_TYPE == 'S' }">selected</c:if>>S</option>
+										<option value="M" <c:if test="${pd.CAMERA_TYPE == 'M' }">selected</c:if>>M</option>
 									</select>
 									</span>
 								</td>
 							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">状态:</td>
-								<td><input type="text" name="DEVICE_STATE" id="DEVICE_STATE" value="${pd.DEVICE_STATE}" 
-								maxlength="50" placeholder="这里输入状态" title="DEVICE_STATE" style="width:98%;"/></td>
-							</tr>
-							
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">乐观锁版本号:</td>
-								<td><input type="text" name="LOCK_VERSION" id="LOCK_VERSION" value="${pd.LOCK_VERSION}" 
-								maxlength="50" placeholder="这里输入状态" title="LOCK_VERSION" style="width:98%;"/></td>
-							</tr>
+
 							<tr>
 							
 								<td style="text-align: center;" colspan="10">
@@ -154,27 +142,8 @@
 				$("#DOLL_ID").focus();
 			return false;
 			}   
-			
-			if($("#CAMERA_NAME").val()==""){
-				$("#CAMERA_NAME").tips({
-					side:3,
-		            msg:'请输入设备名称',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#CAMERA_NAME").focus();
-			return false;
-			}
-			if($("#CAMERA_NUM").val()==""){
-				$("#CAMERA_NUM").tips({
-					side:3,
-		            msg:'请输入设备编号',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#CAMERA_NUM").focus();
-			return false;
-			}
+
+
 			if($("#RTMP_URL").val()==""){
 				$("#RTMP_URL").tips({
 					side:3,
@@ -205,16 +174,6 @@
 				$("#LIVESTREAM").focus();
 			return false;
 			}
-			if($("#SERVER_ID").val()==""){
-				$("#SERVER_ID").tips({
-					side:3,
-		            msg:'请输入流媒体进程ID',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#SERVER_ID").focus();
-			return false;
-			}
 			
 			 if($("#CAMERA_TYPE").val()==""){
 				$("#CAMERA_TYPE").tips({
@@ -226,28 +185,7 @@
 				$("#CAMERA_TYPE").focus();
 			return false;
 			} 
-			
-			
-			if($("#DEVICE_STATE").val()==""){
-				$("#DEVICE_STATE").tips({
-					side:3,
-		            msg:'请输入状态',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#DEVICE_STATE").focus();
-			return false;
-			}
-			if($("#LOCK_VERSION").val()==""){
-				$("#LOCK_VERSION").tips({
-					side:3,
-		            msg:'请输入乐观锁版本号',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#LOCK_VERSION").focus();
-			return false;
-			}
+
 			$("#Form").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();
@@ -256,6 +194,10 @@
 		$(function() {
 			//日期框
 			$('.date-picker').datepicker({autoclose: true,todayHighlight: true});
+		});
+		
+		$(function(){
+		    $('#DOLL_ID').chosen();
 		});
 		</script>
 </body>

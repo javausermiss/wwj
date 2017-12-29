@@ -11,6 +11,7 @@
     </sql>
 	<!-- 字段 -->
 	<sql id="Field">
+		CAMERA_ID,
 		DOLL_ID,	
 		CAMERA_NAME,	
 		CAMERA_NUM,	
@@ -20,14 +21,15 @@
 		SERVER_ID,
 		CLIENT_ID,
 		DEVICE_STATE,
+		CAMERA_TYPE,
 		CREATE_DATE,	
 		UPDATE_DATE,	
-		LOCK_VERSION,	
-		CAMERA_ID
+		LOCK_VERSION
 	</sql>
 	
 	<!-- 字段值 -->
 	<sql id="FieldValue">
+	    #{CAMERA_ID},	
 		#{DOLL_ID},	
 		#{CAMERA_NAME},	
 		#{CAMERA_NUM},	
@@ -37,10 +39,10 @@
 		#{SERVER_ID},
 		#{CLIENT_ID},
 		#{DEVICE_STATE},
-		#{CREATE_DATE},	
-		#{UPDATE_DATE},	
-		#{LOCK_VERSION},	
-		#{CAMERA_ID}
+		#{CAMERA_TYPE},
+		now(),	
+		now(),	
+		0
 	</sql>
 	
 	<!-- 新增-->
@@ -72,14 +74,13 @@
 			CAMERA_NUM = #{CAMERA_NUM},
 			RTMP_URL = #{RTMP_URL},
 			SERVER_NAME = #{SERVER_NAME},
-			LIVESTREAM = #{LIVESTREAM},
+			LIVESTREAM = #{LIVESTREAM},	
 			SERVER_ID = #{SERVER_ID},
 			CLIENT_ID =#{CLIENT_ID},
 			DEVICE_STATE=#{DEVICE_STATE},
-			CREATE_DATE = #{CREATE_DATE},
-			UPDATE_DATE = #{UPDATE_DATE},
-			LOCK_VERSION = #{LOCK_VERSION},
-		CAMERA_ID = CAMERA_ID
+			CAMERA_TYPE=#{CAMERA_TYPE},
+			UPDATE_DATE = now(),
+			LOCK_VERSION = LOCK_VERSION+1
 		where 
 		CAMERA_ID = #{CAMERA_ID}
 	</update>
@@ -95,18 +96,33 @@
 	</select>
 	
 	<!-- 列表 -->
-	<select id="datalistPage" parameterType="page" resultType="pd">
+	<select id="datalistPage" parameterType="pd" resultType="pd">
 		select
-		<include refid="Field"></include>
-		from 
-		<include refid="tableName"></include>
+		    c.CAMERA_ID,
+			c.DOLL_ID,	
+			c.CAMERA_NAME,	
+			c.CAMERA_NUM,	
+			c.RTMP_URL,	
+			c.SERVER_NAME,	
+			c.LIVESTREAM,	
+			c.SERVER_ID,
+			c.CLIENT_ID,
+			c.DEVICE_STATE,
+			c.CAMERA_TYPE,
+			d.DOLL_NAME
+		FROM 
+		
+		TB_DEVICE_CAMERA c LEFT JOIN SYS_APP_DOLL d on d.DOLL_ID=c.DOLL_ID
+
 		where 1=1
+		
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
-			and
-				(
-					CAMERA_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
-				)
+			and d.DOLL_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
 		</if>
+		
+		<if test="pd.DEVICE_STATE != null and pd.DEVICE_STATE != ''"><!-- 状态检索 -->
+            and c.DEVICE_STATE = #{pd.DEVICE_STATE}
+        </if>
 	</select>
 	
 	<!-- 列表(全部) -->

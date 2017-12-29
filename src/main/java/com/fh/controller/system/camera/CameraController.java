@@ -8,7 +8,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
+
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -16,20 +18,18 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.service.system.camera.CameraManager;
+import com.fh.service.system.doll.DollManager;
 import com.fh.util.AppUtil;
+import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 import com.iot.game.pooh.admin.srs.core.entity.httpback.SrsConnectModel;
 import com.iot.game.pooh.admin.srs.core.util.SrsConstants;
 import com.iot.game.pooh.admin.srs.core.util.SrsSignUtil;
-
-import antlr.Token;
-
-import com.fh.util.Jurisdiction;
-import com.fh.service.system.camera.CameraManager;
-import com.fh.service.system.doll.DollManager;
 
 /** 
  * 说明：摄像头处理类
@@ -133,8 +133,11 @@ public class CameraController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		mv.setViewName("system/camera/camera_edit");
+		
+		List<PageData>	dollList =dollService.listAll(new PageData());
 		mv.addObject("msg", "save");
 		mv.addObject("pd", pd);
+		mv.addObject("dollList", dollList);
 		return mv;
 	}	
 	
@@ -148,13 +151,34 @@ public class CameraController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd = cameraService.findById(pd);	//根据ID读取
+		
+		List<PageData>	dollList =dollService.listAll(new PageData());
 		mv.setViewName("system/camera/camera_edit");
-		StringBuffer sbf=CameraToken();
-		mv.addObject("sbf",sbf);
+		
+		mv.addObject("msg", "edit");
+		mv.addObject("pd", pd);
+		mv.addObject("dollList", dollList);
+		return mv;
+	}
+	
+	/**
+	 * 获取token
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/getToken")
+	public ModelAndView getToken()throws Exception{
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		StringBuffer token=CameraToken(pd.getString("CAMERA_ID"));
+		mv.setViewName("system/camera/camera_token");
+		mv.addObject("token",token.toString());
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
 		return mv;
-	}	
+	}
+	
 	
 	 /**批量删除
 	 * @param
@@ -234,19 +258,18 @@ public class CameraController extends BaseController {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
 	}
 	
-	public StringBuffer  CameraToken()throws Exception
+	public StringBuffer  CameraToken(String tId)throws Exception
 	{
 		SrsConnectModel sc=new SrsConnectModel();
 		long time=System.currentTimeMillis();
 		sc.setType("C");
-		sc.setTid("num-0005-M");
+		sc.setTid(tId);
 		sc.setExpire(0);
 		sc.setTime(0);
 		sc.setToken(SrsSignUtil.genSign(sc,SrsConstants.SRS_CONNECT_KEY));
 		StringBuffer sbf=new StringBuffer
 				("?expire=0&time=0&type=C&tid=").
-				append("num-0005-M").append("&token=").append(sc.getToken());
-		
+				append(sc.getTid()).append("&token=").append(sc.getToken());
 		return sbf;
 	}
 

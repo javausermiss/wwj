@@ -72,8 +72,8 @@
 									<th class="center" style="width:35px;">
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
-									<th class="center">娃娃机名称</th>
-									<th class="center">设备名称</th>
+									<th class="center">DOLL_ID</th>
+									<th class="center">DOLL_NAME</th>
 									<th class="center">设备编号</th>
 									<th class="center">推流地址</th>
 									<th class="center">推流服务名称</th>
@@ -95,7 +95,7 @@
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.CAMERA_ID}" class="ace" /><span class="lbl"></span></label>
 											</td>
 											<td class='center'>${var.DOLL_ID}</td>
-											<td class='center'>${var.CAMERA_NAME}</td>
+											<td class='center'>${var.DOLL_NAME}</td>
 											<td class='center'>${var.CAMERA_NUM}</td>
 											<td class='center'>${var.RTMP_URL}</td>
 											<td class='center'>${var.SERVER_NAME}</td>
@@ -105,24 +105,26 @@
                                                                 class="label label-success arrowed">不可用</span></c:if>
                                                         
                                                         <c:if test="${var.DEVICE_STATE == '0' }"><span
-                                                                class="label label-success arrowed">正常</span></c:if>
+                                                                class="label label-success arrowed-in">正常</span></c:if>
                                                     </td>
 											<td style="width: 100px;" class='center'>
-                                                        <c:if test="${var.CAMERA_TYPE == '1' }"><span
+                                                        <c:if test="${var.CAMERA_TYPE == 'S' }"><span
                                                                 class="label label-success arrowed">S</span></c:if>
                                                         
-                                                        <c:if test="${var.CAMERA_TYPE == '2' }"><span
-                                                                class="label label-success arrowed">M</span></c:if>
+                                                        <c:if test="${var.CAMERA_TYPE == 'M' }"><span
+                                                                class="label label-success arrowed-in">M</span></c:if>
                                                     </td>
-											
-											
-											
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i 
 													class="ace-icon fa fa-lock" title="无权限"></i></span>
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group" >
+												
+													<a class="btn btn-xs btn-success" title="推流TOKEN" onclick="getToken('${var.DOLL_ID}');">
+														TOKEN
+													</a>
+													
 													<c:if test="${QX.edit == 1 }">
 													<a class="btn btn-xs btn-success" title="编辑" 
 														onclick="edit('${var.CAMERA_ID}');">
@@ -135,44 +137,6 @@
 														<i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i>
 													</a>
 													</c:if>
-													
-													
-													
-												</div>
-												<div class="hidden-md hidden-lg">
-													<div class="inline pos-rel">
-														<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-															<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-														</button>
-			
-														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-															<c:if test="${QX.edit == 1 }">
-															<li>
-																<a style="cursor:pointer;" onclick="edit('${var.CAMERA_ID}');" 
-																class="tooltip-success" data-rel="tooltip" title="修改">
-																	<span class="green">
-																		<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																	</span>
-																</a>
-															</li>
-															</c:if>
-															<c:if test="${QX.del == 1 }">
-															<li>
-																<a style="cursor:pointer;" 
-																onclick="del('${var.CAMERA_ID}');" 
-																class="tooltip-error" data-rel="tooltip" 
-																title="删除">
-																	<span class="red">
-																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																	</span>
-																</a>
-															</li>
-															</c:if>
-															
-															
-															
-														</ul>
-													</div>
 												</div>
 											</td>
 										</tr>
@@ -306,8 +270,8 @@
 			 diag.Drag=true;
 			 diag.Title ="新增";
 			 diag.URL = '<%=basePath%>camera/goAdd.do';
-			 diag.Width = 450;
-			 diag.Height = 355;
+			 diag.Width = 650;
+			 diag.Height = 555;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮
@@ -345,8 +309,31 @@
 			 diag.Drag=true;
 			 diag.Title ="编辑";
 			 diag.URL = '<%=basePath%>camera/goEdit.do?CAMERA_ID='+Id;
-			 diag.Width = 450;
-			 diag.Height = 355;
+			 diag.Width = 650;
+			 diag.Height = 555;
+			 diag.Modal = true;				//有无遮罩窗口
+			 diag. ShowMaxButton = true;	//最大化按钮
+		     diag.ShowMinButton = true;		//最小化按钮 
+			 diag.CancelEvent = function(){ //关闭事件
+				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+					 tosearch();
+				}
+				diag.close();
+			 };
+			 diag.show();
+		}
+		
+		
+		
+		//修改
+		function getToken(Id){
+			 top.jzts();
+			 var diag = new top.Dialog();
+			 diag.Drag=true;
+			 diag.Title ="编辑";
+			 diag.URL = '<%=basePath%>camera/getToken.do?CAMERA_ID='+Id;
+			 diag.Width = 800;
+			 diag.Height = 200;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮 

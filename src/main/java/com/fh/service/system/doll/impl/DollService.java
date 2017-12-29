@@ -64,7 +64,7 @@ public class DollService implements DollManager {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> listAll(PageData pd)throws Exception{
-		return (List<PageData>)dao.findForList("DollMapper.listAlllistPage", pd);
+		return (List<PageData>)dao.findForList("DollMapper.listAllPage", pd);
 	}
 	
 	/**通过id获取数据

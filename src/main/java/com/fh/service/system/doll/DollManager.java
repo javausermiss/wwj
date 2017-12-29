@@ -119,6 +119,5 @@ public interface DollManager{
 	 */
 	public List<DollVo>  getDollVoList()throws Exception;
 
-
 }
 

@@ -122,7 +122,7 @@
     </select>
 
     <!-- 列表(全部) -->
-    <select id="listAlllistPage" parameterType="pd" resultType="pd">
+    <select id="listAllPage" parameterType="pd" resultType="pd">
         select
         <include refid="Field"></include>
         from
