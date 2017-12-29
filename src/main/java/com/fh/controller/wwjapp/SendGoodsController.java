@@ -230,7 +230,7 @@ public class SendGoodsController {
                 return RespStatus.fail("增加记录失败");
             }
             Map<String, Object> map = new HashMap<>();
-            map.put("playBack", playDetails);
+            map.put("playback", playDetails);
             return RespStatus.successs().element("data", map);
 
         } catch (Exception e) {
