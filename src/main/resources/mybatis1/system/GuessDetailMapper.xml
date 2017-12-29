@@ -122,7 +122,7 @@
 					dgd.SETTLEMENT_GOLD,
 					dpd.GUESS_ID
 					from TB_DOLL_GUESS_DETAIL dgd ,TB_DOLL_PLAY_DETAIL dpd 
-				WHERE dpd.GUESS_ID=dgd.PLAYBACK_ID
+				WHERE dpd.GUESS_ID=dgd.PLAYBACK_ID and dgd.DOLL_ID=dpd.DOLLID
 				AND dgd.APP_USER_ID=#{userId}
 			 	ORDER BY dgd.CREATE_DATE DESC
 				LIMIT 0,10
