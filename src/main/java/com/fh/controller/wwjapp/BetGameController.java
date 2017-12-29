@@ -263,8 +263,10 @@ public class BetGameController {
     public JSONObject getPond( @RequestParam("userId") String userId) {
 
         try {
-        	List<PageData> datList=betGameService.getGuessDetailTop10ByUserId(userId);
-            return RespStatus.successs().element("data", datList);
+        	List<PageData> dataList=betGameService.getGuessDetailTop10ByUserId(userId);
+        	Map<String, Object> map = new HashMap<>();
+        	map.put("dataList", dataList);
+            return RespStatus.successs().element("data", map);
         } catch (Exception e) {
             e.printStackTrace();
             return RespStatus.fail();
