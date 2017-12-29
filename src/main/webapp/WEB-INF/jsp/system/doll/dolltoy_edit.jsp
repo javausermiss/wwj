@@ -28,9 +28,23 @@
 					<div class="col-xs-12">
 					
 					<form action="dolltoy/${msg }.do" name="Form" id="Form" method="post">
-						<input type="hidden" name="DOLLTOY_ID" id="DOLLTOY_ID" value="${pd.DOLLTOY_ID}"/>
+						<input type="hidden" name="TOY_ID" id="TOY_ID" value="${pd.TOY_ID}"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
+							<tr>
+								<td style="width:100px;text-align: right;padding-top: 13px;">娃娃名称:</td>
+								<td><input type="text" name="TOY_NAME" id="TOY_NAME" value="${pd.TOY_NAME}" maxlength="10" placeholder="这里输入娃娃名称" title="TOY_NAME" style="width:98%;"/></td>
+							</tr>
+
+							<tr>
+								<td style="width:100px;text-align: right;padding-top: 13px;">采购娃娃数量:</td>
+								<td><input type="number" name="TOY_NUM" id="TOY_NUM" value="${pd.TOY_NUM}" maxlength="10" placeholder="这里输入采购娃娃数量" title="TOY_NUM" style="width:98%;"/></td>
+							</tr>
+								<tr>
+									<td style="width:100px;text-align: right;padding-top: 13px;">采购单价:</td>
+									<td><input type="text" name="BUY_PRICE" id="BUY_PRICE" value="${pd.BUY_PRICE}" maxlength="10" placeholder="这里输入采购单价" title="BUY_PRICE" style="width:98%;"/></td>
+								</tr>
+							<tr>
 							<tr>
 								<td style="text-align: center;" colspan="10">
 									<a class="btn btn-mini btn-primary" onclick="save();">保存</a>
