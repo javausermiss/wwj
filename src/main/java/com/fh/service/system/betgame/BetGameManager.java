@@ -1,6 +1,7 @@
 package com.fh.service.system.betgame;
 
 import com.fh.entity.system.GuessDetailL;
+import com.fh.util.PageData;
 
 import java.util.List;
 
@@ -70,5 +71,14 @@ public interface BetGameManager {
      * @throws Exception
      */
     public GuessDetailL getGuessDetail(GuessDetailL guessDetailL) throws Exception;
+    
+    /**
+     * 通过 userId 查询 最新10条竞猜记录
+     * @param guessDetailL
+     * @return
+     * @throws Exception
+     */
+    public List<PageData> getGuessDetailTop10ByUserId(String userId) throws Exception;
+    
 
 }
