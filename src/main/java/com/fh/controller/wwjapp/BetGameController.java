@@ -258,7 +258,7 @@ public class BetGameController {
      * @param dollId
      * @return
      */
-    @RequestMapping(value = "/getGuessDetailTop10", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/getGuessDetailTop10", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject getPond( @RequestParam("userId") String userId) {
 
