@@ -269,6 +269,7 @@ public class SendGoodsController {
                     int m =  Integer.valueOf(c);
                     String newBalance = String.valueOf(balance + m);
                     appUser.setBALANCE(newBalance);
+                    appuserService.updateAppUserBalanceById(appUser);
                     playBack.setPOST_STATE("2");//兑换
                     playDetailService.updatePostStateForCon(playBack);
                 } else {
