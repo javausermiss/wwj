@@ -1,5 +1,6 @@
 package com.fh.controller.system.doll;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -8,26 +9,30 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.Resource;
-import javax.wsdl.Service;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
-import com.fh.entity.system.Doll;
+import com.fh.service.system.doll.DollManager;
 import com.fh.util.AppUtil;
+import com.fh.util.FastDFSClient;
+import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
-import com.fh.util.Jurisdiction;
-import com.fh.util.Tools;
-import com.fh.service.system.doll.DollManager;
-import com.fh.service.system.doll.impl.DollService;
+
 
 /** 
  * 说明：娃娃机处理类
@@ -46,14 +51,30 @@ public class DollController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/save")
-	public ModelAndView save() throws Exception{
+	public ModelAndView save(HttpServletRequest req,
+			@RequestParam(value = "DOLL_FILE", required = false)CommonsMultipartFile  multipartFile //保存图片文件上传路径
+			) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"新增Doll");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
+		
+		//文件上传
+		String fileId="";
+		try{
+			String newFilename=multipartFile.getOriginalFilename();
+			DiskFileItem fi = (DiskFileItem) multipartFile.getFileItem();
+			File file = fi.getStoreLocation();
+			fileId = FastDFSClient.uploadFile(file, newFilename);
+			logger.info("---------fileId-------------"+fileId);
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		
 		pd = this.getPageData();
 		pd.put("DOLL_ID", this.get32UUID());	//主键
-		pd.put("DOLL_STATE", "2");	//DOLL_STATE
+		pd.put("DOLL_STATE", "2");	//DOLL_ST;ATE
+		pd.put("DOLL_URL", fileId);
 		dollService.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");

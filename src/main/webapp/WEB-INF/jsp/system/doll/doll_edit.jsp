@@ -27,7 +27,7 @@
 				<div class="row">
 					<div class="col-xs-12">
 					
-					<form action="doll/${msg }.do" name="Form" id="Form" method="post">
+					<form action="doll/${msg }.do" name="Form" id="Form" method="post" enctype="multipart/form-data">
 						<input type="hidden" name="DOLL_ID" id="DOLL_ID" value="${pd.DOLL_ID}"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
@@ -39,15 +39,19 @@
 								<td style="width:100px;text-align: right;padding-top: 13px;">娃娃机名字:</td>
 								<td><input type="text" name="DOLL_NAME" id="DOLL_NAME" value="${pd.DOLL_NAME}" maxlength="10" placeholder="这里输入娃娃机名字" title="DOLL_NAME" style="width:98%;"/></td>
 							</tr>
-
+							
 							<tr>
 								<td style="width:100px;text-align: right;padding-top: 13px;">娃娃机金币:</td>
 								<td><input type="text" name="DOLL_GOLD" id="DOLL_GOLD" value="${pd.DOLL_GOLD}" maxlength="10" placeholder="这里输入娃娃机花费金额" title="DOLL_GOLD" style="width:98%;"/></td>
 							</tr>
-								<tr>
-									<td style="width:100px;text-align: right;padding-top: 13px;">可兑换金币数:</td>
-									<td><input type="text" name="DOLL_CONVERSIONGOLD" id="DOLL_CONVERSIONGOLD" value="${pd.DOLL_CONVERSIONGOLD}" maxlength="10" placeholder="这里输入可兑换金币数" title="DOLL_CONVERSIONGOLD" style="width:98%;"/></td>
-								</tr>
+							<tr>
+								<td style="width:100px;text-align: right;padding-top: 13px;">可兑换金币数:</td>
+								<td><input type="text" name="DOLL_CONVERSIONGOLD" id="DOLL_CONVERSIONGOLD" value="${pd.DOLL_CONVERSIONGOLD}" maxlength="10" placeholder="这里输入可兑换金币数" title="DOLL_CONVERSIONGOLD" style="width:98%;"/></td>
+							</tr>
+							<tr>
+								<td style="width:100px;text-align: right;padding-top: 13px;">文件域：</td>
+								<td><input type="file" id="DOLL_FILE" name="DOLL_FILE" /></td>
+							</tr>
 							<tr>
 								<td style="text-align: center;" colspan="10">
 									<a class="btn btn-mini btn-primary" onclick="save();">保存</a>
