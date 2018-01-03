@@ -1,9 +1,108 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="playDetailMapper">
-
-    <insert id="reg" parameterType="com.fh.entity.system.PlayDetail">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PlayDetailMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		TB_DOLL_PLAY_DETAIL
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		USERID,	
+		DOLLID,	
+		DOLL_NAME,
+			
+		STATE,	
+		CREATE_DATE,
+		ID
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{USERID},	
+		#{DOLLID},	
+		#{DOLL_NAME},	
+		#{STATE},
+		#{CREATE_DATE},	
+		#{ID}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			USERID = #{USERID},
+			DOLLID = #{DOLLID},
+			DOLL_NAME = #{DOLL_NAME_},
+			STATE = #{STATE},
+			CREATE_DATE = #{CREATE_DATE},
+		ID = ID
+		where 
+		ID = #{ID}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			ID = #{ID}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		c.USERID,	
+		c.DOLLID,	
+		c.DOLL_NAME_,
+		c.STATE,	
+		c.CREATE_DATE,
+		c.ID,	
+		d.NICKNAME,
+		e.DOLL_NAME
+		from 
+		TB_DOLL_PLAY_DETAIL c
+		LEFT JOIN SYS_APP_USER d on d.USER_ID=c.USERID 
+		LEFT JOIN SYS_APP_DOLL e on e.DOLL_ID=c.DOLLID 
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and(
+			d.NICKNAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+			or
+			e.DOLL_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+			)
+		</if>
+		<if test="pd.STATE != null and pd.STATE != ''"><!-- 状态检索 -->
+            and c.STATE = #{pd.STATE}
+        </if>
+	</select>	
+	
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	
+	<insert id="reg" parameterType="com.fh.entity.system.PlayDetail">
         INSERT INTO
         TB_DOLL_PLAY_DETAIL
         (
@@ -188,5 +287,4 @@
         WHERE
         dd.ID=#{ID}
     </select>
-
 </mapper>

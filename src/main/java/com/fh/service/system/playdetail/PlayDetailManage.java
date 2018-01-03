@@ -1,11 +1,43 @@
 package com.fh.service.system.playdetail;
 
 import com.fh.entity.system.PlayDetail;
+import com.fh.util.PageData;
+import com.fh.entity.Page;
 import org.omg.CORBA.PUBLIC_MEMBER;
-
 import java.util.List;
 
 public interface PlayDetailManage {
+	/**新增
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void save(PageData pd)throws Exception;
+
+	/**修改
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void edit(PageData pd)throws Exception;
+	
+	/**列表
+	 * @param page
+	 * @throws Exception
+	 */
+	public List<PageData> list(Page page)throws Exception;
+	
+	/**列表(全部)
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> listAll(PageData pd)throws Exception;
+	
+	/**通过id获取数据
+	 * @param pd
+	 * @throws Exception
+	 */
+	public PageData findById(PageData pd)throws Exception;
+	
+	
     /**
      * 新建场次
      * @param playDetail
