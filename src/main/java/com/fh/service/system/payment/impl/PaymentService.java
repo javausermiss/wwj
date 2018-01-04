@@ -40,4 +40,9 @@ public class PaymentService implements PaymentManager {
     public List<PageData> findRegDetaillistPage(Page page)throws Exception{
 		 return (List<PageData>)dao.findForList("paymentMapper.findRegDetaillistPage", page);
 	 }
+
+	@Override
+	public List<Payment> getPaymenlist(String userId) throws Exception {
+		return (List<Payment>)dao.findForList("paymentMapper.getPaymenlist",userId);
+	}
 }

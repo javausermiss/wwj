@@ -10,14 +10,16 @@
         USERID,
         CREATE_TIME,
         DOLLID,
-        COST_TYPE
+        COST_TYPE,
+        REMARK
         )VALUES
         (
         #{GOLD},
         #{USERID},
         now(),
         #{DOLLID},
-        #{COST_TYPE}
+        #{COST_TYPE},
+        #{REMARK}
         )
     </insert>
 
@@ -89,5 +91,13 @@
 		
 		ORDER BY o.CREATETIME desc
 	</select>
+    
+    <!--查询用户的支出明细-->
+    <select id="getPaymenlist" parameterType="String" resultType="com.fh.entity.system.Payment">
+        select * from tb_appuser_payment where userid = #{USERID} order by create_time desc ;
+    </select>
+    
+    
+    
 
 </mapper>

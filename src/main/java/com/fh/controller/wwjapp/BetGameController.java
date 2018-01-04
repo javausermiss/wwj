@@ -163,6 +163,7 @@ public class BetGameController {
             payment.setDOLLID(dollId);
             payment.setUSERID(userId);
             payment.setGOLD("-"+String.valueOf(wager));
+            payment.setREMARK("竞猜"+dollService.getDollByID(dollId).getDOLL_NAME());
             paymentService.reg(payment);
             //增加竞猜记录
             GuessDetailL guessDetailL = new GuessDetailL(userId, dollId, guessKey, wager, guessId);
@@ -254,8 +255,7 @@ public class BetGameController {
     /**
      * 根据用户Id获取当前用户的竞猜最新10条记录
      *
-     * @param guessid
-     * @param dollId
+     * @param userId
      * @return
      */
     @RequestMapping(value = "/getGuessDetailTop10", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -273,5 +273,36 @@ public class BetGameController {
         }
 
     }
+
+    /**
+     * 查询用户收支明细
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "/getPaymenlist", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+
+    public JSONObject getPaymenlist(@RequestParam ("userId") String userId){
+
+        try {
+           List<Payment> paymentList =   paymentService.getPaymenlist(userId);
+           Map<String,Object> map = new LinkedHashMap<>();
+           map.put("paymentList",paymentList);
+            return RespStatus.successs().element("data",map);
+        }catch (Exception e){
+            e.printStackTrace();
+            return RespStatus.fail();
+        }
+
+
+
+    }
+
+
+
+
+
+
+
 
 }

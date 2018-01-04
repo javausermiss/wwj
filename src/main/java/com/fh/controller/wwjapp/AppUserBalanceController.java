@@ -313,7 +313,7 @@ public class AppUserBalanceController {
                     payment.setUSERID(o.getUSER_ID());
                     payment.setDOLLID(null);
                     payment.setCOST_TYPE("5");
-                    payment.setREMARK("充值");
+                    payment.setREMARK("充值测试");
                     paymentService.reg(payment);
                     o.setORDER_NO(order_no);
                     o.setREGGOLD(String.valueOf(reggold));
@@ -332,7 +332,7 @@ public class AppUserBalanceController {
                 payment.setUSERID(o.getUSER_ID());
                 payment.setDOLLID(null);
                 payment.setCOST_TYPE("5");
-                payment.setREMARK("充值");
+                payment.setREMARK("充值"+String.valueOf(amount/100)+"元");
                 paymentService.reg(payment);
                 o.setREGGOLD(String.valueOf(gold));
                 o.setORDER_NO(order_no);

@@ -11,6 +11,7 @@ import com.fh.service.system.playdetail.impl.PlayDetailService;
 import com.fh.service.system.pond.PondManager;
 import com.fh.util.wwjUtil.RedisUtil;
 import com.fh.util.wwjUtil.RespStatus;
+import com.sun.org.apache.xml.internal.utils.StringBufferPool;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -146,7 +147,7 @@ public class PlayBackController {
 
     }
 
-    public static void main(String[] strings) {
+    public static void main(String[] strings){
         String sendGoods = "wqe,sda, ";
         String[] s = sendGoods.split("\\,");
         String name = s[0];
@@ -155,13 +156,12 @@ public class PlayBackController {
         System.out.println(name);
         System.out.println(phone);
         System.out.println("空格" + address);
-
         int a = 38, b = 7;
         double b1 = (a * 1.0 / b);
         Math.round(38 * 1.0 / 7);
         int n = (int) Math.floor(29 / 1);
         System.out.println(n);
-    }
 
+    }
 
 }

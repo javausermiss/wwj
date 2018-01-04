@@ -12,8 +12,18 @@ public class Payment {
     private String CREATE_TIME;
     private String REMARK;
     private String UPDATE_TIME;
+    private String dollname;//娃娃名字
+
 
     public Payment() {
+    }
+
+    public String getDollname() {
+        return dollname;
+    }
+
+    public void setDollname(String dollname) {
+        this.dollname = dollname;
     }
 
     public Integer getID() {

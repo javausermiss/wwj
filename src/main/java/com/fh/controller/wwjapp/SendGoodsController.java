@@ -182,6 +182,7 @@ public class SendGoodsController {
                     payment.setUSERID(userId);
                     payment.setDOLLID(null);
                     payment.setCOST_TYPE("6");
+                    payment.setREMARK("支付运费");
                     paymentService.reg(payment);
                     sendGoods.setMODE_DESPATCH("2");
                 }
@@ -280,7 +281,8 @@ public class SendGoodsController {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String time = format.format(date);
                 conversion.setCREATETIME(time);
-                conversion.setDOLLNAME(dollService.getDollByID(playDetailService.getPlayDetailByID(Integer.valueOf(pid)).getDOLLID()).getDOLL_NAME());
+                String dollname = dollService.getDollByID(playDetailService.getPlayDetailByID(Integer.valueOf(pid)).getDOLLID()).getDOLL_NAME();
+                conversion.setDOLLNAME(dollname);
                 conversion.setNUMBER("1");
                 conversion.setUSERID(userId);
                 conversion.setPLAYID(pid);
@@ -291,6 +293,7 @@ public class SendGoodsController {
                 payment.setUSERID(userId);
                 payment.setDOLLID(playBack.getDOLLID());
                 payment.setCOST_TYPE("7");
+                payment.setREMARK("兑换"+dollname);
                 paymentService.reg(payment);
             }
             Map<String, Object> map = new HashMap<>();

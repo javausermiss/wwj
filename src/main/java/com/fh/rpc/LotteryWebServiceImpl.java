@@ -61,6 +61,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
             payment.setDOLLID(dollId);
             payment.setUSERID(userId);
             payment.setGOLD("-"+String.valueOf(dollService.getDollByID(dollId).getDOLL_GOLD()));
+            payment.setREMARK("抓取"+dollService.getDollByID(dollId).getDOLL_NAME());
             paymentService.reg(payment);
             appUser.setBALANCE(String.valueOf(old - b2));
             appuserService.updateAppUserBalanceById(appUser);
@@ -242,6 +243,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                         payment.setUSERID(uid);
                         payment.setDOLLID(roomId);
                         payment.setCOST_TYPE("4");
+                        payment.setREMARK("流局返款");
                         paymentService.reg(payment);
                         //更改竞猜记录
                         guessDetailL.setGUESS_TYPE("-1");//流局标识 -1
@@ -275,6 +277,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                         payment.setUSERID(uid);
                         payment.setDOLLID(roomId);
                         payment.setCOST_TYPE("4");
+                        payment.setREMARK("流局返款");
                         paymentService.reg(payment);
                         //更改竞猜记录
                         guessDetailL.setGUESS_TYPE("-1");//流局标识 -1
@@ -325,6 +328,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                         payment.setUSERID(uid);
                         payment.setDOLLID(roomId);
                         payment.setCOST_TYPE("4");
+                        payment.setREMARK("流局返款");
                         paymentService.reg(payment);
                         //更改竞猜记录
                         guessDetailL.setGUESS_TYPE("-1");//流局标识 -1
@@ -359,6 +363,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                         payment.setUSERID(uid);
                         payment.setDOLLID(roomId);
                         payment.setCOST_TYPE("4");
+                        payment.setREMARK("流局返款");
                         paymentService.reg(payment);
                         //更改竞猜记录
                         guessDetailL.setGUESS_TYPE("-1");//流局标识 -1
@@ -428,6 +433,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                     payment.setUSERID(userId);
                     payment.setDOLLID(roomId);
                     payment.setCOST_TYPE("3");
+                    payment.setREMARK("竞猜成功");
                     paymentService.reg(payment);
                 }
             }
@@ -476,6 +482,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                 payment.setUSERID(guessDetailL.getAPP_USER_ID());
                 payment.setDOLLID(roomId);
                 payment.setCOST_TYPE("2");
+                payment.setREMARK("机器异常返款");
                 paymentService.reg(payment);
             }
         } catch (Exception e) {
