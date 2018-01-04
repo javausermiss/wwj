@@ -103,7 +103,8 @@
                                     <th class="center">娃娃机名字</th>
                                     <th class="center">娃娃机房间号</th>
                                     <th class="center">娃娃金币</th>
-                                    <th class="center">娃娃可兑换金币</th>>
+                                    <th class="center">娃娃可兑换金币</th>
+                                    <th class="center">状态</th>
                                     <th class="center">操作</th>
                                 </tr>
                                 </thead>

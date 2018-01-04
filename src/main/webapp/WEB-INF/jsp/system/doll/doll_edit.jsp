@@ -31,22 +31,37 @@
 						<input type="hidden" name="DOLL_ID" id="DOLL_ID" value="${pd.DOLL_ID}"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
-							<%--<tr>
+							<tr>
 								<td style="width:100px;text-align: right;padding-top: 13px;">娃娃机机SN:</td>
 								<td><input type="text" name="DOLL_SN" id="DOLL_SN" value="${pd.DOLL_SN}" maxlength="50" placeholder="这里输入娃娃机SN" title="sn" style="width:98%;"/></td>
-							</tr>--%>
+							</tr>
 							<tr>
 								<td style="width:100px;text-align: right;padding-top: 13px;">娃娃机名字:</td>
-								<td><input type="text" name="DOLL_NAME" id="DOLL_NAME" value="${pd.DOLL_NAME}" maxlength="10" placeholder="这里输入娃娃机名字" title="DOLL_NAME" style="width:98%;"/></td>
+								<td><input type="text" name="DOLL_NAME" id="DOLL_NAME" value="${pd.DOLL_NAME}"
+								 maxlength="10" placeholder="这里输入娃娃机名字" title="DOLL_NAME" style="width:98%;"/></td>
 							</tr>
-							
 							<tr>
 								<td style="width:100px;text-align: right;padding-top: 13px;">娃娃机金币:</td>
-								<td><input type="text" name="DOLL_GOLD" id="DOLL_GOLD" value="${pd.DOLL_GOLD}" maxlength="10" placeholder="这里输入娃娃机花费金额" title="DOLL_GOLD" style="width:98%;"/></td>
+								<td><input type="text" name="DOLL_GOLD" id="DOLL_GOLD" value="${pd.DOLL_GOLD}" 
+								maxlength="10" placeholder="这里输入娃娃机花费金额" title="DOLL_GOLD" style="width:98%;"/></td>
 							</tr>
 							<tr>
 								<td style="width:100px;text-align: right;padding-top: 13px;">可兑换金币数:</td>
-								<td><input type="text" name="DOLL_CONVERSIONGOLD" id="DOLL_CONVERSIONGOLD" value="${pd.DOLL_CONVERSIONGOLD}" maxlength="10" placeholder="这里输入可兑换金币数" title="DOLL_CONVERSIONGOLD" style="width:98%;"/></td>
+								<td><input type="text" name="DOLL_CONVERSIONGOLD" id="DOLL_CONVERSIONGOLD" 
+								value="${pd.DOLL_CONVERSIONGOLD}" maxlength="10" placeholder="这里输入可兑换金币数" title="DOLL_CONVERSIONGOLD" style="width:98%;"/></td>
+							</tr>
+							<tr>
+								<td style="text-align: right;padding-top: 13px;">玩具名称:</td>
+								<td>
+									<select class="chosen-select" name=TOY_ID id="TOY_ID" data-placeholder="请选择玩具名称" style="width:320px;">
+											<c:forEach items="${toyList}" var="var" varStatus="vs">
+											  <option value="${var.TOY_ID}"  
+											  			<c:if test="${pd.TOY_ID == var.TOY_ID }">selected</c:if> >
+	                                            		${var.TOY_NAME}(${var.TOY_ID})
+	                                            </option>
+                                            </c:forEach>
+								  	</select>
+								</td>
 							</tr>
 							<tr>
 								<td style="width:100px;text-align: right;padding-top: 13px;">文件域：</td>
@@ -87,7 +102,7 @@
 		$(top.hangge());
 		//保存
 		function save(){
-			/*if($("#DOLL_SN").val()==""){
+			if($("#DOLL_SN").val()==""){
 				$("#DOLL_SN").tips({
 					side:3,
 		            msg:'请输入sn',
@@ -96,7 +111,17 @@
 		        });
 				$("#DOLL_SN").focus();
 			return false;
-			}*/
+			}
+            if($("#TOY_ID").val()==""){
+                $("#TOY_ID").tips({
+                    side:3,
+                    msg:'请输入玩具名称',
+                    bg:'#AE81FF',
+                    time:2
+                });
+                $("#TOY_ID").focus();
+                return false;
+            }
             if($("#DOLL_GOLD").val()==""){
                 $("#DOLL_GOLD").tips({
                     side:3,
@@ -135,6 +160,9 @@
 		$(function() {
 			//日期框
 			$('.date-picker').datepicker({autoclose: true,todayHighlight: true});
+		});
+		$(function(){
+		    $('#TOY_ID').chosen();
 		});
 		</script>
 </body>

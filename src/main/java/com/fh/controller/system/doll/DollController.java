@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.DoubleToLongFunction;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.system.doll.DollManager;
+import com.fh.service.system.doll.DollToyManager;
 import com.fh.util.AppUtil;
 import com.fh.util.FastDFSClient;
 import com.fh.util.Jurisdiction;
@@ -45,6 +47,11 @@ public class DollController extends BaseController {
 	String menuUrl = "doll/list.do"; //菜单地址(权限用)
 	@Resource(name="dollService")
 	private DollManager dollService;
+	
+	
+	@Resource(name="dolltoyService")
+	private DollToyManager dolltoyService;
+
 	
 	/**保存
 	 * @param
@@ -70,11 +77,13 @@ public class DollController extends BaseController {
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
-		
-		pd = this.getPageData();
+		String file = req.getParameter("DOLL_FILE");
+//		pd = this.getPageData();
 		pd.put("DOLL_ID", this.get32UUID());	//主键
 		pd.put("DOLL_STATE", "2");	//DOLL_ST;ATE
 		pd.put("DOLL_URL", fileId);
+		pd.put("DOLL_FILE", file);
+		
 		dollService.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
@@ -147,8 +156,11 @@ public class DollController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		mv.setViewName("system/doll/doll_edit");
+		List<PageData>	toyList = dolltoyService.listAll(getPageData());
+		
 		mv.addObject("msg", "save");
 		mv.addObject("pd", pd);
+		mv.addObject("toyList", toyList);
 		return mv;
 	}	
 	
@@ -162,9 +174,11 @@ public class DollController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd = dollService.findById(pd);	//根据ID读取
+		List<PageData>	toyList = dolltoyService.listAll(getPageData());
 		mv.setViewName("system/doll/doll_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
+		mv.addObject("toyList", toyList);
 		return mv;
 	}	
 	

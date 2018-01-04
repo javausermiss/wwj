@@ -15,6 +15,7 @@
 		<result column="DOLL_CONVERSIONGOLD" property="dollConversiongold"/>
 		<result column="CAMERA_NAME_01" property="cameraName01"/>
 		<result column="CAMERA_NAME_02" property="cameraName02"/>
+		<!-- <result column="TOY_ID" property="toy_id"/> -->
 			
 		<collection property="cameras" column="DOLL_ID" ofType="com.fh.vo.system.CameraVo">
 	        <id property="cameraId" column="CAMERA_ID"/>
@@ -46,7 +47,8 @@
 		DOLL_URL,
 		DOLL_CONVERSIONGOLD,
 		CAMERA_NAME_01,
-		CAMERA_NAME_02
+		CAMERA_NAME_02,
+		TOY_ID
 	</sql>
 
     <!-- 字段值 -->
@@ -60,7 +62,8 @@
 		#{DOLL_URL},
 		#{DOLL_CONVERSIONGOLD},
 		#{CAMERA_NAME_01},
-		#{CAMERA_NAME_02}
+		#{CAMERA_NAME_02},
+		#{TOY_ID}
 	</sql>
 
     <!-- 新增-->
