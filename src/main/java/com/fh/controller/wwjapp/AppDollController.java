@@ -8,15 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fh.controller.base.BaseController;
-import com.fh.entity.system.Doll;
 import com.fh.service.system.doll.DollManager;
-import com.fh.util.wwjUtil.DollRegUtil;
-import com.fh.util.wwjUtil.MyUUID;
-import com.fh.util.wwjUtil.RedisUtil;
 import com.fh.util.wwjUtil.RespStatus;
 import com.fh.vo.system.DollVo;
 

@@ -86,6 +86,33 @@ public class FastDFSClient {
 			}
 		}
 	}
+	
+	/**
+	 * 
+	 * @param file_buff 文件流
+	 * @param fileName
+	 *            文件名
+	 * @return 返回Null则为失败
+	 */
+	public static String uploadFile(byte[] file_buff, String fileName) {
+		FileInputStream fis = null;
+		try {
+			NameValuePair[] meta_list = new NameValuePair[0];
+			String fileid = storageClient1.upload_file1(file_buff, getFileExt(fileName), meta_list);
+			return fileid;
+		} catch (Exception ex) {
+			logger.error(ex.getLocalizedMessage());
+			return null;
+		}finally{
+			if (fis != null){
+				try {
+					fis.close();
+				} catch (IOException e) {
+					logger.error(e);
+				}
+			}
+		}
+	}
 
 	/**
 	 * 根据组名和远程文件名来删除一个文件
