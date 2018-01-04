@@ -285,9 +285,10 @@ public class BetGameController {
     public JSONObject getPaymenlist(@RequestParam ("userId") String userId){
 
         try {
-           List<Payment> paymentList =   paymentService.getPaymenlist(userId);
+           List<Payment> paymentList =  paymentService.getPaymenlist(userId);
            Map<String,Object> map = new LinkedHashMap<>();
            map.put("paymentList",paymentList);
+           map.put("appUser",getAppUserInfo(userId));
             return RespStatus.successs().element("data",map);
         }catch (Exception e){
             e.printStackTrace();

@@ -97,7 +97,6 @@
     <orderEntry type="library" name="Maven: org.mybatis:mybatis:3.3.1" level="project" />
     <orderEntry type="library" name="Maven: org.mybatis:mybatis-spring:1.2.0" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.9" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.7.9" level="project" />
     <orderEntry type="library" name="Maven: taglibs:standard:1.1.2" level="project" />
     <orderEntry type="library" name="Maven: wsdl4j:wsdl4j:1.6.3" level="project" />
     <orderEntry type="library" name="Maven: com.hynnet:sqljdbc4-chs:4.0.2206.100" level="project" />
@@ -296,5 +295,6 @@
     <orderEntry type="library" name="Maven: com.iot.game.pooh.admin:pooh-admin-srs-interface:1.0.0.SNAPSHORT" level="project" />
     <orderEntry type="library" name="Maven: com.iot.game.pooh.admin:pooh-admin-srs-core:1.0.0.SNAPSHORT" level="project" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.16.10" level="project" />
+    <orderEntry type="library" name="Maven: org.csource:fastdfs-client:1.24" level="project" />
   </component>
 </module>

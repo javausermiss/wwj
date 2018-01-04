@@ -60,76 +60,76 @@ public class PlayDetailService implements PlayDetailManage {
     
     @Override
     public int reg(PlayDetail playDetail) throws Exception {
-        return (int)dao.save("playDetailMapper.reg",playDetail);
+        return (int)dao.save("PlayDetailMapper.reg",playDetail);
     }
 
     @Override
     public PlayDetail getPlayDetailByGuessID(PlayDetail playDetail) throws Exception {
-        return (PlayDetail)dao.findForObject("playDetailMapper.getPlayDetailByGuessID",playDetail);
+        return (PlayDetail)dao.findForObject("PlayDetailMapper.getPlayDetailByGuessID",playDetail);
     }
 
     @Override
     public PlayDetail getPlayDetailLast(PlayDetail playDetail) throws Exception {
-        return (PlayDetail)dao.findForObject("playDetailMapper.getPlayDetailLast",playDetail);
+        return (PlayDetail)dao.findForObject("PlayDetailMapper.getPlayDetailLast",playDetail);
     }
 
     @Override
     public PlayDetail getPlayIdForPeople(String dollId) throws Exception {
-        return (PlayDetail)dao.findForObject("playDetailMapper.getPlayIdForPeople",dollId);
+        return (PlayDetail)dao.findForObject("PlayDetailMapper.getPlayIdForPeople",dollId);
     }
 
     @Override
     public PlayDetail getPlayDetailByRoomId(String roomId) throws Exception {
-        return (PlayDetail)dao.findForObject("playDetailMapper.getPlayDetailByRoomId",roomId);
+        return (PlayDetail)dao.findForObject("PlayDetailMapper.getPlayDetailByRoomId",roomId);
     }
 
     @Override
     public int updatePlayDetailStopFlag(PlayDetail playDetail) throws Exception {
-        return (int)dao.update("playDetailMapper.updatePlayDetailStopFlag",playDetail);
+        return (int)dao.update("PlayDetailMapper.updatePlayDetailStopFlag",playDetail);
     }
 
     @Override
     public int updatePlayDetailState(PlayDetail playDetail) throws Exception {
-        return (int)dao.update("playDetailMapper.updatePlayDetailState",playDetail);
+        return (int)dao.update("PlayDetailMapper.updatePlayDetailState",playDetail);
     }
 
     @Override
     public PlayDetail getPlayDetailForCamera(PlayDetail playDetail) throws Exception {
-        return (PlayDetail) dao.findForObject("playDetailMapper.getPlayDetailForCamera",playDetail);
+        return (PlayDetail) dao.findForObject("PlayDetailMapper.getPlayDetailForCamera",playDetail);
     }
 
     @Override
     public int updatePlayDetailForCamera(PlayDetail playDetail) throws Exception {
-        return (int)dao.update("playDetailMapper.updatePlayDetailForCamera",playDetail);
+        return (int)dao.update("PlayDetailMapper.updatePlayDetailForCamera",playDetail);
     }
 
     @Override
     public List<PlayDetail> getPlaylist(String userId) throws Exception {
-        return (List<PlayDetail>)dao.findForList("playDetailMapper.getPlaylist",userId);
+        return (List<PlayDetail>)dao.findForList("PlayDetailMapper.getPlaylist",userId);
     }
 
     @Override
     public List<PlayDetail> getDollCount(String userId) throws Exception {
-        return (List<PlayDetail>)dao.findForList("playDetailMapper.getDollCount",userId);
+        return (List<PlayDetail>)dao.findForList("PlayDetailMapper.getDollCount",userId);
     }
 
     @Override
     public List<PlayDetail> getPlayRecordPM() throws Exception {
-        return (List<PlayDetail>)dao.findForList("playDetailMapper.getPlayRecordPM",null);
+        return (List<PlayDetail>)dao.findForList("PlayDetailMapper.getPlayRecordPM",null);
     }
 
     @Override
     public PlayDetail getPlayDetailByID(Integer id) throws Exception {
-        return (PlayDetail)dao.findForObject("playDetailMapper.getPlayDetailById",id);
+        return (PlayDetail)dao.findForObject("PlayDetailMapper.getPlayDetailById",id);
     }
 
     @Override
     public int updatePostState(PlayDetail playDetail) throws Exception {
-        return (int)dao.update("playDetailMapper.updatePostState",playDetail);
+        return (int)dao.update("PlayDetailMapper.updatePostState",playDetail);
     }
 
     @Override
     public int updatePostStateForCon(PlayDetail playDetail) throws Exception {
-        return (int)dao.update("playDetailMapper.updatePostStateForCon",playDetail);
+        return (int)dao.update("PlayDetailMapper.updatePostStateForCon",playDetail);
     }
 }
