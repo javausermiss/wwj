@@ -137,7 +137,6 @@ public class AppUserController {
                 if (n >0 ) {
                     Map<String, Object> map = new LinkedHashMap<>();
                     map.put("appUser", getAppUserInfoByID(userId));
-                    map.put("userHeader", PropertiesUtils.getCurrProperty("fastdfs.server.url")); //文件服务器地址
                     return RespStatus.successs().element("data", map);
                 } else {
                     return RespStatus.fail("更新头像失败");
