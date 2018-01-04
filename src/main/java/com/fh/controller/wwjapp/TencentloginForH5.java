@@ -4,6 +4,7 @@ import com.fh.entity.system.AppUser;
 import com.fh.entity.system.Doll;
 import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.doll.DollManager;
+import com.fh.util.PropertiesUtils;
 import com.fh.util.wwjUtil.*;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -78,7 +79,8 @@ public class TencentloginForH5 {
                 if (code.equals("SUCCESS")) {
                     AppUser appUser1 = new AppUser();
                     if (imageUrl == null||imageUrl.equals("") ) {
-                        imageUrl = "/default.png";
+//                        imageUrl = "/default.png";
+                        imageUrl = PropertiesUtils.getCurrProperty("user.default.header.url"); //默认头像
                     }
                    // String newFace = FaceImageUtil.downloadImage(imageUrl);
                     appUser1.setNICKNAME(nickname);
@@ -128,7 +130,8 @@ public class TencentloginForH5 {
                 String code = TokenVerify.verifyForH5(token);
                 if (code.equals("SUCCESS")) {
                     if ( imageUrl == null||imageUrl.equals("")  ) {
-                        imageUrl = "/default.png";
+//                        imageUrl = "/default.png";
+                        imageUrl = PropertiesUtils.getCurrProperty("user.default.header.url"); //默认头像
                     }
                     String newFace = FaceImageUtil.downloadImage(imageUrl);
                     appUser.setNICKNAME(nickname);

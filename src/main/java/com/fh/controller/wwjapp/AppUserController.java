@@ -1,23 +1,28 @@
 package com.fh.controller.wwjapp;
 
-import com.fh.entity.system.AppUser;
-import com.fh.service.system.appuser.AppuserManager;
-import com.fh.util.wwjUtil.Base64Image;
-import com.fh.util.wwjUtil.Base64Util;
-import com.fh.util.wwjUtil.MyUUID;
-import com.fh.util.wwjUtil.RespStatus;
+import java.io.File;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-import net.sf.json.JSONObject;
+import javax.annotation.Resource;
+
+import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import com.fh.entity.system.AppUser;
+import com.fh.service.system.appuser.AppuserManager;
+import com.fh.util.FastDFSClient;
+import com.fh.util.PropertiesUtils;
+import com.fh.util.wwjUtil.Base64Util;
+import com.fh.util.wwjUtil.RespStatus;
+
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/api")
@@ -105,20 +110,34 @@ public class AppUserController {
     @RequestMapping(value = "/updateUser", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject updateUser(@RequestParam("userId") String userId,
-                                 @RequestParam("base64Image") String base64Image) {
+    							 @RequestParam(value = "base64Image", required = false)CommonsMultipartFile  multipartFile //保存图片文件上传路径
+                                ) {
         try {
             //String phone = new String(Base64Util.decryptBASE64(aPhone));
             AppUser appUser = appuserService.getUserByID(userId);
             if (appUser != null) {
-                String faceName = MyUUID.createSessionId();
-                if (!Base64Image.GenerateImage(base64Image, "/usr/local/tomcat/webapps/faceImage/" + faceName + ".png")) {
-                    return RespStatus.fail("上传失败");
-                }
-                appUser.setIMAGE_URL("/" + faceName + ".png");
+        		String faceName="";
+//                String faceName = MyUUID.createSessionId();
+//                if (!Base64Image.GenerateImage(base64Image, "/usr/local/tomcat/webapps/faceImage/" + faceName + ".png")) {
+//                    return RespStatus.fail("上传失败");
+//                }
+//                appUser.setIMAGE_URL("/" + faceName + ".png");
+//                int n = appuserService.updateAppUserImage(appUser);
+        		//头像上传
+        		try{
+        			String newFilename=multipartFile.getOriginalFilename();
+        			DiskFileItem fi = (DiskFileItem) multipartFile.getFileItem();
+        			File file = fi.getStoreLocation();
+        			faceName = FastDFSClient.uploadFile(file, newFilename);
+        		}catch(Exception ex){
+        			ex.printStackTrace();
+        		}
+        		appUser.setIMAGE_URL(faceName);
                 int n = appuserService.updateAppUserImage(appUser);
-                if (n != 0) {
+                if (n >0 ) {
                     Map<String, Object> map = new LinkedHashMap<>();
                     map.put("appUser", getAppUserInfoByID(userId));
+                    map.put("userHeader", PropertiesUtils.getCurrProperty("fastdfs.server.url")); //文件服务器地址
                     return RespStatus.successs().element("data", map);
                 } else {
                     return RespStatus.fail("更新头像失败");
