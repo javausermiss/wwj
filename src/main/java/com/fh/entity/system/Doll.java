@@ -1,7 +1,5 @@
 package com.fh.entity.system;
 
-import lombok.*;
-
 /**
  * 娃娃机实体类
  */
@@ -18,6 +16,7 @@ public class Doll {
     private String CAMERA_NAME_01;
     private String CAMERA_NAME_02;
     private String DOLL_CONVERSIONGOLD;
+    private String TOY_ID;
 
     public Doll() {
 
@@ -107,4 +106,12 @@ public class Doll {
     public void setDOLL_URL(String DOLL_URL) {
         this.DOLL_URL = DOLL_URL;
     }
+
+	public String getTOY_ID() {
+		return TOY_ID;
+	}
+
+	public void setTOY_ID(String TOY_ID) {
+		 this.TOY_ID = TOY_ID;
+	}
 }
