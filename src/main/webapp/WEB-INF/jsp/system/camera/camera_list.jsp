@@ -121,7 +121,7 @@
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group" >
 												
-													<a class="btn btn-xs btn-success" title="推流TOKEN" onclick="getToken('${var.DOLL_ID}');">
+													<a class="btn btn-xs btn-success" title="推流TOKEN" onclick="getToken('${var.LIVESTREAM}');">
 														TOKEN
 													</a>
 													
@@ -326,12 +326,12 @@
 		
 		
 		//修改
-		function getToken(Id){
+		function getToken(LIVESTREAM){
 			 top.jzts();
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="编辑";
-			 diag.URL = '<%=basePath%>camera/getToken.do?CAMERA_ID='+Id;
+			 diag.URL = '<%=basePath%>camera/getToken.do?LIVESTREAM='+LIVESTREAM;
 			 diag.Width = 800;
 			 diag.Height = 200;
 			 diag.Modal = true;				//有无遮罩窗口
