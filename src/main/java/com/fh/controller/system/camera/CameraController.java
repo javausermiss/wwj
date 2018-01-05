@@ -171,7 +171,7 @@ public class CameraController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		StringBuffer token=CameraToken(pd.getString("CAMERA_ID"));
+		StringBuffer token=CameraToken(pd.getString("LIVESTREAM"));
 		mv.setViewName("system/camera/camera_token");
 		mv.addObject("token",token.toString());
 		mv.addObject("msg", "edit");
