@@ -300,7 +300,6 @@ public class AppUserBalanceController {
                 if (o.getSTATUS().equals("1")) {
                     return "SUCCESS";
                 }
-
                 Paycard paycard = paycardService.getGold(String.valueOf(amount / 100));
                 if (paycard == null) {
                     AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
@@ -322,18 +321,54 @@ public class AppUserBalanceController {
                     return "SUCCESS";
                 }
                 int gold = Integer.valueOf(paycard.getGOLD());
+                String award= "";
+                String rechare = "";
+                switch (gold){
+                    case 65:
+                        rechare = "60";
+                        award = "5";
+                        break;
+                    case 335:
+                        rechare = "300";
+                        award = "35";
+                        break;
+                    case 800:
+                        rechare = "680";
+                        award = "120";
+                        break;
+                    case 1600:
+                        rechare = "1280";
+                        award = "320";
+                        break;
+                    case 4375:
+                        rechare = "3280";
+                        award = "1095";
+                        break;
+                    case 9260:
+                        rechare = "6480";
+                        award = "2780";
+                        break;
+                }
                 AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
                 int a = Integer.valueOf(appUser.getBALANCE()) + gold;
                 appUser.setBALANCE(String.valueOf(a));
                 appuserService.updateAppUserBalanceById(appUser);
                 //更新收支表
                 Payment payment = new Payment();
-                payment.setGOLD(String.valueOf(gold));
+                payment.setGOLD(rechare);
                 payment.setUSERID(o.getUSER_ID());
                 payment.setDOLLID(null);
                 payment.setCOST_TYPE("5");
-                payment.setREMARK("充值"+String.valueOf(amount/100)+"元");
+                payment.setREMARK("充值"+rechare);
                 paymentService.reg(payment);
+                //奖励记录
+                Payment payment1 = new Payment();
+                payment1.setGOLD(award);
+                payment1.setUSERID(o.getUSER_ID());
+                payment1.setDOLLID(null);
+                payment1.setCOST_TYPE("9");
+                payment1.setREMARK("奖励"+award);
+                paymentService.reg(payment1);
                 o.setREGGOLD(String.valueOf(gold));
                 o.setORDER_NO(order_no);
                 o.setSTATUS("1");

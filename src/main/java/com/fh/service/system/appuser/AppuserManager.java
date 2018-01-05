@@ -248,6 +248,30 @@ public interface AppuserManager {
 
     public AppUser testuser(AppUser appUser) throws Exception;
 
+    /**
+     * 查询所有的用户
+     * @return
+     * @throws Exception
+     */
+    public List<AppUser> getAppUserList()throws Exception;
+
+    /**
+     * 修改余额和标签
+     * @param appUser
+     * @return
+     * @throws Exception
+     */
+    public int  updateAppUserSB(AppUser appUser)throws Exception;
+
+
+    /**
+     * 修改用户的签到标签
+     * @param appUser
+     * @return
+     * @throws Exception
+     */
+    public int  updateAppUserSign(AppUser appUser)throws Exception;
+
 
 
 

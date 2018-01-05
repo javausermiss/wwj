@@ -270,5 +270,20 @@ public class AppuserService implements AppuserManager{
 	public AppUser testuser(AppUser appUser) throws Exception {
 		return (AppUser)dao.findForObject("AppuserMapper.testuser",appUser);
 	}
+
+	@Override
+	public List<AppUser> getAppUserList() throws Exception {
+		return (List<AppUser>)dao.findForList("AppuserMapper.getAppUserList",null);
+	}
+
+	@Override
+	public int updateAppUserSB(AppUser appUser) throws Exception {
+		return (int)dao.update("AppuserMapper.updateAppUserSB",appUser);
+	}
+
+	@Override
+	public int updateAppUserSign(AppUser appUser) throws Exception {
+		return (int)dao.update("AppuserMapper.updateAppUserSign",appUser);
+	}
 }
 

@@ -27,6 +27,7 @@ public class AppUser {
     private String CNEE_NAME;
     private String CNEE_ADDRESS;
     private String CNEE_PHONE;
+    private String SIGN_TAG;
 
     public AppUser() {
     }
@@ -69,6 +70,14 @@ public class AppUser {
         this.CREATETIME = CREATETIME;
         this.USERNAME = USERNAME;
         this.NICKNAME = NICKNAME;
+    }
+
+    public String getSIGN_TAG() {
+        return SIGN_TAG;
+    }
+
+    public void setSIGN_TAG(String SIGN_TAG) {
+        this.SIGN_TAG = SIGN_TAG;
     }
 
     public String getCNEE_NAME() {

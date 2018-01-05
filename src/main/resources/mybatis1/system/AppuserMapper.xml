@@ -455,8 +455,29 @@
 
     <select id="testuser" parameterType="com.fh.entity.system.AppUser" resultType="com.fh.entity.system.AppUser">
         SELECT * FROM sys_app_user where nickname = #{NICKNAME} AND phone = #{PHONE}
-
-
     </select>
+
+    <select id="getAppUserList" resultType="com.fh.entity.system.AppUser">
+        SELECT a.USER_ID , a.SIGN_TAG FROM sys_app_user AS a WHERE a.SIGN_TAG = '1'
+    </select>
+
+    <update id="updateAppUserSB" parameterType="com.fh.entity.system.AppUser">
+        UPDATE
+        sys_app_user
+		SET
+		BALANCE = #{BALANCE},
+		SIGN_TAG = #{SIGN_TAG}
+		WHERE
+		USER_ID = #{USER_ID}
+    </update>
+
+    <update id="updateAppUserSign" parameterType="com.fh.entity.system.AppUser">
+        UPDATE
+        sys_app_user
+		SET
+		SIGN_TAG = #{SIGN_TAG}
+		WHERE
+		USER_ID = #{USER_ID}
+    </update>
 
 </mapper>
