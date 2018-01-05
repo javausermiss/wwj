@@ -77,12 +77,21 @@ public class DollController extends BaseController {
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
-		String file = req.getParameter("DOLL_FILE");
+		
+		String doll_sn = req.getParameter("DOLL_SN");
+		String doll_name = req.getParameter("DOLL_NAME");
+		String doll_gold = req.getParameter("DOLL_GOLD");
+		String doll_conversiongold = req.getParameter("DOLL_CONVERSIONGOLD");
 //		pd = this.getPageData();
 		pd.put("DOLL_ID", this.get32UUID());	//主键
 		pd.put("DOLL_STATE", "2");	//DOLL_ST;ATE
 		pd.put("DOLL_URL", fileId);
-		pd.put("DOLL_FILE", file);
+		
+		pd.put("DOLL_SN", doll_sn);
+		pd.put("DOLL_NAME", doll_name);
+		pd.put("DOLL_GOLD", doll_gold);
+		pd.put("DOLL_CONVERSIONGOLD", doll_conversiongold);
+		pd.put("TOY_ID", req.getParameter("TOY_ID"));
 		
 		dollService.save(pd);
 		mv.addObject("msg","success");
@@ -110,12 +119,28 @@ public class DollController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/edit")
-	public ModelAndView edit() throws Exception{
+	public ModelAndView edit(HttpServletRequest req) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"修改Doll");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
-		pd = this.getPageData();
+		//pd = this.getPageData();
+		pd.put("DOLL_ID", req.getParameter("DOLL_ID"));
+		pd.put("DOLL_SN", req.getParameter("DOLL_SN"));
+		pd.put("DOLL_NAME", req.getParameter("DOLL_NAME"));
+		pd.put("DOLL_GOLD", req.getParameter("DOLL_GOLD"));
+		pd.put("DOLL_CONVERSIONGOLD", req.getParameter("DOLL_CONVERSIONGOLD"));
+		pd.put("TOY_ID", req.getParameter("TOY_ID"));
+		pd.put("DOLL_FILE", req.getParameter("DOLL_FILE"));
+		
+		FastDFSClient fastdfsclient = new FastDFSClient();
+		
+		String oldFileId = req.getParameter("DOLL_FILE");
+		File file =null;
+		String filePath = "";
+		fastdfsclient.modifyFile(oldFileId, file, filePath);
+		
+		
 		dollService.edit(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
