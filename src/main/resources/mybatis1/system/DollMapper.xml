@@ -91,8 +91,11 @@
         <include refid="tableName"></include>
         set
         DOLL_NAME = #{DOLL_NAME},
+        DOLL_SN = #{DOLL_SN},
         DOLL_GOLD = #{DOLL_GOLD},
-        DOLL_URL = #{DOLL_URL}
+        DOLL_CONVERSIONGOLD = #{DOLL_CONVERSIONGOLD},
+        DOLL_URL = #{DOLL_URL},
+        TOY_ID = #{TOY_ID}
         where
         DOLL_ID = #{DOLL_ID}
     </update>
