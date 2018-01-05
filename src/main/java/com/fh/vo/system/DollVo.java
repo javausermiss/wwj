@@ -16,7 +16,7 @@ public class DollVo {
     private String dollUrl;
     private String cameraName01;
     private String cameraName02;
-    private String dollCnversiongold;
+    private String dollConversiongold;
     private List<CameraVo> cameras;
 
 	public String getDollId() {
@@ -92,11 +92,11 @@ public class DollVo {
 	}
 
 	public String getDollCnversiongold() {
-		return dollCnversiongold;
+		return dollConversiongold;
 	}
 
 	public void setDollCnversiongold(String dollCnversiongold) {
-		this.dollCnversiongold = dollCnversiongold;
+		this.dollConversiongold = dollCnversiongold;
 	}
 
 	public List<CameraVo> getCameras() {

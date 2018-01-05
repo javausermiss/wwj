@@ -6,6 +6,9 @@ import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.doll.DollManager;
 import com.fh.util.PropertiesUtils;
 import com.fh.util.wwjUtil.*;
+import com.iot.game.pooh.admin.srs.core.entity.httpback.SrsConnectModel;
+import com.iot.game.pooh.admin.srs.core.util.SrsConstants;
+import com.iot.game.pooh.admin.srs.core.util.SrsSignUtil;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,7 +83,7 @@ public class TencentloginController {
                 String code = TokenVerify.verify(token);
                 if (code.equals("SUCCESS")) {
                     AppUser appUser1 = new AppUser();
-                    if (imageUrl == null || imageUrl.equals("") ) {
+                    if (imageUrl == null || imageUrl.equals("")) {
                         imageUrl = PropertiesUtils.getCurrProperty("user.default.header.url"); //默认头像
                     }
                     String newFace = FaceImageUtil.downloadImage(imageUrl);
@@ -89,28 +92,13 @@ public class TencentloginController {
                     appUser1.setUSER_ID(userId);
                     appuserService.regwx(appUser1);
                     //SRS推流
-                    Date currentTime = new Date();
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-                    String dateString = formatter.format(currentTime);
-                    String tid = userId;
-                    String type = "U";
-                    String time = dateString;
-                    Map<String,Object> map = new HashMap<>();
-                    map.put("expire",3600);
-                    map.put("type",type);
-                    map.put("tid",userId);
-                    map.put("time",dateString);
-                    map.put("key","Pooh4token");
-                    Map<String, Object> sortedParams = new TreeMap<String, Object>(map);
-                    Set<Map.Entry<String, Object>> entrys = sortedParams.entrySet();
-                    // 遍历排序后的字典，将所有参数按"key=value"格式拼接在一起
-                    StringBuilder basestring = new StringBuilder();
-                    for (Map.Entry<String, Object> param : entrys) {
-                        basestring.append(param.getKey()).append('=').append(param.getValue()).append('&');
-                    }
-                    basestring.append("key=").append("Pooh4token");
-                    String SRStoken =  TokenVerify.md5(basestring.toString());
-                    RedisUtil.getRu().setex("SRStoken:appUser:"+userId,SRStoken,21600);
+                    SrsConnectModel sc = new SrsConnectModel();
+                    long time = System.currentTimeMillis();
+                    sc.setType("U");
+                    sc.setTid(userId);
+                    sc.setExpire(3600 * 24);
+                    sc.setTime(time);
+                    sc.setToken(SrsSignUtil.genSign(sc, SrsConstants.SRS_CONNECT_KEY));
                     String sessionID = MyUUID.createSessionId();
                     List<Doll> doll = dollService.getAllDoll();
                     RedisUtil.getRu().set("sessionId:appUser:" + userId, sessionID);
@@ -118,11 +106,9 @@ public class TencentloginController {
                     Map<String, Object> map1 = new HashMap<>();
                     map1.put("appUser", getAppUserInfo(userId));
                     map1.put("sessionID", sessionID);
+                    map1.put("accessToken", token);
                     map1.put("dollList", doll);
-                    map1.put("expire",3600);
-                    map1.put("SRSUsertoken",SRStoken);
-                    map1.put("time",dateString);
-
+                    map1.put("srsToken", sc);
                     return RespStatus.successs().element("data", map1);
                 } else {
                     return RespStatus.fail("token不合法");
@@ -130,38 +116,22 @@ public class TencentloginController {
             } else {
                 String code = TokenVerify.verify(token);
                 if (code.equals("SUCCESS")) {
-                    if ( imageUrl == null||imageUrl.equals("")  ) {
+                    if (imageUrl == null || imageUrl.equals("")) {
 //                        imageUrl = "/default.png";
-                    	imageUrl = PropertiesUtils.getCurrProperty("user.default.header.url"); //默认头像
+                        imageUrl = PropertiesUtils.getCurrProperty("user.default.header.url"); //默认头像
                     }
                     String newFace = FaceImageUtil.downloadImage(imageUrl);
                     appUser.setNICKNAME(nickname);
                     appUser.setIMAGE_URL(newFace);
                     appuserService.updateTencentUser(appUser);
                     //SRS推流
-                    Date currentTime = new Date();
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-                    String dateString = formatter.format(currentTime);
-                    String tid = userId;
-                    String type = "U";
-                    String time = dateString;
-                    Map<String,Object> map = new HashMap<>();
-                    map.put("expire",3600);
-                    map.put("type",type);
-                    map.put("tid",userId);
-                    map.put("time",dateString);
-                    map.put("key","Pooh4token");
-                    Map<String, Object> sortedParams = new TreeMap<String, Object>(map);
-                    Set<Map.Entry<String, Object>> entrys = sortedParams.entrySet();
-                    // 遍历排序后的字典，将所有参数按"key=value"格式拼接在一起
-                    StringBuilder basestring = new StringBuilder();
-                    for (Map.Entry<String, Object> param : entrys) {
-                        basestring.append(param.getKey()).append('=').append(param.getValue()).append('&');
-                    }
-                    basestring.append("key=").append("Pooh4token");
-                    String SRStoken =  TokenVerify.md5(basestring.toString());
-                    RedisUtil.getRu().setex("SRStoken:appUser:"+userId,SRStoken,21600);
-
+                    SrsConnectModel sc = new SrsConnectModel();
+                    long time = System.currentTimeMillis();
+                    sc.setType("U");
+                    sc.setTid(userId);
+                    sc.setExpire(3600 * 24);
+                    sc.setTime(time);
+                    sc.setToken(SrsSignUtil.genSign(sc, SrsConstants.SRS_CONNECT_KEY));
                     String sessionID = MyUUID.createSessionId();
                     List<Doll> doll = dollService.getAllDoll();
                     RedisUtil.getRu().set("tencentToken:" + userId, token);
@@ -169,10 +139,10 @@ public class TencentloginController {
                     Map<String, Object> map1 = new HashMap<>();
                     map1.put("appUser", getAppUserInfo(userId));
                     map1.put("sessionID", sessionID);
+                    map1.put("accessToken", token);
                     map1.put("dollList", doll);
-                    map1.put("expire",3600);
-                    map1.put("SRSUsertoken",SRStoken);
-                    map1.put("time",dateString);
+                    map1.put("srsToken", sc);
+
                     return RespStatus.successs().element("data", map1);
                 } else {
                     return RespStatus.fail("token不合法");
@@ -206,28 +176,13 @@ public class TencentloginController {
                     return RespStatus.fail("用户不存在");
                 }
                 //SRS推流
-                Date currentTime = new Date();
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-                String dateString = formatter.format(currentTime);
-                String tid = userId;
-                String type = "U";
-                String time = dateString;
-                Map<String,Object> map = new HashMap<>();
-                map.put("expire",3600);
-                map.put("type",type);
-                map.put("tid",userId);
-                map.put("time",dateString);
-                map.put("key","Pooh4token");
-                Map<String, Object> sortedParams = new TreeMap<String, Object>(map);
-                Set<Map.Entry<String, Object>> entrys = sortedParams.entrySet();
-                // 遍历排序后的字典，将所有参数按"key=value"格式拼接在一起
-                StringBuilder basestring = new StringBuilder();
-                for (Map.Entry<String, Object> param : entrys) {
-                    basestring.append(param.getKey()).append('=').append(param.getValue()).append('&');
-                }
-                basestring.append("key=").append("Pooh4token");
-                String SRStoken =  TokenVerify.md5(basestring.toString());
-                RedisUtil.getRu().setex("SRStoken:appUser:"+userId,SRStoken,21600);
+                SrsConnectModel sc = new SrsConnectModel();
+                long time = System.currentTimeMillis();
+                sc.setType("U");
+                sc.setTid(userId);
+                sc.setExpire(3600 * 24);
+                sc.setTime(time);
+                sc.setToken(SrsSignUtil.genSign(sc, SrsConstants.SRS_CONNECT_KEY));
                 String sessionID = MyUUID.createSessionId();
                 List<Doll> doll = dollService.getAllDoll();
                 RedisUtil.getRu().set("tencentToken:" + userId, accessToken);
@@ -237,10 +192,7 @@ public class TencentloginController {
                 map1.put("sessionID", sessionID);
                 map1.put("dollList", doll);
                 map1.put("accessToken", accessToken);
-                map1.put("expire",3600);
-                map1.put("SRSUsertoken",SRStoken);
-                map1.put("time",dateString);
-
+                map1.put("srsToken", sc);
                 return RespStatus.successs().element("data", map1);
             } else {
                 return RespStatus.fail("token 失效");
@@ -252,18 +204,18 @@ public class TencentloginController {
         }
     }
 
-    public static void main(String[] a){
+    public static void main(String[] a) {
         Date currentTime = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
         String dateString = formatter.format(currentTime);
         String tid = "123";
         String type = "U";
         String time = dateString;
-        Map<String,Object> map = new HashMap<>();
-        map.put("expire",3600);
-        map.put("type",type);
-        map.put("tid",tid);
-        map.put("time",dateString);
+        Map<String, Object> map = new HashMap<>();
+        map.put("expire", 3600);
+        map.put("type", type);
+        map.put("tid", tid);
+        map.put("time", dateString);
 
         Map<String, Object> sortedParams = new TreeMap<String, Object>(map);
         Set<Map.Entry<String, Object>> entrys = sortedParams.entrySet();
@@ -274,7 +226,7 @@ public class TencentloginController {
         }
         basestring.append("key=").append("Pooh4token");
         System.out.println(basestring);
-        String SRStoken =  TokenVerify.md5(basestring.toString());
+        String SRStoken = TokenVerify.md5(basestring.toString());
         System.out.println(SRStoken);
     }
 
