@@ -19,10 +19,14 @@
 
     <select id="getSignLastByUserId" parameterType="String" resultType="com.fh.entity.system.Sign">
         select
-        s.SIGNID,s.USERID,s.SIGNTIME,s.CSDATE
+        s.SIGNID,s.USERID,s.SIGNTIME,s.CSDATE,u.SIGN_TAG
         FROM
         tb_sign_datail AS s
-        WHERE
+        LEFT JOIN
+        sys_app_user AS  u
+        on
+        s.USERID  = u.USER_ID
+        where
         s.USERID = #{USERID}
         ORDER BY
         s.SIGNTIME

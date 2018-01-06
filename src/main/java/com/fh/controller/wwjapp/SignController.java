@@ -153,19 +153,29 @@ public class SignController {
     ) {
 
         try {
+            Date date = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+            String dateString = formatter.format(date);
             if (signType.equals("0")) {
                 Sign newSignLast = signService.getSignLastByUserId(userId);
+                Sign sign = new Sign();
+                if (newSignLast == null) {
+                    sign.setCSDATE("0");
+                    sign.setUSERID(userId);
+                    sign.setSIGNTIME(dateString);
+                    signService.insertSign(sign);
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("sign", sign);
+                    return RespStatus.successs().element("data", map);
+                }
                 Map<String, Object> map = new HashMap<>();
-                map.put("sign", newSignLast);
+                map.put("sign",newSignLast);
                 return RespStatus.successs().element("data", map);
             } else {
                 Sign signLast = signService.getSignLastByUserId(userId);//查询出用户最近的一条签到记录
-                Date date = new Date();
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-                String dateString = formatter.format(date);
                 String gold = "";
                 Sign s = new Sign();
-                if (signLast == null) {
+                if (signLast.getCSDATE().equals("0")) {
                     s.setUSERID(userId);
                     s.setSIGNTIME(dateString);
                     s.setCSDATE("1");
@@ -186,9 +196,10 @@ public class SignController {
                     if (signLast.getSIGNTIME().equals(dateString)) {
                         return RespStatus.fail("已经签到！");
                     }
-                    String signday = signLast.getCSDATE();
-                    if (!signday.equals("7")) {
-                        switch (signday) {
+                    String signday = signLast.getCSDATE();//查询最近的签到天数
+                    int h = Integer.valueOf(signday);
+                    if (h != 7) {
+                        switch (String.valueOf(h + 1)) {
                             case "1":
                                 gold = "10";
                                 break;
@@ -211,7 +222,7 @@ public class SignController {
                                 gold = "40";
                                 break;
                         }
-                        signday = String.valueOf(Integer.valueOf(signday) + 1);
+                        signday = String.valueOf(h + 1);
                         s.setUSERID(userId);
                         s.setSIGNTIME(dateString);
                         s.setCSDATE(signday);
@@ -228,7 +239,6 @@ public class SignController {
                         payment.setGOLD("+" + gold);
                         payment.setREMARK("签到奖励");
                         paymentService.reg(payment);
-
                     } else {
                         s.setUSERID(userId);
                         s.setSIGNTIME(dateString);
@@ -247,7 +257,6 @@ public class SignController {
                         payment.setREMARK("签到奖励");
                         paymentService.reg(payment);
                     }
-
                 }
                 Sign newSignLast = signService.getSignLastByUserId(userId);
                 Map<String, Object> map = new HashMap<>();

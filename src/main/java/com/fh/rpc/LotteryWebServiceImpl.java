@@ -190,6 +190,9 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                     ) {
                 return null;
             }
+            if (gifinumber!=0){
+                gifinumber = 1;
+            }
             playDetail.setSTATE(String.valueOf(gifinumber));
             playDetail.setPOST_STATE("0");
             playDetail.setDOLLID(roomId);
@@ -217,7 +220,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
             String file = "";//失败状态
             String userid = playDetail.getUSERID();
             //判断是否抓中
-            if (String.valueOf(gifinumber).equals("1")) {
+            if (!String.valueOf(gifinumber).equals("0")) {
                 file = "0";
                 //用户抓中，更新抓中总数
                 AppUser appUser = appuserService.getUserByID(userid);
