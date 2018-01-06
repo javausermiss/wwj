@@ -100,14 +100,12 @@ public class TencentloginController {
                     sc.setTime(time);
                     sc.setToken(SrsSignUtil.genSign(sc, SrsConstants.SRS_CONNECT_KEY));
                     String sessionID = MyUUID.createSessionId();
-                    List<Doll> doll = dollService.getAllDoll();
                     RedisUtil.getRu().set("sessionId:appUser:" + userId, sessionID);
                     RedisUtil.getRu().set("tencentToken:" + userId, token);
                     Map<String, Object> map1 = new HashMap<>();
                     map1.put("appUser", getAppUserInfo(userId));
                     map1.put("sessionID", sessionID);
                     map1.put("accessToken", token);
-                    map1.put("dollList", doll);
                     map1.put("srsToken", sc);
                     return RespStatus.successs().element("data", map1);
                 } else {
@@ -133,14 +131,12 @@ public class TencentloginController {
                     sc.setTime(time);
                     sc.setToken(SrsSignUtil.genSign(sc, SrsConstants.SRS_CONNECT_KEY));
                     String sessionID = MyUUID.createSessionId();
-                    List<Doll> doll = dollService.getAllDoll();
                     RedisUtil.getRu().set("tencentToken:" + userId, token);
                     RedisUtil.getRu().set("sessionId:appUser:" + userId, sessionID);
                     Map<String, Object> map1 = new HashMap<>();
                     map1.put("appUser", getAppUserInfo(userId));
                     map1.put("sessionID", sessionID);
                     map1.put("accessToken", token);
-                    map1.put("dollList", doll);
                     map1.put("srsToken", sc);
 
                     return RespStatus.successs().element("data", map1);
@@ -184,13 +180,11 @@ public class TencentloginController {
                 sc.setTime(time);
                 sc.setToken(SrsSignUtil.genSign(sc, SrsConstants.SRS_CONNECT_KEY));
                 String sessionID = MyUUID.createSessionId();
-                List<Doll> doll = dollService.getAllDoll();
                 RedisUtil.getRu().set("tencentToken:" + userId, accessToken);
                 RedisUtil.getRu().set("sessionId:appUser:" + userId, sessionID);
                 Map<String, Object> map1 = new HashMap<>();
                 map1.put("appUser", getAppUserInfo(userId));
                 map1.put("sessionID", sessionID);
-                map1.put("dollList", doll);
                 map1.put("accessToken", accessToken);
                 map1.put("srsToken", sc);
                 return RespStatus.successs().element("data", map1);
@@ -203,32 +197,5 @@ public class TencentloginController {
             return RespStatus.fail();
         }
     }
-
-    public static void main(String[] a) {
-        Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-        String dateString = formatter.format(currentTime);
-        String tid = "123";
-        String type = "U";
-        String time = dateString;
-        Map<String, Object> map = new HashMap<>();
-        map.put("expire", 3600);
-        map.put("type", type);
-        map.put("tid", tid);
-        map.put("time", dateString);
-
-        Map<String, Object> sortedParams = new TreeMap<String, Object>(map);
-        Set<Map.Entry<String, Object>> entrys = sortedParams.entrySet();
-        // 遍历排序后的字典，将所有参数按"key=value"格式拼接在一起
-        StringBuilder basestring = new StringBuilder();
-        for (Map.Entry<String, Object> param : entrys) {
-            basestring.append(param.getKey()).append('=').append(param.getValue()).append('&');
-        }
-        basestring.append("key=").append("Pooh4token");
-        System.out.println(basestring);
-        String SRStoken = TokenVerify.md5(basestring.toString());
-        System.out.println(SRStoken);
-    }
-
 
 }

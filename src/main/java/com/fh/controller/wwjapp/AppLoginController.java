@@ -8,6 +8,9 @@ import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.doll.DollManager;
 import com.fh.util.MD5;
 import com.fh.util.wwjUtil.*;
+import com.iot.game.pooh.admin.srs.core.entity.httpback.SrsConnectModel;
+import com.iot.game.pooh.admin.srs.core.util.SrsConstants;
+import com.iot.game.pooh.admin.srs.core.util.SrsSignUtil;
 import net.sf.json.JSONObject;
 import org.apache.ibatis.annotations.Param;
 
@@ -136,29 +139,21 @@ public class AppLoginController {
                     return RespStatus.fail("该用户已经登录");
                 }*/
 
-                String accessToken = "";
-                if (RedisUtil.getRu().exists("accessToken")) {
-                    accessToken = RedisUtil.getRu().get("accessToken");
-                } else {
-                    accessToken = CameraUtils.getAccessToken();
-                }
                 String sessionID = MyUUID.createSessionId();
-                //srstoken
-                Date date = new Date();
-                SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-                String time = format.format(date);
-
-                String token = MD5.md5(time+sessionID+"Pooh4token"+"3600");
-                RedisUtil.getRu().setex("SRStoken",token,3600);
-
-                List<Doll> doll = dollService.getAllDoll();
+                String userId = appUser.getUSER_ID();
+                //SRS推流
+                SrsConnectModel sc = new SrsConnectModel();
+                long time = System.currentTimeMillis();
+                sc.setType("U");
+                sc.setTid(userId);
+                sc.setExpire(3600 * 24);
+                sc.setTime(time);
+                sc.setToken(SrsSignUtil.genSign(sc, SrsConstants.SRS_CONNECT_KEY));
                 RedisUtil.getRu().set("sessionId:appUser:" + appUser.getUSER_ID(), sessionID);
                 Map<String, Object> map = new LinkedHashMap<>();
-                map.put("accessToken", accessToken);
                 map.put("sessionID", sessionID);
                 map.put("appUser", getAppUserInfo(appUser.getUSER_ID()));
-                map.put("dollList", doll);
-                map.put("SRStoken",token);
+                map.put("srsToken", sc);
                 return RespStatus.successs().element("data", map);
             } else {
                 int a1 = appuserService.reg(phone);
@@ -167,20 +162,21 @@ public class AppLoginController {
 
                 }
                 AppUser appUserNew = appuserService.getUserByPhone(phone);
-                String accessToken = "";
-                if (RedisUtil.getRu().exists("accessToken")) {
-                    accessToken = RedisUtil.getRu().get("accessToken");
-                } else {
-                    accessToken = CameraUtils.getAccessToken();
-                }
+                String userId = appUserNew.getUSER_ID();
+                //SRS推流
+                SrsConnectModel sc = new SrsConnectModel();
+                long time = System.currentTimeMillis();
+                sc.setType("U");
+                sc.setTid(userId);
+                sc.setExpire(3600 * 24);
+                sc.setTime(time);
+                sc.setToken(SrsSignUtil.genSign(sc, SrsConstants.SRS_CONNECT_KEY));
                 String sessionID = MyUUID.createSessionId();
-                List<Doll> doll = dollService.getAllDoll();
                 RedisUtil.getRu().set("sessionId:appUser:" + appUserNew.getUSER_ID(), sessionID);
                 Map<String, Object> map = new LinkedHashMap<>();
-                map.put("accessToken", accessToken);
                 map.put("sessionID", sessionID);
                 map.put("appUser", getAppUserInfo(appUserNew.getUSER_ID()));
-                map.put("dollList", doll);
+                map.put("srsToken", sc);
                 return RespStatus.successs().element("data", map);
             }
         } catch (Exception e) {
@@ -203,16 +199,20 @@ public class AppLoginController {
            // String phone = new String(Base64Util.decryptBASE64(aPhone));
             AppUser appUser = appuserService.getUserByID(userId);
             if (appUser != null) {
-                String accessToken = "";
                 String sessionID = MyUUID.createSessionId();
-                String phone =  appUser.getPHONE();
-                RedisUtil.getRu().set("sessionId:appUser:" + phone, sessionID);
-                List<Doll> doll = dollService.getAllDoll();
+                RedisUtil.getRu().set("sessionId:appUser:" + userId, sessionID);
+                //SRS推流
+                SrsConnectModel sc = new SrsConnectModel();
+                long time = System.currentTimeMillis();
+                sc.setType("U");
+                sc.setTid(userId);
+                sc.setExpire(3600 * 24);
+                sc.setTime(time);
+                sc.setToken(SrsSignUtil.genSign(sc, SrsConstants.SRS_CONNECT_KEY));
                 Map<String, Object> map = new LinkedHashMap<>();
-                map.put("accessToken", accessToken);
                 map.put("sessionID", sessionID);
                 map.put("appUser", getAppUserInfo(appUser.getUSER_ID()));
-                map.put("dollList", doll);
+                map.put("srsToken", sc);
                 return RespStatus.successs().element("data", map);
             } else {
                 return RespStatus.fail("此用户尚未注册！");
