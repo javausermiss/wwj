@@ -142,85 +142,30 @@ public class SignController {
 
     /**
      * 连续签到
+     *
      * @param userId
      * @return
      */
     @RequestMapping(value = "/sign", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public JSONObject sign(@RequestParam("userId") String userId) {
+    public JSONObject sign(@RequestParam("userId") String userId,
+                           @RequestParam("signType") String signType
+    ) {
 
         try {
-            Sign signLast = signService.getSignLastByUserId(userId);//查询出用户最近的一条签到记录
-            Date date = new Date();
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-            String dateString = formatter.format(date);
-            String gold = "";
-            Sign s = new Sign();
-            if (signLast == null) {
-                s.setUSERID(userId);
-                s.setSIGNTIME(dateString);
-                s.setCSDATE("1");
-                signService.insertSign(s);
-                AppUser appUser = appuserService.getUserByID(userId);
-                String oldBalance = appUser.getBALANCE();
-                int newBalance = Integer.valueOf(oldBalance) + Integer.valueOf("10");
-                appUser.setBALANCE(String.valueOf(newBalance));
-                appUser.setSIGN_TAG("1");
-                appuserService.updateAppUserSB(appUser);
-                Payment payment = new Payment();
-                payment.setCOST_TYPE("8");
-                payment.setUSERID(userId);
-                payment.setGOLD("+10");
-                payment.setREMARK("签到奖励");
-                paymentService.reg(payment);
+            if (signType.equals("0")) {
+                Sign newSignLast = signService.getSignLastByUserId(userId);
+                Map<String, Object> map = new HashMap<>();
+                map.put("sign", newSignLast);
+                return RespStatus.successs().element("data", map);
             } else {
-                if (signLast.getSIGNTIME().equals(dateString)) {
-                    return RespStatus.fail("已经签到！");
-                }
-                String signday =  signLast.getCSDATE();
-                if (!signday.equals("7")){
-                    switch (signday) {
-                        case "1":
-                            gold = "10";
-                            break;
-                        case "2":
-                            gold = "10";
-                            break;
-                        case "3":
-                            gold = "20";
-                            break;
-                        case "4":
-                            gold = "10";
-                            break;
-                        case "5":
-                            gold = "10";
-                            break;
-                        case "6":
-                            gold = "10";
-                            break;
-                        case "7":
-                            gold = "40";
-                            break;
-                    }
-                    signday = String.valueOf(Integer.valueOf(signday) + 1);
-                    s.setUSERID(userId);
-                    s.setSIGNTIME(dateString);
-                    s.setCSDATE(signday);
-                    signService.insertSign(s);
-                    AppUser appUser = appuserService.getUserByID(userId);
-                    String oldBalance = appUser.getBALANCE();
-                    int newBalance = Integer.valueOf(oldBalance) + Integer.valueOf(gold);
-                    appUser.setBALANCE(String.valueOf(newBalance));
-                    appUser.setSIGN_TAG("1");
-                    appuserService.updateAppUserSB(appUser);
-                    Payment payment = new Payment();
-                    payment.setCOST_TYPE("8");
-                    payment.setUSERID(userId);
-                    payment.setGOLD("+"+gold);
-                    payment.setREMARK("签到奖励");
-                    paymentService.reg(payment);
-
-                }else {
+                Sign signLast = signService.getSignLastByUserId(userId);//查询出用户最近的一条签到记录
+                Date date = new Date();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+                String dateString = formatter.format(date);
+                String gold = "";
+                Sign s = new Sign();
+                if (signLast == null) {
                     s.setUSERID(userId);
                     s.setSIGNTIME(dateString);
                     s.setCSDATE("1");
@@ -237,13 +182,79 @@ public class SignController {
                     payment.setGOLD("+10");
                     payment.setREMARK("签到奖励");
                     paymentService.reg(payment);
-                }
+                } else {
+                    if (signLast.getSIGNTIME().equals(dateString)) {
+                        return RespStatus.fail("已经签到！");
+                    }
+                    String signday = signLast.getCSDATE();
+                    if (!signday.equals("7")) {
+                        switch (signday) {
+                            case "1":
+                                gold = "10";
+                                break;
+                            case "2":
+                                gold = "10";
+                                break;
+                            case "3":
+                                gold = "20";
+                                break;
+                            case "4":
+                                gold = "10";
+                                break;
+                            case "5":
+                                gold = "10";
+                                break;
+                            case "6":
+                                gold = "10";
+                                break;
+                            case "7":
+                                gold = "40";
+                                break;
+                        }
+                        signday = String.valueOf(Integer.valueOf(signday) + 1);
+                        s.setUSERID(userId);
+                        s.setSIGNTIME(dateString);
+                        s.setCSDATE(signday);
+                        signService.insertSign(s);
+                        AppUser appUser = appuserService.getUserByID(userId);
+                        String oldBalance = appUser.getBALANCE();
+                        int newBalance = Integer.valueOf(oldBalance) + Integer.valueOf(gold);
+                        appUser.setBALANCE(String.valueOf(newBalance));
+                        appUser.setSIGN_TAG("1");
+                        appuserService.updateAppUserSB(appUser);
+                        Payment payment = new Payment();
+                        payment.setCOST_TYPE("8");
+                        payment.setUSERID(userId);
+                        payment.setGOLD("+" + gold);
+                        payment.setREMARK("签到奖励");
+                        paymentService.reg(payment);
 
+                    } else {
+                        s.setUSERID(userId);
+                        s.setSIGNTIME(dateString);
+                        s.setCSDATE("1");
+                        signService.insertSign(s);
+                        AppUser appUser = appuserService.getUserByID(userId);
+                        String oldBalance = appUser.getBALANCE();
+                        int newBalance = Integer.valueOf(oldBalance) + Integer.valueOf("10");
+                        appUser.setBALANCE(String.valueOf(newBalance));
+                        appUser.setSIGN_TAG("1");
+                        appuserService.updateAppUserSB(appUser);
+                        Payment payment = new Payment();
+                        payment.setCOST_TYPE("8");
+                        payment.setUSERID(userId);
+                        payment.setGOLD("+10");
+                        payment.setREMARK("签到奖励");
+                        paymentService.reg(payment);
+                    }
+
+                }
+                Sign newSignLast = signService.getSignLastByUserId(userId);
+                Map<String, Object> map = new HashMap<>();
+                map.put("sign", newSignLast);
+                return RespStatus.successs().element("data", map);
             }
-            Sign newSignLast = signService.getSignLastByUserId(userId);
-            Map<String,Object> map = new HashMap<>();
-            map.put("sign",newSignLast);
-            return RespStatus.successs().element("data",map);
+
         } catch (Exception e) {
             e.printStackTrace();
             return RespStatus.fail();
@@ -255,15 +266,15 @@ public class SignController {
      * 定时器。0点刷新用户的签到标签
      */
     @Scheduled(cron = "0 0 0 * * ?")
-    public void flushAppuserSign(){
+    public void flushAppuserSign() {
         try {
-            List<AppUser> list =  appuserService.getAppUserList();
-            for (int i = 0; i <list.size() ; i++) {
-                AppUser appUser =  list.get(i);
+            List<AppUser> list = appuserService.getAppUserList();
+            for (int i = 0; i < list.size(); i++) {
+                AppUser appUser = list.get(i);
                 appUser.setSIGN_TAG("0");
                 appuserService.updateAppUserSign(appUser);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
