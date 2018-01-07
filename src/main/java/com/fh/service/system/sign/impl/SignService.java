@@ -23,4 +23,8 @@ public class SignService implements SignManager{
         return (Sign)dao.findForObject("SignMapper.getSignLastByUserId",userId);
     }
 
+    @Override
+    public int updateSign(Sign sign) throws Exception {
+        return (int)dao.update("SignMapper.updateSign",sign);
+    }
 }

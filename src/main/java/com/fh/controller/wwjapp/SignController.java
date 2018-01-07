@@ -164,8 +164,9 @@ public class SignController {
                     sign.setUSERID(userId);
                     sign.setSIGNTIME(dateString);
                     signService.insertSign(sign);
+                    Sign newSignLast1 = signService.getSignLastByUserId(userId);
                     Map<String, Object> map = new HashMap<>();
-                    map.put("sign", sign);
+                    map.put("sign", newSignLast1);
                     return RespStatus.successs().element("data", map);
                 }
                 Map<String, Object> map = new HashMap<>();
@@ -176,10 +177,8 @@ public class SignController {
                 String gold = "";
                 Sign s = new Sign();
                 if (signLast.getCSDATE().equals("0")) {
-                    s.setUSERID(userId);
-                    s.setSIGNTIME(dateString);
-                    s.setCSDATE("1");
-                    signService.insertSign(s);
+                    signLast.setCSDATE("1");
+                    signService.updateSign(signLast);
                     AppUser appUser = appuserService.getUserByID(userId);
                     String oldBalance = appUser.getBALANCE();
                     int newBalance = Integer.valueOf(oldBalance) + Integer.valueOf("10");

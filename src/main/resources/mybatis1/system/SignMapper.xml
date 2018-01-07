@@ -21,20 +21,25 @@
         select
         s.SIGNID,s.USERID,s.SIGNTIME,s.CSDATE,u.SIGN_TAG
         FROM
-        tb_sign_datail AS s
-        LEFT JOIN
+        tb_sign_datail AS s ,
         sys_app_user AS  u
-        on
-        s.USERID  = u.USER_ID
         where
+        s.USERID  = u.USER_ID
+        AND
         s.USERID = #{USERID}
         ORDER BY
         s.SIGNTIME
         DESC
         limit
         0,1
-
     </select>
 
-
+    <update id="updateSign" parameterType="com.fh.entity.system.Sign">
+        UPDATE
+         tb_sign_datail
+         SET
+       CSDATE = #{CSDATE}
+       WHERE
+       SIGNID =#{SIGNID}
+    </update>
 </mapper>

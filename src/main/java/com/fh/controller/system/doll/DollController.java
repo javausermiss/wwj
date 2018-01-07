@@ -119,10 +119,55 @@ public class DollController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/edit")
-	public ModelAndView edit(HttpServletRequest req) throws Exception{
+	public ModelAndView edit(HttpServletRequest req,
+							 @RequestParam(value = "DOLL_FILE", required = false)CommonsMultipartFile  multipartFile //保存图片文件上传路径
+							 ) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"修改Doll");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
 		ModelAndView mv = this.getModelAndView();
+		//文件上传
+		String fileId="";
+		if (dollService.getDollByID(req.getParameter("DOLL_ID")).getDOLL_URL()==null){
+			try{
+				String newFilename=multipartFile.getOriginalFilename();
+				DiskFileItem fi = (DiskFileItem) multipartFile.getFileItem();
+				File file = fi.getStoreLocation();
+				fileId = FastDFSClient.uploadFile(file, newFilename);
+				logger.info("---------fileId-------------"+fileId);
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}
+			PageData pd = new PageData();
+			//pd = this.getPageData();
+			pd.put("DOLL_ID", req.getParameter("DOLL_ID"));
+			pd.put("DOLL_SN", req.getParameter("DOLL_SN"));
+			pd.put("DOLL_NAME", req.getParameter("DOLL_NAME"));
+			pd.put("DOLL_GOLD", req.getParameter("DOLL_GOLD"));
+			pd.put("DOLL_CONVERSIONGOLD", req.getParameter("DOLL_CONVERSIONGOLD"));
+			pd.put("TOY_ID", req.getParameter("TOY_ID"));
+			//pd.put("DOLL_FILE", req.getParameter("DOLL_FILE"));
+			pd.put("DOLL_URL", fileId);
+			FastDFSClient fastdfsclient = new FastDFSClient();
+
+			String oldFileId = req.getParameter("DOLL_FILE");
+			File file =null;
+			String filePath = "";
+			fastdfsclient.modifyFile(oldFileId, file, filePath);
+
+			dollService.edit(pd);
+			mv.addObject("msg","success");
+			mv.setViewName("save_result");
+			return mv;
+		}
+		try{
+			String newFilename=multipartFile.getOriginalFilename();
+			DiskFileItem fi = (DiskFileItem) multipartFile.getFileItem();
+			File file = fi.getStoreLocation();
+			fileId = FastDFSClient.uploadFile(file, newFilename);
+			logger.info("---------fileId-------------"+fileId);
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
 		PageData pd = new PageData();
 		//pd = this.getPageData();
 		pd.put("DOLL_ID", req.getParameter("DOLL_ID"));
@@ -131,16 +176,16 @@ public class DollController extends BaseController {
 		pd.put("DOLL_GOLD", req.getParameter("DOLL_GOLD"));
 		pd.put("DOLL_CONVERSIONGOLD", req.getParameter("DOLL_CONVERSIONGOLD"));
 		pd.put("TOY_ID", req.getParameter("TOY_ID"));
-		pd.put("DOLL_FILE", req.getParameter("DOLL_FILE"));
+		//pd.put("DOLL_FILE", req.getParameter("DOLL_FILE"));
+		pd.put("DOLL_URL", fileId);
 		
 		FastDFSClient fastdfsclient = new FastDFSClient();
-		
+
 		String oldFileId = req.getParameter("DOLL_FILE");
 		File file =null;
 		String filePath = "";
 		fastdfsclient.modifyFile(oldFileId, file, filePath);
-		
-		
+
 		dollService.edit(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
