@@ -153,7 +153,6 @@ public class DollController extends BaseController {
 			File file =null;
 			String filePath = "";
 			fastdfsclient.modifyFile(oldFileId, file, filePath);
-
 			dollService.edit(pd);
 			mv.addObject("msg","success");
 			mv.setViewName("save_result");

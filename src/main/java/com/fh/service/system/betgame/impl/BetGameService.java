@@ -1,6 +1,7 @@
 package com.fh.service.system.betgame.impl;
 
 import com.fh.dao.DaoSupport;
+import com.fh.entity.Page;
 import com.fh.entity.system.GuessDetailL;
 import com.fh.service.system.betgame.BetGameManager;
 import com.fh.util.PageData;
@@ -15,6 +16,41 @@ public class BetGameService implements BetGameManager {
 
     @Resource(name = "daoSupport")
     private DaoSupport dao;
+
+    /**列表
+     * @param page
+     * @throws Exception
+     */
+    @SuppressWarnings("unchecked")
+    public List<PageData> list(Page page)throws Exception{
+        return (List<PageData>)dao.findForList("GuessDetailMapper.datalistPage", page);
+    }
+
+    /**列表(全部)
+     * @param pd
+     * @throws Exception
+     */
+    @SuppressWarnings("unchecked")
+    public List<PageData> listAll(PageData pd)throws Exception{
+        return (List<PageData>)dao.findForList("GuessDetailMapper.listAll", pd);
+    }
+
+    /**通过id获取数据
+     * @param pd
+     * @throws Exception
+     */
+    public PageData findById(PageData pd)throws Exception{
+        return (PageData)dao.findForObject("GuessDetailMapper.findById", pd);
+    }
+
+    /**批量删除
+     * @param ArrayDATA_IDS
+     * @throws Exception
+     */
+    public void deleteAll(String[] ArrayDATA_IDS)throws Exception{
+        dao.delete("GuessDetailMapper.deleteAll", ArrayDATA_IDS);
+    }
+
     /**
      * 增加竞猜记录
      * @param guessDetailL

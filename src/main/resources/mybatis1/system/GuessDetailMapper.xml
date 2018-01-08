@@ -7,17 +7,82 @@
         TB_DOLL_GUESS_DETAIL
     </sql>
     <sql id="Field">
-        GUESS_ID,
-        APP_USER_ID,
-        DOLL_ID,
-        GUESS_TYPE,
-        GUESS_KEY,
-        GUESS_GOLD,
-        CREATE_DATE,
-        PLAYBACK_ID,
-        SETTLEMENT_FLAG,
-        SETTLEMENT_DATE
+       	GUESS_ID,
+		APP_USER_ID,
+		DOLL_ID,
+		GUESS_TYPE,
+		GUESS_KEY,
+		GUESS_GOLD,
+		CREATE_DATE,
+		PLAYBACK_ID,
+		SETTLEMENT_GOLD,
+		SETTLEMENT_FLAG,
+		SETTLEMENT_DATE,
     </sql>
+
+    <!-- 通过ID获取数据 -->
+    <select id="findById" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where
+        GUESSDETAIL_ID = #{GUESSDETAIL_ID}
+    </select>
+
+    <!-- 列表 -->
+    <select id="datalistPage" parameterType="page" resultType="pd">
+        select
+        g.GUESS_ID,
+        g.APP_USER_ID,
+        g.DOLL_ID,
+        g.GUESS_TYPE,
+        g.GUESS_KEY,
+        g.GUESS_GOLD,
+        g.CREATE_DATE,
+        g.PLAYBACK_ID,
+        g.SETTLEMENT_GOLD,
+        g.SETTLEMENT_FLAG,
+        g.SETTLEMENT_DATE,
+        u.NICKNAME,
+        d.STATE
+        from
+        TB_DOLL_GUESS_DETAIL AS g
+        LEFT JOIN sys_app_user AS  u
+        ON g.APP_USER_ID = u.USER_ID
+        LEFT JOIN tb_doll_play_detail AS d
+        ON g.PLAYBACK_ID = d.GUESS_ID AND g.DOLL_ID = d.DOLLID
+        where 1=1
+        <if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+            and
+            (
+                u.NICKNAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            )
+        </if>
+        ORDER
+        BY
+        g.CREATE_DATE
+        DESC
+    </select>
+
+    <!-- 列表(全部) -->
+    <select id="listAll" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+    </select>
+
+    <!-- 批量删除 -->
+    <delete id="deleteAll" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where
+        GUESSDETAIL_ID in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
 
     <insert id="regGuessDetail" parameterType="com.fh.entity.system.GuessDetailL">
         INSERT INTO

@@ -1,11 +1,37 @@
 package com.fh.service.system.betgame;
 
+import com.fh.entity.Page;
 import com.fh.entity.system.GuessDetailL;
 import com.fh.util.PageData;
 
 import java.util.List;
 
 public interface BetGameManager {
+
+    /**列表
+     * @param page
+     * @throws Exception
+     */
+    public List<PageData> list(Page page)throws Exception;
+
+    /**列表(全部)
+     * @param pd
+     * @throws Exception
+     */
+    public List<PageData> listAll(PageData pd)throws Exception;
+
+    /**通过id获取数据
+     * @param pd
+     * @throws Exception
+     */
+    public PageData findById(PageData pd)throws Exception;
+
+    /**批量删除
+     * @param ArrayDATA_IDS
+     * @throws Exception
+     */
+    public void deleteAll(String[] ArrayDATA_IDS)throws Exception;
+
     /**
      * 增加竞猜记录
      * @param guessDetailL
@@ -74,7 +100,7 @@ public interface BetGameManager {
     
     /**
      * 通过 userId 查询 最新10条竞猜记录
-     * @param guessDetailL
+     * @param userId
      * @return
      * @throws Exception
      */

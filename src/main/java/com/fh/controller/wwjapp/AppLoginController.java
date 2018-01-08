@@ -3,9 +3,11 @@ package com.fh.controller.wwjapp;
 
 import com.fh.entity.system.AppUser;
 import com.fh.entity.system.Doll;
+import com.fh.entity.system.Payment;
 import com.fh.service.system.appuser.AppuserManager;
 
 import com.fh.service.system.doll.DollManager;
+import com.fh.service.system.payment.PaymentManager;
 import com.fh.util.MD5;
 import com.fh.util.wwjUtil.*;
 import com.iot.game.pooh.admin.srs.core.entity.httpback.SrsConnectModel;
@@ -39,6 +41,9 @@ public class AppLoginController {
 
     @Resource(name = "dollService")
     private DollManager dollService;
+
+    @Resource(name = "paymentService")
+    private PaymentManager paymentService;
 
     /**
      * 个人信息
@@ -163,6 +168,13 @@ public class AppLoginController {
                 }
                 AppUser appUserNew = appuserService.getUserByPhone(phone);
                 String userId = appUserNew.getUSER_ID();
+                //增加赠送金币明细
+                Payment payment = new Payment();
+                payment.setREMARK("注册赠送");
+                payment.setGOLD("+60");
+                payment.setCOST_TYPE("9");
+                payment.setUSERID(userId);
+                paymentService.reg(payment);
                 //SRS推流
                 SrsConnectModel sc = new SrsConnectModel();
                 long time = System.currentTimeMillis();
