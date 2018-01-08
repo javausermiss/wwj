@@ -46,7 +46,7 @@ public class TokenVerify {
             String signatrue = md5(TokenVerify.getSignature(timestamp, ckeyH5, cidH5, acctoken));
             System.out.println(signatrue);
             //HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost("http://test.api.hxwolf.com:7002/userVisit?" + "cid=" + cidH5 +
+            HttpPost httpPost = new HttpPost("http://domestic.apitest.hxwolf.com:7002/userVisit?" + "cid=" + cidH5 +
                     "&timestamp=" + timestamp + "&access_token=" + acctoken + "&signatrue=" + signatrue);
             httpPost.addHeader("Content-type", "application/x-www-form-urlencoded");
             CloseableHttpResponse response = httpClient.execute(httpPost);

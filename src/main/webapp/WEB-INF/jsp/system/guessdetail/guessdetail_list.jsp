@@ -102,7 +102,7 @@
 											<td class='center'>
 												<c:if test="${var.GUESS_KEY == var.GUESS_TYPE &&(var.GUESS_TYPE == '0'||var.GUESS_TYPE == '1')  }">中</c:if>
 												<c:if test="${var.GUESS_KEY != var.GUESS_TYPE &&(var.GUESS_TYPE == '0'||var.GUESS_TYPE == '1')  }">不中</c:if>
-												<c:if test="${var.GUESS_TYPE == '-1' }">流局</c:if>
+												<c:if test="${var.GUESS_TYPE == '-1'|| var.GUESS_TYPE == '-0' }">流局</c:if>
 											</td>
 											<td class='center'>${var.GUESS_GOLD}</td>
 											<td class='center'>${var.CREATE_DATE}</td>

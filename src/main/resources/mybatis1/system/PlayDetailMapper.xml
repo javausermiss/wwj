@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="PlayDetailMapper">
-	
-	<!--表名 -->
-	<sql id="tableName">
+
+    <!--表名 -->
+    <sql id="tableName">
 		TB_DOLL_PLAY_DETAIL
 	</sql>
-	
-	<!-- 字段 -->
-	<sql id="Field">
+
+    <!-- 字段 -->
+    <sql id="Field">
 		USERID,	
 		DOLLID,	
 		DOLL_NAME,
@@ -17,9 +17,9 @@
 		CREATE_DATE,
 		ID
 	</sql>
-	
-	<!-- 字段值 -->
-	<sql id="FieldValue">
+
+    <!-- 字段值 -->
+    <sql id="FieldValue">
 		#{USERID},	
 		#{DOLLID},	
 		#{DOLL_NAME},	
@@ -27,82 +27,82 @@
 		#{CREATE_DATE},	
 		#{ID}
 	</sql>
-	
-	<!-- 新增-->
-	<insert id="save" parameterType="pd">
-		insert into 
-	<include refid="tableName"></include>
-		(
-	<include refid="Field"></include>
-		) values (
-	<include refid="FieldValue"></include>
-		)
-	</insert>
-	
-	<!-- 修改 -->
-	<update id="edit" parameterType="pd">
-		update
-		<include refid="tableName"></include>
-		set 
-			USERID = #{USERID},
-			DOLLID = #{DOLLID},
-			DOLL_NAME = #{DOLL_NAME_},
-			STATE = #{STATE},
-			CREATE_DATE = #{CREATE_DATE},
-		ID = ID
-		where 
-		ID = #{ID}
-	</update>
-	
-	<!-- 通过ID获取数据 -->
-	<select id="findById" parameterType="pd" resultType="pd">
-		select 
-		<include refid="Field"></include>
-		from 
-		<include refid="tableName"></include>
-		where 
-			ID = #{ID}
-	</select>
-	
-	<!-- 列表 -->
-	<select id="datalistPage" parameterType="page" resultType="pd">
-		select
-		c.USERID,	
-		c.DOLLID,	
-		c.DOLL_NAME_,
-		c.STATE,	
-		c.CREATE_DATE,
-		c.ID,	
-		d.NICKNAME,
-		e.DOLL_NAME
-		from 
-		TB_DOLL_PLAY_DETAIL c
-		LEFT JOIN SYS_APP_USER d on d.USER_ID=c.USERID 
-		LEFT JOIN SYS_APP_DOLL e on e.DOLL_ID=c.DOLLID 
-		where 1=1
-		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
-			and(
-			d.NICKNAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
-			or
-			e.DOLL_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
-			)
-		</if>
-		<if test="pd.STATE != null and pd.STATE != ''"><!-- 状态检索 -->
+
+    <!-- 新增-->
+    <insert id="save" parameterType="pd">
+        insert into
+        <include refid="tableName"></include>
+        (
+        <include refid="Field"></include>
+        ) values (
+        <include refid="FieldValue"></include>
+        )
+    </insert>
+
+    <!-- 修改 -->
+    <update id="edit" parameterType="pd">
+        update
+        <include refid="tableName"></include>
+        set
+        USERID = #{USERID},
+        DOLLID = #{DOLLID},
+        DOLL_NAME = #{DOLL_NAME_},
+        STATE = #{STATE},
+        CREATE_DATE = #{CREATE_DATE},
+        ID = ID
+        where
+        ID = #{ID}
+    </update>
+
+    <!-- 通过ID获取数据 -->
+    <select id="findById" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where
+        ID = #{ID}
+    </select>
+
+    <!-- 列表 -->
+    <select id="datalistPage" parameterType="page" resultType="pd">
+        select
+        c.USERID,
+        c.DOLLID,
+        c.DOLL_NAME_,
+        c.STATE,
+        c.CREATE_DATE,
+        c.ID,
+        d.NICKNAME,
+        e.DOLL_NAME
+        from
+        TB_DOLL_PLAY_DETAIL c
+        LEFT JOIN SYS_APP_USER d on d.USER_ID=c.USERID
+        LEFT JOIN SYS_APP_DOLL e on e.DOLL_ID=c.DOLLID
+        where 1=1
+        <if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+            and(
+            d.NICKNAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            or
+            e.DOLL_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            )
+        </if>
+        <if test="pd.STATE != null and pd.STATE != ''"><!-- 状态检索 -->
             and c.STATE = #{pd.STATE}
         </if>
-	</select>	
-	
-	
-	<!-- 列表(全部) -->
-	<select id="listAll" parameterType="pd" resultType="pd">
-		select
-		<include refid="Field"></include>
-		from 
-		<include refid="tableName"></include>
-	</select>
-	
-	
-	<insert id="reg" parameterType="com.fh.entity.system.PlayDetail">
+    </select>
+
+
+    <!-- 列表(全部) -->
+    <select id="listAll" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+    </select>
+
+
+    <insert id="reg" parameterType="com.fh.entity.system.PlayDetail">
         INSERT INTO
         TB_DOLL_PLAY_DETAIL
         (
@@ -200,7 +200,7 @@
         WHERE
         ID = #{ID}
     </update>
-        <!--获取玩家的抓中记录信息-->
+    <!--获取玩家的抓中记录信息-->
     <select id="getPlaylist" parameterType="String" resultType="com.fh.entity.system.PlayDetail">
             select
             d.DOLL_NAME, d.doll_url, dd.ID, dd.USERID, dd.GUESS_ID, dd.DOLLID, dd.STATE, dd.CREATE_DATE, dd.GOLD, dd.CAMERA_DATE,
@@ -217,7 +217,7 @@
     </select>
 
     <!--查询用户分组抓到的娃娃的数量-->
-    <select id="getDollCount" parameterType="String" resultType="com.fh.entity.system.PlayDetail">
+   <!-- <select id="getDollCount" parameterType="String" resultType="com.fh.entity.system.PlayDetail">
         select
         dd.userid ,dd.conversiongold ,u.nickname,d.doll_name,count(*) AS COUNT
         from
@@ -225,7 +225,7 @@
         inner join  sys_app_doll as d on d.doll_id = dd.dollid
         inner join sys_app_user as u on u.user_id = dd.userid
         where u.user_id = #{USERID}
-        and state = '1'
+        and dd.state = '1'
         and DOLLID
         in
         (
@@ -235,7 +235,24 @@
         group by DOLLID
         )
         group by
-        DOLLID
+    </select>-->
+
+    <select id="getDollCount" parameterType="String" resultType="com.fh.entity.system.PlayDetail">
+       SELECT D.*,
+                ad.DOLL_NAME,
+                au.CNEE_NAME from (
+				select  t.DOLLID,
+						t.USERID,
+						t.CONVERSIONGOLD,
+						COUNT(1) as COUNT from
+						tb_doll_play_detail t
+						where  t.USERID=#{ USERID}
+						AND t.state = '1'
+						group by  DOLLID,USERID,CONVERSIONGOLD
+        ) d,sys_app_doll ad,sys_app_user au
+        WHERE ad.DOLL_ID=d.DOLLID
+        and au.USER_ID=d.USERID
+        and d.USERID=#{ USERID}
     </select>
 
 
@@ -257,7 +274,7 @@
     </select>
 
 
-    <update id="updatePostState" parameterType="com.fh.entity.system.PlayDetail" >
+    <update id="updatePostState" parameterType="com.fh.entity.system.PlayDetail">
         UPDATE
         tb_doll_play_detail
         SET

@@ -334,7 +334,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                         payment.setREMARK("流局返款");
                         paymentService.reg(payment);
                         //更改竞猜记录
-                        guessDetailL.setGUESS_TYPE("-1");//流局标识 -1
+                        guessDetailL.setGUESS_TYPE("-0");//流局标识 -1
                         guessDetailL.setSETTLEMENT_FLAG("Y");//结算
                         guessDetailL.setSETTLEMENT_GOLD(Integer.valueOf(gold));
                         betGameService.updateGuessDetail(guessDetailL);
@@ -369,7 +369,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                         payment.setREMARK("流局返款");
                         paymentService.reg(payment);
                         //更改竞猜记录
-                        guessDetailL.setGUESS_TYPE("-1");//流局标识 -1
+                        guessDetailL.setGUESS_TYPE("-0");//流局标识 -1
                         guessDetailL.setSETTLEMENT_FLAG("Y");//结算
                         guessDetailL.setSETTLEMENT_GOLD(Integer.valueOf(gold));
                         betGameService.updateGuessDetail(guessDetailL);
@@ -472,7 +472,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
             List<GuessDetailL> list = betGameService.getAllGuesser(playDetail.getGUESS_ID());
             for (int i = 0; i < list.size(); i++) {
                 GuessDetailL guessDetailL = list.get(i);
-                guessDetailL.setGUESS_TYPE("-1");
+                guessDetailL.setGUESS_TYPE("-2");
                 guessDetailL.setSETTLEMENT_FLAG("Y");
                 betGameService.updateGuessDetail(guessDetailL);
                 AppUser appUser1 = appuserService.getUserByID(guessDetailL.getAPP_USER_ID());
