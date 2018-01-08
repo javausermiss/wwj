@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.DoubleToLongFunction;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.entity.system.Doll;
 import com.fh.service.system.doll.DollManager;
 import com.fh.service.system.doll.DollToyManager;
 import com.fh.util.AppUtil;
@@ -125,66 +125,44 @@ public class DollController extends BaseController {
 		logBefore(logger, Jurisdiction.getUsername()+"修改Doll");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
 		ModelAndView mv = this.getModelAndView();
-		//文件上传
+		
+		//获取当前编辑的对象
+		Doll doll=dollService.getDollByID(req.getParameter("DOLL_ID"));
+		
+		//上传的文件
+		String newFilename=multipartFile.getOriginalFilename();
+		DiskFileItem fi = (DiskFileItem) multipartFile.getFileItem();
+		File file = fi.getStoreLocation();
+		
+		
+		//文件上传，编辑操作
 		String fileId="";
-		if (dollService.getDollByID(req.getParameter("DOLL_ID")).getDOLL_URL()==null){
+		if (doll !=null && doll.getDOLL_URL()==null){
 			try{
-				String newFilename=multipartFile.getOriginalFilename();
-				DiskFileItem fi = (DiskFileItem) multipartFile.getFileItem();
-				File file = fi.getStoreLocation();
 				fileId = FastDFSClient.uploadFile(file, newFilename);
 				logger.info("---------fileId-------------"+fileId);
 			}catch(Exception ex){
 				ex.printStackTrace();
 			}
-			PageData pd = new PageData();
-			//pd = this.getPageData();
-			pd.put("DOLL_ID", req.getParameter("DOLL_ID"));
-			pd.put("DOLL_SN", req.getParameter("DOLL_SN"));
-			pd.put("DOLL_NAME", req.getParameter("DOLL_NAME"));
-			pd.put("DOLL_GOLD", req.getParameter("DOLL_GOLD"));
-			pd.put("DOLL_CONVERSIONGOLD", req.getParameter("DOLL_CONVERSIONGOLD"));
-			pd.put("TOY_ID", req.getParameter("TOY_ID"));
-			//pd.put("DOLL_FILE", req.getParameter("DOLL_FILE"));
-			pd.put("DOLL_URL", fileId);
-			FastDFSClient fastdfsclient = new FastDFSClient();
-
-			String oldFileId = req.getParameter("DOLL_FILE");
-			File file =null;
-			String filePath = "";
-			fastdfsclient.modifyFile(oldFileId, file, filePath);
-			dollService.edit(pd);
-			mv.addObject("msg","success");
-			mv.setViewName("save_result");
-			return mv;
+		}else{
+			 //判断当前文件是否为空
+			if(file !=null && !multipartFile.isEmpty() && multipartFile.getSize() >0){
+				fileId = FastDFSClient.modifyFile(doll.getDOLL_URL(), file, newFilename);
+			}else{
+				//
+				fileId=doll.getDOLL_URL();
+			}
 		}
-		try{
-			String newFilename=multipartFile.getOriginalFilename();
-			DiskFileItem fi = (DiskFileItem) multipartFile.getFileItem();
-			File file = fi.getStoreLocation();
-			fileId = FastDFSClient.uploadFile(file, newFilename);
-			logger.info("---------fileId-------------"+fileId);
-		}catch(Exception ex){
-			ex.printStackTrace();
-		}
+		
+		//更新数据
 		PageData pd = new PageData();
-		//pd = this.getPageData();
 		pd.put("DOLL_ID", req.getParameter("DOLL_ID"));
 		pd.put("DOLL_SN", req.getParameter("DOLL_SN"));
 		pd.put("DOLL_NAME", req.getParameter("DOLL_NAME"));
 		pd.put("DOLL_GOLD", req.getParameter("DOLL_GOLD"));
 		pd.put("DOLL_CONVERSIONGOLD", req.getParameter("DOLL_CONVERSIONGOLD"));
 		pd.put("TOY_ID", req.getParameter("TOY_ID"));
-		//pd.put("DOLL_FILE", req.getParameter("DOLL_FILE"));
 		pd.put("DOLL_URL", fileId);
-		
-		FastDFSClient fastdfsclient = new FastDFSClient();
-
-		String oldFileId = req.getParameter("DOLL_FILE");
-		File file =null;
-		String filePath = "";
-		fastdfsclient.modifyFile(oldFileId, file, filePath);
-
 		dollService.edit(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
