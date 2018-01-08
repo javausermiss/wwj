@@ -355,7 +355,7 @@ public class AppUserBalanceController {
                 appuserService.updateAppUserBalanceById(appUser);
                 //更新收支表
                 Payment payment = new Payment();
-                payment.setGOLD(rechare);
+                payment.setGOLD("+"+rechare);
                 payment.setUSERID(o.getUSER_ID());
                 payment.setDOLLID(null);
                 payment.setCOST_TYPE("5");
@@ -363,7 +363,7 @@ public class AppUserBalanceController {
                 paymentService.reg(payment);
                 //奖励记录
                 Payment payment1 = new Payment();
-                payment1.setGOLD(award);
+                payment1.setGOLD("+"+award);
                 payment1.setUSERID(o.getUSER_ID());
                 payment1.setDOLLID(null);
                 payment1.setCOST_TYPE("9");
