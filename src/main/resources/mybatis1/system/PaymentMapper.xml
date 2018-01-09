@@ -97,7 +97,38 @@
         select * from tb_appuser_payment where userid = #{USERID} order by create_time desc ;
     </select>
     
-    
-    
 
+	  
+	<select id="getRechargeCount" parameterType="pd" resultType="pd">
+    SELECT 
+    	DATE_FORMAT(t.CREATE_TIME,'%Y-%m-%d') as CREATE_TIME,
+    	COUNT(1) as COUNT 
+    	FROM TB_APPUSER_PAYMENT t 
+    	where t.COST_TYPE='5'
+    	  <if test="lastStart != null and lastStart != ''">
+             and date_format(t.CREATE_TIME,'%Y-%m-%d') &gt;= str_to_date(#{lastStart}, '%Y-%m-%d %H:%i:%s')
+         </if>
+         <if test="lastEnd != null and lastEnd != ''">
+             and date_format(t.CREATE_TIME,'%Y-%m-%d') &lt;= str_to_date(#{lastEnd}, '%Y-%m-%d %H:%i:%s')
+         </if>
+		GROUP BY  date_format(t.CREATE_TIME,'%Y-%m-%d')
+	    ORDER BY  date_format(t.CREATE_TIME,'%Y-%m-%d')
+	  </select>
+
+
+    <select id="getRemainCount" parameterType="pd" resultType="pd">
+    	SELECT 
+    	DATE_FORMAT(t.CREATE_TIME,'%Y-%m-%d') as CREATE_TIME,
+    	COUNT(1) as COUNT 
+    	FROM TB_APPUSER_PAYMENT t 
+    	where (t.COST_TYPE='0' or t.COST_TYPE='1')
+    	  <if test="lastStart != null and lastStart != ''">
+             and  date_format(t.CREATE_TIME,'%Y-%m-%d') &gt;= str_to_date(#{lastStart}, '%Y-%m-%d %H:%i:%s')
+         </if>
+         <if test="lastEnd != null and lastEnd != ''">
+             AND date_format(t.CREATE_TIME,'%Y-%m-%d') &lt;= str_to_date(#{lastEnd}, '%Y-%m-%d %H:%i:%s')
+         </if>
+		GROUP BY  date_format(t.CREATE_TIME,'%Y-%m-%d')
+	    ORDER BY  date_format(t.CREATE_TIME,'%Y-%m-%d')
+	  </select>
 </mapper>

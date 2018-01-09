@@ -45,4 +45,25 @@ public class PaymentService implements PaymentManager {
 	public List<Payment> getPaymenlist(String userId) throws Exception {
 		return (List<Payment>)dao.findForList("paymentMapper.getPaymenlist",userId);
 	}
+	
+	 /**
+	  * 获取用户的充值统计
+	  * @param pd
+	  * @return
+	  * @throws Exception
+	  */
+	public List<PageData> getRechargeCount(PageData pd)throws Exception{
+		 return (List<PageData>)dao.findForList("paymentMapper.getRechargeCount",pd);
+	 }
+	 
+	 
+	 /**
+	  * 获取单日留存用户
+	  * @param pd
+	  * @return
+	  * @throws Exception
+	  */
+	public List<PageData> getRemainCount(PageData pd)throws Exception{
+		 return (List<PageData>)dao.findForList("paymentMapper.getRemainCount",pd);
+	 }
 }

@@ -1,5 +1,7 @@
 package com.fh.util;
 
+import org.slf4j.LoggerFactory;
+
 /** 
  * 说明：日志处理
  * 创建人：FH Q313596790
@@ -8,14 +10,14 @@ package com.fh.util;
  */
 public class Logger {
 
-	private org.apache.log4j.Logger logger;
+	private org.slf4j.Logger logger;
 
 	
 	/**
 	 * 构造方法，初始化Log4j的日志对象
 	 */
-	private Logger(org.apache.log4j.Logger log4jLogger) {
-		logger = log4jLogger;
+	private Logger(org.slf4j.Logger logger) {
+		this.logger = logger;
 	}
 
 
@@ -26,7 +28,7 @@ public class Logger {
      * @return Logger对象
      */
 	public static Logger getLogger(Class classObject) {
-		return new Logger(org.apache.log4j.Logger.getLogger(classObject));
+		return new Logger(LoggerFactory.getLogger(classObject));
 	}
 
     /**
@@ -36,50 +38,38 @@ public class Logger {
      * @return Logger对象
      */
 	public static Logger getLogger(String loggerName) {
-		return new Logger(org.apache.log4j.Logger.getLogger(loggerName));
+		return new Logger(LoggerFactory.getLogger(loggerName));
 	}
 
-	public void debug(Object object) {
-		logger.debug(object);
+	public void info(String str) {
+		logger.info(str);
+	}
+	
+	public void info(String str,Throwable e) {
+		logger.info(str,e);
 	}
 
-	public void debug(Object object, Throwable e) {
-		logger.debug(object, e);
+	public void warn(String str) {
+		logger.warn(str);
 	}
 
-	public void info(Object object) {
-		logger.info(object);
+	public void warn(String str, Throwable e) {
+		logger.warn(str, e);
 	}
 
-	public void info(Object object, Throwable e) {
-		logger.info(object, e);
+	public void error(String str) {
+		logger.error(str);
 	}
-
-	public void warn(Object object) {
-		logger.warn(object);
-	}
-
-	public void warn(Object object, Throwable e) {
-		logger.warn(object, e);
-	}
-
-	public void error(Object object) {
-		logger.error(object);
-	}
-
-	public void error(Object object, Throwable e) {
-		logger.error(object, e);
-	}
-
-	public void fatal(Object object) {
-		logger.fatal(object);
+	
+	public void error(String str, Throwable e) {
+		logger.error(str,e);
 	}
 
 	public String getName() {
 		return logger.getName();
 	}
 
-	public org.apache.log4j.Logger getLog4jLogger() {
+	public org.slf4j.Logger getLog4jLogger() {
 		return logger;
 	}
 
