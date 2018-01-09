@@ -177,6 +177,21 @@ public class DateUtil {
     }
     
     /**
+     * 获取当前日期，月变化的时间字符串
+     * @param months
+     * @return
+     */
+    public static String getCalendarByMonths(int months){
+    	Calendar canlendar = Calendar.getInstance(); // java.util包
+    	canlendar.setTime(new Date());
+    	canlendar.add(Calendar.MONTH, -1);
+    	Date m = canlendar.getTime();
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    	String mon = format.format(m);
+    	return mon;
+    }
+    
+    /**
      * 得到n天之后是周几
      * @param days
      * @return

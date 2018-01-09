@@ -34,5 +34,22 @@ public interface PaymentManager {
 	 */
 	 List<Payment> getPaymenlist (String userId)throws Exception;
 
+	 
+	 /**
+	  * 获取用户的充值统计
+	  * @param pd
+	  * @return
+	  * @throws Exception
+	  */
+	 List<PageData> getRechargeCount(PageData pd)throws Exception;
+	 
+	 
+	 /**
+	  * 获取单日留存用户
+	  * @param pd
+	  * @return
+	  * @throws Exception
+	  */
+	 List<PageData> getRemainCount(PageData pd)throws Exception;
 
 }
