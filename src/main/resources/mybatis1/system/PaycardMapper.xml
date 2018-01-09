@@ -1,7 +1,108 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="paycardMapper">
+<mapper namespace="PaycardMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+        SYS_APP_PAYCARD
+    </sql>
+
+    <!-- 字段 -->
+    <sql id="Field">
+        ID,
+        AMOUNT,
+        GOLD,
+        DISCOUNT,
+        IMAGEURL
+    </sql>
+
+    <!-- 字段值 -->
+    <sql id="FieldValue">
+        #{ID},
+        #{AMOUNT},
+        #{GOLD},
+        #{DISCOUNT},
+        #{IMAGEURL}
+    </sql>
+
+    <!-- 新增-->
+    <insert id="save" parameterType="pd">
+        insert into
+        <include refid="tableName"/>
+        (
+        AMOUNT,
+        GOLD,
+        DISCOUNT,
+        IMAGEURL
+        ) values (
+        #{AMOUNT},
+        #{GOLD},
+        #{DISCOUNT},
+        #{IMAGEURL}
+        )
+    </insert>
+
+    <!-- 删除-->
+    <delete id="delete" parameterType="pd">
+        delete from
+        <include refid="tableName"/>
+        where
+        ID = #{ID}
+    </delete>
+
+    <!-- 修改 -->
+    <update id="edit" parameterType="pd">
+        update
+        <include refid="tableName"/>
+        set
+        AMOUNT = #{AMOUNT},
+        GOLD = #{GOLD},
+        DISCOUNT = #{DISCOUNT},
+        IMAGEURL = #{IMAGEURL}
+        where
+        ID = #{ID}
+    </update>
+
+    <!-- 通过ID获取数据 -->
+    <select id="findById" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"/>
+        from
+        <include refid="tableName"/>
+        where
+        ID = #{ID}
+    </select>
+
+    <!-- 列表 -->
+    <select id="datalistPage" parameterType="page" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where 1=1
+    </select>
+
+    <!-- 列表(全部) -->
+    <select id="listAll" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+    </select>
+
+    <!-- 批量删除 -->
+    <delete id="deleteAll" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where
+        ID in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
 
     <select id="getPayCard" resultType="com.fh.entity.system.Paycard">
         SELECT * FROM  sys_app_paycard
@@ -10,6 +111,11 @@
     <select id="getGold" parameterType="String" resultType="com.fh.entity.system.Paycard">
         SELECT * FROM sys_app_paycard where amount = #{AMOUNT}
     </select>
+
+    <select id="getPayCardById" parameterType="String" resultType="com.fh.entity.system.Paycard">
+        SELECT * FROM sys_app_paycard where ID = #{ID}
+    </select>
+
 
 
 </mapper>

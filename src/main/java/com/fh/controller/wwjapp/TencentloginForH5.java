@@ -79,10 +79,9 @@ public class TencentloginForH5 {
                 if (code.equals("SUCCESS")) {
                     AppUser appUser1 = new AppUser();
                     if (imageUrl == null||imageUrl.equals("") ) {
-//                        imageUrl = "/default.png";
                         imageUrl = PropertiesUtils.getCurrProperty("user.default.header.url"); //默认头像
                     }
-                   // String newFace = FaceImageUtil.downloadImage(imageUrl);
+
                     appUser1.setNICKNAME(nickname);
                     appUser1.setIMAGE_URL(imageUrl);
                     appUser1.setUSER_ID(userId);

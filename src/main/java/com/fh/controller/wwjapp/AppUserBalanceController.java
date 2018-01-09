@@ -9,6 +9,7 @@ import com.fh.service.system.payment.PaymentManager;
 import com.fh.service.system.playback.PlayBackManage;
 import com.fh.service.system.playdetail.PlayDetailManage;
 import com.fh.service.system.pond.PondManager;
+import com.fh.util.PropertiesUtils;
 import com.fh.util.wwjUtil.MyUUID;
 import com.fh.util.wwjUtil.RedisUtil;
 import com.fh.util.wwjUtil.RespStatus;
@@ -28,8 +29,8 @@ import java.util.*;
 @Controller
 @RequestMapping(value = "/pay")
 public class AppUserBalanceController {
-    private final String ckey = "y3WfBKF1FY4=";
 
+  //  private final String ckey = "y3WfBKF1FY4=";
     @Resource(name = "appuserService")
     private AppuserManager appuserService;
 
@@ -248,6 +249,7 @@ public class AppUserBalanceController {
     ) {
         try {
             Order o = orderTestService.getOrderById(out_trade_no);
+            String ckey = PropertiesUtils.getCurrProperty("pay.ckey");
             if (o == null) {
                 return "there is no order";
             }

@@ -1,9 +1,11 @@
 package com.fh.controller.wwjapp;
 
 import com.fh.entity.system.AppUser;
+import com.fh.entity.system.AppuserLogin;
 import com.fh.entity.system.Doll;
 import com.fh.entity.system.Payment;
 import com.fh.service.system.appuser.AppuserManager;
+import com.fh.service.system.appuserlogininfo.AppuserLoginInfoManager;
 import com.fh.service.system.doll.DollManager;
 import com.fh.service.system.payment.PaymentManager;
 import com.fh.util.PropertiesUtils;
@@ -34,6 +36,9 @@ public class TencentloginController {
 
     @Resource(name = "paymentService")
     private PaymentManager paymentService;
+
+    @Resource(name="appuserlogininfoService")
+    private AppuserLoginInfoManager appuserlogininfoService;
 
     /**
      * 个人信息
@@ -103,6 +108,11 @@ public class TencentloginController {
                     payment.setCOST_TYPE("9");
                     payment.setUSERID(userId);
                     paymentService.reg(payment);
+                    //登录日志
+                    AppuserLogin appuserLogin = new AppuserLogin();
+                    appuserLogin.setAPPUSERLOGININFO_ID(MyUUID.getUUID32());
+                    appuserLogin.setUSER_ID(userId);
+                    appuserlogininfoService.insertLoginLog(appuserLogin);
                     //SRS推流
                     SrsConnectModel sc = new SrsConnectModel();
                     long time = System.currentTimeMillis();
@@ -127,13 +137,17 @@ public class TencentloginController {
                 String code = TokenVerify.verify(token);
                 if (code.equals("SUCCESS")) {
                     if (imageUrl == null || imageUrl.equals("")) {
-//                        imageUrl = "/default.png";
                         imageUrl = PropertiesUtils.getCurrProperty("user.default.header.url"); //默认头像
                     }
                     String newFace = FaceImageUtil.downloadImage(imageUrl);
                     appUser.setNICKNAME(nickname);
                     appUser.setIMAGE_URL(newFace);
                     appuserService.updateTencentUser(appUser);
+                    //登录日志
+                    AppuserLogin appuserLogin = new AppuserLogin();
+                    appuserLogin.setAPPUSERLOGININFO_ID(MyUUID.getUUID32());
+                    appuserLogin.setUSER_ID(userId);
+                    appuserlogininfoService.insertLoginLog(appuserLogin);
                     //SRS推流
                     SrsConnectModel sc = new SrsConnectModel();
                     long time = System.currentTimeMillis();
@@ -183,6 +197,11 @@ public class TencentloginController {
                 if (appuserService.getUserByID(userId) == null) {
                     return RespStatus.fail("用户不存在");
                 }
+                //登录日志
+                AppuserLogin appuserLogin = new AppuserLogin();
+                appuserLogin.setAPPUSERLOGININFO_ID(MyUUID.getUUID32());
+                appuserLogin.setUSER_ID(userId);
+                appuserlogininfoService.insertLoginLog(appuserLogin);
                 //SRS推流
                 SrsConnectModel sc = new SrsConnectModel();
                 long time = System.currentTimeMillis();
@@ -209,5 +228,6 @@ public class TencentloginController {
             return RespStatus.fail();
         }
     }
+
 
 }
