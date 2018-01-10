@@ -4,17 +4,19 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import com.fh.entity.system.AppUser;
-import com.fh.entity.system.Doll;
-import com.fh.util.DateUtil;
-import com.fh.util.wwjUtil.AppUserNameUtil;
-import com.fh.util.wwjUtil.MyUUID;
 import org.springframework.stereotype.Service;
 
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
+import com.fh.entity.system.AppUser;
+import com.fh.entity.system.Payment;
 import com.fh.service.system.appuser.AppuserManager;
+import com.fh.service.system.payment.PaymentManager;
+import com.fh.util.Const;
+import com.fh.util.NumberUtils;
 import com.fh.util.PageData;
+import com.fh.util.StrUtil;
+import com.fh.util.wwjUtil.MyUUID;
 
 
 /**类名称：AppuserService
@@ -26,6 +28,10 @@ public class AppuserService implements AppuserManager{
 
 	@Resource(name = "daoSupport")
 	private DaoSupport dao;
+	
+	
+    @Resource(name = "paymentService")
+    private PaymentManager paymentService;
 	
 	/**列出某角色下的所有会员
 	 * @param pd
@@ -284,6 +290,94 @@ public class AppuserService implements AppuserManager{
 	@Override
 	public int updateAppUserSign(AppUser appUser) throws Exception {
 		return (int)dao.update("AppuserMapper.updateAppUserSign",appUser);
+	}
+	
+	
+
+    /**
+     * 修改账户金币
+     * @param userId appUser.userId 用户对象主键
+     * @param operNum 操作的数量
+     * @param operType A:add,加; S:sub,减
+     * @param operMenu 操作的枚举
+     * @return
+     */
+    public int updateUserBalance(String userId,int operNum,String operType,Const.PlayMentCostType operMenu) throws Exception{
+    	
+    	int oper=0;
+    	AppUser appUser=this.getUserAppById(userId);
+    	//step1 判断用户是否存在
+    	if(appUser ==null){
+    		return 0;
+    	}
+    	if(StrUtil.isNullOrEmpty(appUser.getUSER_ID())){
+    		return 0;
+    	}
+    	if(StrUtil.isNullOrEmpty(appUser.getBALANCE())){
+    		appUser.setBALANCE("0");
+    	}
+    	//step2  判断金额
+    	if(operNum<=0){
+    		return 0;
+    	}
+    	
+    	//step3  判断追加类型
+    	String operGlod="0";
+    	if(StrUtil.isNullOrEmpty(operType)){
+    		return 0;
+    	}else{
+    		String newBalance=appUser.getBALANCE();
+    		if("A".equals(operType)){
+    			operGlod="+"+operNum;
+    			newBalance=NumberUtils.add(appUser.getBALANCE(), String.valueOf(operNum));
+    		}else if("S".equals(operType)){
+    			operGlod="-"+operNum;
+    			newBalance=NumberUtils.sub(appUser.getBALANCE(), String.valueOf(operNum));
+    		}
+    		appUser.setBALANCE(newBalance);
+    		
+    	}
+    	
+    	
+    	//step4 判断操作类型
+    	if(operMenu==null){
+    		return 0;
+    	}
+    	
+    	
+    	//step5 记录交易明细
+        Payment payment = new Payment();
+        payment.setCOST_TYPE(operMenu.getValue());
+        payment.setUSERID(appUser.getUSER_ID());
+        payment.setGOLD(operGlod);
+        payment.setREMARK(operMenu.getName());
+        paymentService.reg(payment);
+    	
+        
+        //修改金额余额
+        oper=this.updateAppUserBalanceNew(appUser);
+    	
+    	return oper;
+    }
+    
+	/**
+	 * 修改用户金币
+	 * @param appUser
+	 * @return
+	 * @throws Exception
+	 */
+	private int updateAppUserBalanceNew(AppUser appUser)throws Exception{
+		return (int)dao.update("AppuserMapper.updateAppUserBalanceNew",appUser);
+	}
+	
+	/**
+	 * 查询用户信
+	 * @param userId
+	 * @return
+	 * @throws Exception
+	 */
+	private AppUser getUserAppById(String userId)throws Exception{
+		return (AppUser)dao.findForObject("AppuserMapper.getUserAppById",userId);
 	}
 }
 

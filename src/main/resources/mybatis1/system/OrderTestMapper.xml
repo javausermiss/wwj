@@ -45,4 +45,24 @@
     </select>
 
 
+	<select id="getUserRegDetaillistPage" parameterType="page" resultType="pd">
+	SELECT 
+		o.ORDER_ID,
+		o.`STATUS`,
+		o.REGAMOUNT,
+		o.REGGOLD,
+		o.CREATETIME,
+		u.CNEE_NAME  
+		FROM sys_app_order o 
+			LEFT JOIN sys_app_user u 
+			ON o.USER_ID=u.USER_ID
+		WHERE 1=1 
+		 <if test="pd.lastStart != null and pd.lastStart != ''">
+             and date_format( o.CREATETIME,'%Y-%m-%d') &gt;= str_to_date(#{pd.lastStart}+' 00:00:00', '%Y-%m-%d %H:%i:%s')
+         </if>
+         <if test="pd.lastEnd != null and pd.lastEnd != ''">
+             and date_format( o.CREATETIME,'%Y-%m-%d') &lt;= str_to_date(#{pd.lastEnd}+' 23:59:59', '%Y-%m-%d %H:%i:%s')
+         </if>
+
+	</select>
 </mapper>

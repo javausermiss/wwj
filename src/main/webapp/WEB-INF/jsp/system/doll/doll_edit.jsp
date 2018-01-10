@@ -64,6 +64,17 @@
 								</td>
 							</tr>
 							<tr>
+							<td style="width:75px;text-align: right;padding-top: 13px;">发布状态:</td>
+								<td>
+								<span style="font-size:12px;">
+									<select id="RELEASE_STATUS" name="RELEASE_STATUS">
+										<option value="1" <c:if test="${pd.RELEASE_STATUS == '1' }">selected</c:if>>已发布</option>
+										<option value="0" <c:if test="${pd.RELEASE_STATUS == '0' }">selected</c:if>>未发布</option>
+									</select>
+									</span>
+								</td>
+							</tr>
+							<tr>
 								<td style="width:100px;text-align: right;padding-top: 13px;">文件域：</td>
 								<td><input type="file" id="DOLL_FILE" name="DOLL_FILE" /></td>
 							</tr>

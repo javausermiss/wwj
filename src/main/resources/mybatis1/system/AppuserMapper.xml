@@ -86,21 +86,28 @@
 
     <!-- 会员列表 -->
     <select id="userlistPage" parameterType="page" resultType="pd">
-        select u.USER_ID,
-        u.USERNAME,
-        u.PASSWORD,
-        u.LAST_LOGIN,
-        u.NAME,
-        u.IP,
-        u.END_TIME,
-        u.YEARS,
-        u.STATUS,
-        u.EMAIL,
-        u.PHONE,
-        u.NUMBER,
-        u.CREATETIME,
-        u.IMAGE_URL
-        from
+        select 
+	        u.USER_ID,
+			u.USERNAME,
+			u.`NAME`,
+			u.RIGHTS,
+			u.ROLE_ID,
+			u.NICKNAME,
+			u.LAST_LOGIN,
+			u.IP,
+			u.`STATUS`,
+			u.BZ,
+			u.PHONE,
+			u.SFID,
+			u.START_TIME,
+			u.END_TIME,
+			u.YEARS,
+			u.NUMBER,
+			u.EMAIL,
+			u.CREATETIME,
+			u.IMAGE_URL,
+			u.BALANCE
+        FROM
         <include refid="tableName"/>
         u
         where 1 = 1
@@ -111,6 +118,8 @@
             u.EMAIL LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
             or
             u.NUMBER LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            or
+            u.NICKNAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
             )
         </if>
         <if test="pd.ROLE_ID != null and pd.ROLE_ID != ''"><!-- 角色检索 -->
@@ -125,7 +134,7 @@
         <if test="pd.STATUS != null and pd.STATUS != ''"><!-- 状态检索 -->
             and u.STATUS=#{pd.STATUS}
         </if>
-        order by u.USERNAME
+        order by u.CREATETIME
     </select>
 
     <!-- 通过USERNAME获取数据 -->
@@ -195,10 +204,8 @@
         SFID = #{SFID},
         START_TIME = #{START_TIME},
         END_TIME = #{END_TIME},
-        YEARS = #{YEARS},
         STATUS = #{STATUS},
         EMAIL = #{EMAIL},
-        APIKEY = #{APIKEY},
         NUMBER = #{NUMBER}
         <if test="PASSWORD != null and PASSWORD != ''">
             ,PASSWORD = #{PASSWORD}
@@ -479,5 +486,25 @@
 		WHERE
 		USER_ID = #{USER_ID}
     </update>
+    
+     <!--用户余额更改-->
+    <update id="updateAppUserBalanceNew" parameterType="com.fh.entity.system.AppUser">
+        update
+        <include refid="tableName"/>
+        set
+        BALANCE = #{BALANCE}
+        WHERE
+        USER_ID = #{USER_ID}
+    </update>
+    
+     <!-- 通过id获取用户信息 -->
+    <select id="getUserAppById" parameterType="String" resultType="com.fh.entity.system.AppUser">
+        select
+        <include refid="Field"/>
+        from
+        <include refid="tableName"/>
+        where
+        USER_ID = #{USER_ID} FOR UPDATE
+    </select>
 
 </mapper>

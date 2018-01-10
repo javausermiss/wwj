@@ -56,6 +56,12 @@ public interface DollManager{
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception;
 
+	/**批量发布
+	 * @param ArrayRELEASE_STA
+	 * @throws Exception
+	 */
+	public void releaseAll(String[] ArrayRELEASE_STA)throws Exception;
+	
 	/**
 	 * 通过SN号来查询是否存在次娃娃机
 	 * @param SN

@@ -1,6 +1,10 @@
 package com.fh.service.system.ordertest;
 
+import java.util.List;
+
+import com.fh.entity.Page;
 import com.fh.entity.system.Order;
+import com.fh.util.PageData;
 
 public interface OrderTestManager {
     /**
@@ -26,5 +30,12 @@ public interface OrderTestManager {
      * @throws Exception
      */
     public Order getOrderById(String id) throws Exception;
-
+    
+    
+	/**用户充值列表
+	 * @param page
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> getUserRegDetailList(Page page)throws Exception;
 }

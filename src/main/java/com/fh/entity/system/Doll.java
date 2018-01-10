@@ -17,7 +17,8 @@ public class Doll {
     private String CAMERA_NAME_02;
     private String DOLL_CONVERSIONGOLD;
     private String TOY_ID;
-
+    private String RELEASE_STATUS;//发布状态
+    
     public Doll() {
 
     }
@@ -113,5 +114,13 @@ public class Doll {
 
 	public void setTOY_ID(String TOY_ID) {
 		 this.TOY_ID = TOY_ID;
+	}
+
+	public String getRELEASE_STATUS() {
+		return RELEASE_STATUS;
+	}
+
+	public void setRELEASE_STATUS(String rELEASE_STATUS) {
+		RELEASE_STATUS = rELEASE_STATUS;
 	}
 }

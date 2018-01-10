@@ -53,4 +53,58 @@ public class Const {
 	//app根据用户名密码登录接口_请求协议中的参数
 	public static final String[] APP_LOGIN_PARAM_ARRAY = new String[]{"USERNAME","PASSWORD"};
 	public static final String[] APP_LOGIN_VALUE_ARRAY = new String[]{"用户名","密码"};
+	
+	
+	/**
+	 * 
+	 * @author JAVA_DEV
+	 *
+	 */
+	public enum PlayMentCostType{
+		
+		cost_type00("游戏扣款","0"),
+		cost_type01("竞猜扣款","1"),
+		cost_type02("机器故障返款","2"),
+		cost_type03("竞猜成功返款","3"),
+		cost_type04("单向竞猜返款 ","4"),
+		cost_type05("充值加款","5"),
+		cost_type06("发货运费抵扣","6"),
+		cost_type07("兑换娃娃","7"),
+		cost_type08("签到奖励","8"),
+		cost_type09("充值奖励","9"),
+		cost_type10("内调","10");
+		
+		private  String name;
+		private  String value;
+
+		PlayMentCostType(String name, String value) {
+			this.name = name;
+			this.value = value;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getValue() {
+			return value;
+		}
+
+		public void setValue(String value) {
+			this.value = value;
+		}
+
+		public static PlayMentCostType findByCode(String value) {
+			for (PlayMentCostType t : PlayMentCostType.values()) {
+				if (t.value.equalsIgnoreCase(value)) {
+					return t;
+				}
+			}
+			return null;
+		}
+	}
 }
