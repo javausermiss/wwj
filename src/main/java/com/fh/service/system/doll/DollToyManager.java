@@ -3,6 +3,7 @@ package com.fh.service.system.doll;
 import java.util.List;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
+import com.fh.vo.system.DollToyVo;
 
 /** 
  * 说明： SYS_APP_DOLL_TOY接口
@@ -53,6 +54,30 @@ public interface DollToyManager{
 	 * @throws Exception
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception;
+
+	/**
+	 *通过ID查询玩具信息
+	 * @param toyId
+	 * @return
+	 * @throws Exception
+	 */
+	public DollToyVo getDollToyByToyId(String toyId)throws Exception;
+
+	/**
+	 * 根据娃娃名称获取相关娃娃信息
+	 * @param toyName
+	 * @return
+	 * @throws Exception
+	 */
+	public DollToyVo getDollToyByToyName(String toyName)throws Exception;
+
+	/**
+	 * 更新娃娃数量
+	 * @param dollToyVo
+	 * @return
+	 * @throws Exception
+	 */
+	public int updateToyNum(DollToyVo dollToyVo)throws Exception;
 	
 }
 

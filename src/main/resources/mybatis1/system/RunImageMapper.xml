@@ -11,14 +11,18 @@
 	<sql id="Field">
 		IMAGE_URL,	
 		RUN_NAME,	
-		RUNIMAGE_ID
+		RUNIMAGE_ID,
+		TIME,
+		CONTENT
 	</sql>
 	
 	<!-- 字段值 -->
 	<sql id="FieldValue">
 		#{IMAGE_URL},	
 		#{RUN_NAME},	
-		#{RUNIMAGE_ID}
+		#{RUNIMAGE_ID},
+		#{TIME},
+		#{CONTENT}
 	</sql>
 	
 	<!-- 新增-->
@@ -47,7 +51,7 @@
 		set 
 			IMAGE_URL = #{IMAGE_URL},
 			RUN_NAME = #{RUN_NAME},
-		RUNIMAGE_ID = RUNIMAGE_ID
+		    CONTENT = #{CONTENT}
 		where 
 		RUNIMAGE_ID = #{RUNIMAGE_ID}
 	</update>
@@ -96,7 +100,7 @@
 		SELECT * FROM <include refid="tableName"/> WHERE RUNIMAGE_ID = #{RUNIMAGE_ID}
 	</select>
 
-	<select id="getRunImageList" >
+	<select id="getRunImageList"  resultType="com.fh.entity.system.RunImage">
 		SELECT * FROM <include refid="tableName"/>
 	</select>
 

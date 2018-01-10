@@ -1,6 +1,5 @@
-package com.fh.controller.system.runimage;
+package com.fh.controller.system.sendgoods;
 
-import java.io.File;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -10,67 +9,48 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import com.fh.entity.system.RunImage;
-import com.fh.util.*;
-import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
-import com.fh.service.system.runimage.RunImageManager;
+import com.fh.util.AppUtil;
+import com.fh.util.ObjectExcelView;
+import com.fh.util.PageData;
+import com.fh.util.Jurisdiction;
+import com.fh.util.Tools;
+import com.fh.service.system.sendgoods.SendGoodsManager;
 
 /** 
- * 说明：首页滚动图
+ * 说明：发货管理
  * 创建人：FH Q313596790
- * 创建时间：2018-01-09
+ * 创建时间：2018-01-10
  */
 @Controller
-@RequestMapping(value="/runimage")
-public class RunImageController extends BaseController {
+@RequestMapping(value="/sendgoods")
+public class SendGoodsController extends BaseController {
 	
-	String menuUrl = "runimage/list.do"; //菜单地址(权限用)
-	@Resource(name="runimageService")
-	private RunImageManager runimageService;
+	String menuUrl = "sendgoods/list.do"; //菜单地址(权限用)
+	@Resource(name="sendGoodsService")
+	private SendGoodsManager sendgoodsService;
 	
 	/**保存
 	 * @param
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/save")
-	public ModelAndView save(
-			HttpServletRequest req,
-			@RequestParam(value = "RUN_FILE", required = false)CommonsMultipartFile multipartFile
-	) throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"新增RunImage");
+	public ModelAndView save() throws Exception{
+		logBefore(logger, Jurisdiction.getUsername()+"新增SendGoods");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
-		//文件上传
-		String fileId="";
-		try{
-			String newFilename=multipartFile.getOriginalFilename();
-			DiskFileItem fi = (DiskFileItem) multipartFile.getFileItem();
-			File file = fi.getStoreLocation();
-			fileId = FastDFSClient.uploadFile(file, newFilename);
-			logger.info("---------fileId-------------"+fileId);
-		}catch(Exception ex){
-			ex.printStackTrace();
-		}
-		pd.put("RUNIMAGE_ID", this.get32UUID());	//主键
-		pd.put("RUN_NAME",req.getParameter("RUN_NAME"));
-		pd.put("IMAGE_URL",fileId);
-		pd.put("CONTENT",req.getParameter("CONTENT"));
-		pd.put("TIME",req.getParameter("TIME"));
-		runimageService.save(pd);
+		pd = this.getPageData();
+		pd.put("SENDGOODS_ID", this.get32UUID());	//主键
+		sendgoodsService.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
@@ -82,11 +62,11 @@ public class RunImageController extends BaseController {
 	 */
 	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out) throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"删除RunImage");
+		logBefore(logger, Jurisdiction.getUsername()+"删除SendGoods");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		runimageService.delete(pd);
+		sendgoodsService.delete(pd);
 		out.write("success");
 		out.close();
 	}
@@ -96,46 +76,13 @@ public class RunImageController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/edit")
-	public ModelAndView edit(
-			HttpServletRequest req,
-			@RequestParam(value = "RUN_FILE", required = false)CommonsMultipartFile multipartFile
-	) throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"修改RunImage");
+	public ModelAndView edit() throws Exception{
+		logBefore(logger, Jurisdiction.getUsername()+"修改SendGoods");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
-		RunImage runImage =  runimageService.getRunImageById(req.getParameter("RUNIMAGE_ID"));
-
-		//上传的文件
-		String newFilename=multipartFile.getOriginalFilename();
-		DiskFileItem fi = (DiskFileItem) multipartFile.getFileItem();
-		File file = fi.getStoreLocation();
-
-
-		//文件上传，编辑操作
-		String fileId="";
-		if (runImage !=null && runImage.getIMAGE_URL()==null){
-			try{
-				fileId = FastDFSClient.uploadFile(file, newFilename);
-				logger.info("---------fileId-------------"+fileId);
-			}catch(Exception ex){
-				ex.printStackTrace();
-			}
-		}else{
-			//判断当前文件是否为空
-			if(file !=null && !multipartFile.isEmpty() && multipartFile.getSize() >0){
-				fileId = FastDFSClient.modifyFile(runImage.getIMAGE_URL(), file, newFilename);
-			}else{
-				//
-				fileId=runImage.getIMAGE_URL();
-			}
-		}
-		pd.put("RUN_NAME",req.getParameter("RUN_NAME"));
-		pd.put("IMAGE_URL",fileId);
-		pd.put("RUNIMAGE_ID",req.getParameter("RUNIMAGE_ID"));
-		pd.put("CONTENT",req.getParameter("CONTENT"));
-		pd.put("TIME",req.getParameter("TIME"));
-		runimageService.edit(pd);
+		pd = this.getPageData();
+		sendgoodsService.edit(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
@@ -147,7 +94,7 @@ public class RunImageController extends BaseController {
 	 */
 	@RequestMapping(value="/list")
 	public ModelAndView list(Page page) throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"列表RunImage");
+		logBefore(logger, Jurisdiction.getUsername()+"列表SendGoods");
 		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
@@ -157,8 +104,8 @@ public class RunImageController extends BaseController {
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		List<PageData>	varList = runimageService.list(page);	//列出RunImage列表
-		mv.setViewName("system/runimage/runimage_list");
+		List<PageData>	varList = sendgoodsService.list(page);	//列出SendGoods列表
+		mv.setViewName("system/sendgoods/sendgoods_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
@@ -174,7 +121,7 @@ public class RunImageController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		mv.setViewName("system/runimage/runimage_edit");
+		mv.setViewName("system/sendgoods/sendgoods_edit");
 		mv.addObject("msg", "save");
 		mv.addObject("pd", pd);
 		return mv;
@@ -189,8 +136,8 @@ public class RunImageController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd = runimageService.findById(pd);	//根据ID读取
-		mv.setViewName("system/runimage/runimage_edit");
+		pd = sendgoodsService.findById(pd);	//根据ID读取
+		mv.setViewName("system/sendgoods/sendgoods_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
 		return mv;
@@ -203,7 +150,7 @@ public class RunImageController extends BaseController {
 	@RequestMapping(value="/deleteAll")
 	@ResponseBody
 	public Object deleteAll() throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"批量删除RunImage");
+		logBefore(logger, Jurisdiction.getUsername()+"批量删除SendGoods");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
 		PageData pd = new PageData();		
 		Map<String,Object> map = new HashMap<String,Object>();
@@ -212,7 +159,7 @@ public class RunImageController extends BaseController {
 		String DATA_IDS = pd.getString("DATA_IDS");
 		if(null != DATA_IDS && !"".equals(DATA_IDS)){
 			String ArrayDATA_IDS[] = DATA_IDS.split(",");
-			runimageService.deleteAll(ArrayDATA_IDS);
+			sendgoodsService.deleteAll(ArrayDATA_IDS);
 			pd.put("msg", "ok");
 		}else{
 			pd.put("msg", "no");
@@ -228,22 +175,50 @@ public class RunImageController extends BaseController {
 	 */
 	@RequestMapping(value="/excel")
 	public ModelAndView exportExcel() throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"导出RunImage到excel");
+		logBefore(logger, Jurisdiction.getUsername()+"导出SendGoods到excel");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		Map<String,Object> dataMap = new HashMap<String,Object>();
 		List<String> titles = new ArrayList<String>();
-		titles.add("图像地址");	//1
-		titles.add("图片名称");	//2
+		titles.add("主键ID");	//1
+		titles.add("废弃");	//2
+		titles.add("用户ID");	//3
+		titles.add("发货数量");	//4
+		titles.add("收货人名字");	//5
+		titles.add("收货人地址");	//6
+		titles.add("收货人手机号码");	//7
+		titles.add("订单创建时间");	//8
+		titles.add("付款方式");	//9
+		titles.add("是否发货");	//10
+		titles.add("发货备注");	//11
+		titles.add("备注");	//12
+		titles.add("发货时间");	//13
+		titles.add("物流单号");	//14
+		titles.add("物流名称");	//15
+		titles.add("更新时间");	//16
 		dataMap.put("titles", titles);
-		List<PageData> varOList = runimageService.listAll(pd);
+		List<PageData> varOList = sendgoodsService.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
 		for(int i=0;i<varOList.size();i++){
 			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).getString("IMAGE_URL"));	    //1
-			vpd.put("var2", varOList.get(i).getString("RUN_NAME"));	    //2
+			vpd.put("var1", varOList.get(i).get("ID").toString());	//1
+			vpd.put("var2", varOList.get(i).getString("PLAYBACK_ID"));	    //2
+			vpd.put("var3", varOList.get(i).getString("USER_ID"));	    //3
+			vpd.put("var4", varOList.get(i).getString("GOODS_NUM"));	    //4
+			vpd.put("var5", varOList.get(i).getString("CNEE_NAME"));	    //5
+			vpd.put("var6", varOList.get(i).getString("CNEE_ADDRESS"));	    //6
+			vpd.put("var7", varOList.get(i).getString("CNEE_PHONE"));	    //7
+			vpd.put("var8", varOList.get(i).getString("CREATE_TIME"));	    //8
+			vpd.put("var9", varOList.get(i).getString("MODE_DESPATCH"));	    //9
+			vpd.put("var10", varOList.get(i).getString("SENDBOOLEAN"));	    //10
+			vpd.put("var11", varOList.get(i).getString("POST_REMARK"));	    //11
+			vpd.put("var12", varOList.get(i).getString("REMARK"));	    //12
+			vpd.put("var13", varOList.get(i).getString("FMS_TIME"));	    //13
+			vpd.put("var14", varOList.get(i).getString("FMS_ORDER_NO"));	    //14
+			vpd.put("var15", varOList.get(i).getString("FMS_NAME"));	    //15
+			vpd.put("var16", varOList.get(i).getString("UPDATE_TIME"));	    //16
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);

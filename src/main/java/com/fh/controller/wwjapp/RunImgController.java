@@ -19,7 +19,7 @@ public class RunImgController {
     @Resource(name="runimageService")
     private RunImageManager runimageService;
 
-    @RequestMapping(value = "/getRunImage", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/getRunImage", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject getRunImage(){
         try{

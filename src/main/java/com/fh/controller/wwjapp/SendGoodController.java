@@ -1,14 +1,12 @@
 package com.fh.controller.wwjapp;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.annotation.Resource;
 
+import com.fh.service.system.doll.DollToyManager;
+import com.fh.vo.system.DollToyVo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,11 +31,19 @@ import com.fh.util.wwjUtil.RespStatus;
 
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 @Slf4j
 @RequestMapping("/app")
 @Controller
-public class SendGoodsController {
+public class SendGoodController {
     @Resource(name = "appuserService")
     private AppuserManager appuserService;
     @Resource(name = "playBackService")
@@ -54,17 +60,9 @@ public class SendGoodsController {
     private DollManager dollService;
     @Resource(name = "paymentService")
     private PaymentManager paymentService;
+    @Resource(name="dolltoyService")
+    private DollToyManager dolltoyService;
 
-
-    public JSONObject getSendGoodsInfo(String playId) {
-        try {
-            SendGoods sendGoods = sendGoodsService.getSendGoodsByPlayId(Integer.parseInt(playId));
-            return JSONObject.fromObject(sendGoods);
-        } catch (Exception e) {
-            return null;
-        }
-
-    }
 
 
     public JSONObject getPlayBackInfo(String playId) {
@@ -138,7 +136,6 @@ public class SendGoodsController {
 
     }
 
-
     /**
      * 发货接口
      *
@@ -151,7 +148,7 @@ public class SendGoodsController {
      */
     @RequestMapping(value = "/sendGoods", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public JSONObject sendGoods(
+    public JSONObject sendGoods1(
             @RequestParam("id") String playId,//抓取编号
             @RequestParam("number") String number,
             @RequestParam("consignee") String consignee,
@@ -211,6 +208,20 @@ public class SendGoodsController {
                     return RespStatus.fail("已经发货或者兑换");
                 }
             }
+            List<String> list1 = new LinkedList<>();
+            for (int i = 0; i < list.size(); i++) {
+                String toyId =  dollService.getDollByID(list.get(i)).getTOY_ID();
+                DollToyVo dollToyVo =  dolltoyService.getDollToyByToyId(toyId);
+                String toyName =  dollToyVo.getToy_name();
+                list1.add(toyName);
+            }
+            List<String> list2 = new LinkedList<>();
+            for (int i = 0; i <list1.size() ; i++) {
+               int n  =  Collections.frequency(list1, list1.get(i));
+               String toyName = list1.get(i);
+               list2.add(toyName+"数量为："+n);
+            }
+            List<String> newList = new LinkedList(new TreeSet(list2));
             String[] s = consignee.split("\\,");
             String name = s[0];
             String phone = s[1];
@@ -223,8 +234,16 @@ public class SendGoodsController {
             sendGoods.setREMARK(remark);//留言
             sendGoods.setUSER_ID(userId);
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < list.size(); i++) {
-                String d = list.get(i);
+            for (int i = 0; i < newList.size(); i++) {
+                String ss =  newList.get(i).toString();
+                String ss1 = ss.substring(ss.length()-1,ss.length());
+                int num = Integer.valueOf(ss1);
+                String toyname = ss.substring(0,ss.length()-5);
+                DollToyVo dollToyVo =  dolltoyService.getDollToyByToyName(toyname);
+                int toyNum = dollToyVo.getToy_num();
+                dollToyVo.setToy_num(toyNum-num);
+                dolltoyService.updateToyNum(dollToyVo);
+                String d = newList.get(i);
                 sb.append(d + "，");
             }
             sendGoods.setPOST_REMARK(sb.toString());
@@ -259,7 +278,7 @@ public class SendGoodsController {
     @ResponseBody
     public JSONObject conversionGoods(
             @RequestParam("id") String id,
-            @RequestParam("dollId") String dollId,
+            @RequestParam("dollId")  String dollId,
             @RequestParam("number") String number,
             @RequestParam("userId") String userId
     ) {
@@ -335,21 +354,7 @@ public class SendGoodsController {
         }
     }
 
-    public static void main(String[] ad) {
-        Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-        String dateString = formatter.format(currentTime);
-        long l = Long.parseLong(dateString);
-        System.out.println(dateString);
-        String id = "121";
-        String[] pd = id.split("\\,");//获取需要兑换的抓中娃娃编号
-        for (int i = 0; i <pd.length ; i++) {
-
-            String aa =  pd[i];
-            System.out.println(aa);
-        }
-
-
+    public static void main(String[] a){
 
 
 

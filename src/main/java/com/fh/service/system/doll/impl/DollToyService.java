@@ -2,6 +2,8 @@ package com.fh.service.system.doll.impl;
 
 import java.util.List;
 import javax.annotation.Resource;
+
+import com.fh.vo.system.DollToyVo;
 import org.springframework.stereotype.Service;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
@@ -76,6 +78,20 @@ public class DollToyService implements DollToyManager{
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception{
 		dao.delete("DollToyMapper.deleteAll", ArrayDATA_IDS);
 	}
-	
+
+	@Override
+	public DollToyVo getDollToyByToyId(String toyId) throws Exception {
+		return (DollToyVo)dao.findForObject("DollToyMapper.getDollToyByToyId",toyId);
+	}
+
+	@Override
+	public DollToyVo getDollToyByToyName(String toyName) throws Exception {
+		return (DollToyVo)dao.findForObject("DollToyMapper.getDollToyByToyName",toyName);
+	}
+
+	@Override
+	public int updateToyNum(DollToyVo dollToyVo) throws Exception {
+		return (int)dao.update("DollToyMapper.updateToyNum",dollToyVo);
+	}
 }
 

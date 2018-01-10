@@ -6,6 +6,19 @@
 	<sql id="tableName">
 		TB_APP_DOLL_TOY
 	</sql>
+
+	<resultMap id="dollToyResultMap" type="com.fh.vo.system.DollToyVo">
+		<id column="TOY_ID" property="toy_id"/>
+		<result column="TOY_NAME" property="toy_name"/>
+		<result column="TOY_NUM" property="toy_num"/>
+		<result column="TOY_CONVERSION" property="toy_conversion"/>
+		<result column="BUY_PRICE" property="buy_price"/>
+		<result column="DOOL_GOLD" property="doll_gold"/>
+		<result column="REMARK" property="remark"/>
+		<result column="CREATE_TIME" property="create_time"/>
+		<result column="UPDATE_TIME" property="update_time"/>
+	</resultMap>
+
 	
 	<!-- 字段 -->
 	<sql id="Field">
@@ -13,7 +26,7 @@
 		TOY_NAME,	
 		TOY_NUM,	
 		BUY_PRICE,	
-		DOOL_GOLD,	
+		DOOL_GOLD,
 		REMARK,	
 		CREATE_TIME,	
 		UPDATE_TIME
@@ -121,5 +134,17 @@
 		</foreach>
 	</delete>
 	
-	<!-- fh313596790qq(青苔) -->
+	<select id="getDollToyByToyId" parameterType="String" resultMap="dollToyResultMap">
+		SELECT * FROM <include refid="tableName"/> WHERE TOY_ID = #{toy_id}
+	</select>
+
+
+	<select id="getDollToyByToyName" parameterType="String" resultMap="dollToyResultMap">
+		SELECT * FROM <include refid="tableName"/> WHERE TOY_NAME = #{toy_name}
+	</select>
+
+	<update id="updateToyNum" parameterType="com.fh.vo.system.DollToyVo" >
+		UPDATE <include refid="tableName"/> SET TOY_NUM = #{toy_num} WHERE TOY_ID = #{toy_id}
+	</update>
+
 </mapper>

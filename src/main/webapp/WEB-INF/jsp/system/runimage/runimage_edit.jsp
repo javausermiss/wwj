@@ -36,8 +36,12 @@
 								<td><input type="text" name="IMAGE_URL" id="IMAGE_URL" value="${pd.IMAGE_URL}" maxlength="255" placeholder="这里输入图像地址" title="图像地址" style="width:98%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">图片名称:</td>
-								<td><input type="text" name="RUN_NAME" id="RUN_NAME" value="${pd.RUN_NAME}" maxlength="255" placeholder="这里输入图片名称" title="图片名称" style="width:98%;"/></td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">图片标题:</td>
+								<td><input type="text" name="RUN_NAME" id="RUN_NAME" value="${pd.RUN_NAME}" maxlength="255" placeholder="这里输入图片标题" title="图片标题" style="width:98%;"/></td>
+							</tr>
+							<tr>
+								<td style="width:75px;text-align: right;padding-top: 13px;">图片内容:</td>
+								<td><input type="text" name="CONTENT" id="CONTENT" value="${pd.CONTENT}" maxlength="255" placeholder="这里输入图片内容" title="图片内容" style="width:98%;"/></td>
 							</tr>
 							<tr>
 								<td style="width:100px;text-align: right;padding-top: 13px;">文件域：</td>
@@ -88,6 +92,16 @@
 				$("#RUN_NAME").focus();
 			return false;
 			}
+            if($("#CONTENT").val()==""){
+                $("#CONTENT").tips({
+                    side:3,
+                    msg:'请输入图片内容',
+                    bg:'#AE81FF',
+                    time:2
+                });
+                $("#CONTENT").focus();
+                return false;
+            }
 			$("#Form").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();
