@@ -2,6 +2,7 @@ package com.fh.controller.system.appuser;
 
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.entity.system.AppUser;
 import com.fh.entity.system.Role;
 import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.role.RoleManager;
@@ -31,8 +32,10 @@ import java.util.*;
 public class AppuserController extends BaseController {
 	
 	String menuUrl = "happuser/listUsers.do"; //菜单地址(权限用)
+	
 	@Resource(name="appuserService")
 	private AppuserManager appuserService;
+	
 	@Resource(name="roleService")
 	private RoleManager roleService;
 
@@ -204,6 +207,17 @@ public class AppuserController extends BaseController {
 			pd.put("PASSWORD", MD5.md5(pd.getString("PASSWORD")));
 		}
 		appuserService.editU(pd);
+		
+		
+		//给用户添加金币
+		if(!StrUtil.isNullOrEmpty(pd.get("ADD_GOLD"))){
+			int operNum=Integer.parseInt((String) pd.get("ADD_GOLD"));
+			if(operNum>0){
+				AppUser appUser=appuserService.getUserByID(pd.getString("USER_ID"));
+				appuserService.updateUserBalance(appUser, operNum, "A", Const.PlayMentCostType.cost_type10);
+			}
+		}
+		
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;

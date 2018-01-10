@@ -33,21 +33,8 @@
 							<div id="zhongxin" style="padding-top: 13px;">
 							<table id="table_report" class="table table-striped table-bordered table-hover">
 								<tr>
-									<td style="width:79px;text-align: right;padding-top: 13px;">角色:</td>
-									<td id="js">
-									<select class="chosen-select form-control" name="ROLE_ID" id="role_id" data-placeholder="请选择等级" style="vertical-align:top;"  title="级别" style="width:98%;" >
-									<option value=""></option>
-									<c:forEach items="${roleList}" var="role">
-										<option value="${role.ROLE_ID }" <c:if test="${role.ROLE_ID == pd.ROLE_ID }">selected</c:if>>${role.ROLE_NAME }</option>
-									</c:forEach>
-									</select>
-									</td>
-									<td style="width:79px;text-align: right;padding-top: 13px;">开通日期:</td>
-									<td><input class="span10 date-picker" name="START_TIME" id="START_TIME" value="${pd.START_TIME}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" placeholder="开通日期"  title="开通日期" style="width:98%;" /></td>
-								</tr>
-								<tr>
-									<td style="width:79px;text-align: right;padding-top: 13px;">用户名:</td>
-									<td><input type="text" name="USERNAME" id="loginname" value="${pd.USERNAME }" maxlength="32" placeholder="这里输入用户名" title="用户名" style="width:98%;" /></td>
+									<td style="width:79px;text-align: right;padding-top: 13px;">用户昵称:</td>
+									<td><input type="text" name="NICKNAME" id="NICKNAME" value="${pd.NICKNAME }" maxlength="32" placeholder="这里昵称" title="用户名" style="width:98%;" /></td>
 									<td style="width:79px;text-align: right;padding-top: 13px;">到期日期:</td>
 									<td><input class="span10 date-picker" name="END_TIME" id="END_TIME" value="${pd.END_TIME}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" placeholder="到期日期" title="到期日期" style="width:98%;" /></td>
 								</tr>
@@ -87,7 +74,11 @@
 									</td>
 								</tr>
 								<tr>
-									<td class="center" colspan="6">
+									<td style="width:79px;text-align: right;padding-top: 13px;">追加金币:</td>
+									<td colspan="3"><input type="number" name="ADD_GOLD" id="ADD_GOLD" value="0" maxlength="10" placeholder="这里输入追加金币数量" title="ADD_GOLD" style="width:98%;"/></td>
+								</tr>
+								<tr>
+									<td class="center" colspan="4">
 										<a class="btn btn-mini btn-primary" onclick="save();">保存</a>
 										<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
 									</td>
@@ -136,124 +127,6 @@
 
 	//保存
 	function save(){
-		if($("#role_id").val()==""){
-			$("#js").tips({
-				side:3,
-	            msg:'选择角色',
-	            bg:'#AE81FF',
-	            time:2
-	        });
-			$("#role_id").focus();
-			return false;
-		}
-		if($("#loginname").val()=="" || $("#loginname").val()=="此用户名已存在!"){
-			$("#loginname").tips({
-				side:3,
-	            msg:'输入用户名',
-	            bg:'#AE81FF',
-	            time:2
-	        });
-			$("#loginname").focus();
-			$("#loginname").val('');
-			$("#loginname").css("background-color","white");
-			return false;
-		}else{
-			$("#loginname").val(jQuery.trim($('#loginname').val()));
-		}
-		if($("#NUMBER").val()==""){
-			$("#NUMBER").tips({
-				side:3,
-	            msg:'输入编号',
-	            bg:'#AE81FF',
-	            time:3
-	        });
-			$("#NUMBER").focus();
-			return false;
-		}else{
-			$("#NUMBER").val($.trim($("#NUMBER").val()));
-		}	
-		if($("#EMAIL").val()==""){
-			
-			$("#EMAIL").tips({
-				side:3,
-	            msg:'输入邮箱',
-	            bg:'#AE81FF',
-	            time:3
-	        });
-			$("#EMAIL").focus();
-			return false;
-		}else if(!ismail($("#EMAIL").val())){
-			$("#EMAIL").tips({
-				side:3,
-	            msg:'邮箱格式不正确',
-	            bg:'#AE81FF',
-	            time:3
-	        });
-			$("#EMAIL").focus();
-			return false;
-		}
-		if($("#user_id").val()=="" && $("#password").val()==""){
-			$("#password").tips({
-				side:3,
-	            msg:'输入密码',
-	            bg:'#AE81FF',
-	            time:2
-	        });
-			$("#password").focus();
-			return false;
-		}
-		if($("#password").val()!=$("#chkpwd").val()){
-			$("#chkpwd").tips({
-				side:3,
-	            msg:'两次密码不相同',
-	            bg:'#AE81FF',
-	            time:3
-	        });
-			$("#chkpwd").focus();
-			return false;
-		}
-		if($("#name").val()==""){
-			$("#name").tips({
-				side:3,
-	            msg:'输入姓名',
-	            bg:'#AE81FF',
-	            time:3
-	        });
-			$("#name").focus();
-			return false;
-		}
-		if($("#START_TIME").val()!= "" && $("#END_TIME").val() != ""){
-			var t1 = $("#START_TIME").val();
-			var t2 = $("#END_TIME").val();
-			t1 = Number(t1.replace('-', '').replace('-', ''));
-			t2 = Number(t2.replace('-', '').replace('-', ''));
-			if(t1-t2>0){
-				
-				$("#END_TIME").tips({
-					side:3,
-		            msg:'到期日期必须大于开通日期',
-		            bg:'#AE81FF',
-		            time:3
-		        });
-				
-				return false;
-			}
-		}
-		if($("#YEARS").val()==""){
-			$("#YEARS").val(0);
-		}else if(isNaN(Number($("#YEARS").val()))){
-			
-			$("#YEARS").tips({
-				side:3,
-	            msg:'输入数字',
-	            bg:'#AE81FF',
-	            time:3
-	        });
-			
-			$("#YEARS").focus();
-			$("#YEARS").val(0);
-			return false;
-		}
 		if($("#user_id").val()==""){
 			hasU();
 		}else{
@@ -307,58 +180,6 @@
 			}
 		});
 	}
-	
-	//判断编码是否存在
-	function hasN(USERNAME){
-		var NUMBER = $("#NUMBER").val();
-		$.ajax({
-			type: "POST",
-			url: '<%=basePath%>happuser/hasN.do',
-	    	data: {NUMBER:NUMBER,USERNAME:USERNAME,tm:new Date().getTime()},
-			dataType:'json',
-			cache: false,
-			success: function(data){
-				 if("success" != data.result){
-					 $("#NUMBER").tips({
-							side:3,
-				            msg:'编号'+NUMBER+'已存在',
-				            bg:'#AE81FF',
-				            time:3
-				        });
-					 $('#NUMBER').val('');
-				 }
-			}
-		});
-	}
-	
-	$(function() {
-		//日期框
-		$('.date-picker').datepicker({autoclose: true,todayHighlight: true});
-		//下拉框
-		if(!ace.vars['touch']) {
-			$('.chosen-select').chosen({allow_single_deselect:true}); 
-			$(window)
-			.off('resize.chosen')
-			.on('resize.chosen', function() {
-				$('.chosen-select').each(function() {
-					 var $this = $(this);
-					 $this.next().css({'width': $this.parent().width()});
-				});
-			}).trigger('resize.chosen');
-			$(document).on('settings.ace.chosen', function(e, event_name, event_val) {
-				if(event_name != 'sidebar_collapsed') return;
-				$('.chosen-select').each(function() {
-					 var $this = $(this);
-					 $this.next().css({'width': $this.parent().width()});
-				});
-			});
-			$('#chosen-multiple-style .btn').on('click', function(e){
-				var target = $(this).find('input[type=radio]');
-				var which = parseInt(target.val());
-				if(which == 2) $('#form-field-select-4').addClass('tag-input-style');
-				 else $('#form-field-select-4').removeClass('tag-input-style');
-			});
-		}
-	});
+
 </script>
 </html>

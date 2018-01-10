@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fh.entity.Page;
 import com.fh.entity.system.AppUser;
+import com.fh.util.Const;
 import com.fh.util.PageData;
 
 
@@ -272,8 +273,17 @@ public interface AppuserManager {
      */
     public int  updateAppUserSign(AppUser appUser)throws Exception;
 
-
-
+    /**
+     * 修改账户金币
+     * @param AppUser appUser 用户对象
+     * @param operNum 操作的数量
+     * @param operType A:add,加; S:sub,减
+     * @param operMenu 操作的枚举
+     * @return
+     */
+    public int updateUserBalance(AppUser appUser,int operNum,String operType,Const.PlayMentCostType operMenu) throws Exception;
+    
+    
 
 }
 
