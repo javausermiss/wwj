@@ -48,7 +48,8 @@
 		DOLL_CONVERSIONGOLD,
 		CAMERA_NAME_01,
 		CAMERA_NAME_02,
-		TOY_ID
+		TOY_ID,
+		RELEASE_STATUS
 	</sql>
 
     <!-- 字段值 -->
@@ -63,7 +64,8 @@
 		#{DOLL_CONVERSIONGOLD},
 		#{CAMERA_NAME_01},
 		#{CAMERA_NAME_02},
-		#{TOY_ID}
+		#{TOY_ID},
+		#{RELEASE_STATUS}
 	</sql>
 
     <!-- 新增-->
@@ -94,6 +96,7 @@
         DOLL_SN = #{DOLL_SN},
         DOLL_GOLD = #{DOLL_GOLD},
         DOLL_CONVERSIONGOLD = #{DOLL_CONVERSIONGOLD},
+        RELEASE_STATUS = #{RELEASE_STATUS},
         DOLL_URL = #{DOLL_URL},
         TOY_ID = #{TOY_ID}
         where

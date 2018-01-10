@@ -105,6 +105,7 @@
                                     <th class="center">娃娃金币</th>
                                     <th class="center">娃娃可兑换金币</th>
                                     <th class="center">状态</th>
+                                    <th class="center">发布状态</th>
                                     <th class="center">操作</th>
                                 </tr>
                                 </thead>
@@ -128,13 +129,19 @@
                                                     <td class='center'>${var.DOLL_ID}</td>
                                                     <td class="center">${var.DOLL_GOLD}</td>
                                                     <td class="center">${var.DOLL_CONVERSIONGOLD}</td>
-                                                    <td style="width: 200px;" class='center'>
+                                                    <td style="width: 100px;" class='center'>
                                                         <c:if test="${var.DOLL_STATE == '1' }"><span
                                                                 class="label label-success arrowed">游戏</span></c:if>
                                                         <c:if test="${var.DOLL_STATE == '-1' }"><span
                                                                 class="label label-important arrowed-in">离线</span></c:if>
                                                         <c:if test="${var.DOLL_STATE == '0' }"><span
                                                                 class="label label-success arrowed">空闲</span></c:if>
+                                                    </td>
+                                                    <td style="width: 100px;" class='center'>
+                                                        <c:if test="${var.RELEASE_STATUS == '0' }"><span
+                                                                class="label label-important arrowed-in">未发布</span></c:if>
+                                                        <c:if test="${var.RELEASE_STATUS == '1' }"><span
+                                                                class="label label-success arrowed">已发布</span></c:if>
                                                     </td>
                                                     <td class="center">
                                                         <c:if test="${QX.edit != 1 && QX.del != 1 }">
@@ -165,6 +172,7 @@
                                                                 </button>
 
                                                                 <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                                               
                                                                     <c:if test="${QX.edit == 1 }">
                                                                         <li>
                                                                             <a style="cursor:pointer;"
@@ -221,6 +229,10 @@
                                             <c:if test="${QX.del == 1 }">
                                                 <a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');"
                                                    title="批量删除"><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
+                                            </c:if>
+                                            <c:if test="${QX.del == 1 }">
+                                            <a class="btn btn-mini btn-success" onclick="edit('${var.DOLL_ID}');">
+                                            	发布</a>
                                             </c:if>
                                         </td>
                                         <td style="vertical-align:top;">
@@ -401,7 +413,10 @@
                         time: 8
                     });
                     return;
-                } else {
+                }if (msg == '发布') {
+                	top.jzts();
+                	
+				}else {
                     if (msg == '确定要删除选中的数据吗?') {
                         top.jzts();
                         $.ajax({

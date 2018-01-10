@@ -82,7 +82,15 @@ public class DollService implements DollManager {
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception{
 		dao.delete("DollMapper.deleteAll", ArrayDATA_IDS);
 	}
-
+	
+	/**批量发布
+	 * @param ArrayRELEASE_STA
+	 * @throws Exception
+	 */
+	public void releaseAll(String[] ArrayRELEASE_STA)throws Exception{
+		dao.delete("DollMapper.releaseAll", ArrayRELEASE_STA);
+	}
+	
 	/**
 	 * 通过SN号来查询是否存在娃娃机
 	 * @param SN

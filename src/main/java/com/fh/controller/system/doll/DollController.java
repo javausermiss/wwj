@@ -77,11 +77,11 @@ public class DollController extends BaseController {
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
-		
 		String doll_sn = req.getParameter("DOLL_SN");
 		String doll_name = req.getParameter("DOLL_NAME");
 		String doll_gold = req.getParameter("DOLL_GOLD");
 		String doll_conversiongold = req.getParameter("DOLL_CONVERSIONGOLD");
+		String release_status = req.getParameter("RELEASE_STATUS");
 //		pd = this.getPageData();
 		pd.put("DOLL_ID", this.get32UUID());	//主键
 		pd.put("DOLL_STATE", "2");	//DOLL_ST;ATE
@@ -91,6 +91,7 @@ public class DollController extends BaseController {
 		pd.put("DOLL_NAME", doll_name);
 		pd.put("DOLL_GOLD", doll_gold);
 		pd.put("DOLL_CONVERSIONGOLD", doll_conversiongold);
+		pd.put("RELEASE_STATUS", release_status);
 		pd.put("TOY_ID", req.getParameter("TOY_ID"));
 		
 		dollService.save(pd);
@@ -161,6 +162,7 @@ public class DollController extends BaseController {
 		pd.put("DOLL_NAME", req.getParameter("DOLL_NAME"));
 		pd.put("DOLL_GOLD", req.getParameter("DOLL_GOLD"));
 		pd.put("DOLL_CONVERSIONGOLD", req.getParameter("DOLL_CONVERSIONGOLD"));
+		pd.put("RELEASE_STATUS", req.getParameter("RELEASE_STATUS"));
 		pd.put("TOY_ID", req.getParameter("TOY_ID"));
 		pd.put("DOLL_URL", fileId);
 		dollService.edit(pd);
