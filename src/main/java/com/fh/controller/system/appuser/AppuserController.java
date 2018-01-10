@@ -213,8 +213,7 @@ public class AppuserController extends BaseController {
 		if(!StrUtil.isNullOrEmpty(pd.get("ADD_GOLD"))){
 			int operNum=Integer.parseInt((String) pd.get("ADD_GOLD"));
 			if(operNum>0){
-				AppUser appUser=appuserService.getUserByID(pd.getString("USER_ID"));
-				appuserService.updateUserBalance(appUser, operNum, "A", Const.PlayMentCostType.cost_type10);
+				appuserService.updateUserBalance(pd.getString("USER_ID"), operNum, "A", Const.PlayMentCostType.cost_type10);
 			}
 		}
 		

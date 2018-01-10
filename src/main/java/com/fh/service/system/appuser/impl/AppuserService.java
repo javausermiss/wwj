@@ -294,18 +294,18 @@ public class AppuserService implements AppuserManager{
 	
 	
 
-	
     /**
      * 修改账户金币
-     * @param AppUser appUser 用户对象
+     * @param userId appUser.userId 用户对象主键
      * @param operNum 操作的数量
-     * @param operType A:add,添加; S:sub,减少
+     * @param operType A:add,加; S:sub,减
      * @param operMenu 操作的枚举
      * @return
      */
-    public int updateUserBalance(AppUser appUser,int operNum,String operType,Const.PlayMentCostType operMenu) throws Exception{
+    public int updateUserBalance(String userId,int operNum,String operType,Const.PlayMentCostType operMenu) throws Exception{
     	
     	int oper=0;
+    	AppUser appUser=this.getUserAppById(userId);
     	//step1 判断用户是否存在
     	if(appUser ==null){
     		return 0;
@@ -368,6 +368,16 @@ public class AppuserService implements AppuserManager{
 	 */
 	private int updateAppUserBalanceNew(AppUser appUser)throws Exception{
 		return (int)dao.update("AppuserMapper.updateAppUserBalanceNew",appUser);
+	}
+	
+	/**
+	 * 查询用户信
+	 * @param userId
+	 * @return
+	 * @throws Exception
+	 */
+	private AppUser getUserAppById(String userId)throws Exception{
+		return (AppUser)dao.findForObject("AppuserMapper.getUserAppById",userId);
 	}
 }
 

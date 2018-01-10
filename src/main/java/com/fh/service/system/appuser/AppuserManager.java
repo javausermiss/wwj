@@ -275,13 +275,13 @@ public interface AppuserManager {
 
     /**
      * 修改账户金币
-     * @param AppUser appUser 用户对象
+     * @param userId appUser.userId 用户对象主键
      * @param operNum 操作的数量
      * @param operType A:add,加; S:sub,减
      * @param operMenu 操作的枚举
      * @return
      */
-    public int updateUserBalance(AppUser appUser,int operNum,String operType,Const.PlayMentCostType operMenu) throws Exception;
+    public int updateUserBalance(String userId,int operNum,String operType,Const.PlayMentCostType operMenu) throws Exception;
     
     
 

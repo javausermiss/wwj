@@ -496,5 +496,15 @@
         WHERE
         USER_ID = #{USER_ID}
     </update>
+    
+     <!-- 通过id获取用户信息 -->
+    <select id="getUserAppById" parameterType="String" resultType="com.fh.entity.system.AppUser">
+        select
+        <include refid="Field"/>
+        from
+        <include refid="tableName"/>
+        where
+        USER_ID = #{USER_ID} FOR UPDATE
+    </select>
 
 </mapper>
