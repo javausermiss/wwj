@@ -249,6 +249,7 @@
 			c.LIVESTREAM,
 			c.DEVICE_STATE from
 			SYS_APP_DOLL d LEFT JOIN TB_DEVICE_CAMERA c ON d.DOLL_ID=c.DOLL_ID
+			WHERE d.RELEASE_STATUS ='1'
     </select>
 
 </mapper>
