@@ -231,7 +231,7 @@
                                                    title="批量删除"><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
                                             </c:if>
                                             <c:if test="${QX.del == 1 }">
-                                            <a class="btn btn-mini btn-success" onclick="edit('${var.DOLL_ID}');">
+                                            <a class="btn btn-mini btn-success" onclick="">
                                             	发布</a>
                                             </c:if>
                                         </td>
