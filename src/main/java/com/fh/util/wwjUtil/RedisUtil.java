@@ -15,14 +15,14 @@ public class RedisUtil {
 
     private RedisUtil() {
         if (pool == null) {
-            String ip = ConfigUtil.getStr("redis_ip");
-            int port = ConfigUtil.getInt("redis_port");
+            String ip = ConfigUtil.getStr("redis.ip");
+            int port = ConfigUtil.getInt("redis.port");
             JedisPoolConfig config = new JedisPoolConfig();
             config.setMaxTotal(-1);
             config.setMaxIdle(20000);
             config.setMaxWaitMillis(100000);
             config.setTestOnBorrow(true);
-            pool = new JedisPool(config, ip, port, 100000, ConfigUtil.getStr("redis_pwd"));
+            pool = new JedisPool(config, ip, port, 100000, ConfigUtil.getStr("redis.pwd"));
 
         }
     }

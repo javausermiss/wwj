@@ -16,7 +16,7 @@ public class ConfigUtil {
 
     static {
         try {
-            prop.load(new InputStreamReader(Client.class.getClassLoader().getResourceAsStream("application.properties"),
+            prop.load(new InputStreamReader(Client.class.getClassLoader().getResourceAsStream("conf/system.properties"),
                     "UTF-8"));
         } catch (Exception e) {
             e.printStackTrace();
