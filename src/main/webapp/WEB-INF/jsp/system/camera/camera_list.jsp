@@ -45,11 +45,11 @@
 								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期" title="开始日期"/></td>
 								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期" title="结束日期"/></td>
 								<td style="vertical-align:top;padding-left:2px;">
-								 	<select class="chosen-select form-control" name="name" id="id" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
+								 	<select class="chosen-select form-control" name="DEVICE_STATE" id="DEVICE_STATE" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
 									<option value=""></option>
 									<option value="">全部</option>
-									<option value="-1"
-                                                    <c:if test="${pd.DEVICE_STATE == '1' }">selected</c:if> >可用
+									<option value="1"
+                                                    <c:if test="${pd.DEVICE_STATE == '1' }">selected</c:if> >不可用
                                             </option>
                                             <option value="0"
                                                     <c:if test="${pd.DEVICE_STATE == '0' }">selected</c:if> >正常

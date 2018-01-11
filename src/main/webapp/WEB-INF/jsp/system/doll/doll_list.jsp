@@ -55,18 +55,15 @@
                                                                          readonly="readonly" style="width:88px;"
                                                                          placeholder="结束日期" title="结束日期"/></td>
                                     <td style="vertical-align:top;padding-left:2px;">
-                                        <select class="chosen-select form-control" name="DOLL_STATE" id="DOLL_STATE"
-                                                data-placeholder="请选择状态" style="vertical-align:top;width: 120px;">
+                                        <select class="chosen-select form-control" name="RELEASE_STATUS" id="RELEASE_STATUS"
+                                                data-placeholder="请选择发布状态" style="vertical-align:top;width: 120px;">
                                             <option value=""></option>
                                             <option value="">全部</option>
-                                            <option value="-1"
-                                                    <c:if test="${pd.DOLL_STATE == '-1' }">selected</c:if> >离线
-                                            </option>
                                             <option value="0"
-                                                    <c:if test="${pd.DOLL_STATE == '0' }">selected</c:if> >空闲
+                                                    <c:if test="${pd.DOLL_STATE == '0' }">selected</c:if> >未发布
                                             </option>
                                             <option value="1"
-                                                    <c:if test="${pd.DOLL_STATE == '1' }">selected</c:if> >游戏
+                                                    <c:if test="${pd.DOLL_STATE == '1' }">selected</c:if> >已发布
                                             </option>
                                         </select>
                                     </td>
