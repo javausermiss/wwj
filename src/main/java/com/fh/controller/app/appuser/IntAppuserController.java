@@ -15,7 +15,6 @@ import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**@author FH Q313596790
   * 会员-接口类 
   * 相关参数协议：
