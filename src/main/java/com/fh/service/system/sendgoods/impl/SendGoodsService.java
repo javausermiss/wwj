@@ -11,14 +11,11 @@ import java.util.TreeSet;
 
 import javax.annotation.Resource;
 
+import com.fh.entity.system.*;
 import org.springframework.stereotype.Service;
 
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
-import com.fh.entity.system.AppUser;
-import com.fh.entity.system.Payment;
-import com.fh.entity.system.PlayDetail;
-import com.fh.entity.system.SendGoods;
 import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.betgame.BetGameManager;
 import com.fh.service.system.conversion.ConversionManager;
@@ -64,6 +61,16 @@ public class SendGoodsService implements SendGoodsManager{
 
     @Resource(name = "daoSupport")
     private DaoSupport dao;
+
+    public JSONObject getAppUserInfo(String id) {
+        try {
+            AppUser appUser = appuserService.getUserByID(id);
+            return JSONObject.fromObject(appUser);
+        } catch (Exception e) {
+            return null;
+        }
+
+    }
 
 
     /**新增
@@ -165,7 +172,7 @@ public class SendGoodsService implements SendGoodsManager{
                 payment.setCOST_TYPE("6");
                 payment.setREMARK("支付运费");
                 paymentService.reg(payment);
-                sendGoods.setMODE_DESPATCH("2");
+                sendGoods.setMODE_DESPATCH("1");
             }
         }
 
@@ -238,4 +245,54 @@ public class SendGoodsService implements SendGoodsManager{
         return RespStatus.successs().element("data", map);
     }
 
+    /**
+     * 兑换金币
+     * @param id
+     * @param userId
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public JSONObject doConversionGold(String id, String userId) throws Exception {
+        String[] pd = id.split("\\,");//获取需要兑换的抓中娃娃编号
+        for (int i = 0; i < pd.length; i++) {
+            String pid = pd[i];
+            PlayDetail playBack = playDetailService.getPlayDetailByID(Integer.parseInt(pid));
+            if (playBack.getPOST_STATE().equals("0")) {
+                AppUser appUser = appuserService.getUserByID(userId);
+                int balance = Integer.parseInt(appUser.getBALANCE());
+                String c = playBack.getCONVERSIONGOLD();
+                int m = Integer.valueOf(c);
+                String newBalance = String.valueOf(balance + m);
+                appUser.setBALANCE(newBalance);
+                appuserService.updateAppUserBalanceById(appUser);
+                playBack.setPOST_STATE("2");//兑换
+                playDetailService.updatePostStateForCon(playBack);
+            } else {
+                return RespStatus.fail("该娃娃已经被兑换过或者寄出");
+            }
+            Conversion conversion = new Conversion();
+            Date date = new Date();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String time = format.format(date);
+            conversion.setCREATETIME(time);
+            String dollname = dollService.getDollByID(playDetailService.getPlayDetailByID(Integer.valueOf(pid)).getDOLLID()).getDOLL_NAME();
+            conversion.setDOLLNAME(dollname);
+            conversion.setNUMBER("1");
+            conversion.setUSERID(userId);
+            conversion.setPLAYID(pid);
+            conversion.setCONMONEY(String.valueOf(playBack.getCONVERSIONGOLD()));
+            conversionService.reg(conversion);
+            Payment payment = new Payment();
+            payment.setGOLD("+" + String.valueOf(playBack.getCONVERSIONGOLD()));
+            payment.setUSERID(userId);
+            payment.setDOLLID(playBack.getDOLLID());
+            payment.setCOST_TYPE("7");
+            payment.setREMARK("兑换" + dollname);
+            paymentService.reg(payment);
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("appUser", getAppUserInfo(userId));
+        return RespStatus.successs().element("data", map);
+    }
 }

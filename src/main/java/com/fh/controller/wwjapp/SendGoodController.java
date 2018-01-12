@@ -31,6 +31,7 @@ import com.fh.util.wwjUtil.RespStatus;
 
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -60,9 +61,8 @@ public class SendGoodController {
     private DollManager dollService;
     @Resource(name = "paymentService")
     private PaymentManager paymentService;
-    @Resource(name="dolltoyService")
+    @Resource(name = "dolltoyService")
     private DollToyManager dolltoyService;
-
 
 
     public JSONObject getPlayBackInfo(String playId) {
@@ -157,108 +157,7 @@ public class SendGoodController {
             @RequestParam("mode") String mode
     ) {
         try {
-            //增加发货记录
-            SendGoods sendGoods = new SendGoods();
-            //免邮
-            if (mode.equals("0") ) {
-                sendGoods.setMODE_DESPATCH("0");
-            }
-            //货到付款
-            if (mode.equals("2")) {
-                sendGoods.setMODE_DESPATCH("2");
-            }
-            //金币抵扣
-            if (mode.equals("1")) {
-                //满2包邮 ，一个需要付运费
-                if (Integer.valueOf(number) < 2) {
-                    //判断用户是否有足够的余额支付邮寄费用
-                    AppUser appUser = appuserService.getUserByID(userId);
-                    String balance = appUser.getBALANCE();
-                    if (Integer.valueOf(balance) < 80) {
-                        return RespStatus.fail("余额不足，请充值");
-                    }
-                    int newbalance = Integer.valueOf(appUser.getBALANCE()) - 80;
-                    appUser.setBALANCE(String.valueOf(newbalance));
-                    appuserService.updateAppUserBalanceById(appUser);
-                    Payment payment = new Payment();
-                    payment.setGOLD("-80");
-                    payment.setUSERID(userId);
-                    payment.setDOLLID(null);
-                    payment.setCOST_TYPE("6");
-                    payment.setREMARK("支付运费");
-                    paymentService.reg(payment);
-                    sendGoods.setMODE_DESPATCH("2");
-                }
-            }
-
-            List<String> list = new LinkedList<>();
-            List<PlayDetail> playDetails = new LinkedList<>();
-            //获取需要发货的娃娃编号
-            String[] pd = playId.split("\\,");
-            for (int i = 0; i < pd.length; i++) {
-                PlayDetail playDetail = playDetailService.getPlayDetailByID(Integer.parseInt(pd[i]));
-                playDetails.add(playDetail);
-                String dollId = playDetail.getDOLLID();
-                list.add(dollId);
-                if (playDetail.getPOST_STATE().equals("0")) {
-                    playDetail.setPOST_STATE("1");
-                    playDetail.setSENDGOODS(consignee + "," + remark);
-                    playDetailService.updatePostState(playDetail);
-                } else {
-                    return RespStatus.fail("已经发货或者兑换");
-                }
-            }
-            List<String> list1 = new LinkedList<>();
-            for (int i = 0; i < list.size(); i++) {
-                String toyId =  dollService.getDollByID(list.get(i)).getTOY_ID();
-                DollToyVo dollToyVo =  dolltoyService.getDollToyByToyId(toyId);
-                String toyName =  dollToyVo.getToy_name();
-                list1.add(toyName);
-            }
-            List<String> list2 = new LinkedList<>();
-            for (int i = 0; i <list1.size() ; i++) {
-               int n  =  Collections.frequency(list1, list1.get(i));
-               String toyName = list1.get(i);
-               list2.add(toyName+"数量为："+n);
-            }
-            List<String> newList = new LinkedList(new TreeSet(list2));
-            String[] s = consignee.split("\\,");
-            String name = s[0];
-            String phone = s[1];
-            String address = s[2];
-            sendGoods.setCNEE_NAME(name);
-            sendGoods.setCNEE_ADDRESS(address);
-            sendGoods.setCNEE_PHONE(phone);
-            sendGoods.setPLAYBACK_ID(null);//抓取的娃娃编号
-            sendGoods.setGOODS_NUM(number);
-            sendGoods.setREMARK(remark);//留言
-            sendGoods.setUSER_ID(userId);
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < newList.size(); i++) {
-                String ss =  newList.get(i).toString();
-                String ss1 = ss.substring(ss.length()-1,ss.length());
-                int num = Integer.valueOf(ss1);
-                String toyname = ss.substring(0,ss.length()-5);
-                DollToyVo dollToyVo =  dolltoyService.getDollToyByToyName(toyname);
-                int toyNum = dollToyVo.getToy_num();
-                dollToyVo.setToy_num(toyNum-num);
-                dolltoyService.updateToyNum(dollToyVo);
-                String d = newList.get(i);
-                sb.append(d + "，");
-            }
-            sendGoods.setPOST_REMARK(sb.toString());
-            Date date = new Date();
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String time = format.format(date);
-            sendGoods.setCREATE_TIME(time);
-            int sg = sendGoodsService.regSendGoods(sendGoods);
-            if (sg == 0) {
-                return RespStatus.fail("增加记录失败");
-            }
-            Map<String, Object> map = new HashMap<>();
-            map.put("playback", playDetails);
-            return RespStatus.successs().element("data", map);
-
+            return sendGoodsService.doSendGoods(playId, number, consignee, remark, userId, mode);
         } catch (Exception e) {
             e.printStackTrace();
             return RespStatus.fail();
@@ -278,53 +177,13 @@ public class SendGoodController {
     @ResponseBody
     public JSONObject conversionGoods(
             @RequestParam("id") String id,
-            @RequestParam("dollId")  String dollId,
+            @RequestParam("dollId") String dollId,
             @RequestParam("number") String number,
             @RequestParam("userId") String userId
     ) {
 
         try {
-            String[] pd = id.split("\\,");//获取需要兑换的抓中娃娃编号
-            for (int i = 0; i < pd.length; i++) {
-                String pid = pd[i];
-                PlayDetail playBack = playDetailService.getPlayDetailByID(Integer.parseInt(pid));
-                if (playBack.getPOST_STATE().equals("0")) {
-                    AppUser appUser = appuserService.getUserByID(userId);
-                    int balance = Integer.parseInt(appUser.getBALANCE());
-                    String c =  playBack.getCONVERSIONGOLD();
-                    int m =  Integer.valueOf(c);
-                    String newBalance = String.valueOf(balance + m);
-                    appUser.setBALANCE(newBalance);
-                    appuserService.updateAppUserBalanceById(appUser);
-                    playBack.setPOST_STATE("2");//兑换
-                    playDetailService.updatePostStateForCon(playBack);
-                } else {
-                    return RespStatus.fail("该娃娃已经被兑换过或者寄出");
-                }
-                Conversion conversion = new Conversion();
-                Date date = new Date();
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String time = format.format(date);
-                conversion.setCREATETIME(time);
-                String dollname = dollService.getDollByID(playDetailService.getPlayDetailByID(Integer.valueOf(pid)).getDOLLID()).getDOLL_NAME();
-                conversion.setDOLLNAME(dollname);
-                conversion.setNUMBER("1");
-                conversion.setUSERID(userId);
-                conversion.setPLAYID(pid);
-                conversion.setCONMONEY(String.valueOf(playBack.getCONVERSIONGOLD()));
-                conversionService.reg(conversion);
-                Payment payment = new Payment();
-                payment.setGOLD("+"+String.valueOf(playBack.getCONVERSIONGOLD()));
-                payment.setUSERID(userId);
-                payment.setDOLLID(playBack.getDOLLID());
-                payment.setCOST_TYPE("7");
-                payment.setREMARK("兑换"+dollname);
-                paymentService.reg(payment);
-            }
-            Map<String, Object> map = new HashMap<>();
-            map.put("appUser", getAppUserInfo(userId));
-            return RespStatus.successs().element("data", map);
-
+            return sendGoodsService.doConversionGold(id,userId);
         } catch (Exception e) {
             e.printStackTrace();
             return RespStatus.fail();
@@ -354,8 +213,7 @@ public class SendGoodController {
         }
     }
 
-    public static void main(String[] a){
-
+    public static void main(String[] a) {
 
 
     }

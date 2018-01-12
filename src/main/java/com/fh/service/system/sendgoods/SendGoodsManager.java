@@ -60,4 +60,24 @@ public interface SendGoodsManager {
      */
     public JSONObject doSendGoods(String playId,String number,String consignee,String remark,String userId,String mode) throws Exception;
 
+    /**
+     * 兑换金币
+     * @param id
+     * @param userId
+     * @return
+     * @throws Exception
+     */
+    public JSONObject doConversionGold(String id,String userId)throws Exception;
+
+
+
+
+
+
+
+
+
+
+
+
 }

@@ -2,6 +2,7 @@ package com.fh.service.system.sign;
 
 import com.fh.entity.system.Sign;
 import com.fh.util.PageData;
+import net.sf.json.JSONObject;
 
 public interface SignManager {
     /**
@@ -21,6 +22,8 @@ public interface SignManager {
     public Sign getSignLastByUserId(String userId)throws Exception;
 
     public int updateSign(Sign sign) throws Exception;
+
+    public JSONObject doSign(String userId,String signType )throws Exception;
 
 
 
