@@ -202,7 +202,7 @@
     </update>
     <!--获取玩家的抓中记录信息-->
     <select id="getPlaylist" parameterType="String" resultType="com.fh.entity.system.PlayDetail">
-            select
+            SELECT h.* FROM (select
             d.DOLL_NAME, d.doll_url, dd.ID, dd.USERID, dd.GUESS_ID, dd.DOLLID, dd.STATE, dd.CREATE_DATE, dd.GOLD, dd.CAMERA_DATE,
             dd.STOP_FLAG,dd.CONVERSIONGOLD,dd.POST_STATE,dd.SENDGOODS,u.NICKNAME,u.IMAGE_URL
             from
@@ -210,10 +210,10 @@
             inner join  sys_app_doll as d on d.doll_id = dd.dollid
             inner join sys_app_user as u on u.user_id = dd.userid
             where u.user_id = #{USERID}
-            and dd.state = '1'
+            and dd.state = '1') AS h
             order by
-            dd.create_date
-            desc
+            h.POST_STAT
+            ASC
     </select>
 
     <!--查询用户分组抓到的娃娃的数量-->

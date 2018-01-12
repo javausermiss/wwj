@@ -86,27 +86,27 @@
 
     <!-- 会员列表 -->
     <select id="userlistPage" parameterType="page" resultType="pd">
-        select 
-	        u.USER_ID,
-			u.USERNAME,
-			u.`NAME`,
-			u.RIGHTS,
-			u.ROLE_ID,
-			u.NICKNAME,
-			u.LAST_LOGIN,
-			u.IP,
-			u.`STATUS`,
-			u.BZ,
-			u.PHONE,
-			u.SFID,
-			u.START_TIME,
-			u.END_TIME,
-			u.YEARS,
-			u.NUMBER,
-			u.EMAIL,
-			u.CREATETIME,
-			u.IMAGE_URL,
-			u.BALANCE
+        select
+        u.USER_ID,
+        u.USERNAME,
+        u.`NAME`,
+        u.RIGHTS,
+        u.ROLE_ID,
+        u.NICKNAME,
+        u.LAST_LOGIN,
+        u.IP,
+        u.`STATUS`,
+        u.BZ,
+        u.PHONE,
+        u.SFID,
+        u.START_TIME,
+        u.END_TIME,
+        u.YEARS,
+        u.NUMBER,
+        u.EMAIL,
+        u.CREATETIME,
+        u.IMAGE_URL,
+        u.BALANCE
         FROM
         <include refid="tableName"/>
         u
@@ -419,6 +419,8 @@
         ORDER BY
         DOLLTOTAL
         DESC
+        limit
+        0,10
     </select>
 
     <!--更新收货人信息地址-->
@@ -486,8 +488,8 @@
 		WHERE
 		USER_ID = #{USER_ID}
     </update>
-    
-     <!--用户余额更改-->
+
+    <!--用户余额更改-->
     <update id="updateAppUserBalanceNew" parameterType="com.fh.entity.system.AppUser">
         update
         <include refid="tableName"/>
@@ -496,8 +498,8 @@
         WHERE
         USER_ID = #{USER_ID}
     </update>
-    
-     <!-- 通过id获取用户信息 -->
+
+    <!-- 通过id获取用户信息 -->
     <select id="getUserAppById" parameterType="String" resultType="com.fh.entity.system.AppUser">
         select
         <include refid="Field"/>
@@ -505,6 +507,16 @@
         <include refid="tableName"/>
         where
         USER_ID = #{USER_ID} FOR UPDATE
+    </select>
+
+    <!--获取个人排名-->
+    <select id="getAppUserRanklist" parameterType="String" resultType="com.fh.entity.system.AppUser">
+        select * from
+        (select u.user_id,u.nickname ,u.dolltotal,u.image_url,
+        (@rownum := @rowNum + 1) as RANK from sys_app_user u , (select (@rownum := 0))
+        b order by dolltotal desc ,createtime ) p
+        where
+        p.user_id = #{USER_ID}
     </select>
 
 </mapper>

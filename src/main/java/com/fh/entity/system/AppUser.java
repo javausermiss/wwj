@@ -28,6 +28,7 @@ public class AppUser {
     private String CNEE_ADDRESS;
     private String CNEE_PHONE;
     private String SIGN_TAG;
+    private String RANK;
 
     public AppUser() {
     }
@@ -70,6 +71,14 @@ public class AppUser {
         this.CREATETIME = CREATETIME;
         this.USERNAME = USERNAME;
         this.NICKNAME = NICKNAME;
+    }
+
+    public String getRANK() {
+        return RANK;
+    }
+
+    public void setRANK(String RANK) {
+        this.RANK = RANK;
     }
 
     public String getSIGN_TAG() {

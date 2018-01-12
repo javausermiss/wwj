@@ -11,19 +11,18 @@
     <dubbo:application name="web-rpc-1.0"/>
 
     <!--使用zookeeper注册中心暴露服务地址 -即zookeeper的所在服务器ip地址和端口号-->
-    <!--<dubbo:registry address="zookeeper://192.168.1.25:2181"/>-->
-   <!-- <dubbo:registry address="zookeeper://47.100.32.153:2181"/>-->
 
-<!--   <dubbo:registry address="zookeeper://172.19.155.250:2181"/>-->
-    <dubbo:registry address="zookeeper://47.100.32.153:2181"/>
+    <dubbo:registry address="${dubbo.registry.address}"/>
     <!--用dubbo协议在20880端口暴露服务-->
     <dubbo:protocol name="dubbo" port="20880"/>
 
     <!--声明需要暴露的服务接口-->
     <dubbo:service interface="com.iot.game.pooh.web.rpc.interfaces.LotteryWebRpcService" version="1.0" ref="lotteryWebRpcService"/>
+        <dubbo:service interface="com.iot.game.pooh.web.rpc.interfaces.DollWebRpcService" version="1.0" ref="dollWebRpcService"/>
 
     <!--具体的实现bean-->
     <bean id="lotteryWebRpcService" class="com.fh.rpc.LotteryWebServiceImpl"/>
+    <bean id="dollWebRpcService" class="com.fh.rpc.DollWebServiceImpl"/>
 
     <dubbo:reference id="lotteryServerRpcService" interface="com.iot.game.pooh.server.rpc.interfaces.LotteryServerRpcService" version="1.0"/>
 

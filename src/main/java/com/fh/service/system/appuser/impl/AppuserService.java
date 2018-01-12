@@ -379,5 +379,10 @@ public class AppuserService implements AppuserManager{
 	private AppUser getUserAppById(String userId)throws Exception{
 		return (AppUser)dao.findForObject("AppuserMapper.getUserAppById",userId);
 	}
+
+	@Override
+	public AppUser getAppUserRanklist(String userId) throws Exception {
+		return (AppUser)dao.findForObject("AppuserMapper.getAppUserRanklist",userId);
+	}
 }
 

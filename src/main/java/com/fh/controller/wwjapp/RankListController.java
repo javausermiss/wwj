@@ -7,6 +7,7 @@ import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
@@ -42,6 +43,10 @@ public class RankListController {
 
     }
 
+    /**
+     * 排行榜前10名
+     * @return
+     */
     @RequestMapping(value = "/rankList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject rankList() {
@@ -50,7 +55,25 @@ public class RankListController {
             Map<String, Object> map = new HashMap<>();
             map.put("appUser", list);
             return RespStatus.successs().element("data", map);
+        } catch (Exception e) {
+            return RespStatus.fail();
+        }
 
+    }
+
+    /**
+     * 排行榜个人所在名次
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "/rankSelfList", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public JSONObject rankSelfList(@RequestParam ("userId") String userId) {
+        try {
+            AppUser appUser = appuserService.getAppUserRanklist(userId);
+            Map<String, Object> map = new HashMap<>();
+            map.put("appUser",appUser);
+            return RespStatus.successs().element("data", map);
         } catch (Exception e) {
             return RespStatus.fail();
         }

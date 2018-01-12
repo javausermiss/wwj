@@ -282,7 +282,14 @@ public interface AppuserManager {
      * @return
      */
     public int updateUserBalance(String userId,int operNum,String operType,Const.PlayMentCostType operMenu) throws Exception;
-    
+
+    /**
+     * 查询用户个人所在排名
+     * @param userId
+     * @return
+     * @throws Exception
+     */
+    public AppUser getAppUserRanklist (String userId)throws Exception;
     
 
 }

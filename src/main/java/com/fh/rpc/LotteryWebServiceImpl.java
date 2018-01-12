@@ -1,14 +1,25 @@
 package com.fh.rpc;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Resource;
+
 import com.alibaba.dubbo.config.annotation.Service;
-import com.fh.entity.system.*;
+import com.fh.entity.system.AppUser;
+import com.fh.entity.system.Doll;
+import com.fh.entity.system.GuessDetailL;
+import com.fh.entity.system.Payment;
+import com.fh.entity.system.PlayDetail;
+import com.fh.entity.system.Pond;
 import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.betgame.BetGameManager;
 import com.fh.service.system.doll.DollManager;
 import com.fh.service.system.payment.PaymentManager;
 import com.fh.service.system.playdetail.PlayDetailManage;
 import com.fh.service.system.pond.PondManager;
-import com.fh.util.Logger;
 import com.iot.game.pooh.server.entity.json.enums.PoohAbnormalStatus;
 import com.iot.game.pooh.server.entity.json.enums.PoohNormalStatus;
 import com.iot.game.pooh.server.rpc.interfaces.LotteryServerRpcService;
@@ -16,13 +27,8 @@ import com.iot.game.pooh.server.rpc.interfaces.bean.RpcCommandResult;
 import com.iot.game.pooh.server.rpc.interfaces.bean.RpcReturnCode;
 import com.iot.game.pooh.web.rpc.interfaces.LotteryWebRpcService;
 import com.iot.game.pooh.web.rpc.interfaces.entity.GuessDetail;
+
 import lombok.extern.slf4j.Slf4j;
-import com.fh.entity.system.GuessDetailL;
-
-
-import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 @Slf4j
 @Service
@@ -48,38 +54,52 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
     @Override
     public RpcCommandResult startLottery(String dollId, String userId) {
         try {
-
+        	//查找娃娃机信息
+            Doll doll= dollService.getDollByID(dollId);
+            
+            //获取用户
             AppUser appUser = appuserService.getUserByID(userId);
+            
             String b1 = appUser.getBALANCE();
             int old = Integer.valueOf(b1);
-            int b2 = dollService.getDollByID(dollId).getDOLL_GOLD();
+            int b2 = doll.getDOLL_GOLD();
             if (Integer.valueOf(b1) < b2) {
                 return null;
             }
+
+            //添加游戏金币明细记录
             Payment payment = new Payment();
             payment.setCOST_TYPE("0");
             payment.setDOLLID(dollId);
             payment.setUSERID(userId);
-            payment.setGOLD("-"+String.valueOf(dollService.getDollByID(dollId).getDOLL_GOLD()));
-            payment.setREMARK("抓取"+dollService.getDollByID(dollId).getDOLL_NAME());
+            payment.setGOLD("-"+String.valueOf(doll.getDOLL_GOLD()));
+            payment.setREMARK("抓取"+doll.getDOLL_NAME());
             paymentService.reg(payment);
+
+            //修改金币数量
             appUser.setBALANCE(String.valueOf(old - b2));
             appuserService.updateAppUserBalanceById(appUser);
+            
+            //获取最新的场次
             PlayDetail playDetail = new PlayDetail();
             playDetail.setDOLLID(dollId);
-            PlayDetail p = playDetailService.getPlayDetailLast(playDetail);//获取最新的场次
-            String conversionGold = "";
-            int gold = dollService.getDollByID(dollId).getDOLL_GOLD();
-            switch (gold) {
-                case 19:
-                    conversionGold = "80";
-                    break;
-                case 29:
-                    conversionGold = "120";
-                    break;
-                default:
-                    conversionGold = "180";
-            }
+            PlayDetail p = playDetailService.getPlayDetailLast(playDetail);
+//            String conversionGold = "";
+//            int gold = dollService.getDollByID(dollId).getDOLL_GOLD();
+//            switch (gold) {
+//                case 19:
+//                    conversionGold = "80";
+//                    break;
+//                case 29:
+//                    conversionGold = "120";
+//                    break;
+//                default:
+//                    conversionGold = "180";
+//            }
+            
+             //获取娃娃机兑换的金币
+             String conversionGold=doll.getDOLL_CONVERSIONGOLD();
+             
             if (p == null) {
                 Date currentTime1 = new Date();
                 SimpleDateFormat formatter1 = new SimpleDateFormat("yyyyMMdd");
@@ -91,7 +111,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                 newPlayDetail.setDOLLID(dollId);
                 newPlayDetail.setUSERID(userId);
                 newPlayDetail.setCONVERSIONGOLD(conversionGold);
-                newPlayDetail.setGOLD(String.valueOf(dollService.getDollByID(dollId).getDOLL_GOLD()));
+                newPlayDetail.setGOLD(String.valueOf(doll.getDOLL_GOLD()));
                 playDetailService.reg(newPlayDetail);
                 Pond pond = new Pond(newPlayDetail.getGUESS_ID(), dollId, null);
                 pondService.regPond(pond);
@@ -112,7 +132,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                     newp.setUSERID(userId);
                     newp.setDOLLID(dollId);
                     newp.setCONVERSIONGOLD(conversionGold);
-                    newp.setGOLD(String.valueOf(dollService.getDollByID(dollId).getDOLL_GOLD()));
+                    newp.setGOLD(String.valueOf(doll.getDOLL_GOLD()));
                     playDetailService.reg(newp);
                     Pond pond = new Pond(newp.getGUESS_ID(), dollId, null);
                     pondService.regPond(pond);
@@ -130,7 +150,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                     playDetail1.setUSERID(userId);
                     playDetail1.setCONVERSIONGOLD(conversionGold);
                     playDetail1.setGUESS_ID(newGuessID);
-                    playDetail1.setGOLD(String.valueOf(dollService.getDollByID(dollId).getDOLL_GOLD()));
+                    playDetail1.setGOLD(String.valueOf(doll.getDOLL_GOLD()));
                     playDetailService.reg(playDetail1);
                     Pond pond = new Pond(playDetail1.getGUESS_ID(), dollId, null);
                     pondService.regPond(pond);
