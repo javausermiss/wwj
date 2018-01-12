@@ -114,11 +114,17 @@
 		
 		TB_DEVICE_CAMERA c LEFT JOIN SYS_APP_DOLL d on d.DOLL_ID=c.DOLL_ID
 
-		where d.RELEASE_STATUS ='1'
+		where 1=1
 		
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
-			and d.DOLL_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
-		</if>
+			and (
+				d.DOLL_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				or 
+				d.DOLL_SN LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				or 
+				c.LIVESTREAM LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')  
+				)
+        </if>
 		
 		<if test="pd.DEVICE_STATE != null and pd.DEVICE_STATE != ''"><!-- 状态检索 -->
             and c.DEVICE_STATE = #{pd.DEVICE_STATE}
