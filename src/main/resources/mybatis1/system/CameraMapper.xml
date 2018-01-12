@@ -129,6 +129,8 @@
 		<if test="pd.DEVICE_STATE != null and pd.DEVICE_STATE != ''"><!-- 状态检索 -->
             and c.DEVICE_STATE = #{pd.DEVICE_STATE}
         </if>
+        
+       order by d.DOLL_ID
 	</select>
 	
 	<!-- 列表(全部) -->
