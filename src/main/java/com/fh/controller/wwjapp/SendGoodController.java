@@ -187,7 +187,7 @@ public class SendGoodController {
                     payment.setCOST_TYPE("6");
                     payment.setREMARK("支付运费");
                     paymentService.reg(payment);
-                    sendGoods.setMODE_DESPATCH("1");
+                    sendGoods.setMODE_DESPATCH("2");
                 }
             }
 
@@ -355,10 +355,6 @@ public class SendGoodController {
     }
 
     public static void main(String[] a){
-        String playId = "611";
-        String[] pd = playId.split("\\,");
-       String sss =  pd[0];
-       System.out.println(sss);
 
 
 

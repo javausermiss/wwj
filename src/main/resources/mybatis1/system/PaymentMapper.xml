@@ -32,8 +32,9 @@
 			p.GOLD,
 			p.COST_TYPE,
 			p.CREATE_TIME,
-			u.CNEE_NAME 
-			
+			p.REMARK,
+			u.NICKNAME,
+			u.NAME
 			from TB_APPUSER_PAYMENT p 
 						left join sys_app_user u
 						on u.USER_ID=p.USERID
@@ -68,7 +69,8 @@
 			   o.REGMODE,
 			   o.REGAMOUNT,
 			   o.`STATUS`,
-			   u.CNEE_NAME
+			   u.NICKNAME,
+			   u.NAME
 			   from sys_app_order o 
 			   		left join sys_app_user u 
 			   			on u.USER_ID=o.USER_ID
@@ -94,7 +96,16 @@
     
     <!--查询用户的支出明细-->
     <select id="getPaymenlist" parameterType="String" resultType="com.fh.entity.system.Payment">
-        select * from tb_appuser_payment where userid = #{USERID} order by create_time desc ;
+        select 
+			ID,
+			DOLLID,
+			GOLD,
+			USERID,
+			COST_TYPE,
+			CREATE_TIME,
+			REMARK,
+			UPDATE_TIME
+         from tb_appuser_payment where userid = #{USERID} order by create_time desc ;
     </select>
     
 
