@@ -212,7 +212,7 @@
             where u.user_id = #{USERID}
             and dd.state = '1') AS h
             order by
-            h.POST_STAT
+            h.POST_STATE
             ASC
     </select>
 

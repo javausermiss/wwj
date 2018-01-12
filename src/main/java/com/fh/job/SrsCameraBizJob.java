@@ -24,6 +24,7 @@ public class SrsCameraBizJob{
     
 	@Autowired
     private SrsServerService srsServerService;
+
 	
 	@Autowired
 	private CameraManager cameraManager;

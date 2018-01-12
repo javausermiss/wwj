@@ -53,8 +53,13 @@
 							</tr>--%>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">是否发货:</td>
-								<td><input type="text" name="SENDBOOLEAN" id="SENDBOOLEAN" value="${pd.SENDBOOLEAN}" maxlength="255" placeholder="这里输入是否发货" title="是否发货" style="width:98%;"/></td>
+									<td><select id="SENDBOOLEAN" name="SENDBOOLEAN">
+										<option value="1" <c:if test="${pd.SENDBOOLEAN == '1' }">selected</c:if>>已发货</option>
+										<option value="0" <c:if test="${pd.SENDBOOLEAN == '0' }">selected</c:if>>未发货</option>
+									</select>
+									</td>
 							</tr>
+
 							<%--<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">备注:</td>
 								<td><input type="text" name="REMARK" id="REMARK" value="${pd.REMARK}" maxlength="255" placeholder="这里输入备注" title="备注" style="width:98%;"/></td>
@@ -178,7 +183,7 @@
 				$("#MODE_DESPATCH").focus();
 			return false;
 			}*/
-			/*if($("#SENDBOOLEAN").val()==""){
+			if($("#SENDBOOLEAN").val()==""){
 				$("#SENDBOOLEAN").tips({
 					side:3,
 		            msg:'请输入是否发货',
@@ -187,7 +192,7 @@
 		        });
 				$("#SENDBOOLEAN").focus();
 			return false;
-			}*/
+			}
 			/*if($("#POST_REMARK").val()==""){
 				$("#POST_REMARK").tips({
 					side:3,
