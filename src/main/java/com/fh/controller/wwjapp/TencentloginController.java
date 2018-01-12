@@ -1,5 +1,17 @@
 package com.fh.controller.wwjapp;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.fh.controller.base.BaseController;
 import com.fh.entity.system.AppUser;
 import com.fh.entity.system.AppuserLogin;
 import com.fh.entity.system.Doll;
@@ -8,25 +20,22 @@ import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.appuserlogininfo.AppuserLoginInfoManager;
 import com.fh.service.system.doll.DollManager;
 import com.fh.service.system.payment.PaymentManager;
+import com.fh.util.Const;
 import com.fh.util.PropertiesUtils;
-import com.fh.util.wwjUtil.*;
+import com.fh.util.wwjUtil.FaceImageUtil;
+import com.fh.util.wwjUtil.MyUUID;
+import com.fh.util.wwjUtil.RedisUtil;
+import com.fh.util.wwjUtil.RespStatus;
+import com.fh.util.wwjUtil.TokenVerify;
 import com.iot.game.pooh.admin.srs.core.entity.httpback.SrsConnectModel;
 import com.iot.game.pooh.admin.srs.core.util.SrsConstants;
 import com.iot.game.pooh.admin.srs.core.util.SrsSignUtil;
-import net.sf.json.JSONObject;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/app")
-public class TencentloginController {
+public class TencentloginController extends BaseController {
 
     @Resource(name = "appuserService")
     private AppuserManager appuserService;
@@ -122,8 +131,14 @@ public class TencentloginController {
                     sc.setTime(time);
                     sc.setToken(SrsSignUtil.genSign(sc, SrsConstants.SRS_CONNECT_KEY));
                     String sessionID = MyUUID.createSessionId();
-                    RedisUtil.getRu().set("sessionId:appUser:" + userId, sessionID);
-                    RedisUtil.getRu().set("tencentToken:" + userId, token);
+                    RedisUtil.getRu().set(Const.REDIS_APPUSER_SESSIONID  + userId, sessionID);
+                    RedisUtil.getRu().set(Const.REDIS_APPUSER_LOGIN_TENCENTTOKEN  + userId, token);
+                    
+                    //用户登陆存储redis log
+                    logger.info("用户 appUser is null tencentLogin 登陆accessToken sessionID:");
+                    logger.info("redis " +Const.REDIS_APPUSER_LOGIN_TENCENTTOKEN + userId+"-->"+token);
+                    logger.info("redis "+Const.REDIS_APPUSER_SESSIONID + userId+"-->"+sessionID);
+                    
                     Map<String, Object> map1 = new HashMap<>();
                     map1.put("appUser", getAppUserInfo(userId));
                     map1.put("sessionID", sessionID);
@@ -157,8 +172,14 @@ public class TencentloginController {
                     sc.setTime(time);
                     sc.setToken(SrsSignUtil.genSign(sc, SrsConstants.SRS_CONNECT_KEY));
                     String sessionID = MyUUID.createSessionId();
-                    RedisUtil.getRu().set("tencentToken:" + userId, token);
-                    RedisUtil.getRu().set("sessionId:appUser:" + userId, sessionID);
+                    RedisUtil.getRu().set(Const.REDIS_APPUSER_SESSIONID  + userId, sessionID);
+                    RedisUtil.getRu().set(Const.REDIS_APPUSER_LOGIN_TENCENTTOKEN  + userId, token);
+                    
+                    //用户登陆存储redis log 
+                    logger.info("用户 appUser not null tencentLogin 登陆accessToken sessionID:");
+                    logger.info("redis " +Const.REDIS_APPUSER_LOGIN_TENCENTTOKEN + userId+"-->"+token);
+                    logger.info("redis "+Const.REDIS_APPUSER_SESSIONID + userId+"-->"+sessionID);
+                    
                     Map<String, Object> map1 = new HashMap<>();
                     map1.put("appUser", getAppUserInfo(userId));
                     map1.put("sessionID", sessionID);
@@ -192,7 +213,6 @@ public class TencentloginController {
     ) {
         try {
             String a = TokenVerify.verify(accessToken.trim());//请求sdk后台效验token是否合法
-            System.out.println("------------------------------------" + accessToken + "--------------------------------------");
             if (a.equals("SUCCESS")) {
                 if (appuserService.getUserByID(userId) == null) {
                     return RespStatus.fail("用户不存在");
@@ -211,8 +231,15 @@ public class TencentloginController {
                 sc.setTime(time);
                 sc.setToken(SrsSignUtil.genSign(sc, SrsConstants.SRS_CONNECT_KEY));
                 String sessionID = MyUUID.createSessionId();
-                RedisUtil.getRu().set("tencentToken:" + userId, accessToken);
-                RedisUtil.getRu().set("sessionId:appUser:" + userId, sessionID);
+                RedisUtil.getRu().set(Const.REDIS_APPUSER_LOGIN_TENCENTTOKEN + userId, accessToken);
+                RedisUtil.getRu().set(Const.REDIS_APPUSER_SESSIONID + userId, sessionID);
+                
+                
+                //用户登陆存储redis log 
+                logger.info("用户 tencentAutoLogin accessToken sessionID:");
+                logger.info("redis" +Const.REDIS_APPUSER_LOGIN_TENCENTTOKEN + userId+"-->"+accessToken);
+                logger.info("redis "+Const.REDIS_APPUSER_SESSIONID + userId+"-->"+sessionID);
+                
                 Map<String, Object> map1 = new HashMap<>();
                 map1.put("appUser", getAppUserInfo(userId));
                 map1.put("sessionID", sessionID);

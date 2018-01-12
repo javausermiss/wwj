@@ -7,6 +7,14 @@ import org.springframework.context.ApplicationContext;
  * 修改日期：2015/11/2
 */
 public class Const {
+	
+	//redis sessionId key:sessionId:appUser:			
+	public static final String REDIS_APPUSER_SESSIONID="sessionId:appUser:";
+	
+	//redis sessionId key:sessionId:appUser:					 
+	public static final String REDIS_APPUSER_LOGIN_TENCENTTOKEN="tencentToken:";
+	
+	
 	public static final String SESSION_SECURITY_CODE = "sessionSecCode";	//验证码
 	public static final String SESSION_USER = "sessionUser";				//session用的用户
 	public static final String SESSION_ROLE_RIGHTS = "sessionRoleRights";

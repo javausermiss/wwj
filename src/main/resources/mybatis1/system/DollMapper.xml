@@ -121,8 +121,12 @@
         <include refid="tableName"></include>
         where 1=1
         <if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
-            and
-            DOLL_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			and
+				(
+					DOLL_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or 
+					DOLL_SN LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+				)
         </if>
         <if test="pd.DOLL_STATE != null and pd.DOLL_STATE != ''"><!-- 状态检索 -->
             and DOLL_STATE = #{pd.DOLL_STATE}
