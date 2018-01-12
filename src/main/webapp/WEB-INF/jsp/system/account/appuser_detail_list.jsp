@@ -55,27 +55,42 @@
                                                                          readonly="readonly" style="width:88px;"
                                                                          placeholder="结束日期" title="结束日期"/></td>
                                     <td style="vertical-align:top;padding-left:2px;">
-                                        <select class="chosen-select form-control" name="DOLL_STATE" id="DOLL_STATE"
+                                        <select class="chosen-select form-control" name="COST_TYPE" id="COST_TYPE"
                                                 data-placeholder="请选择状态" style="vertical-align:top;width: 120px;">
                                             <option value="">全部</option>
                                             <option value="0"
-                                                    <c:if test="${pd.DOLL_STATE == '0' }">selected</c:if> >游戏扣款
+                                                    <c:if test="${pd.COST_TYPE == '0' }">selected</c:if> >游戏扣款
                                             </option>
                                             <option value="1"
-                                                    <c:if test="${pd.DOLL_STATE == '1' }">selected</c:if> >竞猜扣款
+                                                    <c:if test="${pd.COST_TYPE == '1' }">selected</c:if> >竞猜扣款
                                             </option>
                                            <option value="2"
-                                                    <c:if test="${pd.DOLL_STATE == '2' }">selected</c:if> >机器故障返款 
+                                                    <c:if test="${pd.COST_TYPE == '2' }">selected</c:if> >机器故障返款 
                                             </option>
                                             <option value="3"
-                                                    <c:if test="${pd.DOLL_STATE == '3' }">selected</c:if> >竞猜成功返款
+                                                    <c:if test="${pd.COST_TYPE == '3' }">selected</c:if> >竞猜成功返款
                                             </option>
                                              <option value="4"
-                                                    <c:if test="${pd.DOLL_STATE == '4' }">selected</c:if> >单向竞猜返款
+                                                    <c:if test="${pd.COST_TYPE == '4' }">selected</c:if> >单向竞猜返款
                                             </option>
                                              <option value="5"
-                                                    <c:if test="${pd.DOLL_STATE == '5' }">selected</c:if> >充值加款
+                                                    <c:if test="${pd.COST_TYPE == '5' }">selected</c:if> >充值加款
                                             </option>
+                                                 <option value="6"
+                                                    <c:if test="${pd.COST_TYPE == '6' }">selected</c:if> >发货运费抵扣
+                                            </option>
+                                                 <option value="7"
+                                                    <c:if test="${pd.COST_TYPE == '7' }">selected</c:if> >兑换娃娃
+                                            </option>
+                                                 <option value="8"
+                                                    <c:if test="${pd.COST_TYPE == '8' }">selected</c:if> >签到奖励
+                                            </option>
+                                                 <option value="9"
+                                                    <c:if test="${pd.COST_TYPE == '9' }">selected</c:if> >充值奖励
+                                            </option>
+<!--                                             <option value="10" -->
+<%--                                                     <c:if test="${pd.DOLL_STATE == '10' }">selected</c:if> >内调 --%>
+<!--                                             </option> -->
                                         </select>
                                     </td>
                                 
@@ -127,9 +142,9 @@
                                                                 class="lbl"></span></label>
                                                     </td>
                                                     <td class='center' style="width: 30px;">${vs.index+1}</td>
-                                                    <td class='center'>${var.CNEE_NAME}</td>
+                                                    <td class='center'>${var.NICKNAME}</td>
                                                     <td class='center'>${var.CREATE_TIME}</td>
-                                                    <td class='center'></td>
+                                                    <td class='center'>${var.REMARK }</td>
                                                     <td class='center'>${var.GOLD}</td>
                                                     
                                                     <td style="width: 200px;" class='center'>
@@ -151,6 +166,18 @@
                                                          </c:if>
                                                          <c:if test="${var.COST_TYPE == '5' }">
                                                          	<span class="label label-success arrowed">充值加款</span>
+                                                         </c:if>
+                                                         <c:if test="${var.COST_TYPE == '6' }">
+                                                         	<span class="label label-success arrowed">发货运费抵扣</span>
+                                                         </c:if>
+                                                         <c:if test="${var.COST_TYPE == '7' }">
+                                                         	<span class="label label-success arrowed">兑换娃娃</span>
+                                                         </c:if>
+                                                         <c:if test="${var.COST_TYPE == '8' }">
+                                                         	<span class="label label-success arrowed">签到奖励</span>
+                                                         </c:if>
+                                                         <c:if test="${var.COST_TYPE == '9' }">
+                                                         	<span class="label label-success arrowed">充值奖励</span>
                                                          </c:if>
                                                     </td>
                                                 </tr>

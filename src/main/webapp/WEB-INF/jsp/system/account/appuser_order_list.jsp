@@ -94,7 +94,7 @@
                                                 class="lbl"></span></label>
                                     </th>
                                     <th class="center" style="width:50px;">序号</th>
-                                    <th class="center">用户名</th>
+                                    <th class="center">用户昵称</th>
                                     <th class="center">流水号</th>
                                     <th class="center">支付流水号</th>
                                     <th class="center">交易时间</th>
@@ -117,7 +117,7 @@
                                                                 class="lbl"></span></label>
                                                     </td>
                                                     <td class='center' style="width: 30px;">${vs.index+1}</td>
-                                                    <td class='center'>${var.CNEE_NAME}</td>
+                                                    <td class='center'>${var.NICKNAME}</td>
                                                      <td class='center'>${var.REG_ID}</td>
                                                     <td class='center'></td>
                                                     <td class='center'>${var.CREATETIME}</td>
