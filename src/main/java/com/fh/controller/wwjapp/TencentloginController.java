@@ -97,19 +97,29 @@ public class TencentloginController extends BaseController {
             @RequestParam("nickName") String nickname
     ) {
         try {
+        	logger.info("tencentLogin--> userId="+userId+",accessToken="+token+",imageUrl="+imageUrl+",nickName"+nickname);
+        	//验证token 是否合法
+        	String code = TokenVerify.verify(token);
+        	if (!"SUCCESS".equals(code)) {
+        		return RespStatus.fail("token不合法");
+        	}
+        	
+        	//判断用户是否存在
             AppUser appUser = appuserService.getUserByID(userId);
+            String newFace ="";
             if (appUser == null) {
-                String code = TokenVerify.verify(token);
-                if (code.equals("SUCCESS")) {
-                    AppUser appUser1 = new AppUser();
+                    appUser = new AppUser();
                     if (imageUrl == null || imageUrl.equals("")) {
-                        imageUrl = PropertiesUtils.getCurrProperty("user.default.header.url"); //默认头像
+                    	newFace = PropertiesUtils.getCurrProperty("user.default.header.url"); //默认头像
+                    }else{
+                    	newFace=FaceImageUtil.downloadImage(imageUrl);
                     }
-                    String newFace = FaceImageUtil.downloadImage(imageUrl);
-                    appUser1.setNICKNAME(nickname);
-                    appUser1.setIMAGE_URL(newFace);
-                    appUser1.setUSER_ID(userId);
-                    appuserService.regwx(appUser1);
+                    appUser.setNICKNAME(nickname);
+                    appUser.setIMAGE_URL(newFace);
+                    appUser.setUSER_ID(userId);
+                    appuserService.regwx(appUser); //未注册用户 先注册用户
+                    
+                    logger.info("tencentLogin--> userId="+userId+",首次登陆，注册赠送金币...");
                     //增加赠送金币明细
                     Payment payment = new Payment();
                     payment.setREMARK("注册赠送");
@@ -117,80 +127,48 @@ public class TencentloginController extends BaseController {
                     payment.setCOST_TYPE("9");
                     payment.setUSERID(userId);
                     paymentService.reg(payment);
-                    //登录日志
-                    AppuserLogin appuserLogin = new AppuserLogin();
-                    appuserLogin.setAPPUSERLOGININFO_ID(MyUUID.getUUID32());
-                    appuserLogin.setUSER_ID(userId);
-                    appuserlogininfoService.insertLoginLog(appuserLogin);
-                    //SRS推流
-                    SrsConnectModel sc = new SrsConnectModel();
-                    long time = System.currentTimeMillis();
-                    sc.setType("U");
-                    sc.setTid(userId);
-                    sc.setExpire(3600 * 24);
-                    sc.setTime(time);
-                    sc.setToken(SrsSignUtil.genSign(sc, SrsConstants.SRS_CONNECT_KEY));
-                    String sessionID = MyUUID.createSessionId();
-                    RedisUtil.getRu().set(Const.REDIS_APPUSER_SESSIONID  + userId, sessionID);
-                    RedisUtil.getRu().set(Const.REDIS_APPUSER_LOGIN_TENCENTTOKEN  + userId, token);
-                    
-                    //用户登陆存储redis log
-                    logger.info("用户 appUser is null tencentLogin 登陆accessToken sessionID:");
-                    logger.info("redis " +Const.REDIS_APPUSER_LOGIN_TENCENTTOKEN + userId+"-->"+token);
-                    logger.info("redis "+Const.REDIS_APPUSER_SESSIONID + userId+"-->"+sessionID);
-                    
-                    Map<String, Object> map1 = new HashMap<>();
-                    map1.put("appUser", getAppUserInfo(userId));
-                    map1.put("sessionID", sessionID);
-                    map1.put("accessToken", token);
-                    map1.put("srsToken", sc);
-                    return RespStatus.successs().element("data", map1);
-                } else {
-                    return RespStatus.fail("token不合法");
+            }else{
+                if (imageUrl == null || imageUrl.equals("")) {
+                	newFace = PropertiesUtils.getCurrProperty("user.default.header.url"); //默认头像
+                }else{
+                	newFace = FaceImageUtil.downloadImage(imageUrl);
                 }
-            } else {
-                String code = TokenVerify.verify(token);
-                if (code.equals("SUCCESS")) {
-                    if (imageUrl == null || imageUrl.equals("")) {
-                        imageUrl = PropertiesUtils.getCurrProperty("user.default.header.url"); //默认头像
-                    }
-                    String newFace = FaceImageUtil.downloadImage(imageUrl);
-                    appUser.setNICKNAME(nickname);
-                    appUser.setIMAGE_URL(newFace);
-                    appuserService.updateTencentUser(appUser);
-                    //登录日志
-                    AppuserLogin appuserLogin = new AppuserLogin();
-                    appuserLogin.setAPPUSERLOGININFO_ID(MyUUID.getUUID32());
-                    appuserLogin.setUSER_ID(userId);
-                    appuserlogininfoService.insertLoginLog(appuserLogin);
-                    //SRS推流
-                    SrsConnectModel sc = new SrsConnectModel();
-                    long time = System.currentTimeMillis();
-                    sc.setType("U");
-                    sc.setTid(userId);
-                    sc.setExpire(3600 * 24);
-                    sc.setTime(time);
-                    sc.setToken(SrsSignUtil.genSign(sc, SrsConstants.SRS_CONNECT_KEY));
-                    String sessionID = MyUUID.createSessionId();
-                    RedisUtil.getRu().set(Const.REDIS_APPUSER_SESSIONID  + userId, sessionID);
-                    RedisUtil.getRu().set(Const.REDIS_APPUSER_LOGIN_TENCENTTOKEN  + userId, token);
-                    
-                    //用户登陆存储redis log 
-                    logger.info("用户 appUser not null tencentLogin 登陆accessToken sessionID:");
-                    logger.info("redis " +Const.REDIS_APPUSER_LOGIN_TENCENTTOKEN + userId+"-->"+token);
-                    logger.info("redis "+Const.REDIS_APPUSER_SESSIONID + userId+"-->"+sessionID);
-                    
-                    Map<String, Object> map1 = new HashMap<>();
-                    map1.put("appUser", getAppUserInfo(userId));
-                    map1.put("sessionID", sessionID);
-                    map1.put("accessToken", token);
-                    map1.put("srsToken", sc);
-
-                    return RespStatus.successs().element("data", map1);
-                } else {
-                    return RespStatus.fail("token不合法");
-                }
+                appUser.setNICKNAME(nickname);
+                appUser.setIMAGE_URL(newFace);
+                appuserService.updateTencentUser(appUser); //已注册用户 更新用户昵称和头像
             }
+                    
+            //登录日志
+            AppuserLogin appuserLogin = new AppuserLogin();
+            appuserLogin.setAPPUSERLOGININFO_ID(MyUUID.getUUID32());
+            appuserLogin.setUSER_ID(userId);
+            appuserlogininfoService.insertLoginLog(appuserLogin);
+            
+            //SRS推流
+            SrsConnectModel sc = new SrsConnectModel();
+            long time = System.currentTimeMillis();
+            sc.setType("U");
+            sc.setTid(userId);
+            sc.setExpire(3600 * 24);
+            sc.setTime(time);
+            sc.setToken(SrsSignUtil.genSign(sc, SrsConstants.SRS_CONNECT_KEY));
+            String sessionID = MyUUID.createSessionId();
+            RedisUtil.getRu().set(Const.REDIS_APPUSER_SESSIONID  + userId, sessionID);
+            RedisUtil.getRu().set(Const.REDIS_APPUSER_LOGIN_TENCENTTOKEN  + userId, token);
+            
+            //用户登陆存储redis log
+            logger.info("用户 appUser is null tencentLogin 登陆accessToken sessionID:");
+            logger.info("redis " +Const.REDIS_APPUSER_LOGIN_TENCENTTOKEN + userId+"-->"+token);
+            logger.info("redis "+Const.REDIS_APPUSER_SESSIONID + userId+"-->"+sessionID);
+            
+            Map<String, Object> map = new HashMap<>();
+            
+            
+            map.put("appUser", getAppUserInfo(userId));//重新查询用户信息
+            map.put("sessionID", sessionID);
+            map.put("accessToken", token);
+            map.put("srsToken", sc);
+            return RespStatus.successs().element("data", map);
         } catch (Exception e) {
             e.printStackTrace();
             return RespStatus.fail();
@@ -211,6 +189,7 @@ public class TencentloginController extends BaseController {
             @RequestParam("userId") String userId,
             @RequestParam("accessToken") String accessToken
     ) {
+    	logger.info("tencentAutoLogin--> userId="+userId+",accessToken="+accessToken);
         try {
             String a = TokenVerify.verify(accessToken.trim());//请求sdk后台效验token是否合法
             if (a.equals("SUCCESS")) {
