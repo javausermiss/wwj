@@ -1,39 +1,38 @@
 package com.fh.util.wwjUtil;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.net.URI;
-import java.security.GeneralSecurityException;
-import java.security.NoSuchAlgorithmException;
+import java.io.IOException;
+import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeMap;
 
-import com.fh.util.MD5;
-import net.sf.json.JSONObject;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.HttpClient;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import java.io.IOException;
-import java.security.MessageDigest;
+import com.fh.util.Logger;
+import com.fh.util.PropertiesUtils;
+
+import net.sf.json.JSONObject;
 
 /**
  * 微信登录token效验
  */
 
 public class TokenVerify {
-    private final static String ckey = "y3WfBKF1FY4=";
-    private final static String cid = "6f456783a0fe44e28771c08ab63a52f7";
-    private final static String ckeyH5 = "rcWhucD6efT=";
-    private final static String cidH5 = "aed34f22d80e430a868c083da0e4de07";
+	
+	 private static Logger logger = Logger.getLogger(TokenVerify.class);
+	
+	
+    private final static String ckey = PropertiesUtils.getCurrProperty("api.app.sdk.ckey");
+    private final static String cid =  PropertiesUtils.getCurrProperty("api.app.skd.cid");
+
     private final static String key = "Pooh4token";
 
 
@@ -43,10 +42,10 @@ public class TokenVerify {
             String code = null;
             String timestamp = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
             System.out.println(timestamp);
-            String signatrue = md5(TokenVerify.getSignature(timestamp, ckeyH5, cidH5, acctoken));
+            String signatrue = md5(TokenVerify.getSignature(timestamp, ckey, cid, acctoken));
             System.out.println(signatrue);
             //HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost("http://domestic.apitest.hxwolf.com:7002/userVisit?" + "cid=" + cidH5 +
+            HttpPost httpPost = new HttpPost(PropertiesUtils.getCurrProperty("api.app.sdk.url") + "cid=" + cid +
                     "&timestamp=" + timestamp + "&access_token=" + acctoken + "&signatrue=" + signatrue);
             httpPost.addHeader("Content-type", "application/x-www-form-urlencoded");
             CloseableHttpResponse response = httpClient.execute(httpPost);
@@ -56,9 +55,8 @@ public class TokenVerify {
                 JSONObject object = new JSONObject();
                 object = object.fromObject(conResult);//将字符串转化为json对象
                 code = String.valueOf(object.get("msg"));
-                System.out.println(code);
+                logger.info("verifyForH5 login result code = "+code);
             } else {
-                System.out.println("error!!!!!!!!!!!!!!");
                 return RespStatus.fail().toString();
             }
             response.close();
@@ -79,11 +77,9 @@ public class TokenVerify {
             CloseableHttpClient httpClient = HttpClients.createDefault();
             String code = null;
             String timestamp = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
-            System.out.println(timestamp);
             String signatrue = md5(TokenVerify.getSignature(timestamp, ckey, cid, acctoken));
-            System.out.println(signatrue);
             //HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost("http://sdk3.api.1862.cn/userVisit?" + "cid=" + cid +
+            HttpPost httpPost = new HttpPost(PropertiesUtils.getCurrProperty("api.app.sdk.url") + "cid=" + cid +
                     "&timestamp=" + timestamp + "&access_token=" + acctoken + "&signatrue=" + signatrue);
             httpPost.addHeader("Content-type", "application/x-www-form-urlencoded");
             CloseableHttpResponse response = httpClient.execute(httpPost);
@@ -123,7 +119,6 @@ public class TokenVerify {
             basestring.append(param.getKey()).append('=').append(param.getValue()).append('&');
         }
         basestring.delete(basestring.length() - 1, basestring.length()).append(secret);
-        System.out.println("====================" + basestring + "=======================");
         return basestring.toString();
 
     }
@@ -160,7 +155,6 @@ public class TokenVerify {
             basestring.append(param.getKey()).append('=').append(param.getValue()).append('&');
         }
         basestring.append("Key=").append(key);
-        System.out.println("====================" + basestring + "=======================");
         return md5(basestring.toString());
 
     }

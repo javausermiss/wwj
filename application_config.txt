@@ -69,4 +69,9 @@ user.default.header.url=group1/M00/00/00/CoXIAFpS5E-ANuelAAAgnQZ3bM0916.png
 #pay.ckey#
 pay.ckey=y3WfBKF1FY4=
 
+
+api.app.sdk.url=http://sdk3.api.1862.cn/userVisit?
+api.app.sdk.ckey=y3WfBKF1FY4=
+api.app.skd.cid=6f456783a0fe44e28771c08ab63a52f7
+
 ####################################################config.properties end#######################
