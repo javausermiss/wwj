@@ -10,7 +10,6 @@
     <!-- 字段 -->
     <sql id="Field">
         ID,
-        PLAYBACK_ID,
         USER_ID,
         GOODS_NUM,
         CNEE_NAME,
@@ -25,13 +24,11 @@
         FMS_ORDER_NO,
         FMS_NAME,
         UPDATE_TIME
-
     </sql>
 
     <!-- 字段值 -->
     <sql id="FieldValue">
         #{ID},
-        #{PLAYBACK_ID},
         #{USER_ID},
         #{GOODS_NUM},
         #{CNEE_NAME},
@@ -101,12 +98,19 @@
         <if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
             and
             (
-            SENDBOOLEAN LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            FMS_ORDER_NO LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
                  or
-            MODE_DESPATCH LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-                 or
-            SENDBOOLEAN LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            CNEE_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
             )
+        </if>
+        <if test="pd.lastLoginStart!=null and pd.lastLoginStart!=''"><!-- 到期时间检索 -->
+            and CREATE_TIME &gt;= #{pd.lastLoginStart}
+        </if>
+        <if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 到期时间检索 -->
+            and CREATE_TIME &lt;= #{pd.lastLoginEnd}
+        </if>
+        <if test="pd.SENDBOOLEAN != null and pd.SENDBOOLEAN != ''"><!-- 状态检索 -->
+            and SENDBOOLEAN = #{pd.SENDBOOLEAN}
         </if>
         ORDER
         BY
@@ -115,11 +119,25 @@
     </select>
 
     <!-- 列表(全部) -->
-    <select id="listAll" parameterType="pd" resultType="pd">
+    <select id="listAll" parameterType="page" resultType="pd">
         select
         <include refid="Field"></include>
         from
         <include refid="tableName"></include>
+        where 1=1
+        <if test="pd.lastLoginStart!=null and pd.lastLoginStart!=''"><!-- 到期时间检索 -->
+            and CREATE_TIME &gt;= #{pd.lastLoginStart}
+        </if>
+        <if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 到期时间检索 -->
+            and CREATE_TIME &lt;= #{pd.lastLoginEnd}
+        </if>
+        <if test="pd.SENDBOOLEAN != null and pd.SENDBOOLEAN != ''"><!-- 状态检索 -->
+            and SENDBOOLEAN = #{pd.SENDBOOLEAN}
+        </if>
+        ORDER
+        BY
+        FMS_TIME
+        ASC
     </select>
 
     <!-- 批量删除 -->

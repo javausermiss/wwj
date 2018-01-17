@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -32,6 +34,7 @@ import com.fh.service.system.sendgoods.SendGoodsManager;
  */
 @Controller
 @RequestMapping(value="/sendgoods")
+@Slf4j
 public class SendGoodsController extends BaseController {
 	
 	String menuUrl = "sendgoods/list.do"; //菜单地址(权限用)
@@ -174,16 +177,28 @@ public class SendGoodsController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/excel")
-	public ModelAndView exportExcel() throws Exception{
+	public ModelAndView exportExcel(Page page) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"导出SendGoods到excel");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		String keywords = pd.getString("keywords");				//关键词检索条件
+		if(null != keywords && !"".equals(keywords)){
+			pd.put("keywords", keywords.trim());
+		}
+		String lastLoginStart = pd.getString("lastLoginStart");
+		String lastLoginEnd = pd.getString("lastLoginEnd");
+		if(lastLoginStart != null && !"".equals(lastLoginStart)){
+			pd.put("lastLoginStart", lastLoginStart+" 00:00:00");
+		}
+		if(lastLoginEnd != null && !"".equals(lastLoginEnd)){
+			pd.put("lastLoginEnd", lastLoginEnd+" 00:00:00");
+		}
+		page.setPd(pd);
 		Map<String,Object> dataMap = new HashMap<String,Object>();
 		List<String> titles = new ArrayList<String>();
 		titles.add("主键ID");	//1
-		titles.add("废弃");	//2
 		titles.add("用户ID");	//3
 		titles.add("发货数量");	//4
 		titles.add("收货人名字");	//5
@@ -199,26 +214,33 @@ public class SendGoodsController extends BaseController {
 		titles.add("物流名称");	//15
 		titles.add("更新时间");	//16
 		dataMap.put("titles", titles);
-		List<PageData> varOList = sendgoodsService.listAll(pd);
+		List<PageData> varOList = sendgoodsService.listAll(page);
 		List<PageData> varList = new ArrayList<PageData>();
 		for(int i=0;i<varOList.size();i++){
 			PageData vpd = new PageData();
 			vpd.put("var1", varOList.get(i).get("ID").toString());	//1
-			vpd.put("var2", varOList.get(i).getString("PLAYBACK_ID"));	    //2
-			vpd.put("var3", varOList.get(i).getString("USER_ID"));	    //3
-			vpd.put("var4", varOList.get(i).getString("GOODS_NUM"));	    //4
-			vpd.put("var5", varOList.get(i).getString("CNEE_NAME"));	    //5
-			vpd.put("var6", varOList.get(i).getString("CNEE_ADDRESS"));	    //6
-			vpd.put("var7", varOList.get(i).getString("CNEE_PHONE"));	    //7
-			vpd.put("var8", varOList.get(i).getString("CREATE_TIME"));	    //8
-			vpd.put("var9", varOList.get(i).getString("MODE_DESPATCH"));	    //9
-			vpd.put("var10", varOList.get(i).getString("SENDBOOLEAN"));	    //10
-			vpd.put("var11", varOList.get(i).getString("POST_REMARK"));	    //11
-			vpd.put("var12", varOList.get(i).getString("REMARK"));	    //12
-			vpd.put("var13", varOList.get(i).getString("FMS_TIME"));	    //13
-			vpd.put("var14", varOList.get(i).getString("FMS_ORDER_NO"));	    //14
-			vpd.put("var15", varOList.get(i).getString("FMS_NAME"));	    //15
-			vpd.put("var16", varOList.get(i).getString("UPDATE_TIME"));	    //16
+			vpd.put("var2", varOList.get(i).getString("USER_ID"));	    //3
+			vpd.put("var3", varOList.get(i).getString("GOODS_NUM"));	    //4
+			vpd.put("var4", varOList.get(i).getString("CNEE_NAME"));	    //5
+			vpd.put("var5", varOList.get(i).getString("CNEE_ADDRESS"));	    //6
+			vpd.put("var6", varOList.get(i).getString("CNEE_PHONE"));	    //7
+			vpd.put("var7", varOList.get(i).getString("CREATE_TIME"));	    //8
+			vpd.put("var8", varOList.get(i).getString("MODE_DESPATCH"));	    //9
+			vpd.put("var9", varOList.get(i).getString("SENDBOOLEAN"));	    //10
+			vpd.put("var10", varOList.get(i).getString("POST_REMARK"));	    //11
+			vpd.put("var11", varOList.get(i).getString("REMARK"));	    //12
+			if (varOList.get(i).get("FMS_TIME")==null){
+				vpd.put("var12", null);
+			}else {
+				vpd.put("var12", varOList.get(i).get("FMS_TIME").toString());	    //13
+			}
+			vpd.put("var13", varOList.get(i).getString("FMS_ORDER_NO"));	    //14
+			vpd.put("var14", varOList.get(i).getString("FMS_NAME"));	    //15
+			if (varOList.get(i).get("UPDATE_TIME")==null){
+				vpd.put("var15",null);
+			}else {
+				vpd.put("var15", varOList.get(i).get("UPDATE_TIME").toString());	  //16
+			}
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);

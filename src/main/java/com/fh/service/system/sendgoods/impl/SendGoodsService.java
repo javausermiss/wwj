@@ -111,7 +111,7 @@ public class SendGoodsService implements SendGoodsManager{
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    public List<PageData> listAll(PageData pd)throws Exception{
+    public List<PageData> listAll(Page  pd)throws Exception{
         return (List<PageData>)dao.findForList("SendGoodsMapper.listAll", pd);
     }
 
@@ -263,10 +263,7 @@ public class SendGoodsService implements SendGoodsManager{
             if (playBack.getPOST_STATE().equals("0")) {
                 AppUser appUser = appuserService.getUserByID(userId);
                 int balance = Integer.parseInt(appUser.getBALANCE());
-                String dollid =  playBack.getDOLLID();
-                Doll doll =  dollService.getDollByID(dollid);
-                String c = doll.getDOLL_CONVERSIONGOLD();
-              //  String c = playBack.getCONVERSIONGOLD();
+                String c = playBack.getCONVERSIONGOLD();
                 int m = Integer.valueOf(c);
                 String newBalance = String.valueOf(balance + m);
                 appUser.setBALANCE(newBalance);

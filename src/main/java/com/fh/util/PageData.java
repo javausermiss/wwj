@@ -2,20 +2,20 @@ package com.fh.util;
 
 import java.io.BufferedReader;
 import java.io.Reader;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
 import com.alibaba.druid.proxy.jdbc.ClobProxyImpl;
-/** 
+
+/**
  * 说明：用MAP封装前台传的参数
  * 创建人：FH Q313596790
  * 修改时间：2014年9月20日
- * @version
  */
 public class PageData extends HashMap implements Map{
 	
@@ -70,7 +70,7 @@ public class PageData extends HashMap implements Map{
 	public String getString(Object key) {
 		return (String)get(key);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object put(Object key, Object value) {

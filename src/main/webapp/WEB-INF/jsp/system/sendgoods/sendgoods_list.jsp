@@ -42,14 +42,23 @@
 										</span>
 									</div>
 								</td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期" title="开始日期"/></td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期" title="结束日期"/></td>
+								<td style="padding-left:2px;"><input class="span10 date-picker"
+																	 name="lastLoginStart" id="lastLoginStart"
+																	 value="${pd.lastLoginStart}" type="text"
+																	 data-date-format="yyyy-mm-dd"
+																	 readonly="readonly" style="width:88px;"
+																	 placeholder="开始日期" title="最近登录开始"/></td>
+								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastLoginEnd"
+																	 name="lastLoginEnd" value="${pd.lastLoginEnd}"
+																	 type="text" data-date-format="yyyy-mm-dd"
+																	 readonly="readonly" style="width:88px;"
+																	 placeholder="结束日期" title="最近登录结束"/></td>
 								<td style="vertical-align:top;padding-left:2px;">
-								 	<select class="chosen-select form-control" name="name" id="id" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
+								 	<select class="chosen-select form-control" name="SENDBOOLEAN" id="SENDBOOLEAN" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
 									<option value=""></option>
 									<option value="">全部</option>
-									<option value="">1</option>
-									<option value="">2</option>
+										<option value="1" <c:if test="${pd.SENDBOOLEAN == '1' }">selected</c:if>>已发货</option>
+										<option value="0" <c:if test="${pd.SENDBOOLEAN == '0' }">selected</c:if>>未发货</option>
 								  	</select>
 								</td>
 								<c:if test="${QX.cha == 1 }">
@@ -67,14 +76,12 @@
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
 									<th class="center" style="width:50px;">序号</th>
-									<%--<th class="center">用户ID</th>--%>
 									<th class="center">收货人名字</th>
 									<th class="center">收货人地址</th>
 									<th class="center">收货人手机号码</th>
 									<th class="center">发货数量</th>
 									<th class="center">订单创建时间</th>
 									<th class="center">付款方式</th>
-									<%--<th class="center">是否发货</th>--%>
 									<th class="center">发货备注</th>
 									<th class="center">备注</th>
 									<th class="center">发货时间</th>
@@ -95,7 +102,6 @@
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.ID}" class="ace" /><span class="lbl"></span></label>
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<%--<td class='center'>${var.USER_ID}</td>--%>
 											<td class='center'>${var.CNEE_NAME}</td>
 											<td class='center'>${var.CNEE_ADDRESS}</td>
 											<td class='center'>${var.CNEE_PHONE}</td>
@@ -106,7 +112,6 @@
 												<c:if test="${var.MODE_DESPATCH == '1'}">金币抵扣</c:if>
 												<c:if test="${var.MODE_DESPATCH == '2'}">货到付款</c:if>
 													</td>
-											<%--<td class='center'>${var.SENDBOOLEAN}</td>--%>
 											<td class='center'>${var.POST_REMARK}</td>
 											<td class='center'>${var.REMARK}</td>
 											<td class='center'><fmt:formatDate value="${var.FMS_TIME}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
@@ -384,7 +389,11 @@
 		
 		//导出excel
 		function toExcel(){
-			window.location.href='<%=basePath%>sendgoods/excel.do';
+            var keywords = $("#nav-search-input").val();
+            var lastLoginStart = $("#lastLoginStart").val();
+            var lastLoginEnd = $("#lastLoginEnd").val();
+            var SENDBOOLEAN = $("#SENDBOOLEAN").val();
+			window.location.href='<%=basePath%>sendgoods/excel.do?keywords=' + keywords + '&lastLoginStart=' + lastLoginStart + '&lastLoginEnd=' + lastLoginEnd + '&SENDBOOLEAN=' + SENDBOOLEAN;
 		}
 	</script>
 
