@@ -55,7 +55,7 @@ public class Jurisdiction {
 					map.put("add", (RightsHelper.testRights(map.get("adds"), MENU_ID)) || isAdmin?"1":"0");
 					map.put("del", RightsHelper.testRights(map.get("dels"), MENU_ID) || isAdmin?"1":"0");
 					map.put("edit", RightsHelper.testRights(map.get("edits"), MENU_ID) || isAdmin?"1":"0");
-					map.put("cha", RightsHelper.testRights(map.get("chas"), MENU_ID) || isAdmin?"1":"0");
+					map.put("cha","1");
 					session.removeAttribute(USERNAME + Const.SESSION_QX);
 					session.setAttribute(USERNAME + Const.SESSION_QX, map);	//重新分配按钮权限
 					return true;
