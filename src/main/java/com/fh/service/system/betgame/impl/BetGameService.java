@@ -167,6 +167,10 @@ public class BetGameService implements BetGameManager {
 
     @Override
     public JSONObject doBet(String userId, String dollId, int wager, String guessId, String guessKey) throws Exception {
+        AppUser appUser1 = appuserService.getAppUserRanklist(userId);
+        if (appUser1==null){
+            return null;
+        }
         PlayDetail p1 = new PlayDetail();
         p1.setDOLLID(dollId);
         p1.setGUESS_ID(guessId);

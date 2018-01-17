@@ -17,7 +17,7 @@
 		PLAYBACK_ID,
 		SETTLEMENT_GOLD,
 		SETTLEMENT_FLAG,
-		SETTLEMENT_DATE,
+		SETTLEMENT_DATE
     </sql>
 
     <!-- 通过ID获取数据 -->

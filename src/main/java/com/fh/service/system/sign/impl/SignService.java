@@ -46,6 +46,10 @@ public class SignService implements SignManager{
 
     @Override
     public JSONObject doSign(String userId, String signType) throws Exception {
+        AppUser appUser1 = appuserService.getUserByID(userId);
+        if (appUser1 == null) {
+            return null;
+        }
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
         String dateString = formatter.format(date);
@@ -53,6 +57,15 @@ public class SignService implements SignManager{
             Sign newSignLast = this.getSignLastByUserId(userId);
             Sign sign = new Sign();
             if (newSignLast == null) {
+                sign.setCSDATE("0");
+                sign.setUSERID(userId);
+                sign.setSIGNTIME(dateString);
+                this.insertSign(sign);
+                Sign newSignLast1 = this.getSignLastByUserId(userId);
+                Map<String, Object> map = new HashMap<>();
+                map.put("sign", newSignLast1);
+                return RespStatus.successs().element("data", map);
+            }else if(newSignLast.getCSDATE().equals("7")) {
                 sign.setCSDATE("0");
                 sign.setUSERID(userId);
                 sign.setSIGNTIME(dateString);

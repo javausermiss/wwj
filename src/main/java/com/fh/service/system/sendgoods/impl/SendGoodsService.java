@@ -254,6 +254,8 @@ public class SendGoodsService implements SendGoodsManager{
      */
     @Override
     public JSONObject doConversionGold(String id, String userId) throws Exception {
+
+
         String[] pd = id.split("\\,");//获取需要兑换的抓中娃娃编号
         for (int i = 0; i < pd.length; i++) {
             String pid = pd[i];
@@ -261,7 +263,10 @@ public class SendGoodsService implements SendGoodsManager{
             if (playBack.getPOST_STATE().equals("0")) {
                 AppUser appUser = appuserService.getUserByID(userId);
                 int balance = Integer.parseInt(appUser.getBALANCE());
-                String c = playBack.getCONVERSIONGOLD();
+                String dollid =  playBack.getDOLLID();
+                Doll doll =  dollService.getDollByID(dollid);
+                String c = doll.getDOLL_CONVERSIONGOLD();
+              //  String c = playBack.getCONVERSIONGOLD();
                 int m = Integer.valueOf(c);
                 String newBalance = String.valueOf(balance + m);
                 appUser.setBALANCE(newBalance);

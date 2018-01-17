@@ -1,6 +1,9 @@
 package com.fh.controller.wwjapp;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +39,22 @@ public class AppDollController extends BaseController{
     public JSONObject getDollLists(HttpServletRequest req) {
     	 try {
          	List<DollVo> dollList=dollService.getDollVoList();
-         	return RespStatus.successs().element("dollList", dollList);
+            /* Random index = new Random();
+             List<Integer> indexList = new ArrayList<>();
+             List<DollVo> newList = new ArrayList<>();
+             for(int i=0,j;i<10;i++){
+                 j = index.nextInt(dollList.size());
+                 //判断是否重复
+                 if(!indexList.contains(j)){
+                     //获取元素
+                     indexList.add(j);
+                     newList.add(dollList.get(j));
+                 }else{
+                     i--;//如果重复再来一次
+                 }
+             }
+         	return RespStatus.successs().element("dollList", newList);*/
+             return RespStatus.successs().element("dollList", dollList);
          } catch (Exception e) {
          	logger.error(e.getLocalizedMessage());
              return RespStatus.exception();

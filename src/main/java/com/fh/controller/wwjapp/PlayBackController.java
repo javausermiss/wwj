@@ -92,6 +92,10 @@ public class PlayBackController {
             @RequestParam("userId") String userId
     ) {
         try {
+            AppUser appUser = appuserService.getAppUserRanklist(userId);
+            if (appUser==null){
+                return null;
+            }
             List<PlayDetail> p = playDetailService.getDollCount(userId);
             List<PlayDetail> n = playDetailService.getPlaylist(userId);
             Map<String, Object> map = new HashMap<>();

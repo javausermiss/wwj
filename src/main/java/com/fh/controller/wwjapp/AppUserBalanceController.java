@@ -30,7 +30,7 @@ import java.util.*;
 @RequestMapping(value = "/pay")
 public class AppUserBalanceController {
 
-  //  private final String ckey = "y3WfBKF1FY4=";
+    //  private final String ckey = "y3WfBKF1FY4=";
     @Resource(name = "appuserService")
     private AppuserManager appuserService;
 
@@ -144,6 +144,11 @@ public class AppUserBalanceController {
             @RequestParam("amount") String amounr
     ) {
         try {
+
+            AppUser appUser = appuserService.getUserByID(userId);
+            if (appUser == null) {
+                return null;
+            }
             String datetime = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
             boolean a = RedisUtil.getRu().exists("tradeOrder");
             if (a) {
@@ -323,9 +328,9 @@ public class AppUserBalanceController {
                     return "SUCCESS";
                 }
                 int gold = Integer.valueOf(paycard.getGOLD());
-                String award= "";
+                String award = "";
                 String rechare = "";
-                switch (gold){
+                switch (gold) {
                     case 65:
                         rechare = "60";
                         award = "5";
@@ -357,19 +362,19 @@ public class AppUserBalanceController {
                 appuserService.updateAppUserBalanceById(appUser);
                 //更新收支表
                 Payment payment = new Payment();
-                payment.setGOLD("+"+rechare);
+                payment.setGOLD("+" + rechare);
                 payment.setUSERID(o.getUSER_ID());
                 payment.setDOLLID(null);
                 payment.setCOST_TYPE("5");
-                payment.setREMARK("充值"+rechare);
+                payment.setREMARK("充值" + rechare);
                 paymentService.reg(payment);
                 //奖励记录
                 Payment payment1 = new Payment();
-                payment1.setGOLD("+"+award);
+                payment1.setGOLD("+" + award);
                 payment1.setUSERID(o.getUSER_ID());
                 payment1.setDOLLID(null);
                 payment1.setCOST_TYPE("9");
-                payment1.setREMARK("奖励"+award);
+                payment1.setREMARK("奖励" + award);
                 paymentService.reg(payment1);
                 o.setREGGOLD(String.valueOf(gold));
                 o.setORDER_NO(order_no);

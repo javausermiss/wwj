@@ -71,6 +71,9 @@ public class RankListController {
     public JSONObject rankSelfList(@RequestParam ("userId") String userId) {
         try {
             AppUser appUser = appuserService.getAppUserRanklist(userId);
+            if (appUser==null){
+                return null;
+            }
             Map<String, Object> map = new HashMap<>();
             map.put("appUser",appUser);
             return RespStatus.successs().element("data", map);
