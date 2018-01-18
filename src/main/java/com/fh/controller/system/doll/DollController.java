@@ -30,6 +30,7 @@ import com.fh.entity.system.Doll;
 import com.fh.service.system.doll.DollManager;
 import com.fh.service.system.doll.DollToyManager;
 import com.fh.util.AppUtil;
+import com.fh.util.DateUtil;
 import com.fh.util.FastDFSClient;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
@@ -189,6 +190,47 @@ public class DollController extends BaseController {
 		page.setPd(pd);
 		List<PageData>	varList = dollService.list(page);	//列出Doll列表
 		mv.setViewName("system/doll/doll_list");
+		mv.addObject("varList", varList);
+		mv.addObject("pd", pd);
+		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		return mv;
+	}
+	
+	
+	
+	/** 娃娃机游戏统计列表
+	 * @param page
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/probabilitylist")
+	public ModelAndView probabilitylist(Page page) throws Exception{
+		logBefore(logger, Jurisdiction.getUsername()+"列表probabilitylist");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String keywords = pd.getString("keywords");				//关键词检索条件
+		if(null != keywords && !"".equals(keywords)){
+			pd.put("keywords", keywords.trim());
+		}
+		
+		String lastStart = pd.getString("lastStart");
+		String lastEnd  = pd.getString("lastEnd");
+		
+		if(lastStart != null && !"".equals(lastStart)){
+			pd.put("lastStart", lastStart+" 00:00:00");
+		}else{
+			pd.put("lastStart", DateUtil.getDay()+" 00:00:00");
+		}
+		
+		if(lastEnd != null && !"".equals(lastEnd)){
+			pd.put("lastEnd", lastEnd+" 23:59:59");
+		}else{
+			pd.put("lastStart", DateUtil.getDay()+" 23:59:59");
+		}
+		
+		page.setPd(pd);
+		List<PageData>	varList = dollService.getDollCountlist(page);	//列出Doll列表
+		mv.setViewName("system/doll/doll_game_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限

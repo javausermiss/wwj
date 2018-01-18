@@ -169,6 +169,15 @@ public class DollService implements DollManager {
 	public List<DollVo>  getDollVoList()throws Exception{
 		return (List<DollVo>) dao.findForList("DollMapper.getDollVoList",null);
 	}
+	
+	
+	/** 娃娃机游戏统计
+	 * @param page
+	 * @throws Exception
+	 */
+	public List<PageData> getDollCountlist(Page page)throws Exception{
+		return (List<PageData>)dao.findForList("DollMapper.dollCountlistPage", page);
+	}
 
 }
 

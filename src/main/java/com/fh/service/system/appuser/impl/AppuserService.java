@@ -384,5 +384,15 @@ public class AppuserService implements AppuserManager{
 	public AppUser getAppUserRanklist(String userId) throws Exception {
 		return (AppUser)dao.findForObject("AppuserMapper.getAppUserRanklist",userId);
 	}
+	
+	/**用户游戏统计列表
+	 * @param page
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> listUserGames(Page page)throws Exception{
+		return (List<PageData>) dao.findForList("AppuserMapper.getAppUserGamelistPage", page);
+	}
+	
 }
 

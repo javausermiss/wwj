@@ -518,5 +518,50 @@
         where
         p.user_id = #{USER_ID}
     </select>
-
+    
+     <!-- 会员游戏统计列表 -->
+    <select id="getAppUserGamelistPage" parameterType="page" resultType="pd">   
+			SELECT 
+			au.USER_ID,
+			au.NICKNAME,
+			au.`NAME`,
+			au.BALANCE,
+			IFNULL(d.PALYCOUNT,0) as PALYCOUNT,
+			IFNULL(d.CAUGHTCOUNT ,0) as CAUGHTCOUNT,
+			(IFNULL(d.CAUGHTCOUNT ,0)/IFNULL(d.PALYCOUNT,1)) as PROBABILITY,
+			IFNULL(ao.REGAMOUNT,0) as REGAMOUNT
+			 from sys_app_user au
+			LEFT JOIN (
+			SELECT 
+			 d3.USERID,
+			SUM(d3.PALYCOUNT) as PALYCOUNT,
+			 SUM(d3.CAUGHTCOUNT) as CAUGHTCOUNT FROM ( 
+			
+			SELECT d1.USERID, 0 as PALYCOUNT, COUNT(1) as CAUGHTCOUNT FROM TB_DOLL_PLAY_DETAIL d1 WHERE 1=1 
+			AND d1.STATE='1' GROUP BY d1.USERID 
+			
+			UNION 
+			SELECT d2.USERID, 
+			COUNT(1) as PALYCOUNT, 
+			0 as CAUGHTCOUNT FROM TB_DOLL_PLAY_DETAIL d2 
+			where 1=1 
+			
+			GROUP BY d2.USERID
+			) d3
+			 GROUP BY d3.USERID  ) d on d.USERID=au.USER_ID
+			
+			LEFT JOIN 
+			 (
+				SELECT o.USER_ID,sum(o.REGAMOUNT)/100 as REGAMOUNT from sys_app_order o where 1=1 and o.STATUS='1' GROUP BY o.USER_ID
+			) ao on ao.USER_ID=au.USER_ID
+			
+			   where 1 = 1
+        	<if test="pd.keywords != null and pd.keywords!= ''"><!-- 关键词检索 -->
+            and (
+	            au.USER_ID LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+	            or
+	            au.NICKNAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            )
+        </if>
+	</select>
 </mapper>

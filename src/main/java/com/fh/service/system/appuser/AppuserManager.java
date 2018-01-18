@@ -291,6 +291,13 @@ public interface AppuserManager {
      */
     public AppUser getAppUserRanklist (String userId)throws Exception;
     
-
+	
+	
+	/**用户游戏统计列表
+	 * @param page
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> listUserGames(Page page)throws Exception;
 }
 

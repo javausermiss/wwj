@@ -124,6 +124,13 @@ public interface DollManager{
 	 * @throws Exception
 	 */
 	public List<DollVo>  getDollVoList()throws Exception;
+	
+	
+	/** 娃娃机游戏统计
+	 * @param page
+	 * @throws Exception
+	 */
+	public List<PageData> getDollCountlist(Page page)throws Exception;
 
 }
 

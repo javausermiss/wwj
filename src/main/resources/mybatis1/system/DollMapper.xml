@@ -123,6 +123,8 @@
         <if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
+					DOLL_ID LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or 
 					DOLL_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
 					 or 
 					DOLL_SN LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
@@ -256,5 +258,62 @@
 			SYS_APP_DOLL d LEFT JOIN TB_DEVICE_CAMERA c ON d.DOLL_ID=c.DOLL_ID
 			WHERE d.RELEASE_STATUS ='1'
     </select>
-
+    
+    <select id="dollCountlistPage" parameterType="page" resultType="pd">
+	SELECT 
+	
+		ad.DOLL_ID,
+		ad.DOLL_NAME,
+		ad.DOLL_SN, 
+		IFNULL(d.PALYCOUNT,0) as PALYCOUNT,
+		IFNULL(d.CAUGHTCOUNT ,0) as CAUGHTCOUNT,
+		(IFNULL(d.CAUGHTCOUNT ,0)/IFNULL(d.PALYCOUNT,1)) as PROBABILITY
+		FROM SYS_APP_DOLL ad 
+	LEFT JOIN 
+	(
+		SELECT d3.DOLLID,SUM(d3.PALYCOUNT) as PALYCOUNT,SUM(d3.CAUGHTCOUNT) as CAUGHTCOUNT FROM (
+		
+			SELECT  
+				d1.DOLLID,
+				0 as PALYCOUNT, 
+				COUNT(1) as CAUGHTCOUNT 
+				FROM TB_DOLL_PLAY_DETAIL d1
+				WHERE 1=1
+				  <if test="pd.lastStart != null and pd.lastStart != ''">
+				 	AND date_format( d1.CREATE_DATE,'%Y-%m-%d') &gt;= str_to_date(#{pd.lastStart}, '%Y-%m-%d %H:%i:%s')
+				 </if>
+				 <if test="pd.lastEnd != null and pd.lastEnd != ''">
+				 	AND date_format( d1.CREATE_DATE,'%Y-%m-%d') &lt;= str_to_date(#{pd.lastEnd}, '%Y-%m-%d %H:%i:%s')
+				 </if>
+				 AND d1.STATE='1'
+				 GROUP BY  d1.DOLLID
+	UNION 
+	
+		SELECT
+			d2.DOLLID,
+			COUNT(1) as PALYCOUNT, 
+			0 as CAUGHTCOUNT 
+			FROM TB_DOLL_PLAY_DETAIL d2
+			where 1=1
+			
+			  	<if test="pd.lastStart != null and pd.lastStart != ''">
+					AND date_format( d2.CREATE_DATE,'%Y-%m-%d') &gt;= str_to_date(#{pd.lastStart}, '%Y-%m-%d %H:%i:%s')
+				</if>
+				<if test="pd.lastEnd != null and pd.lastEnd != ''">
+					AND date_format( d2.CREATE_DATE,'%Y-%m-%d') &lt;= str_to_date(#{pd.lastEnd}, '%Y-%m-%d %H:%i:%s')
+				</if>
+		GROUP BY  d2.DOLLID ) d3 GROUP BY d3.DOLLID )  d ON d.DOLLID=ad.DOLL_ID
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+					ad.DOLL_ID LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or 
+					ad.DOLL_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or 
+					ad.DOLL_SN LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+				)
+        </if>
+		ORDER BY ad.RELEASE_STATUS DESC
+	</select>
 </mapper>
