@@ -183,7 +183,7 @@ public class SendGoodController {
     ) {
 
         try {
-            return sendGoodsService.doConversionGold(id,userId);
+            return sendGoodsService.doConversionGold(id, userId);
         } catch (Exception e) {
             e.printStackTrace();
             return RespStatus.fail();
@@ -212,6 +212,26 @@ public class SendGoodController {
             return RespStatus.fail();
         }
     }
+
+    /**
+     * 查询用户订单信息
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "/getLogistics", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public JSONObject getLogistics(@RequestParam("userId") String userId) {
+        try {
+            List<SendGoods> sendGoods = sendGoodsService.getLogisticsByUserId(userId);
+            Map<String, Object> map = new HashMap<>();
+            map.put("logistics",sendGoods);
+            return RespStatus.successs().element("data", map);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return RespStatus.fail();
+        }
+    }
+
 
     public static void main(String[] a) {
 

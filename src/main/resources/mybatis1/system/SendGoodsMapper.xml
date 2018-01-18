@@ -187,8 +187,32 @@
         WHERE
         PLAYBACK_ID = #{PLAYBACK_ID}
     </select>
-
-
-
+    <!--根据用户ID查询发货信息-->
+    <select id="getLogisticsByUserId" parameterType="String" resultType="com.fh.entity.system.SendGoods">
+        SELECT
+        ID,
+        USER_ID,
+        GOODS_NUM,
+        CNEE_NAME,
+        CNEE_ADDRESS,
+        CNEE_PHONE,
+        CREATE_TIME,
+        MODE_DESPATCH,
+        SENDBOOLEAN,
+        POST_REMARK,
+        REMARK,
+        DATE_FORMAT(FMS_TIME ,'%Y-%m-%d %H:%i:%S')FMS_TIME,
+        FMS_ORDER_NO,
+        FMS_NAME,
+        DATE_FORMAT(UPDATE_TIME ,'%Y-%m-%d %H:%i:%S')UPDATE_TIME
+        FROM
+        TB_SEND_GOODS
+        WHERE
+        USER_ID = #{USER_ID}
+        ORDER
+        BY
+        CREATE_TIME
+        DESC
+    </select>
 
 </mapper>

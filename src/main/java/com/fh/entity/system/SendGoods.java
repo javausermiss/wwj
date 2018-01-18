@@ -16,9 +16,7 @@ public class SendGoods {
     private String FMS_NAME;//物流名称
     private String FMS_ORDER_NO;//物流单号
     private String FMS_TIME;//发货时间
-    private String FMS_STATE;//快递状态
-
-
+    private String SENDBOOLEAN;//快递状态
 
 
     public SendGoods(){}
@@ -32,6 +30,22 @@ public class SendGoods {
         this.CNEE_PHONE = CNEE_PHONE;
         this.CREATE_TIME = CREATE_TIME;
         this.REMARK = REMARK;
+    }
+
+    public String getSENDBOOLEAN() {
+        return SENDBOOLEAN;
+    }
+
+    public void setSENDBOOLEAN(String SENDBOOLEAN) {
+        this.SENDBOOLEAN = SENDBOOLEAN;
+    }
+
+    public String getFMS_TIME() {
+        return FMS_TIME;
+    }
+
+    public void setFMS_TIME(String FMS_TIME) {
+        this.FMS_TIME = FMS_TIME;
     }
 
     public String getFMS_NAME() {
@@ -48,22 +62,6 @@ public class SendGoods {
 
     public void setFMS_ORDER_NO(String FMS_ORDER_NO) {
         this.FMS_ORDER_NO = FMS_ORDER_NO;
-    }
-
-    public String getFMS_TIME() {
-        return FMS_TIME;
-    }
-
-    public void setFMS_TIME(String FMS_TIME) {
-        this.FMS_TIME = FMS_TIME;
-    }
-
-    public String getFMS_STATE() {
-        return FMS_STATE;
-    }
-
-    public void setFMS_STATE(String FMS_STATE) {
-        this.FMS_STATE = FMS_STATE;
     }
 
     public String getMODE_DESPATCH() {

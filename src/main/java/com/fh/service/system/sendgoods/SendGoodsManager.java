@@ -69,6 +69,14 @@ public interface SendGoodsManager {
      */
     public JSONObject doConversionGold(String id,String userId)throws Exception;
 
+    /**
+     * 查询用户发货订单物流信息
+     * @param userId
+     * @return
+     * @throws Exception
+     */
+    public List<SendGoods> getLogisticsByUserId (String userId)throws Exception;
+
 
 
 

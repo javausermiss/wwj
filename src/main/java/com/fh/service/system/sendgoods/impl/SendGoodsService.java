@@ -297,4 +297,9 @@ public class SendGoodsService implements SendGoodsManager{
         map.put("appUser", getAppUserInfo(userId));
         return RespStatus.successs().element("data", map);
     }
+
+    @Override
+    public List<SendGoods> getLogisticsByUserId(String userId) throws Exception {
+        return (List<SendGoods>)dao.findForList("SendGoodsMapper.getLogisticsByUserId",userId);
+    }
 }
