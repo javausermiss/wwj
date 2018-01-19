@@ -39,16 +39,26 @@
 											<span class="input-icon">
 												<input class="nav-search-input" autocomplete="off" id="nav-search-input"
 		                                               type="text" name="keywords" value="${pd.keywords }"
-		                                               placeholder="这里输入用户昵称"/>
+		                                               placeholder="这里输入用户昵称,ID"/>
 												<i class="ace-icon fa fa-search nav-search-icon"></i>
 											</span>
                                         </div>
                                     </td>
-                                        <td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs"
-                                                                                            onclick="searchs();"
-                                                                                            title="检索">
-                                                                                           
-                                                <i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a>
+                                      <td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart"
+                                                                         id="lastStart" value="" type="text"
+                                                                         data-date-format="yyyy-mm-dd"
+                                                                         readonly="readonly" style="width:88px;"
+                                                                         placeholder="开始日期" title="开始日期"/></td>
+                                    <td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd"
+                                                                         name="lastEnd" value="" type="text"
+                                                                         data-date-format="yyyy-mm-dd"
+                                                                         readonly="readonly" style="width:88px;"
+                                                                         placeholder="结束日期" title="结束日期"/></td>
+                                        <td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs"
+                                                                                           onclick="tosearch();"
+                                                                                           title="检索"><i
+                                                id="nav-search-icon"
+                                                class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a>
                                         </td>
                                 </tr>
                             </table>
@@ -137,9 +147,19 @@
     $(top.hangge());
 
     //检索
-    function searchs() {
+    function tosearch() {
         top.jzts();
         $("#userForm").submit();
     }
+    
+
+    $(function () {
+
+        //日期框
+        $('.date-picker').datepicker({
+            autoclose: true,
+            todayHighlight: true
+        });
+    });
 </script>
 </html>

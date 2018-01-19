@@ -538,7 +538,13 @@
 			SUM(d3.PALYCOUNT) as PALYCOUNT,
 			 SUM(d3.CAUGHTCOUNT) as CAUGHTCOUNT FROM ( 
 			
-			SELECT d1.USERID, 0 as PALYCOUNT, COUNT(1) as CAUGHTCOUNT FROM TB_DOLL_PLAY_DETAIL d1 WHERE 1=1 
+			SELECT d1.USERID, 0 as PALYCOUNT, COUNT(1) as CAUGHTCOUNT FROM TB_DOLL_PLAY_DETAIL d1 WHERE 1=1
+			<if test="pd.lastStart != null and pd.lastStart != ''">
+				 	AND date_format( d1.CREATE_DATE,'%Y-%m-%d') &gt;= str_to_date(#{pd.lastStart}, '%Y-%m-%d %H:%i:%s')
+			 </if>
+			 <if test="pd.lastEnd != null and pd.lastEnd != ''">
+			 	AND date_format( d1.CREATE_DATE,'%Y-%m-%d') &lt;= str_to_date(#{pd.lastEnd}, '%Y-%m-%d %H:%i:%s')
+			 </if>
 			AND d1.STATE='1' GROUP BY d1.USERID 
 			
 			UNION 
@@ -546,7 +552,12 @@
 			COUNT(1) as PALYCOUNT, 
 			0 as CAUGHTCOUNT FROM TB_DOLL_PLAY_DETAIL d2 
 			where 1=1 
-			
+				<if test="pd.lastStart != null and pd.lastStart != ''">
+					AND date_format( d2.CREATE_DATE,'%Y-%m-%d') &gt;= str_to_date(#{pd.lastStart}, '%Y-%m-%d %H:%i:%s')
+				</if>
+				<if test="pd.lastEnd != null and pd.lastEnd != ''">
+					AND date_format( d2.CREATE_DATE,'%Y-%m-%d') &lt;= str_to_date(#{pd.lastEnd}, '%Y-%m-%d %H:%i:%s')
+				</if>
 			GROUP BY d2.USERID
 			) d3
 			 GROUP BY d3.USERID  ) d on d.USERID=au.USER_ID
