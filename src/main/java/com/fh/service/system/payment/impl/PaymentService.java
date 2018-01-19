@@ -66,4 +66,50 @@ public class PaymentService implements PaymentManager {
 	public List<PageData> getRemainCount(PageData pd)throws Exception{
 		 return (List<PageData>)dao.findForList("paymentMapper.getRemainCount",pd);
 	 }
+
+	/**
+	  * 获取充值总额
+	  * @param pd
+	  * @return
+	  * @throws Exception
+	  */
+	@Override
+	public List<PageData> getUserTotal(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("paymentMapper.getUserTotal",pd);
+	}
+
+	/**
+	  * 获取充值用户
+	  * @param page
+	  * @return
+	  * @throws Exception
+	  */
+	@Override
+	public List<PageData> findRegTotallistPage(Page page) throws Exception {
+		 return (List<PageData>)dao.findForList("paymentMapper.findRegTotallistPage", page);
+	}
+
+	/**
+	  * 获取每月充值总额
+	  * @param page
+	  * @return
+	  * @throws Exception
+	  */
+	@Override
+	public List<PageData> getUserDateTotal(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("paymentMapper.getUserDateTotal",page);
+	}
+
+	/**
+	  * 获取今日充值总额
+	  * @param page
+	  * @return
+	  * @throws Exception
+	  */
+	@Override
+	public List<PageData> getUserDayTotal(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("paymentMapper.getUserDayTotal",page);
+	}
+
+	
 }

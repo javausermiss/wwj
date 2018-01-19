@@ -520,7 +520,8 @@
     </select>
     
      <!-- 会员游戏统计列表 -->
-    <select id="getAppUserGamelistPage" parameterType="page" resultType="pd">   
+    <select id="getAppUserGamelistPage" parameterType="page" resultType="pd"> 
+   		 SELECT * FROM (
 			SELECT 
 			au.USER_ID,
 			au.NICKNAME,
@@ -537,7 +538,13 @@
 			SUM(d3.PALYCOUNT) as PALYCOUNT,
 			 SUM(d3.CAUGHTCOUNT) as CAUGHTCOUNT FROM ( 
 			
-			SELECT d1.USERID, 0 as PALYCOUNT, COUNT(1) as CAUGHTCOUNT FROM TB_DOLL_PLAY_DETAIL d1 WHERE 1=1 
+			SELECT d1.USERID, 0 as PALYCOUNT, COUNT(1) as CAUGHTCOUNT FROM TB_DOLL_PLAY_DETAIL d1 WHERE 1=1
+			<if test="pd.lastStart != null and pd.lastStart != ''">
+				 	AND date_format( d1.CREATE_DATE,'%Y-%m-%d') &gt;= str_to_date(#{pd.lastStart}, '%Y-%m-%d %H:%i:%s')
+			 </if>
+			 <if test="pd.lastEnd != null and pd.lastEnd != ''">
+			 	AND date_format( d1.CREATE_DATE,'%Y-%m-%d') &lt;= str_to_date(#{pd.lastEnd}, '%Y-%m-%d %H:%i:%s')
+			 </if>
 			AND d1.STATE='1' GROUP BY d1.USERID 
 			
 			UNION 
@@ -545,7 +552,12 @@
 			COUNT(1) as PALYCOUNT, 
 			0 as CAUGHTCOUNT FROM TB_DOLL_PLAY_DETAIL d2 
 			where 1=1 
-			
+				<if test="pd.lastStart != null and pd.lastStart != ''">
+					AND date_format( d2.CREATE_DATE,'%Y-%m-%d') &gt;= str_to_date(#{pd.lastStart}, '%Y-%m-%d %H:%i:%s')
+				</if>
+				<if test="pd.lastEnd != null and pd.lastEnd != ''">
+					AND date_format( d2.CREATE_DATE,'%Y-%m-%d') &lt;= str_to_date(#{pd.lastEnd}, '%Y-%m-%d %H:%i:%s')
+				</if>
 			GROUP BY d2.USERID
 			) d3
 			 GROUP BY d3.USERID  ) d on d.USERID=au.USER_ID
@@ -555,13 +567,15 @@
 				SELECT o.USER_ID,sum(o.REGAMOUNT)/100 as REGAMOUNT from sys_app_order o where 1=1 and o.STATUS='1' GROUP BY o.USER_ID
 			) ao on ao.USER_ID=au.USER_ID
 			
-			   where 1 = 1
+			where 1 = 1
         	<if test="pd.keywords != null and pd.keywords!= ''"><!-- 关键词检索 -->
-            and (
-	            au.USER_ID LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-	            or
-	            au.NICKNAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-            )
-        </if>
+	            and (
+		            au.USER_ID LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+		            or
+		            au.NICKNAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+	            )
+        	</if>
+        
+        ) S ORDER BY PROBABILITY DESC
 	</select>
 </mapper>

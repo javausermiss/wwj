@@ -257,9 +257,11 @@
 			c.DEVICE_STATE from
 			SYS_APP_DOLL d LEFT JOIN TB_DEVICE_CAMERA c ON d.DOLL_ID=c.DOLL_ID
 			WHERE d.RELEASE_STATUS ='1'
+			ORDER BY DOLL_SN ,CAMERA_TYPE
     </select>
     
     <select id="dollCountlistPage" parameterType="page" resultType="pd">
+    SELECT * FROM (
 	SELECT 
 	
 		ad.DOLL_ID,
@@ -314,6 +316,6 @@
 					ad.DOLL_SN LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
 				)
         </if>
-		ORDER BY ad.RELEASE_STATUS DESC
+		ORDER BY ad.RELEASE_STATUS DESC ) S ORDER BY PROBABILITY DESC
 	</select>
 </mapper>

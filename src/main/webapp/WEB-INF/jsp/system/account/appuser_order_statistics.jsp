@@ -31,7 +31,7 @@
                     <div class="col-xs-12">
 
                         <!-- 检索  -->
-                        <form action="doll/probabilitylist.do" method="post" name="Form" id="Form">
+                        <form action="account/detail/appUserOrderStatistics.do" method="post" name="Form" id="Form">
                             <table style="margin-top:5px;">
                                 <tr>
                                     <td>
@@ -45,21 +45,52 @@
                                         </div>
                                     </td>
                                     <td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart"
-                                                                         id="lastStart" value="" type="text"
+                                                                         id="lastStart" value="${pd.lastStart }" type="text"
                                                                          data-date-format="yyyy-mm-dd"
                                                                          readonly="readonly" style="width:88px;"
                                                                          placeholder="开始日期" title="开始日期"/></td>
                                     <td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd"
-                                                                         name="lastEnd" value="" type="text"
+                                                                         name="lastEnd" value="${pd.lastEnd }" type="text"
                                                                          data-date-format="yyyy-mm-dd"
                                                                          readonly="readonly" style="width:88px;"
                                                                          placeholder="结束日期" title="结束日期"/></td>
+                                    <td style="vertical-align:top;padding-left:2px;">
+                                        <%-- <select class="chosen-select form-control" name="STATUS" id="STATUS"
+                                                data-placeholder="请选择状态" style="vertical-align:top;width: 120px;">
+                                            <option value="">全部</option>
+                                            <option value="1"
+                                                    <c:if test="${pd.STATUS == '1' }">selected</c:if> >支付
+                                            </option>
+                                             <option value="0"
+                                                    <c:if test="${pd.STATUS == '0' }">selected</c:if> >未支付
+                                            </option>
+                                        </select> --%>
+                                    </td>
+                                	
                                         <td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs"
                                                                                            onclick="tosearch();"
                                                                                            title="检索"><i
                                                 id="nav-search-icon"
                                                 class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a>
                                         </td>
+                                        	<c:forEach items="${total}" var="s" varStatus="vs">
+                                            <td class='center' ></td>
+                                            	<td class='center' style="width:80px;color:red" bgcolor=""><b>总金额:</b></td>
+                                        		<td class='center'><b>￥${s.money/100}</b></td>
+                                        	</c:forEach>
+                                        	<c:forEach items="${daytotal}" var="day" varStatus="vs">
+                                            <td class='center' ></td>
+                                            	<td class='center' style="width:80px;color:red" bgcolor=""><b>今日金额:</b></td>
+                                        		<td class='center'><b>￥${day.money/100}</b></td>
+                                        	</c:forEach>
+<%--                                     <c:if test="${QX.toExcel == 1 }"> --%>
+<!--                                         <td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" -->
+<!--                                                                                             onclick="toExcel();" -->
+<!--                                                                                             title="导出到EXCEL"><i -->
+<!--                                                 id="nav-search-icon" -->
+<!--                                                 class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a> -->
+<!--                                         </td> -->
+<%--                                     </c:if> --%>
                                 </tr>
                             </table>
                             <!-- 检索  -->
@@ -68,41 +99,44 @@
                                    style="margin-top:5px;">
                                 <thead>
                                 <tr>
-                                    <th class="center" style="width:35px;">
-                                        <label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox"/><span
-                                                class="lbl"></span></label>
-                                    </th>
-                                    <th class="center" style="width:50px;">序号</th>
-                                    <th class="center">娃娃机SN号</th>
-                                    <th class="center">娃娃机名字</th>
-                                    <th class="center">娃娃机房间号</th>
-                                    <th class="center">已抓次数</th>
-                                    <th class="center">抓中次数</th>
-                                    <th class="center">抓中概率</th>
+                                    
+                                    <th class="center">用户昵称</th>
+                                    <th class="center">交易时间</th>
+                                    <th class="center">支付方式</th>
+                                    <th class="center">支付金额</th>
+                                    <th class="center">状态</th>
                                 </tr>
                                 </thead>
 
                                 <tbody>
                                 <!-- 开始循环 -->
                                 <c:choose>
-                                    <c:when test="${not empty varList}">
-                                            <c:forEach items="${varList}" var="var" varStatus="vs">
+                                    <c:when test="${not empty varlist}">
+                                            <c:forEach items="${varlist}" var="var" varStatus="vs">
                                                 <tr>
-                                                    <td class='center'>
-                                                        <label class="pos-rel"><input type='checkbox' name='ids'
-                                                                                      value="${var.DOLL_ID}"
-                                                                                      class="ace"/><span
-                                                                class="lbl"></span></label>
+                                                    
+                                                    <td class='center'>${var.NICKNAME}</td>
+                                                    <td class='center'>${var.CREATETIME}</td>
+                                                    <th class="center">${var.REGMODE}</th>
+                                                    <th class="center">${var.REGAMOUNT/100}</th>
+                                                    <td style="width: 200px;" class='center'>
+                                                        <c:if test="${var.STATUS == '0' }">
+                                                       		 <span class="label label-important arrowed-in">未支付</span>
+                                                        </c:if>
+                                                         <c:if test="${var.STATUS == '1' }">
+                                                         	<span class="label label-success arrowed">支付</span>
+                                                         </c:if>
                                                     </td>
-                                                    <td class='center' style="width: 30px;">${vs.index+1}</td>
-                                                    <td class='center'>${var.DOLL_SN}</td>
-                                                    <td class='center'>${var.DOLL_NAME}</td>
-                                                    <td class='center'>${var.DOLL_ID}</td>
-                                                    <td class="center">${var.PALYCOUNT}</td>
-                                                    <td class="center">${var.CAUGHTCOUNT}</td>
-                                                    <td class="center">${var.PROBABILITY}</td>
                                                 </tr>
-                                            </c:forEach>
+                                            </c:forEach >
+                                            
+                                             <c:forEach items="${datetotal}" var="day" varStatus="vs">
+                                            		<tr>
+                                            		<td class='center'><b>${day.date}年 ${day.dateTime}月</b></td>
+                                            		<td class='center'><b>￥${day.countNumber/100}</b></td>
+                                            		</tr>
+                                             </c:forEach>
+                                             
                                     </c:when>
                                     <c:otherwise>
                                         <tr class="main_info">
@@ -112,8 +146,7 @@
                                 </c:choose>
                                 </tbody>
                             </table>
-                            
-                            <div class="page-header position-relative">
+                             <div class="page-header position-relative">
                                 <table style="width:100%;">
                                     <tr>
                                         <td style="vertical-align:top;">
@@ -197,8 +230,25 @@
                 else $('#form-field-select-4').removeClass('tag-input-style');
             });
         }
+
+
+        //复选框全选控制
+        var active_class = 'active';
+        $('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function () {
+            var th_checked = this.checked;//checkbox inside "TH" table header
+            $(this).closest('table').find('tbody > tr').each(function () {
+                var row = this;
+                if (th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
+                else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
+            });
+        });
     });
 
+
+    //导出excel
+    function toExcel() {
+        window.location.href = '<%=basePath%>doll/excel.do';
+    }
 </script>
 
 

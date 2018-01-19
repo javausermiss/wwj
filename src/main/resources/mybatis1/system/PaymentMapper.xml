@@ -142,4 +142,55 @@
 		GROUP BY  date_format(t.CREATE_TIME,'%Y-%m-%d')
 	    ORDER BY  date_format(t.CREATE_TIME,'%Y-%m-%d')
 	  </select>
+	  
+	  <!-- 总金额 -->
+	  <select id="getUserTotal" parameterType="pd" resultType="pd">
+	  	SELECT SUM(REGAMOUNT) as money FROM sys_app_order  WHERE STATUS=1 
+	  </select>
+	  
+	  <!-- 每月总额 -->
+	  <select id="getUserDateTotal" parameterType="page" resultType="pd">
+	  	SELECT  
+    	SUM(REGAMOUNT) AS countNumber,MONTH(CREATETIME) as dateTime ,YEAR(CREATETIME) as date
+		FROM  
+    	sys_app_order  WHERE `STATUS`=1
+		GROUP BY MONTH(CREATETIME) 
+	  </select>
+	  
+	  <!-- 今日总额 -->
+	  <select id="getUserDayTotal" parameterType="page" resultType="pd">
+	  SELECT SUM(REGAMOUNT) as money FROM sys_app_order 
+	  	WHERE STATUS=1 and to_days(CREATETIME ) = to_days(now());
+	  </select>
+	  
+	 <!-- 充值统计 -->
+	 <select id="findRegTotallistPage" parameterType="page" resultType="pd">
+		SELECT 
+			   o.ORDER_ID,
+			   o.CREATETIME,
+			   o.REGMODE,
+			   o.REGAMOUNT,
+			   o.`STATUS`,
+			   u.NICKNAME,
+			   u.NAME
+			   from sys_app_order o 
+			   		left join sys_app_user u 
+			   			on u.USER_ID=o.USER_ID
+
+		where  o.`STATUS`=1
+		<if test="pd.lastStart != null and pd.lastStart != ''">
+             and o.CREATETIME &gt;= str_to_date(#{pd.lastStart}, '%Y-%m-%d %H:%i:%s')
+         </if>
+         <if test="pd.lastEnd != null and pd.lastEnd != ''">
+             and o.CREATETIME &lt;= str_to_date(#{pd.lastEnd}, '%Y-%m-%d %H:%i:%s')
+         </if>
+         <if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+            and  u.NICKNAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+        </if>
+        <if test="pd.STATUS != null and pd.STATUS != ''"><!-- 状态检索 -->
+            and o.`STATUS` = #{pd.STATUS}
+        </if>
+		
+		ORDER BY o.CREATETIME desc
+	 </select>
 </mapper>
