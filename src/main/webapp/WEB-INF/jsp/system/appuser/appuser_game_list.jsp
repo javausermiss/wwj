@@ -58,14 +58,14 @@
                                 <thead>
                                 <tr>
                                     <th class="center" style="width:50px;">序号</th>
-                                    <th class="center">用户ID</th>
                                     <th class="center">用户名</th>
                                     <th class="center">姓名</th>
                                     <th class="center">游戏次数</th>
                                     <th class="center">抓中次数</th>
-                                     <th class="center">抓中概率</th>
+                                    <th class="center">抓中概率</th>
                                     <th class="center">充值金额</th>
                                     <th class="center">金币余额</th>
+                                    <th class="center">用户ID</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -75,7 +75,6 @@
                                             <c:forEach items="${userList}" var="user" varStatus="vs">
                                                 <tr>
                                                     <td class='center' style="width: 30px;">${vs.index+1}</td>
-                                                    <td class="center">${user.USER_ID }</td>
                                                     <td class="center">${user.NICKNAME }</td>
                                                     <td class="center">${user.NAME }</td>
                                                     <td class="center">${user.PALYCOUNT }</td>
@@ -83,6 +82,7 @@
                                                     <td class="center">${user.PROBABILITY }</td>
                                                     <td class="center">${user.REGAMOUNT}</td>
                                                     <td class="center">${user.BALANCE}</td>
+                                                    <td class="center">${user.USER_ID }</td>
                                                 </tr>
                                             </c:forEach>
                                     </c:when>

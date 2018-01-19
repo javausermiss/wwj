@@ -79,7 +79,6 @@
                                     <th class="center">已抓次数</th>
                                     <th class="center">抓中次数</th>
                                     <th class="center">抓中概率</th>
-                                    <th class="center">后台设置概率</th>
                                 </tr>
                                 </thead>
 
@@ -102,7 +101,6 @@
                                                     <td class="center">${var.PALYCOUNT}</td>
                                                     <td class="center">${var.CAUGHTCOUNT}</td>
                                                     <td class="center">${var.PROBABILITY}</td>
-                                                    <td class="center"></td>
                                                 </tr>
                                             </c:forEach>
                                     </c:when>

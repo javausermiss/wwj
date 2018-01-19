@@ -225,7 +225,7 @@ public class DollController extends BaseController {
 		if(lastEnd != null && !"".equals(lastEnd)){
 			pd.put("lastEnd", lastEnd+" 23:59:59");
 		}else{
-			pd.put("lastStart", DateUtil.getDay()+" 23:59:59");
+			pd.put("lastEnd", DateUtil.getDay()+" 23:59:59");
 		}
 		
 		page.setPd(pd);

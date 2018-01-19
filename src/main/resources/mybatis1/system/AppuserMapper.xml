@@ -520,7 +520,8 @@
     </select>
     
      <!-- 会员游戏统计列表 -->
-    <select id="getAppUserGamelistPage" parameterType="page" resultType="pd">   
+    <select id="getAppUserGamelistPage" parameterType="page" resultType="pd"> 
+   		 SELECT * FROM (
 			SELECT 
 			au.USER_ID,
 			au.NICKNAME,
@@ -555,13 +556,15 @@
 				SELECT o.USER_ID,sum(o.REGAMOUNT)/100 as REGAMOUNT from sys_app_order o where 1=1 and o.STATUS='1' GROUP BY o.USER_ID
 			) ao on ao.USER_ID=au.USER_ID
 			
-			   where 1 = 1
+			where 1 = 1
         	<if test="pd.keywords != null and pd.keywords!= ''"><!-- 关键词检索 -->
-            and (
-	            au.USER_ID LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-	            or
-	            au.NICKNAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-            )
-        </if>
+	            and (
+		            au.USER_ID LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+		            or
+		            au.NICKNAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+	            )
+        	</if>
+        
+        ) S ORDER BY PROBABILITY DESC
 	</select>
 </mapper>

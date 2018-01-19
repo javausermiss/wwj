@@ -261,6 +261,7 @@
     </select>
     
     <select id="dollCountlistPage" parameterType="page" resultType="pd">
+    SELECT * FROM (
 	SELECT 
 	
 		ad.DOLL_ID,
@@ -315,6 +316,6 @@
 					ad.DOLL_SN LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
 				)
         </if>
-		ORDER BY ad.RELEASE_STATUS DESC
+		ORDER BY ad.RELEASE_STATUS DESC ) S ORDER BY PROBABILITY DESC
 	</select>
 </mapper>
