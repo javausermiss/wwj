@@ -154,10 +154,11 @@ public class SendGoodController {
             @RequestParam("consignee") String consignee,
             @RequestParam("remark") String remark,
             @RequestParam("userId") String userId,
-            @RequestParam("mode") String mode
+            @RequestParam("mode") String mode,
+            @RequestParam("costNum")String costNum
     ) {
         try {
-            return sendGoodsService.doSendGoods(playId, number, consignee, remark, userId, mode);
+            return sendGoodsService.doSendGoods(playId, number, consignee, remark, userId, mode,costNum);
         } catch (Exception e) {
             e.printStackTrace();
             return RespStatus.fail();

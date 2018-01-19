@@ -60,10 +60,10 @@
 									</td>
 							</tr>
 
-							<%--<tr>
+							<<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">备注:</td>
 								<td><input type="text" name="REMARK" id="REMARK" value="${pd.REMARK}" maxlength="255" placeholder="这里输入备注" title="备注" style="width:98%;"/></td>
-							</tr>--%>
+							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">物流单号:</td>
 								<td><input type="text" name="FMS_ORDER_NO" id="FMS_ORDER_NO" value="${pd.FMS_ORDER_NO}" maxlength="255" placeholder="这里输入物流单号" title="物流单号" style="width:98%;"/></td>

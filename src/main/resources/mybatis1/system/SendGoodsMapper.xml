@@ -23,7 +23,8 @@
         FMS_TIME,
         FMS_ORDER_NO,
         FMS_NAME,
-        UPDATE_TIME
+        UPDATE_TIME,
+        TOY_NUM
     </sql>
 
     <!-- 字段值 -->
@@ -42,7 +43,8 @@
         #{FMS_TIME},
         #{FMS_ORDER_NO},
         #{FMS_NAME},
-        #{UPDATE_TIME}
+        #{UPDATE_TIME},
+        #{TOY_NUM}
     </sql>
 
     <!-- 新增-->
@@ -70,7 +72,6 @@
         <include refid="tableName"></include>
         set
         SENDBOOLEAN = #{SENDBOOLEAN},
-        REMARK = #{REMARK},
         FMS_TIME = now(),
         FMS_ORDER_NO = #{FMS_ORDER_NO},
         FMS_NAME = #{FMS_NAME}
@@ -164,7 +165,8 @@
         CREATE_TIME,
         REMARK,
         POST_REMARK,
-        MODE_DESPATCH
+        MODE_DESPATCH,
+        TOY_NUM
         )
         VALUES
         (
@@ -177,7 +179,8 @@
         #{CREATE_TIME},
         #{REMARK},
         #{POST_REMARK},
-        #{MODE_DESPATCH}
+        #{MODE_DESPATCH},
+        #{TOY_NUM}
         )
     </insert>
     <!--根据playId查询发货信息-->
@@ -213,6 +216,15 @@
         BY
         CREATE_TIME
         DESC
+    </select>
+
+
+    <select id="getSendById" parameterType="String" resultType="com.fh.entity.system.SendGoods">
+        SELECT *
+        FROM
+        TB_SEND_GOODS
+        WHERE
+        ID = #{ID}
     </select>
 
 </mapper>

@@ -152,12 +152,20 @@ public interface PlayDetailManage {
     public int updatePostState(PlayDetail playDetail)throws Exception;
 
     /**
-     * 更新兑换状态
+     * 0寄存  1 待发货  2 兑换 3 已发货
      * @param playDetail
      * @return
      * @throws Exception
      */
     public int updatePostStateForCon (PlayDetail playDetail) throws Exception;
+
+    /**
+     * 修改娃娃寄存状态
+     * @param pageData
+     * @param toyNum
+     * @throws Exception
+     */
+    public void doSendPost(PageData pageData,String toyNum)throws Exception;
 
 
 

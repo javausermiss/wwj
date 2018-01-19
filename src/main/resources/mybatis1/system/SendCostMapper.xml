@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SendCostMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		TB_SEND_COST
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		PROVINCE_NUM,	
+		PROVINCE,	
+		COST,
+		SENDCOST_ID
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{PROVINCE_NUM},	
+		#{PROVINCE},	
+		#{COST},
+		#{SENDCOST_ID}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			SENDCOST_ID = #{SENDCOST_ID}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			PROVINCE_NUM = #{PROVINCE_NUM},
+			PROVINCE = #{PROVINCE},
+			COST = #{COST},
+		SENDCOST_ID = SENDCOST_ID
+		where 
+		SENDCOST_ID = #{SENDCOST_ID}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			SENDCOST_ID = #{SENDCOST_ID}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+			PROVINCE LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				)
+		</if>
+		ORDER
+		BY
+		PROVINCE_NUM
+		ASC
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			SENDCOST_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+
+
+	<select id="getSendCostByCostNum" parameterType="java.lang.Integer" resultType="com.fh.entity.system.SendCost">
+		SELECT * FROM <include refid="tableName"/> WHERE  PROVINCE_NUM = #{PROVINCE_NUM}
+	</select>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>

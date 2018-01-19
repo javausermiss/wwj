@@ -12,6 +12,7 @@ import java.util.TreeSet;
 import javax.annotation.Resource;
 
 import com.fh.entity.system.*;
+import com.fh.service.system.sendcost.SendCostManager;
 import org.springframework.stereotype.Service;
 
 import com.fh.dao.DaoSupport;
@@ -58,6 +59,9 @@ public class SendGoodsService implements SendGoodsManager{
     
     @Resource(name="dolltoyService")
     private DollToyManager dolltoyService;
+
+    @Resource(name="sendcostService")
+    private SendCostManager sendcostService;
 
     @Resource(name = "daoSupport")
     private DaoSupport dao;
@@ -141,7 +145,7 @@ public class SendGoodsService implements SendGoodsManager{
      * @return
      * @throws Exception
      */
-    public JSONObject doSendGoods(String playId,String number,String consignee,String remark,String userId,String mode) throws Exception{
+    public JSONObject doSendGoods(String playId,String number,String consignee,String remark,String userId,String mode,String costNum) throws Exception{
     	 //增加发货记录
         SendGoods sendGoods = new SendGoods();
         //免邮
@@ -158,15 +162,19 @@ public class SendGoodsService implements SendGoodsManager{
             if (Integer.valueOf(number) < 2) {
                 //判断用户是否有足够的余额支付邮寄费用
                 AppUser appUser = appuserService.getUserByID(userId);
+                //获取相应省份运费
+                SendCost sendCost =  sendcostService.getSendCostByCostNum(Integer.valueOf(costNum));
+                Integer c =  sendCost.getCOST();
+
                 String balance = appUser.getBALANCE();
-                if (Integer.valueOf(balance) < 80) {
+                if (Integer.valueOf(balance) < c) {
                     return RespStatus.fail("余额不足，请充值");
                 }
-                int newbalance = Integer.valueOf(appUser.getBALANCE()) - 80;
+                int newbalance = Integer.valueOf(appUser.getBALANCE()) - c;
                 appUser.setBALANCE(String.valueOf(newbalance));
                 appuserService.updateAppUserBalanceById(appUser);
                 Payment payment = new Payment();
-                payment.setGOLD("-80");
+                payment.setGOLD("-"+costNum);
                 payment.setUSERID(userId);
                 payment.setDOLLID(null);
                 payment.setCOST_TYPE("6");
@@ -236,6 +244,7 @@ public class SendGoodsService implements SendGoodsManager{
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String time = format.format(date);
         sendGoods.setCREATE_TIME(time);
+        sendGoods.setTOY_NUM(playId);
         int sg = this.regSendGoods(sendGoods);
         if (sg == 0) {
             return RespStatus.fail("增加记录失败");
@@ -301,5 +310,10 @@ public class SendGoodsService implements SendGoodsManager{
     @Override
     public List<SendGoods> getLogisticsByUserId(String userId) throws Exception {
         return (List<SendGoods>)dao.findForList("SendGoodsMapper.getLogisticsByUserId",userId);
+    }
+
+    @Override
+    public SendGoods getSendById(String id) throws Exception {
+        return (SendGoods)dao.findForObject("SendGoodsMapper.getSendById",id);
     }
 }

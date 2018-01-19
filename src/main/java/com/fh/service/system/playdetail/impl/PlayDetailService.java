@@ -3,6 +3,7 @@ package com.fh.service.system.playdetail.impl;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.system.PlayDetail;
 import com.fh.service.system.playdetail.PlayDetailManage;
+import com.fh.service.system.sendgoods.SendGoodsManager;
 import com.fh.util.PageData;
 import com.fh.entity.Page;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,11 @@ import java.util.List;
 public class PlayDetailService implements PlayDetailManage {
     @Resource(name = "daoSupport")
     private DaoSupport dao;
+
+    @Resource(name="sendGoodsService")
+    private SendGoodsManager sendgoodsService;
+
+
 
     /**新增
 	 * @param pd
@@ -131,5 +137,18 @@ public class PlayDetailService implements PlayDetailManage {
     @Override
     public int updatePostStateForCon(PlayDetail playDetail) throws Exception {
         return (int)dao.update("PlayDetailMapper.updatePostStateForCon",playDetail);
+    }
+
+    @Override
+    public void doSendPost(PageData pageData, String playId) throws Exception {
+        String[] pd1 = playId.split("\\,");
+        for (int i = 0; i < pd1.length; i++) {
+            PlayDetail playDetail = this.getPlayDetailByID(Integer.parseInt(pd1[i]));
+            if (playDetail.getPOST_STATE().equals("1")) {
+                playDetail.setPOST_STATE("3");
+                this.updatePostStateForCon(playDetail);
+            }
+        }
+        sendgoodsService.edit(pageData);
     }
 }

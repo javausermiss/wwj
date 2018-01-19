@@ -58,7 +58,7 @@ public interface SendGoodsManager {
      * @return
      * @throws Exception
      */
-    public JSONObject doSendGoods(String playId,String number,String consignee,String remark,String userId,String mode) throws Exception;
+    public JSONObject doSendGoods(String playId,String number,String consignee,String remark,String userId,String mode,String costNum) throws Exception;
 
     /**
      * 兑换金币
@@ -76,6 +76,14 @@ public interface SendGoodsManager {
      * @throws Exception
      */
     public List<SendGoods> getLogisticsByUserId (String userId)throws Exception;
+
+    /**
+     * 根据ID查询订单信息
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public SendGoods getSendById(String id)throws Exception;
 
 
 
