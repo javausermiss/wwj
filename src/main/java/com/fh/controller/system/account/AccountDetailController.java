@@ -81,4 +81,33 @@ public class AccountDetailController extends BaseController {
 		}
 		return mv;
 	}
+	
+	//充值统计
+	@RequestMapping(value="/appUserOrderStatistics")
+	public ModelAndView appUserOrderStatistics(Page page){
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		try{
+			pd = this.getPageData();
+			String keywords = pd.getString("keywords");							//检索条件 关键词
+			if(null != keywords && !"".equals(keywords)){
+				pd.put("keywords", keywords.trim());
+			}
+			page.setPd(pd);
+			List<PageData> varlist=paymentService.findRegTotallistPage(page);
+			List<PageData> total = paymentService.getUserTotal(pd);		
+			List<PageData> datetotal = paymentService.getUserDateTotal(page);
+			List<PageData> daytotal = paymentService.getUserDayTotal(page);
+			mv.setViewName("system/account/appuser_order_statistics");
+			mv.addObject("total",total);
+			mv.addObject("datetotal",datetotal);
+			mv.addObject("daytotal",daytotal);
+			mv.addObject("varlist", varlist);
+			mv.addObject("pd", pd);
+			mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		} catch(Exception e){
+			logger.error(e.toString(), e);
+		}
+		return mv;
+	}
 }
