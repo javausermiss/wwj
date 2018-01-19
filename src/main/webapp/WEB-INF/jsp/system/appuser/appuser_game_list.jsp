@@ -58,6 +58,7 @@
                                 <thead>
                                 <tr>
                                     <th class="center" style="width:50px;">序号</th>
+                                    <th class="center">用户ID</th>
                                     <th class="center">用户名</th>
                                     <th class="center">姓名</th>
                                     <th class="center">游戏次数</th>
@@ -74,6 +75,7 @@
                                             <c:forEach items="${userList}" var="user" varStatus="vs">
                                                 <tr>
                                                     <td class='center' style="width: 30px;">${vs.index+1}</td>
+                                                    <td class="center">${user.USER_ID }</td>
                                                     <td class="center">${user.NICKNAME }</td>
                                                     <td class="center">${user.NAME }</td>
                                                     <td class="center">${user.PALYCOUNT }</td>

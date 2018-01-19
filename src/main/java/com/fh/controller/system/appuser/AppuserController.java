@@ -26,6 +26,7 @@ import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.role.RoleManager;
 import com.fh.util.AppUtil;
 import com.fh.util.Const;
+import com.fh.util.DateUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.MD5;
 import com.fh.util.ObjectExcelView;
@@ -94,6 +95,22 @@ public class AppuserController extends BaseController {
 			if(null != keywords && !"".equals(keywords)){
 				pd.put("keywords", keywords.trim());
 			}
+			
+			String lastStart = pd.getString("lastStart");
+			String lastEnd  = pd.getString("lastEnd");
+			
+			if(lastStart != null && !"".equals(lastStart)){
+				pd.put("lastStart", lastStart+" 00:00:00");
+			}else{
+				pd.put("lastStart", DateUtil.getDay()+" 00:00:00");
+			}
+			
+			if(lastEnd != null && !"".equals(lastEnd)){
+				pd.put("lastEnd", lastEnd+" 23:59:59");
+			}else{
+				pd.put("lastStart", DateUtil.getDay()+" 23:59:59");
+			}
+			
 			page.setPd(pd);
 			List<PageData>	userList = appuserService.listUserGames(page);		
 			mv.setViewName("system/appuser/appuser_game_list");
