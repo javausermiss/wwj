@@ -125,6 +125,13 @@ public interface DollManager{
 	 */
 	public List<DollVo>  getDollVoList()throws Exception;
 	
+	/** 娃娃机列表  分页（包含摄像信息）
+	 * getDollList
+	 * @return DollVo
+	 * @throws Exception
+	 */
+	public List<DollVo>  getDollPage(Page page)throws Exception;
+	
 	
 	/** 娃娃机游戏统计
 	 * @param page

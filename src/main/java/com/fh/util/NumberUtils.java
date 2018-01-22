@@ -7,6 +7,9 @@ public class NumberUtils {
    public static int parseInt(String str, int defaultNum){
     	int num = 0;
     	try{
+    		if(str==null || "".equals(str)){
+    			return defaultNum;
+    		}
     		num = Integer.parseInt(str);
     	}catch(Exception e){
     		num = defaultNum;

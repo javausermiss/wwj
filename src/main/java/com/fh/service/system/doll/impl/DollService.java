@@ -170,6 +170,15 @@ public class DollService implements DollManager {
 		return (List<DollVo>) dao.findForList("DollMapper.getDollVoList",null);
 	}
 	
+	/** 娃娃机列表  分页（包含摄像信息）
+	 * getDollList
+	 * @return DollVo
+	 * @throws Exception
+	 */
+	public List<DollVo>  getDollPage(Page page)throws Exception{
+		return (List<DollVo>) dao.findForList("DollMapper.getDolllistPage",page);
+	}
+	
 	
 	/** 娃娃机游戏统计
 	 * @param page
