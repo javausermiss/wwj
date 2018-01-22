@@ -6,6 +6,7 @@ import java.util.*;
 import javax.annotation.Resource;
 
 import com.fh.service.system.doll.DollToyManager;
+import com.fh.util.DateUtil;
 import com.fh.vo.system.DollToyVo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -154,8 +155,8 @@ public class SendGoodController {
             @RequestParam("consignee") String consignee,
             @RequestParam("remark") String remark,
             @RequestParam("userId") String userId,
-            @RequestParam("mode") String mode,
-            @RequestParam("costNum")String costNum
+            @RequestParam(value = "mode") String mode,
+            @RequestParam(value = "costNum",required = false) String costNum
     ) {
         try {
             return sendGoodsService.doSendGoods(playId, number, consignee, remark, userId, mode,costNum);
@@ -224,6 +225,12 @@ public class SendGoodController {
     public JSONObject getLogistics(@RequestParam("userId") String userId) {
         try {
             List<SendGoods> sendGoods = sendGoodsService.getLogisticsByUserId(userId);
+            for (int i = 0; i < sendGoods.size(); i++) {
+                SendGoods sendGoods1  = sendGoods.get(i);
+                String id =  String.valueOf(sendGoods1.getID()) ;
+                String sid =  DateUtil.getNumOrder(id,sendGoods1.getCREATE_TIME());
+                sendGoods1.setSEND_NUM_ID(sid);
+            }
             Map<String, Object> map = new HashMap<>();
             map.put("logistics",sendGoods);
             return RespStatus.successs().element("data", map);

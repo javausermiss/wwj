@@ -92,9 +92,9 @@
     <!-- 列表 -->
     <select id="datalistPage" parameterType="page" resultType="pd">
         select
-        <include refid="Field"></include>
+        <include refid="Field"/>
         from
-        <include refid="tableName"></include>
+        <include refid="tableName"/>
         where 1=1
         <if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
             and

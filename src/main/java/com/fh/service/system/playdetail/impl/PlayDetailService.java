@@ -140,15 +140,21 @@ public class PlayDetailService implements PlayDetailManage {
     }
 
     @Override
-    public void doSendPost(PageData pageData, String playId) throws Exception {
+    public void doSendPost(PageData pageData, String playId,String sid) throws Exception {
         String[] pd1 = playId.split("\\,");
         for (int i = 0; i < pd1.length; i++) {
             PlayDetail playDetail = this.getPlayDetailByID(Integer.parseInt(pd1[i]));
             if (playDetail.getPOST_STATE().equals("1")) {
                 playDetail.setPOST_STATE("3");
-                this.updatePostStateForCon(playDetail);
+                playDetail.setSEND_ORDER_ID(sid);
+                this.updatePostStateForSendGood(playDetail);
             }
         }
         sendgoodsService.edit(pageData);
+    }
+
+    @Override
+    public int updatePostStateForSendGood(PlayDetail playDetail) throws Exception {
+         return  (int)dao.update("PlayDetailMapper.updatePostStateForSendGood",playDetail);
     }
 }

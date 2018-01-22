@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.fh.entity.system.PlayDetail;
 import com.fh.entity.system.SendGoods;
 import com.fh.service.system.playdetail.PlayDetailManage;
+import com.fh.util.*;
 import com.fh.util.wwjUtil.RespStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -25,11 +26,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
-import com.fh.util.AppUtil;
-import com.fh.util.ObjectExcelView;
-import com.fh.util.PageData;
-import com.fh.util.Jurisdiction;
-import com.fh.util.Tools;
 import com.fh.service.system.sendgoods.SendGoodsManager;
 
 /** 
@@ -99,7 +95,9 @@ public class SendGoodsController extends BaseController {
 		pd.put("FMS_ORDER_NO",httpServletRequest.getParameter("FMS_ORDER_NO"));
 		pd.put("SENDBOOLEAN",httpServletRequest.getParameter("SENDBOOLEAN"));
 		pd.put("ID",httpServletRequest.getParameter("ID"));
-		playDetailService.doSendPost(pd,playId);
+		String create_time = sendGoods.getCREATE_TIME();
+		String sid =  DateUtil.getNumOrder(id,create_time);
+		playDetailService.doSendPost(pd,playId,sid);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;

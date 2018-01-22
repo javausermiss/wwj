@@ -179,5 +179,9 @@ public class DollService implements DollManager {
 		return (List<PageData>)dao.findForList("DollMapper.dollCountlistPage", page);
 	}
 
+	@Override
+	public List<DollVo> getDollVoListByTag(String tag) throws Exception {
+		return  (List<DollVo>) dao.findForList("DollMapper.getDollVoListByTag",tag);
+	}
 }
 

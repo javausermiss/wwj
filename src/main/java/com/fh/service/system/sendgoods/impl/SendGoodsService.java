@@ -158,15 +158,20 @@ public class SendGoodsService implements SendGoodsManager{
         }
         //金币抵扣
         if (mode.equals("1")) {
-            //满2包邮 ，一个需要付运费
-            if (Integer.valueOf(number) < 2) {
-                //判断用户是否有足够的余额支付邮寄费用
+               //满2包邮 ，一个需要付运费
                 AppUser appUser = appuserService.getUserByID(userId);
-                //获取相应省份运费
-                SendCost sendCost =  sendcostService.getSendCostByCostNum(Integer.valueOf(costNum));
-                Integer c =  sendCost.getCOST();
-
                 String balance = appUser.getBALANCE();
+                Integer c;
+                if (costNum == null){
+                    //兼容以前APP版本 ，默认扣除80运费
+                    c = 80;
+
+                }else {
+                    //获取相应省份运费
+                    SendCost sendCost =  sendcostService.getSendCostByCostNum(Integer.valueOf(costNum));
+                    c =  sendCost.getCOST();
+                }
+
                 if (Integer.valueOf(balance) < c) {
                     return RespStatus.fail("余额不足，请充值");
                 }
@@ -174,14 +179,14 @@ public class SendGoodsService implements SendGoodsManager{
                 appUser.setBALANCE(String.valueOf(newbalance));
                 appuserService.updateAppUserBalanceById(appUser);
                 Payment payment = new Payment();
-                payment.setGOLD("-"+costNum);
+                payment.setGOLD("-"+String.valueOf(c));
                 payment.setUSERID(userId);
                 payment.setDOLLID(null);
                 payment.setCOST_TYPE("6");
                 payment.setREMARK("支付运费");
                 paymentService.reg(payment);
                 sendGoods.setMODE_DESPATCH("1");
-            }
+
         }
 
         List<String> list = new LinkedList<>();

@@ -18,6 +18,15 @@ public class DollVo {
     private String cameraName02;
     private String dollConversiongold;
     private List<CameraVo> cameras;
+    private String dollTag;
+
+	public String getDollTag() {
+		return dollTag;
+	}
+
+	public void setDollTag(String dollTag) {
+		this.dollTag = dollTag;
+	}
 
 	public String getDollId() {
 		return dollId;

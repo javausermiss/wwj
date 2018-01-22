@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fh.controller.base.BaseController;
@@ -22,9 +23,8 @@ import net.sf.json.JSONObject;
 
 /**
  * APP DOLL ctrl
- * 
- * @author JAVA_DEV
  *
+ * @author JAVA_DEV
  */
 @Controller
 @RequestMapping(value = "/app/doll")
@@ -37,8 +37,8 @@ public class AppDollController extends BaseController{
     @RequestMapping(value = "/getDollList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject getDollLists(HttpServletRequest req) {
-    	 try {
-         	List<DollVo> dollList=dollService.getDollVoList();
+        try {
+            List<DollVo> dollList = dollService.getDollVoList();
             /* Random index = new Random();
              List<Integer> indexList = new ArrayList<>();
              List<DollVo> newList = new ArrayList<>();
@@ -61,3 +61,4 @@ public class AppDollController extends BaseController{
          }
     }
 }
+

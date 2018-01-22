@@ -132,5 +132,12 @@ public interface DollManager{
 	 */
 	public List<PageData> getDollCountlist(Page page)throws Exception;
 
+	/**
+	 * 根据标签查询相关的娃娃机
+	 * @return
+	 * @throws Exception
+	 */
+	public List<DollVo> getDollVoListByTag(String tag)throws Exception;
+
 }
 

@@ -15,7 +15,7 @@ public class PlayDetail {
     private String CAMERA_DATE;//视频日期
     private String STOP_FLAG;//0可以下注 -1禁止下注
     private String CONVERSIONGOLD;
-    private String POST_STATE; //0 寄存  1 发货  2 兑换
+    private String POST_STATE; //0 寄存  1 发货  2 兑换 3已发货
     private String SENDGOODS; //发货信息
     private String NICKNAME;//用户昵称
     private String IMAGE_URL;//用户头像
@@ -23,8 +23,19 @@ public class PlayDetail {
     private String DOLL_NAME;//娃娃名称
     private String COUNT;
     private String VIEW_STATE;
+    private String FREE_DATE;//娃娃机FREE状态更新时间
+    private String SEND_ORDER_ID;//发货订单主键ID
+
 
     public PlayDetail() {
+    }
+
+    public String getSEND_ORDER_ID() {
+        return SEND_ORDER_ID;
+    }
+
+    public void setSEND_ORDER_ID(String SEND_ORDER_ID) {
+        this.SEND_ORDER_ID = SEND_ORDER_ID;
     }
 
     public String getVIEW_STATE() {

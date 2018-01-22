@@ -165,7 +165,15 @@ public interface PlayDetailManage {
      * @param toyNum
      * @throws Exception
      */
-    public void doSendPost(PageData pageData,String toyNum)throws Exception;
+    public void doSendPost(PageData pageData,String toyNum,String id)throws Exception;
+
+    /**
+     * 修改发货娃娃状态
+     * @param playDetail
+     * @return
+     * @throws Exception
+     */
+    public int updatePostStateForSendGood(PlayDetail playDetail)throws Exception;
 
 
 

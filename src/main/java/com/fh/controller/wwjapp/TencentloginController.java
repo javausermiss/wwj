@@ -123,7 +123,7 @@ public class TencentloginController extends BaseController {
                     //增加赠送金币明细
                     Payment payment = new Payment();
                     payment.setREMARK("注册赠送");
-                    payment.setGOLD("+60");
+                    payment.setGOLD("+19");
                     payment.setCOST_TYPE("9");
                     payment.setUSERID(userId);
                     paymentService.reg(payment);

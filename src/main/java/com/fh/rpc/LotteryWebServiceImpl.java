@@ -20,6 +20,7 @@ import com.fh.service.system.doll.DollManager;
 import com.fh.service.system.payment.PaymentManager;
 import com.fh.service.system.playdetail.PlayDetailManage;
 import com.fh.service.system.pond.PondManager;
+import com.fh.util.DateUtil;
 import com.iot.game.pooh.server.entity.json.enums.PoohAbnormalStatus;
 import com.iot.game.pooh.server.entity.json.enums.PoohNormalStatus;
 import com.iot.game.pooh.server.rpc.interfaces.LotteryServerRpcService;
@@ -54,6 +55,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
     @Override
     public RpcCommandResult startLottery(String dollId, String userId) {
         try {
+            log.info("start时间-------------->"+ DateUtil.getTime());
         	//查找娃娃机信息
             Doll doll= dollService.getDollByID(dollId);
             
@@ -66,7 +68,6 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
             if (Integer.valueOf(b1) < b2) {
                 return null;
             }
-
             //添加游戏金币明细记录
             Payment payment = new Payment();
             payment.setCOST_TYPE("0");
@@ -174,6 +175,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
     @Override
     public RpcCommandResult endLottery(String roomId, String userName) {
         try {
+            log.info("下抓时间----------------->"+DateUtil.getTime());
             PlayDetail playDetail = playDetailService.getPlayIdForPeople(roomId);
             playDetail.setSTOP_FLAG("-1");
             playDetailService.updatePlayDetailStopFlag(playDetail);
@@ -194,7 +196,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
     @Override
     public RpcCommandResult drawLottery(String roomId, Integer gifinumber) {
         try {
-
+            log.info("执行复位时间----------------->"+DateUtil.getTime());
             PlayDetail playDetail = playDetailService.getPlayIdForPeople(roomId);//根据房间取得最新的游戏记录
             if (playDetail==null){
                 return null;
@@ -217,6 +219,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
             playDetail.setPOST_STATE("0");
             playDetail.setDOLLID(roomId);
             playDetailService.updatePlayDetailState(playDetail);
+            log.info("更新抓取状态时间----------------->"+DateUtil.getTime());
             Pond p = new Pond();
             p.setDOLLID(roomId);
             p.setGUESS_ID(playDetail.getGUESS_ID());

@@ -15,6 +15,7 @@
 		<result column="DOLL_CONVERSIONGOLD" property="dollConversiongold"/>
 		<result column="CAMERA_NAME_01" property="cameraName01"/>
 		<result column="CAMERA_NAME_02" property="cameraName02"/>
+        <result column="DOLL_TAG" property="dollTag"/>
 		<!-- <result column="TOY_ID" property="toy_id"/> -->
 			
 		<collection property="cameras" column="DOLL_ID" ofType="com.fh.vo.system.CameraVo">
@@ -49,7 +50,8 @@
 		CAMERA_NAME_01,
 		CAMERA_NAME_02,
 		TOY_ID,
-		RELEASE_STATUS
+		RELEASE_STATUS,
+		DOLL_TAG
 	</sql>
 
     <!-- 字段值 -->
@@ -65,7 +67,8 @@
 		#{CAMERA_NAME_01},
 		#{CAMERA_NAME_02},
 		#{TOY_ID},
-		#{RELEASE_STATUS}
+		#{RELEASE_STATUS},
+		#{DOLL_TAG}
 	</sql>
 
     <!-- 新增-->
@@ -249,6 +252,7 @@
 			d.DOLL_GOLD,
 			d.DOLL_URL,
 			d.DOLL_CONVERSIONGOLD,
+			d.DOLL_TAG,
 			c.CAMERA_ID,
 			c.CAMERA_TYPE,
 			c.RTMP_URL,
@@ -318,4 +322,30 @@
         </if>
 		ORDER BY ad.RELEASE_STATUS DESC ) S ORDER BY PROBABILITY DESC
 	</select>
+
+    <!-- 通过娃娃机的名字获取娃娃信息-->
+    <select id="getDollVoListByTag" parameterType="String" resultMap="DollVoResultMap">
+        SELECT
+        d.DOLL_SN,
+        d.DOLL_NAME,
+        d.ROOM_ID,
+        d.DOLL_STATE,
+        d.DOLL_ID,
+        d.DOLL_GOLD,
+        d.DOLL_URL,
+        d.DOLL_CONVERSIONGOLD,
+        d.DOLL_TAG,
+        c.CAMERA_ID,
+        c.CAMERA_TYPE,
+        c.RTMP_URL,
+        c.SERVER_NAME,
+        c.LIVESTREAM,
+        c.DEVICE_STATE from
+        SYS_APP_DOLL d LEFT JOIN TB_DEVICE_CAMERA c ON d.DOLL_ID=c.DOLL_ID
+        WHERE d.RELEASE_STATUS ='1'
+        AND d.DOLL_TAG = #{doll_tag}
+        ORDER BY DOLL_SN ,CAMERA_TYPE
+    </select>
+
+
 </mapper>

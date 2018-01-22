@@ -18,6 +18,8 @@ public class SendGoods {
     private String FMS_TIME;//发货时间
     private String SENDBOOLEAN;//快递状态
     private String TOY_NUM;//抓中的娃娃编号，即游戏列表ID
+    private String SEND_NUM_ID;//拼接以后的订单流水的单号
+
 
 
     public SendGoods(){}
@@ -31,6 +33,14 @@ public class SendGoods {
         this.CNEE_PHONE = CNEE_PHONE;
         this.CREATE_TIME = CREATE_TIME;
         this.REMARK = REMARK;
+    }
+
+    public String getSEND_NUM_ID() {
+        return SEND_NUM_ID;
+    }
+
+    public void setSEND_NUM_ID(String SEND_NUM_ID) {
+        this.SEND_NUM_ID = SEND_NUM_ID;
     }
 
     public String getTOY_NUM() {

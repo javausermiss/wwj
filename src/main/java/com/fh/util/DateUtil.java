@@ -205,6 +205,20 @@ public class DateUtil {
         String dateStr = sdf.format(date);
         return dateStr;
     }
+
+	public  static String getNumOrder(String num,String ddtime){
+		//订单号拼接格式2018011500000897   16位
+		int ii=num.length()+8;
+		StringBuffer sBuffer = new StringBuffer();
+		for(int i=0;i<(16-ii);i++){
+			sBuffer.append("0");
+		}
+		return getTimeNum(ddtime)+sBuffer+num;
+	}
+
+	private static String getTimeNum(String time){
+		return time.substring(0,10).replace("-","");
+	}
     
     public static void main(String[] args) {
     	System.out.println(getDays());

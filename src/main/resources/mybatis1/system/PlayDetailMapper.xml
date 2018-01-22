@@ -174,7 +174,8 @@
         TB_DOLL_PLAY_DETAIL
         SET
         STATE = #{STATE},
-        POST_STATE = #{POST_STATE}
+        POST_STATE = #{POST_STATE},
+        FREE_DATE = now()
         WHERE
         GUESS_ID = #{GUESS_ID}
         AND
@@ -204,7 +205,7 @@
     <select id="getPlaylist" parameterType="String" resultType="com.fh.entity.system.PlayDetail">
             SELECT h.* FROM (select
             d.DOLL_NAME, d.doll_url, dd.ID, dd.USERID, dd.GUESS_ID, dd.DOLLID, dd.STATE, dd.CREATE_DATE, dd.GOLD, dd.CAMERA_DATE,
-            dd.STOP_FLAG,dd.CONVERSIONGOLD,dd.POST_STATE,dd.SENDGOODS,u.NICKNAME,u.IMAGE_URL
+            dd.STOP_FLAG,dd.CONVERSIONGOLD,dd.POST_STATE,dd.SENDGOODS,dd.SEND_ORDER_ID,u.NICKNAME,u.IMAGE_URL
             from
             tb_doll_play_detail as dd
             inner join  sys_app_doll as d on d.doll_id = dd.dollid
@@ -304,4 +305,16 @@
         WHERE
         dd.ID=#{ID}
     </select>
+    <update id="updatePostStateForSendGood" parameterType="com.fh.entity.system.PlayDetail">
+        UPDATE
+        tb_doll_play_detail
+        SET
+        POST_STATE = #{POST_STATE},
+        SEND_ORDER_ID = #{SEND_ORDER_ID}
+        WHERE
+        ID = #{ID}
+    </update>
+
+
+
 </mapper>
