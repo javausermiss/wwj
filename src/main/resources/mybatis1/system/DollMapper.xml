@@ -260,6 +260,29 @@
 			ORDER BY DOLL_SN ,CAMERA_TYPE
     </select>
     
+    
+        <!-- 通过娃娃机的名字获取娃娃信息-->
+    <select id="getDolllistPage" resultMap="DollVoResultMap" parameterType="page">
+        SELECT
+	    	d.DOLL_SN,	
+			d.DOLL_NAME,	
+			d.ROOM_ID,	
+			d.DOLL_STATE,	
+			d.DOLL_ID,
+			d.DOLL_GOLD,
+			d.DOLL_URL,
+			d.DOLL_CONVERSIONGOLD,
+			c.CAMERA_ID,
+			c.CAMERA_TYPE,
+			c.RTMP_URL,
+			c.SERVER_NAME,
+			c.LIVESTREAM,
+			c.DEVICE_STATE from
+			SYS_APP_DOLL d LEFT JOIN TB_DEVICE_CAMERA c ON d.DOLL_ID=c.DOLL_ID
+			WHERE d.RELEASE_STATUS ='1'
+			ORDER BY DOLL_SN ,CAMERA_TYPE
+    </select>
+    
     <select id="dollCountlistPage" parameterType="page" resultType="pd">
     SELECT * FROM (
 	SELECT 
