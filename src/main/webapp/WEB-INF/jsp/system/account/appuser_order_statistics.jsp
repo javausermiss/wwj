@@ -78,22 +78,6 @@
                                             	<td class='center' style="width:80px;color:red" bgcolor=""><b>总金额:</b></td>
                                         		<td class='center'><b>￥${s.money/100}</b></td>
                                         	</c:forEach>
-                                        	<c:forEach items="${daytotal}" var="day" varStatus="vs">
-                                            <td class='center' ></td>
-                                            	<td class='center' style="width:80px;color:red" bgcolor=""><b>今日金额:</b></td>
-                                        		<td class='center'><b>￥${day.money/100}</b></td>
-                                        	</c:forEach>
-                                        <td class='center' style="width:80px;color:red" bgcolor=""><b>每月金额:</b></td>
-                                        <td>
-                                        <select name="CREATETIME" id="CREATETIME" style="width: 100%">
-                                        	<c:forEach items="${datetotal}" var="date" varStatus="vs">
-                                        		<option value="date.CREATETIME"
-                                        			<c:if test="">selected</c:if>>
-                                        			${date.date}年 ${date.dateTime}月 ￥${date.countNumber/100}
-                                        		</option>
-                                        	</c:forEach>
-                                        </select>
-                                        </td>
 <%--                                     <c:if test="${QX.toExcel == 1 }"> --%>
 <!--                                         <td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" -->
 <!--                                                                                             onclick="toExcel();" -->
@@ -110,10 +94,9 @@
                                    style="margin-top:5px;">
                                 <thead>
                                 <tr>
-                                    
+                                    <th class="center">用户ID</th>
                                     <th class="center">用户昵称</th>
                                     <th class="center">交易时间</th>
-                                    <th class="center">支付方式</th>
                                     <th class="center">支付金额</th>
                                     <th class="center">状态</th>
                                 </tr>
@@ -125,10 +108,9 @@
                                     <c:when test="${not empty varlist}">
                                             <c:forEach items="${varlist}" var="var" varStatus="vs">
                                                 <tr>
-                                                    
+                                                    <td class='center'>${var.USER_ID}</td>
                                                     <td class='center'>${var.NICKNAME}</td>
                                                     <td class='center'>${var.CREATETIME}</td>
-                                                    <th class="center">${var.REGMODE}</th>
                                                     <th class="center">${var.REGAMOUNT/100}</th>
                                                     <td style="width: 200px;" class='center'>
                                                         <c:if test="${var.STATUS == '0' }">

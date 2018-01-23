@@ -95,13 +95,9 @@ public class AccountDetailController extends BaseController {
 			}
 			page.setPd(pd);
 			List<PageData> varlist=paymentService.findRegTotallistPage(page);
-			List<PageData> total = paymentService.getUserTotal(pd);		
-			List<PageData> datetotal = paymentService.getUserDateTotal(page);
-			List<PageData> daytotal = paymentService.getUserDayTotal(page);
+			List<PageData> total = paymentService.getUserTotal(page);	
 			mv.setViewName("system/account/appuser_order_statistics");
 			mv.addObject("total",total);
-			mv.addObject("datetotal",datetotal);
-			mv.addObject("daytotal",daytotal);
 			mv.addObject("varlist", varlist);
 			mv.addObject("pd", pd);
 			mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
