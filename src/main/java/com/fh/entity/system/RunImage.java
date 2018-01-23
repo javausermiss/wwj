@@ -9,4 +9,5 @@ public class RunImage {
     private String RUNIMAGE_ID;
     private String CONTENT;//内容
     private String TIME;
+    private String HREF_ST;
 }
