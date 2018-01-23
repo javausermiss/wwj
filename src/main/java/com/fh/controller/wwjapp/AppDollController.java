@@ -88,25 +88,23 @@ public class AppDollController extends BaseController {
             Page page = new Page();
             int currentPage = NumberUtils.parseInt(request.getParameter("nextPage"), 1);
             page.setCurrentPage(currentPage); //当前页数
-            page.setShowCount(8 * 2);//
+            
+            int showCount=8 * 2;
+            page.setShowCount(showCount);//
 
             //获取前端分类
             PageData pd = new PageData();
             String currentType = request.getParameter("currentType");
             pd.put("currentType", currentType);
+            pd.put("currentPage", currentPage);
+            pd.put("showCount", showCount);
             page.setPd(pd);
       
             
             List<DollVo> dollList= dollService.getDollPage(page);
-            
-
-            //分页标签的问题，情况分页Str
-            if (page != null) {
-                page.setPageStr("/");
-                page.setTotalResult(page.getTotalResult() / 2);
-            }
 
             Map<String, Object> map = new HashMap<>();
+            
             map.put("dollList", dollList);
 
             //分页信息
