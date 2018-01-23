@@ -104,3 +104,7 @@ ADD COLUMN `FREE_DATE`  varchar(50) NULL COMMENT 'FREE状态更新时间' AFTER 
 ALTER TABLE `tb_doll_play_detail`
 ADD COLUMN `SEND_ORDER_ID`  bigint(20) NULL COMMENT '发货订单主键ID' AFTER `FREE_DATE`;
 
+
+/*2018 01 23*/
+ALTER TABLE `tb_app_runimage` ADD COLUMN `HREF_ST`  varchar(255) NULL COMMENT '跳转路径';
+alter table `tb_app_runimage` MODIFY COLUMN CONTENT text;
