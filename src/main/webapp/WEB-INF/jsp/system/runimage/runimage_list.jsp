@@ -54,15 +54,6 @@
                                                                          data-date-format="yyyy-mm-dd"
                                                                          readonly="readonly" style="width:88px;"
                                                                          placeholder="结束日期" title="结束日期"/></td>
-                                    <td style="vertical-align:top;padding-left:2px;">
-                                        <select class="chosen-select form-control" name="name" id="id"
-                                                data-placeholder="请选择" style="vertical-align:top;width: 120px;">
-                                            <option value=""></option>
-                                            <option value="">全部</option>
-                                            <option value="">1</option>
-                                            <option value="">2</option>
-                                        </select>
-                                    </td>
                                     <c:if test="${QX.cha == 1 }">
                                         <td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs"
                                                                                            onclick="tosearch();"
@@ -92,6 +83,7 @@
                                                 class="lbl"></span></label>
                                     </th>
                                     <th class="center" style="width:50px;">序号</th>
+                                      <th class="center" style="width:50px;">id</th>
                                     <th class="center">图片标题</th>
                                     <th class="center">时间</th>
                                     <th class="center">图像地址</th>
@@ -113,6 +105,7 @@
                                                                 class="lbl"></span></label>
                                                     </td>
                                                     <td class='center' style="width: 30px;">${vs.index+1}</td>
+                                                    <td class='center'>${var.RUNIMAGE_ID}</td>
                                                     <td class='center'>${var.RUN_NAME}</td>
                                                     <td class='center'>${var.TIME}</td>
                                                     <td class='center'>${var.IMAGE_URL}</td>

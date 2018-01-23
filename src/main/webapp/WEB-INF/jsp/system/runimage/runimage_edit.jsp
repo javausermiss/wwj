@@ -45,15 +45,8 @@
 								<td><input type="file" id="RUN_FILE" name="RUN_FILE" /></td>
 							</tr>
 							<tr>
-							<td style="width:75px;text-align: right;padding-top: 13px;">是否新闻:</td>
-								<td>
-								<span style="font-size:12px;">
-									<select id="HREF_ST" name="HREF_ST">
-										<option value="0" <c:if test="${pd.HREF_ST == '0' }">selected</c:if>>否</option>
-										<option value="1" <c:if test="${pd.HREF_ST == '1' }">selected</c:if>>是</option>
-									</select>
-									</span>
-								</td>
+							<td style="width:75px;text-align: right;padding-top: 13px;">新闻路径:</td>
+							<td><input type="text" name="HREF_ST" id="HREF_ST" value="${pd.HREF_ST}" maxlength="255" placeholder="这里输入图像跳转地址" title="图像跳转地址" style="width:98%;"/></td>
 							</tr>
 							<tr>
 								<td style="width:100px;text-align: right;padding-top: 13px;">新闻内容:</td>
