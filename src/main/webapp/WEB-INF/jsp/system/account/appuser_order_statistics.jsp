@@ -83,6 +83,17 @@
                                             	<td class='center' style="width:80px;color:red" bgcolor=""><b>今日金额:</b></td>
                                         		<td class='center'><b>￥${day.money/100}</b></td>
                                         	</c:forEach>
+                                        <td class='center' style="width:80px;color:red" bgcolor=""><b>每月金额:</b></td>
+                                        <td>
+                                        <select name="CREATETIME" id="CREATETIME" style="width: 100%">
+                                        	<c:forEach items="${datetotal}" var="date" varStatus="vs">
+                                        		<option value="date.CREATETIME"
+                                        			<c:if test="">selected</c:if>>
+                                        			${date.date}年 ${date.dateTime}月 ￥${date.countNumber/100}
+                                        		</option>
+                                        	</c:forEach>
+                                        </select>
+                                        </td>
 <%--                                     <c:if test="${QX.toExcel == 1 }"> --%>
 <!--                                         <td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" -->
 <!--                                                                                             onclick="toExcel();" -->
@@ -129,14 +140,6 @@
                                                     </td>
                                                 </tr>
                                             </c:forEach >
-                                            
-                                             <c:forEach items="${datetotal}" var="day" varStatus="vs">
-                                            		<tr>
-                                            		<td class='center'><b>${day.date}年 ${day.dateTime}月</b></td>
-                                            		<td class='center'><b>￥${day.countNumber/100}</b></td>
-                                            		</tr>
-                                             </c:forEach>
-                                             
                                     </c:when>
                                     <c:otherwise>
                                         <tr class="main_info">
