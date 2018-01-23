@@ -61,6 +61,14 @@ public interface ToyTypeManager{
 	 * @throws Exception
 	 */
 	public List<ToyType> getAllToyType()throws Exception;
+
+	/**
+	 * 查询最新的记录
+	 * @return
+	 * @throws Exception
+	 */
+	public ToyType getLastToyTypeId()throws Exception;
+
 	
 }
 

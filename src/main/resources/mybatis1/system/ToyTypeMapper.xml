@@ -11,7 +11,8 @@
 	<sql id="Field">
 		ID,	
 		TOY_TYPE,	
-		RANKING
+		RANKING,
+		TYPE
 	
 	</sql>
 	
@@ -19,7 +20,8 @@
 	<sql id="FieldValue">
 		#{ID},	
 		#{TOY_TYPE},	
-		#{RANKING}	
+		#{RANKING},
+		#{TYPE}
 
 	</sql>
 	
@@ -49,6 +51,7 @@
 		set 
 			TOY_TYPE = #{TOY_TYPE},
 			RANKING = #{RANKING},
+		    TYPE = #{TYPE}
 		where 
 		ID = #{ID}
 	</update>
@@ -103,6 +106,10 @@
 	
 	<select id="getAllToyType" resultType="com.fh.entity.system.ToyType">
 		SELECT * FROM <include refid="tableName"/> ORDER BY RANKING ASC
+	</select>
+
+	<select id="getLastToyTypeId" resultType="com.fh.entity.system.ToyType">
+		SELECT * FROM <include refid="tableName"/> ORDER BY RANKING DESC limit 1;
 	</select>
 
 

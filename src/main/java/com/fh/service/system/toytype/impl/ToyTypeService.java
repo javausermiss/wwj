@@ -86,5 +86,10 @@ public class ToyTypeService implements ToyTypeManager{
 	public List<ToyType> getAllToyType() throws Exception {
 		return (List<ToyType>)dao.findForList("ToyTypeMapper.getAllToyType", null);
 	}
+
+	@Override
+	public ToyType getLastToyTypeId() throws Exception {
+		return (ToyType)dao.findForObject("ToyTypeMapper.getLastToyTypeId",null);
+	}
 }
 
