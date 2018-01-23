@@ -108,7 +108,8 @@
 		IMAGE_URL,
 		RUN_NAME,
 		RUNIMAGE_ID,
-		TIME
+		TIME,
+		HREF_ST
 		FROM <include refid="tableName"/>
 	</select>
 
