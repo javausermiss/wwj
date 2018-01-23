@@ -7,6 +7,9 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import com.fh.entity.system.ToyType;
+import com.fh.service.system.toytype.ToyTypeManager;
+import com.fh.service.system.toytype.impl.ToyTypeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,13 +33,17 @@ import net.sf.json.JSONObject;
  */
 @Controller
 @RequestMapping(value = "/app/doll")
-public class AppDollController extends BaseController{
-	
+public class AppDollController extends BaseController {
+
     @Resource(name = "dollService")
     private DollManager dollService;
+    @Resource(name = "toytypeService")
+    private ToyTypeManager toytypeService;
+
 
     /**
      * 所有娃娃机列表
+     *
      * @param req
      * @return
      */
@@ -60,55 +67,84 @@ public class AppDollController extends BaseController{
                  }
              }
          	return RespStatus.successs().element("dollList", newList);*/
-             return RespStatus.successs().element("dollList", dollList);
-         } catch (Exception e) {
-         	logger.error(e.getLocalizedMessage());
-             return RespStatus.exception();
-         }
+            return RespStatus.successs().element("dollList", dollList);
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+            return RespStatus.exception();
+        }
     }
-    
+
     /**
      * 娃娃机分页表
-     * @param req
+     *
+     * @param request
      * @return
      */
     @RequestMapping(value = "/getDollPage", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject getDollPage(HttpServletRequest request) {
-    	 try {
-    		//获取当前页
-    		Page page=new Page();
-    		int currentPage= NumberUtils.parseInt(request.getParameter("nextPage"), 1);
-    		page.setCurrentPage(currentPage); //当前页数
-    		page.setShowCount(8*2);//
-    		
-    		//获取前端分类
-    		PageData pd = new PageData();
-    		pd = this.getPageData();
-    		page.setPd(pd);
-         	List<DollVo> dollList=dollService.getDollPage(page);
-         	
-         	
-         	//分页标签的问题，情况分页Str
-         	if(page !=null){
-         		page.setPageStr("/");
-         		page.setTotalResult(page.getTotalResult()/2);
-         	}
-         	
-         	 Map<String, Object> map = new HashMap<>();
-             map.put("dollList",dollList);
-             
-             //分页信息
-             pd.put("currentPage", page.getCurrentPage());
-             pd.put("showCount", (page.getShowCount()/2));
-             pd.put("totalPage", (page.getTotalPage()));
-             map.put("pd",pd); //搜索的顺序
+        try {
+            //获取当前页
+            Page page = new Page();
+            int currentPage = NumberUtils.parseInt(request.getParameter("nextPage"), 1);
+            page.setCurrentPage(currentPage); //当前页数
+            page.setShowCount(8 * 2);//
+
+            //获取前端分类
+            PageData pd = new PageData();
+            pd = this.getPageData();
+            page.setPd(pd);
+            String toy_type = request.getParameter("currentType");
+            List<DollVo> dollList;
+            if (toy_type == null || toy_type.equals("")) {
+                dollList = dollService.getDollPage(page);
+            } else {
+                Integer n = Integer.valueOf(toy_type);
+                dollList = dollService.getDollTypeList(n);
+            }
+
+            //分页标签的问题，情况分页Str
+            if (page != null) {
+                page.setPageStr("/");
+                page.setTotalResult(page.getTotalResult() / 2);
+            }
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("dollList", dollList);
+
+            //分页信息
+            pd.put("currentPage", page.getCurrentPage());
+            pd.put("showCount", (page.getShowCount() / 2));
+            pd.put("totalPage", (page.getTotalPage()));
+            map.put("pd", pd); //搜索的顺序
             return RespStatus.successs().element("data", map);
-            
-         } catch (Exception e) {
-         	logger.error(e.getLocalizedMessage());
-             return RespStatus.exception();
-         }
+
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+            return RespStatus.exception();
+        }
     }
+
+    /**
+     * 获取分页列表
+     *
+     * @return
+     */
+    @RequestMapping(value = "/getAllToyTypeList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public JSONObject getAllToyTypeList() {
+        try {
+            List<ToyType> list = toytypeService.getAllToyType();
+            Map<String, Object> map = new HashMap<>();
+            map.put("toyTypeList", list);
+            return RespStatus.successs().element("data", map);
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+            return RespStatus.exception();
+        }
+
+    }
+
+
 }
 

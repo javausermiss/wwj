@@ -370,5 +370,39 @@
         ORDER BY DOLL_SN ,CAMERA_TYPE
     </select>
 
+<!--分类别查询出相应的娃娃机-->
+    <select id="getDollTypeList"  parameterType="java.lang.Integer" resultMap="DollVoResultMap">
+            select
+            d.DOLL_SN,
+			d.DOLL_NAME,
+			d.ROOM_ID,
+			d.DOLL_STATE,
+			d.DOLL_ID,
+			d.DOLL_GOLD,
+			d.DOLL_URL,
+			d.DOLL_CONVERSIONGOLD,
+			c.CAMERA_ID,
+			c.CAMERA_TYPE,
+			c.RTMP_URL,
+			c.SERVER_NAME,
+			c.LIVESTREAM,
+			c.DEVICE_STATE from
+            (select t.id ,t.toy_type,y.toy_id
+            from
+            tb_toytype t
+            left join
+            tb_toy_toytype y
+            on y.toy_type_id = #{ID}
+            where t.id = #{ID}) m
+            left join
+            sys_app_doll  d
+            on d.toy_id = m.toy_id
+            and d.RELEASE_STATUS ='1'
+            left join
+            TB_DEVICE_CAMERA c
+            ON d.DOLL_ID = c.DOLL_ID
+            ORDER BY DOLL_SN ,CAMERA_TYPE
+    </select>
+
 
 </mapper>

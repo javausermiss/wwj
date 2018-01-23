@@ -146,5 +146,7 @@ public interface DollManager{
 	 */
 	public List<DollVo> getDollVoListByTag(String tag)throws Exception;
 
+	public List<DollVo> getDollTypeList(Integer typeid)throws Exception;
+
 }
 
