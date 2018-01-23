@@ -90,6 +90,7 @@
         <if test="pd.STATE != null and pd.STATE != ''"><!-- 状态检索 -->
             and c.STATE = #{pd.STATE}
         </if>
+        GROUP BY CREATE_DATE DESC
     </select>
 
 

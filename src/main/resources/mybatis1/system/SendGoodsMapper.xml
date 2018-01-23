@@ -116,7 +116,7 @@
         ORDER
         BY
         FMS_TIME
-        ASC
+        DESC
     </select>
 
     <!-- 列表(全部) -->
