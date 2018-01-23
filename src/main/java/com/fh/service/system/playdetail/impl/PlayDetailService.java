@@ -163,6 +163,7 @@ public class PlayDetailService implements PlayDetailManage {
                     this.updatePostStateForSendGood(playDetail);
                 }
             }
+            sendgoodsService.edit(pageData);
 
         }
 
