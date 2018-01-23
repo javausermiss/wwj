@@ -189,7 +189,7 @@ public class Page {
 		return showCount;
 	}
 	
-	public void setShowCount(int showCount) {
+	public void  setShowCount(int showCount) {
 		
 		this.showCount = showCount;
 	}

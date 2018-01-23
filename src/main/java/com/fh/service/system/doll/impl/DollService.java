@@ -192,5 +192,10 @@ public class DollService implements DollManager {
 	public List<DollVo> getDollVoListByTag(String tag) throws Exception {
 		return  (List<DollVo>) dao.findForList("DollMapper.getDollVoListByTag",tag);
 	}
+
+	@Override
+	public List<DollVo> getDollTypeList(Integer typeid) throws Exception {
+		return (List<DollVo>) dao.findForList("DollMapper.getDollTypeList",typeid);
+	}
 }
 
