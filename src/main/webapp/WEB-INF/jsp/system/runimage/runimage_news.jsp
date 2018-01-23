@@ -22,7 +22,7 @@
 	<div class="main-content">
 		<div class="main-content-inner">
 			<div class="page-content">
-				<div style="margin: 6px 0;font: 18px Microsoft Yahei;text-align: center;">${runImage.RUN_NAME }></div>
+				<div style="margin: 6px 0;font: 18px Microsoft Yahei;text-align: center;">${runImage.RUN_NAME }</div>
 				
 				<hr width="600" size="1px" color="#999999">
 				<!-- /.row -->

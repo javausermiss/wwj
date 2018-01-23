@@ -13,6 +13,7 @@
 		RUN_NAME,	
 		RUNIMAGE_ID,
 		TIME,
+		HREF_ST,
 		CONTENT
 	</sql>
 	
@@ -22,6 +23,7 @@
 		#{RUN_NAME},	
 		#{RUNIMAGE_ID},
 		#{TIME},
+		#{HREF_ST},
 		#{CONTENT}
 	</sql>
 	
@@ -51,6 +53,7 @@
 		set 
 			IMAGE_URL = #{IMAGE_URL},
 			RUN_NAME = #{RUN_NAME},
+			HREF_ST = #{HREF_ST},
 		    CONTENT = #{CONTENT}
 		where 
 		RUNIMAGE_ID = #{RUNIMAGE_ID}
@@ -105,7 +108,8 @@
 		IMAGE_URL,
 		RUN_NAME,
 		RUNIMAGE_ID,
-		TIME
+		TIME,
+		HREF_ST
 		FROM <include refid="tableName"/>
 	</select>
 
