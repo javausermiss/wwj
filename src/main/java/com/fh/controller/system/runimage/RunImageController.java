@@ -70,6 +70,7 @@ public class RunImageController extends BaseController {
 		pd.put("IMAGE_URL",fileId);
 		pd.put("CONTENT",req.getParameter("CONTENT"));
 		pd.put("TIME",req.getParameter("TIME"));
+		pd.put("HREF_ST",req.getParameter("HREF_ST"));
 		runimageService.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
@@ -135,6 +136,7 @@ public class RunImageController extends BaseController {
 		pd.put("RUNIMAGE_ID",req.getParameter("RUNIMAGE_ID"));
 		pd.put("CONTENT",req.getParameter("CONTENT"));
 		pd.put("TIME",req.getParameter("TIME"));
+		pd.put("HREF_ST",req.getParameter("HREF_ST"));
 		runimageService.edit(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");

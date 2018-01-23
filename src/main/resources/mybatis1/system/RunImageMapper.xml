@@ -101,7 +101,12 @@
 	</select>
 
 	<select id="getRunImageList"  resultType="com.fh.entity.system.RunImage">
-		SELECT * FROM <include refid="tableName"/>
+		SELECT
+		IMAGE_URL,
+		RUN_NAME,
+		RUNIMAGE_ID,
+		TIME
+		FROM <include refid="tableName"/>
 	</select>
 
 </mapper>

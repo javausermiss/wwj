@@ -93,7 +93,6 @@
                                     </th>
                                     <th class="center" style="width:50px;">序号</th>
                                     <th class="center">图片标题</th>
-                                    <th class="center">内容</th>
                                     <th class="center">时间</th>
                                     <th class="center">图像地址</th>
                                     <th class="center">操作</th>
@@ -115,7 +114,6 @@
                                                     </td>
                                                     <td class='center' style="width: 30px;">${vs.index+1}</td>
                                                     <td class='center'>${var.RUN_NAME}</td>
-                                                    <td class='center'>${var.CONTENT}</td>
                                                     <td class='center'>${var.TIME}</td>
                                                     <td class='center'>${var.IMAGE_URL}</td>
                                                     <td class='center'>
@@ -307,8 +305,8 @@
         diag.Drag = true;
         diag.Title = "新增";
         diag.URL = '<%=basePath%>runimage/goAdd.do';
-        diag.Width = 450;
-        diag.Height = 355;
+        diag.Width = 750;
+        diag.Height = 755;
         diag.Modal = true;				//有无遮罩窗口
         diag.ShowMaxButton = true;	//最大化按钮
         diag.ShowMinButton = true;		//最小化按钮
@@ -345,8 +343,8 @@
         diag.Drag = true;
         diag.Title = "编辑";
         diag.URL = '<%=basePath%>runimage/goEdit.do?RUNIMAGE_ID=' + Id;
-        diag.Width = 450;
-        diag.Height = 355;
+        diag.Width = 750;
+        diag.Height = 755;
         diag.Modal = true;				//有无遮罩窗口
         diag.ShowMaxButton = true;	//最大化按钮
         diag.ShowMinButton = true;		//最小化按钮
