@@ -115,7 +115,7 @@
         </if>
         ORDER
         BY
-        FMS_TIME
+        CREATE_TIME
         DESC
     </select>
 

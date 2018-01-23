@@ -53,13 +53,7 @@ public interface PaymentManager {
 	 List<PageData> getRemainCount(PageData pd)throws Exception;
 	 
 	 //用户充值总额
-	 List<PageData> getUserTotal(PageData pd)throws Exception;
-	 
-	 //每月充值总额
-	 List<PageData> getUserDateTotal(Page page)throws Exception;
-	 
-	 //今日充值总额
-	 List<PageData> getUserDayTotal(Page page)throws Exception;
+	 List<PageData> getUserTotal(Page page)throws Exception;
 	 
 	 //充值用户
 	 List<PageData> findRegTotallistPage(Page page)throws Exception;

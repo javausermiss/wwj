@@ -134,7 +134,7 @@
         <if test="pd.STATUS != null and pd.STATUS != ''"><!-- 状态检索 -->
             and u.STATUS=#{pd.STATUS}
         </if>
-        order by u.CREATETIME
+        order by u.CREATETIME DESC
     </select>
 
     <!-- 通过USERNAME获取数据 -->
