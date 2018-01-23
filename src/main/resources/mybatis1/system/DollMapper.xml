@@ -281,10 +281,27 @@
 			c.RTMP_URL,
 			c.SERVER_NAME,
 			c.LIVESTREAM,
-			c.DEVICE_STATE from
-			SYS_APP_DOLL d LEFT JOIN TB_DEVICE_CAMERA c ON d.DOLL_ID=c.DOLL_ID
-			WHERE d.RELEASE_STATUS ='1'
-			ORDER BY DOLL_SN ,CAMERA_TYPE
+			c.DEVICE_STATE,
+			t1.TYPE_NAME_LIST
+			from
+			SYS_APP_DOLL d
+		  LEFT JOIN TB_DEVICE_CAMERA c ON d.DOLL_ID=c.DOLL_ID
+			LEFT JOIN (
+				SELECT TOY_ID,GROUP_CONCAT(TYPE_ID) AS 'TYPE_ID_LIST',GROUP_CONCAT(TYPE_NAME) AS 'TYPE_NAME_LIST' FROM (
+				SELECT dt.TOY_ID,
+					ty.id as 'TYPE_ID',
+					ty.TOY_TYPE as 'TYPE_NAME'
+					from tb_app_doll_toy dt 
+					INNER  JOIN tb_toy_toytype td on td.TOY_ID=dt.TOY_ID
+			  INNER  JOIN tb_toytype ty on ty.ID=td.TOY_TYPE_ID ) t GROUP BY TOY_ID 
+			  ) t1 on t1.TOY_ID=d.TOY_ID
+				
+		WHERE d.RELEASE_STATUS ='1'
+		 <if test="pd.currentType!= null and pd.currentType != ''"><!-- 关键词检索 -->
+			AND t1.TYPE_ID_LIST LIKE CONCAT(CONCAT('%',#{pd.currentType},'%'))
+		 </if>
+	ORDER BY DOLL_SN ,CAMERA_TYPE
+	
     </select>
     
     <select id="dollCountlistPage" parameterType="page" resultType="pd">

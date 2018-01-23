@@ -92,16 +92,13 @@ public class AppDollController extends BaseController {
 
             //获取前端分类
             PageData pd = new PageData();
-            pd = this.getPageData();
+            String currentType = request.getParameter("currentType");
+            pd.put("currentType", currentType);
             page.setPd(pd);
-            String toy_type = request.getParameter("currentType");
-            List<DollVo> dollList;
-            if (toy_type == null || toy_type.equals("")) {
-                dollList = dollService.getDollPage(page);
-            } else {
-                Integer n = Integer.valueOf(toy_type);
-                dollList = dollService.getDollTypeList(n);
-            }
+      
+            
+            List<DollVo> dollList= dollService.getDollPage(page);
+            
 
             //分页标签的问题，情况分页Str
             if (page != null) {
