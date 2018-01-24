@@ -10,5 +10,6 @@ public class ToyType {
     private Integer ID;
     private String TOY_TYPE;
     private Integer RANKING;
+    private String TYPE;
 
 }

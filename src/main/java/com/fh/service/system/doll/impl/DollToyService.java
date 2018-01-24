@@ -93,5 +93,10 @@ public class DollToyService implements DollToyManager{
 	public int updateToyNum(DollToyVo dollToyVo) throws Exception {
 		return (int)dao.update("DollToyMapper.updateToyNum",dollToyVo);
 	}
+
+	@Override
+	public int updateToyType(DollToyVo dollToyVo) throws Exception {
+		return (int)dao.update("DollToyMapper.updateToyType",dollToyVo);
+	}
 }
 

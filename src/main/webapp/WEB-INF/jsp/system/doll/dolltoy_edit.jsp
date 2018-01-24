@@ -45,6 +45,8 @@
 									<td><input type="text" name="BUY_PRICE" id="BUY_PRICE" value="${pd.BUY_PRICE}" maxlength="10" placeholder="这里输入采购单价" title="BUY_PRICE" style="width:98%;"/></td>
 								</tr>
 							<tr>
+							</tr>
+							<tr>
 							<tr>
 								<td style="text-align: center;" colspan="10">
 									<a class="btn btn-mini btn-primary" onclick="save();">保存</a>

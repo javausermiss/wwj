@@ -19,5 +19,6 @@ public class DollToyVo {
     private String create_time;
     private String update_time;
     private List<DollVo> dollVos;
+    private String toy_type;
 
 }

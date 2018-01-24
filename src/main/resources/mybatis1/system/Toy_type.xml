@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Toy_typeMapper">
+    <insert id="regToy_Type" parameterType="com.fh.entity.system.Toy_type">
+        INSERT INTO tb_toy_toytype (TOY_ID,TOY_TYPE_ID) VALUES (#{TOY_ID},#{TOY_TYPE_ID})
+    </insert>
+    <select id="getToy_Type" parameterType="com.fh.entity.system.Toy_type">
+        SELECT * FROM tb_toy_toytype WHERE TOY_ID = #{TOY_ID} AND TOY_TYPE_ID = #{TOY_TYPE_ID}
+    </select>
+    <delete id="deleteToy_Type" parameterType="com.fh.entity.system.Toy_type">
+        DELETE FROM tb_toy_toytype WHERE TOY_ID = #{TOY_ID} AND TOY_TYPE_ID = #{TOY_TYPE_ID}
+    </delete>
+    <delete id="deleteToy_TypeAll" parameterType="java.lang.Integer">
+        DELETE FROM tb_toy_toytype WHERE TOY_ID = #{TOY_ID}
+    </delete>
+
+    <select id="getToy_TypeList" parameterType="java.lang.Integer" resultType="com.fh.entity.system.Toy_type">
+        SELECT * FROM tb_toy_toytype WHERE TOY_ID = #{TOY_ID}
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

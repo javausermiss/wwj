@@ -17,6 +17,7 @@
 		<result column="REMARK" property="remark"/>
 		<result column="CREATE_TIME" property="create_time"/>
 		<result column="UPDATE_TIME" property="update_time"/>
+		<result column="TOY_TYPE" property="toy_type"/>
 	</resultMap>
 
 	
@@ -29,7 +30,8 @@
 		DOOL_GOLD,
 		REMARK,	
 		CREATE_TIME,	
-		UPDATE_TIME
+		UPDATE_TIME,
+		TOY_TYPE
 	</sql>
 	
 	<!-- 字段值 -->
@@ -41,7 +43,8 @@
 		#{DOOL_GOLD},	
 		#{REMARK},	
 		#{CREATE_TIME},	
-		#{UPDATE_TIME}
+		#{UPDATE_TIME},
+		#{TOY_TYPE}
 	</sql>
 	
 	<!-- 新增-->
@@ -138,6 +141,10 @@
 
 	<update id="updateToyNum" parameterType="com.fh.vo.system.DollToyVo" >
 		UPDATE <include refid="tableName"/> SET TOY_NUM = #{toy_num} WHERE TOY_ID = #{toy_id}
+	</update>
+
+	<update id="updateToyType" parameterType="com.fh.vo.system.DollToyVo">
+		UPDATE <include refid="tableName"/> SET TOY_TYPE = #{toy_type} WHERE TOY_ID = #{toy_id}
 	</update>
 
 </mapper>

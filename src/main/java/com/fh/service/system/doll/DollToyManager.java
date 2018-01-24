@@ -78,6 +78,9 @@ public interface DollToyManager{
 	 * @throws Exception
 	 */
 	public int updateToyNum(DollToyVo dollToyVo)throws Exception;
+
+
+	public int updateToyType(DollToyVo dollToyVo)throws Exception;
 	
 }
 

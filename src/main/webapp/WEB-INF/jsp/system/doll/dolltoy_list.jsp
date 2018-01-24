@@ -86,6 +86,8 @@
 											<td class='center'>${var.TOY_NAME}</td>
 											<td class='center'>${var.TOY_NUM}</td>
 											<td class='center'>${var.BUY_PRICE}</td>
+											<td class='center'>${var.TOY_TYPE}</td>
+
 											<td class='center'>${var.REMARK}</td>
 
 											<td class="center">
@@ -93,6 +95,11 @@
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
+													<c:if test="${QX.edit == 1 }">
+														<a class="btn btn-xs btn-success" title="编辑分类" onclick="editToyType('${var.TOY_ID}');">
+															<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑分类"></i>
+														</a>
+													</c:if>
 													<c:if test="${QX.edit == 1 }">
 													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.TOY_ID}');">
 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
@@ -111,6 +118,15 @@
 														</button>
 			
 														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+															<c:if test="${QX.edit == 1 }">
+																<li>
+																	<a style="cursor:pointer;" onclick="editToyType('${var.TOY_ID}');" class="tooltip-success" data-rel="tooltip" title="修改分类">
+																	<span class="green">
+																		<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+																	</span>
+																	</a>
+																</li>
+															</c:if>
 															<c:if test="${QX.edit == 1 }">
 															<li>
 																<a style="cursor:pointer;" onclick="edit('${var.TOY_ID}');" class="tooltip-success" data-rel="tooltip" title="修改">
@@ -284,6 +300,27 @@
 				}
 			});
 		}
+
+        //修改
+        function editToyType(Id){
+            top.jzts();
+            var diag = new top.Dialog();
+            diag.Drag=true;
+            diag.Title ="编辑";
+            diag.URL = '<%=basePath%>dolltoy/goEditToyType.do?TOY_ID='+Id;
+            diag.Width = 450;
+            diag.Height = 355;
+            diag.Modal = true;				//有无遮罩窗口
+            diag. ShowMaxButton = true;	//最大化按钮
+            diag.ShowMinButton = true;		//最小化按钮
+            diag.CancelEvent = function(){ //关闭事件
+                if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+                    tosearch();
+                }
+                diag.close();
+            };
+            diag.show();
+        }
 		
 		//修改
 		function edit(Id){
