@@ -21,6 +21,7 @@ import com.fh.entity.Page;
 import com.fh.service.system.doll.DollManager;
 import com.fh.util.NumberUtils;
 import com.fh.util.PageData;
+import com.fh.util.wwjUtil.RedisUtil;
 import com.fh.util.wwjUtil.RespStatus;
 import com.fh.vo.system.DollVo;
 
@@ -104,7 +105,12 @@ public class AppDollController extends BaseController {
             List<DollVo> dollList= dollService.getDollPage(page);
 
             Map<String, Object> map = new HashMap<>();
-            
+            //娃娃机网关信息
+            if(dollList !=null && dollList.size()>0){
+            	for (DollVo dollVo : dollList) {
+            		dollVo.setDollState(RedisUtil.getStr("roomInfo:"+dollVo.getRoomId()));
+				}
+            }
             map.put("dollList", dollList);
 
             //分页信息

@@ -4,6 +4,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import com.fh.util.FastDFSClient;
+import com.fh.util.PropertiesUtils;
+
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -60,6 +64,29 @@ public class Base64Image {
         } catch (Exception e) {
             return false;
         }
+    }
+    
+    
+    public static String GenerateImageBytes(String imgStr, String imgFilePath) {// 对字节数组字符串进行Base64解码并生成图片
+    	String fileId=PropertiesUtils.getCurrProperty("user.default.header.url"); //默认头像
+    	if(imgStr ==null || "".equals(imgStr)){
+    		return fileId;
+    	}
+    	BASE64Decoder decoder = new BASE64Decoder();
+        try {
+            // Base64解码
+            byte[] bytes = decoder.decodeBuffer(imgStr);
+            for (int i = 0; i < bytes.length; ++i) {
+                if (bytes[i] < 0) {// 调整异常数据
+                    bytes[i] += 256;
+                }
+            }
+            fileId= FastDFSClient.uploadFile(bytes, imgFilePath);
+        } catch (Exception e) {
+        	return fileId;
+        }
+        
+        return fileId;
     }
 
 

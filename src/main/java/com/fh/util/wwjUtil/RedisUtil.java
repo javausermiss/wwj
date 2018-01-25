@@ -51,6 +51,20 @@ public class RedisUtil {
         }
         return value;
     }
+    
+    public static String getStr(String key) {
+        Jedis jedis = null;
+        String value = null;
+        try {
+            jedis = pool.getResource();
+            value = jedis.get(key);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            returnResource(jedis);
+        }
+        return value;
+    }
 
     /**
      * <p>
@@ -602,7 +616,7 @@ public class RedisUtil {
      * @param field
      * @return 没有返回null
      */
-    public String hget(String key, String field) {
+    public static String hget(String key, String field) {
         Jedis jedis = null;
         String res = null;
         try {
