@@ -108,7 +108,7 @@ public class AppDollController extends BaseController {
             //娃娃机网关信息
             if(dollList !=null && dollList.size()>0){
             	for (DollVo dollVo : dollList) {
-            		dollVo.setDollState(RedisUtil.getStr("roomInfo:"+dollVo.getRoomId()));
+            		dollVo.setDollState(RedisUtil.getStr("roomInfo:"+dollVo.getDollId()));
 				}
             }
             map.put("dollList", dollList);
