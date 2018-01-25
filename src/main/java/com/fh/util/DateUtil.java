@@ -19,7 +19,7 @@ public class DateUtil {
 	private final static SimpleDateFormat sdfDays = new SimpleDateFormat("yyyyMMdd");
 	private final static SimpleDateFormat sdfTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private final static SimpleDateFormat sdfTimes = new SimpleDateFormat("yyyyMMddHHmmss");
-	
+	private final static SimpleDateFormat sdfTimesss = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 	private final static SimpleDateFormat sdf_hhmmss = new SimpleDateFormat("HHmmss");
 
 	/**
@@ -60,6 +60,14 @@ public class DateUtil {
 	 */
 	public static String getTime() {
 		return sdfTime.format(new Date());
+	}
+
+	/**
+	 * 获取YYYY-MM-DD HH:mm:ss:SSS格式
+	 * @return
+	 */
+	public static String getTimeSSS() {
+		return sdfTimesss.format(new Date());
 	}
 	
 	/**
