@@ -89,8 +89,8 @@ public class AppDollController extends BaseController {
             Page page = new Page();
             int currentPage = NumberUtils.parseInt(request.getParameter("nextPage"), 1);
             page.setCurrentPage(currentPage); //当前页数
-            
-            int showCount=8 * 2;
+
+            int showCount = 8 * 2;
             page.setShowCount(showCount);//
 
             //获取前端分类
@@ -100,16 +100,20 @@ public class AppDollController extends BaseController {
             pd.put("currentPage", currentPage);
             pd.put("showCount", showCount);
             page.setPd(pd);
-      
-            
-            List<DollVo> dollList= dollService.getDollPage(page);
+
+
+            List<DollVo> dollList = dollService.getDollPage(page);
 
             Map<String, Object> map = new HashMap<>();
             //娃娃机网关信息
-            if(dollList !=null && dollList.size()>0){
-            	for (DollVo dollVo : dollList) {
-            		dollVo.setDollState(RedisUtil.getStr("roomInfo:"+dollVo.getDollId()));
-				}
+            if (dollList != null && dollList.size() > 0) {
+                for (DollVo dollVo : dollList) {
+                    dollVo.setDollState(RedisUtil.getStr("roomInfo:" + dollVo.getDollId()));
+                    String prob =  RedisUtil.getStr("roomProbability:" + dollVo.getDollId());
+                    if (prob != null){
+                        dollVo.setProb(prob);
+                    }
+                }
             }
             map.put("dollList", dollList);
 

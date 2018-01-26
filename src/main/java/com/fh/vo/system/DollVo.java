@@ -19,6 +19,23 @@ public class DollVo {
     private String dollConversiongold;
     private List<CameraVo> cameras;
     private String dollTag;
+    private String prob;//娃娃机概率
+
+	public String getDollConversiongold() {
+		return dollConversiongold;
+	}
+
+	public void setDollConversiongold(String dollConversiongold) {
+		this.dollConversiongold = dollConversiongold;
+	}
+
+	public String getProb() {
+		return prob;
+	}
+
+	public void setProb(String prob) {
+		this.prob = prob;
+	}
 
 	public String getDollTag() {
 		return dollTag;

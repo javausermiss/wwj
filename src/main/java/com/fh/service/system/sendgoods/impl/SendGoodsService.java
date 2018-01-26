@@ -308,7 +308,13 @@ public class SendGoodsService implements SendGoodsManager {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String time = format.format(date);
             conversion.setCREATETIME(time);
-            String dollname = dollService.getDollByID(playDetailService.getPlayDetailByID(Integer.valueOf(pid)).getDOLLID()).getDOLL_NAME();
+            String dollname ;//
+            if (playBack.getTOY_ID() != null && !playBack.getTOY_ID().equals("")) {
+                DollToyVo dollToyVo =  dolltoyService.getDollToyByToyId(String.valueOf(playBack.getTOY_ID()));
+                dollname = dollToyVo.getToy_name();
+            } else {
+                dollname = dollService.getDollByID(playDetailService.getPlayDetailByID(Integer.valueOf(playBack.getID())).getDOLLID()).getDOLL_NAME();
+            }
             conversion.setDOLLNAME(dollname);
             conversion.setNUMBER("1");
             conversion.setUSERID(userId);
