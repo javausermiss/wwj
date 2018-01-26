@@ -330,6 +330,15 @@
 		NICKNAME = #{NICKNAME}
 	</select>
 
+    <select id="getAppUserByNickNameList"  parameterType="String" resultType="com.fh.entity.system.AppUser">
+        SELECT
+		*
+		FROM
+		sys_app_user
+		where
+		NICKNAME = #{NICKNAME}
+    </select>
+
     <!-- 用户注册 2017/10/12-->
     <insert id="reg">
         insert into

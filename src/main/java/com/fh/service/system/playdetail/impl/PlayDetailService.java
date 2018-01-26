@@ -173,4 +173,9 @@ public class PlayDetailService implements PlayDetailManage {
     public int updatePostStateForSendGood(PlayDetail playDetail) throws Exception {
         return (int) dao.update("PlayDetailMapper.updatePostStateForSendGood", playDetail);
     }
+
+    @Override
+    public List<PlayDetail> getConversionToy() throws Exception {
+        return (List<PlayDetail>) dao.update("PlayDetailMapper.getConversionToy", null);
+    }
 }

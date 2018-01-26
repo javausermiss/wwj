@@ -113,6 +113,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                 newPlayDetail.setUSERID(userId);
                 newPlayDetail.setCONVERSIONGOLD(conversionGold);
                 newPlayDetail.setGOLD(String.valueOf(doll.getDOLL_GOLD()));
+                newPlayDetail.setTOY_ID(Integer.valueOf(doll.getTOY_ID()));//增加娃娃编号
                 playDetailService.reg(newPlayDetail);
                 Pond pond = new Pond(newPlayDetail.getGUESS_ID(), dollId, null);
                 pondService.regPond(pond);
@@ -134,6 +135,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                     newp.setDOLLID(dollId);
                     newp.setCONVERSIONGOLD(conversionGold);
                     newp.setGOLD(String.valueOf(doll.getDOLL_GOLD()));
+                    newp.setTOY_ID(Integer.valueOf(doll.getTOY_ID()));//增加娃娃编号
                     playDetailService.reg(newp);
                     Pond pond = new Pond(newp.getGUESS_ID(), dollId, null);
                     pondService.regPond(pond);
@@ -152,6 +154,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                     playDetail1.setCONVERSIONGOLD(conversionGold);
                     playDetail1.setGUESS_ID(newGuessID);
                     playDetail1.setGOLD(String.valueOf(doll.getDOLL_GOLD()));
+                    playDetail1.setTOY_ID(Integer.valueOf(doll.getTOY_ID()));//增加娃娃编号
                     playDetailService.reg(playDetail1);
                     Pond pond = new Pond(playDetail1.getGUESS_ID(), dollId, null);
                     pondService.regPond(pond);

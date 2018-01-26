@@ -175,6 +175,13 @@ public interface PlayDetailManage {
      */
     public int updatePostStateForSendGood(PlayDetail playDetail)throws Exception;
 
+    /**
+     * 查询出到期未兑换和未发货的娃娃
+     * @return
+     * @throws Exception
+     */
+    public List<PlayDetail> getConversionToy()throws Exception;
+
 
 
 }

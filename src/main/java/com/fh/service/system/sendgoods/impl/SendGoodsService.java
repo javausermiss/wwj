@@ -33,34 +33,34 @@ import com.fh.vo.system.DollToyVo;
 import net.sf.json.JSONObject;
 
 @Service("sendGoodsService")
-public class SendGoodsService implements SendGoodsManager{
+public class SendGoodsService implements SendGoodsManager {
 
-	
+
     @Resource(name = "appuserService")
     private AppuserManager appuserService;
-    
+
     @Resource(name = "playBackService")
     private PlayBackManage playBackService;
-    
+
     @Resource(name = "conversionService")
     private ConversionManager conversionService;
-    
+
     @Resource(name = "betGameService")
     private BetGameManager betGameService;
-    
+
     @Resource(name = "playDetailService")
     private PlayDetailManage playDetailService;
-    
+
     @Resource(name = "dollService")
     private DollManager dollService;
-    
+
     @Resource(name = "paymentService")
     private PaymentManager paymentService;
-    
-    @Resource(name="dolltoyService")
+
+    @Resource(name = "dolltoyService")
     private DollToyManager dolltoyService;
 
-    @Resource(name="sendcostService")
+    @Resource(name = "sendcostService")
     private SendCostManager sendcostService;
 
     @Resource(name = "daoSupport")
@@ -77,79 +77,94 @@ public class SendGoodsService implements SendGoodsManager{
     }
 
 
-    /**新增
+    /**
+     * 新增
+     *
      * @param pd
      * @throws Exception
      */
-    public void save(PageData pd)throws Exception{
+    public void save(PageData pd) throws Exception {
         dao.save("SendGoodsMapper.save", pd);
     }
 
-    /**删除
+    /**
+     * 删除
+     *
      * @param pd
      * @throws Exception
      */
-    public void delete(PageData pd)throws Exception{
+    public void delete(PageData pd) throws Exception {
         dao.delete("SendGoodsMapper.delete", pd);
     }
 
-    /**修改
+    /**
+     * 修改
+     *
      * @param pd
      * @throws Exception
      */
-    public void edit(PageData pd)throws Exception{
+    public void edit(PageData pd) throws Exception {
         dao.update("SendGoodsMapper.edit", pd);
     }
 
-    /**列表
+    /**
+     * 列表
+     *
      * @param page
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    public List<PageData> list(Page page)throws Exception{
-        return (List<PageData>)dao.findForList("SendGoodsMapper.datalistPage", page);
+    public List<PageData> list(Page page) throws Exception {
+        return (List<PageData>) dao.findForList("SendGoodsMapper.datalistPage", page);
     }
 
-    /**列表(全部)
+    /**
+     * 列表(全部)
+     *
      * @param pd
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    public List<PageData> listAll(Page  pd)throws Exception{
-        return (List<PageData>)dao.findForList("SendGoodsMapper.listAll", pd);
+    public List<PageData> listAll(Page pd) throws Exception {
+        return (List<PageData>) dao.findForList("SendGoodsMapper.listAll", pd);
     }
 
-    /**通过id获取数据
+    /**
+     * 通过id获取数据
+     *
      * @param pd
      * @throws Exception
      */
-    public PageData findById(PageData pd)throws Exception{
-        return (PageData)dao.findForObject("SendGoodsMapper.findById", pd);
+    public PageData findById(PageData pd) throws Exception {
+        return (PageData) dao.findForObject("SendGoodsMapper.findById", pd);
     }
 
-    /**批量删除
+    /**
+     * 批量删除
+     *
      * @param ArrayDATA_IDS
      * @throws Exception
      */
-    public void deleteAll(String[] ArrayDATA_IDS)throws Exception{
+    public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
         dao.delete("SendGoodsMapper.deleteAll", ArrayDATA_IDS);
     }
 
     @Override
     public int regSendGoods(SendGoods sendGoods) throws Exception {
-        return (int)dao.save("SendGoodsMapper.regSendGoods",sendGoods);
+        return (int) dao.save("SendGoodsMapper.regSendGoods", sendGoods);
     }
 
     /**
      * 申请发货
+     *
      * @return
      * @throws Exception
      */
-    public JSONObject doSendGoods(String playId,String number,String consignee,String remark,String userId,String mode,String costNum) throws Exception{
-    	 //增加发货记录
+    public JSONObject doSendGoods(String playId, String number, String consignee, String remark, String userId, String mode, String costNum) throws Exception {
+        //增加发货记录
         SendGoods sendGoods = new SendGoods();
         //免邮
-        if (mode.equals("0") ) {
+        if (mode.equals("0")) {
             sendGoods.setMODE_DESPATCH("0");
         }
         //货到付款
@@ -158,34 +173,34 @@ public class SendGoodsService implements SendGoodsManager{
         }
         //金币抵扣
         if (mode.equals("1")) {
-               //满2包邮 ，一个需要付运费
-                AppUser appUser = appuserService.getUserByID(userId);
-                String balance = appUser.getBALANCE();
-                Integer c;
-                if (costNum == null){
-                    //兼容以前APP版本 ，默认扣除80运费
-                    c = 80;
+            //满2包邮 ，一个需要付运费
+            AppUser appUser = appuserService.getUserByID(userId);
+            String balance = appUser.getBALANCE();
+            Integer c;
+            if (costNum == null) {
+                //兼容以前APP版本 ，默认扣除80运费
+                c = 80;
 
-                }else {
-                    //获取相应省份运费
-                    SendCost sendCost =  sendcostService.getSendCostByCostNum(Integer.valueOf(costNum));
-                    c =  sendCost.getCOST();
-                }
+            } else {
+                //获取相应省份运费
+                SendCost sendCost = sendcostService.getSendCostByCostNum(Integer.valueOf(costNum));
+                c = sendCost.getCOST();
+            }
 
-                if (Integer.valueOf(balance) < c) {
-                    return RespStatus.fail("余额不足，请充值");
-                }
-                int newbalance = Integer.valueOf(appUser.getBALANCE()) - c;
-                appUser.setBALANCE(String.valueOf(newbalance));
-                appuserService.updateAppUserBalanceById(appUser);
-                Payment payment = new Payment();
-                payment.setGOLD("-"+String.valueOf(c));
-                payment.setUSERID(userId);
-                payment.setDOLLID(null);
-                payment.setCOST_TYPE("6");
-                payment.setREMARK("支付运费");
-                paymentService.reg(payment);
-                sendGoods.setMODE_DESPATCH("1");
+            if (Integer.valueOf(balance) < c) {
+                return RespStatus.fail("余额不足，请充值");
+            }
+            int newbalance = Integer.valueOf(appUser.getBALANCE()) - c;
+            appUser.setBALANCE(String.valueOf(newbalance));
+            appuserService.updateAppUserBalanceById(appUser);
+            Payment payment = new Payment();
+            payment.setGOLD("-" + String.valueOf(c));
+            payment.setUSERID(userId);
+            payment.setDOLLID(null);
+            payment.setCOST_TYPE("6");
+            payment.setREMARK("支付运费");
+            paymentService.reg(payment);
+            sendGoods.setMODE_DESPATCH("1");
 
         }
 
@@ -208,16 +223,16 @@ public class SendGoodsService implements SendGoodsManager{
         }
         List<String> list1 = new LinkedList<>();
         for (int i = 0; i < list.size(); i++) {
-            String toyId =  dollService.getDollByID(list.get(i)).getTOY_ID();
-            DollToyVo dollToyVo =  dolltoyService.getDollToyByToyId(toyId);
-            String toyName =  dollToyVo.getToy_name();
+            String toyId = dollService.getDollByID(list.get(i)).getTOY_ID();
+            DollToyVo dollToyVo = dolltoyService.getDollToyByToyId(toyId);
+            String toyName = dollToyVo.getToy_name();
             list1.add(toyName);
         }
         List<String> list2 = new LinkedList<>();
-        for (int i = 0; i <list1.size() ; i++) {
-           int n  =  Collections.frequency(list1, list1.get(i));
-           String toyName = list1.get(i);
-           list2.add(toyName+"数量为："+n);
+        for (int i = 0; i < list1.size(); i++) {
+            int n = Collections.frequency(list1, list1.get(i));
+            String toyName = list1.get(i);
+            list2.add(toyName + "数量为：" + n);
         }
         List<String> newList = new LinkedList(new TreeSet(list2));
         String[] s = consignee.split("\\,");
@@ -233,13 +248,13 @@ public class SendGoodsService implements SendGoodsManager{
         sendGoods.setUSER_ID(userId);
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < newList.size(); i++) {
-            String ss =  newList.get(i).toString();
-            String ss1 = ss.substring(ss.length()-1,ss.length());
+            String ss = newList.get(i).toString();
+            String ss1 = ss.substring(ss.length() - 1, ss.length());
             int num = Integer.valueOf(ss1);
-            String toyname = ss.substring(0,ss.length()-5);
-            DollToyVo dollToyVo =  dolltoyService.getDollToyByToyName(toyname);
+            String toyname = ss.substring(0, ss.length() - 5);
+            DollToyVo dollToyVo = dolltoyService.getDollToyByToyName(toyname);
             int toyNum = dollToyVo.getToy_num();
-            dollToyVo.setToy_num(toyNum-num);
+            dollToyVo.setToy_num(toyNum - num);
             dolltoyService.updateToyNum(dollToyVo);
             String d = newList.get(i);
             sb.append(d + "，");
@@ -261,6 +276,7 @@ public class SendGoodsService implements SendGoodsManager{
 
     /**
      * 兑换金币
+     *
      * @param id
      * @param userId
      * @return
@@ -314,11 +330,63 @@ public class SendGoodsService implements SendGoodsManager{
 
     @Override
     public List<SendGoods> getLogisticsByUserId(String userId) throws Exception {
-        return (List<SendGoods>)dao.findForList("SendGoodsMapper.getLogisticsByUserId",userId);
+        return (List<SendGoods>) dao.findForList("SendGoodsMapper.getLogisticsByUserId", userId);
     }
 
     @Override
     public SendGoods getSendById(String id) throws Exception {
-        return (SendGoods)dao.findForObject("SendGoodsMapper.getSendById",id);
+        return (SendGoods) dao.findForObject("SendGoodsMapper.getSendById", id);
+    }
+
+    /**
+     * 定时兑换娃娃（年后上线）
+     * @param playDetail
+     * @throws Exception
+     */
+    @Override
+    public void doConversionGoldAuto(PlayDetail playDetail) throws Exception {
+        try {
+            playDetail.setPOST_STATE("2");
+            playDetailService.updatePostState(playDetail);
+            //用户更新余额
+            AppUser appUser = appuserService.getUserByID(playDetail.getUSERID());
+            int balance = Integer.parseInt(appUser.getBALANCE());
+            String c = playDetail.getCONVERSIONGOLD();
+            int m = Integer.valueOf(c);
+            String newBalance = String.valueOf(balance + m);
+            appUser.setBALANCE(newBalance);
+            appuserService.updateAppUserBalanceById(appUser);
+            //添加兑换记录
+            Conversion conversion = new Conversion();
+            Date date = new Date();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String time = format.format(date);
+            conversion.setCREATETIME(time);
+            String dollname ;//
+            if (playDetail.getTOY_ID() != null && !playDetail.getTOY_ID().equals("")) {
+                DollToyVo dollToyVo =  dolltoyService.getDollToyByToyId(String.valueOf(playDetail.getTOY_ID()));
+                dollname = dollToyVo.getToy_name();
+            } else {
+                dollname = dollService.getDollByID(playDetailService.getPlayDetailByID(Integer.valueOf(playDetail.getID())).getDOLLID()).getDOLL_NAME();
+            }
+
+            conversion.setDOLLNAME(dollname);
+            conversion.setNUMBER("1");
+            conversion.setUSERID(playDetail.getUSERID());
+            conversion.setPLAYID(playDetail.getID());
+            conversion.setCONMONEY(String.valueOf(playDetail.getCONVERSIONGOLD()));
+            conversionService.reg(conversion);
+            //添加明细记录
+            Payment payment = new Payment();
+            payment.setGOLD("+" + String.valueOf(playDetail.getCONVERSIONGOLD()));
+            payment.setUSERID(playDetail.getUSERID());
+            payment.setDOLLID(playDetail.getDOLLID());
+            payment.setCOST_TYPE("7");
+            payment.setREMARK("超时兑换" + dollname);
+            paymentService.reg(payment);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

@@ -3,6 +3,7 @@ package com.fh.service.system.sendgoods;
 import java.util.List;
 
 import com.fh.entity.Page;
+import com.fh.entity.system.PlayDetail;
 import com.fh.entity.system.SendGoods;
 import com.fh.util.PageData;
 
@@ -84,6 +85,13 @@ public interface SendGoodsManager {
      * @throws Exception
      */
     public SendGoods getSendById(String id)throws Exception;
+
+    /**
+     * 兑换过期未兑换未发货娃娃
+     * @param playDetail
+     * @throws Exception
+     */
+    public void doConversionGoldAuto(PlayDetail playDetail)throws Exception;
 
 
 

@@ -3,6 +3,7 @@ package com.fh.controller.wwjapp;
 import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -176,10 +177,10 @@ public class AppUserController {
             }
             if (user.getNICKNAME().equals(name)) {
                 Map<String, Object> map = new LinkedHashMap<>();
-                map.put("appUser", getAppUserByNickName(name));
+                map.put("appUser", getAppUserInfoByID(userId));
                 return RespStatus.successs().element("data", map);
             } else {
-                AppUser userExist = appuserService.getAppUserByNickName(name);
+                List<AppUser> userExist = appuserService.getAppUserByNickNameList(name);
                 if (userExist != null) {
                     return RespStatus.fail("用户名已经存在");
                 } else {
@@ -187,7 +188,7 @@ public class AppUserController {
                     int n = appuserService.updateAppUsernickName(user);
                     if (n != 0) {
                         Map<String, Object> map = new LinkedHashMap<>();
-                        map.put("appUser", getAppUserByNickName(name));
+                        map.put("appUser", getAppUserInfoByID(userId));
                         return RespStatus.successs().element("data", map);
                     } else {
                         return RespStatus.fail("更改昵称失败！");

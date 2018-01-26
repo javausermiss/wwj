@@ -111,3 +111,7 @@ alter table `tb_app_runimage` MODIFY COLUMN CONTENT text;
 
 ALTER TABLE `tb_app_doll_toy`
 ADD COLUMN `TOY_TYPE`  varchar(255) NULL COMMENT '类别' AFTER `DOOL_GOLD`;
+
+/*2018 01 25*/
+ALTER TABLE `tb_doll_play_detail`
+ADD COLUMN `TOY_ID`  int(11) NULL COMMENT '娃娃编号' AFTER `CREATE_DATE`;

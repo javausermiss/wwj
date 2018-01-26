@@ -25,9 +25,26 @@ public class PlayDetail {
     private String VIEW_STATE;
     private String FREE_DATE;//娃娃机FREE状态更新时间
     private String SEND_ORDER_ID;//发货订单主键ID
+    private Integer TOY_ID;//娃娃编号
 
 
     public PlayDetail() {
+    }
+
+    public String getFREE_DATE() {
+        return FREE_DATE;
+    }
+
+    public void setFREE_DATE(String FREE_DATE) {
+        this.FREE_DATE = FREE_DATE;
+    }
+
+    public Integer getTOY_ID() {
+        return TOY_ID;
+    }
+
+    public void setTOY_ID(Integer TOY_ID) {
+        this.TOY_ID = TOY_ID;
     }
 
     public String getSEND_ORDER_ID() {

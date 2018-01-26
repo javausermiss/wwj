@@ -128,4 +128,6 @@ public interface BetGameManager {
     public JSONObject doBet(String userId, String dollId, int wager, String guessId, String guessKey) throws Exception;
 
 
+    public void doFree(String dollId)throws Exception;
+
 }

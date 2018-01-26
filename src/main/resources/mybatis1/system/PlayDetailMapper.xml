@@ -112,7 +112,8 @@
         CREATE_DATE,
         GUESS_ID,
         GOLD,
-        CONVERSIONGOLD
+        CONVERSIONGOLD,
+        TOY_ID
         )
         VALUES (
         #{DOLLID},
@@ -120,7 +121,8 @@
         now(),
         #{GUESS_ID},
         #{GOLD},
-        #{CONVERSIONGOLD}
+        #{CONVERSIONGOLD},
+        #{TOY_ID}
         )
     </insert>
 
@@ -315,6 +317,10 @@
         WHERE
         ID = #{ID}
     </update>
+
+    <select id="getConversionToy" resultType="com.fh.entity.system.PlayDetail">
+        select * from tb_doll_play_detail where state = '1' and post_state = '0'
+    </select>
 
 
 

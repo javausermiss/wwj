@@ -183,6 +183,9 @@ public interface AppuserManager {
      */
     public AppUser getAppUserByNickName(String nickName) throws Exception;
 
+
+    public List<AppUser> getAppUserByNickNameList(String nickName) throws Exception;
+
     /**
      * 获取用户更新的的账户余额
      *

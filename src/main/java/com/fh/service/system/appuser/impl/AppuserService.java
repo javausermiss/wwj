@@ -216,6 +216,11 @@ public class AppuserService implements AppuserManager{
 		return (AppUser)dao.findForObject("AppuserMapper.getAppUserByNickName",nickName);
 	}
 
+	@Override
+	public List<AppUser> getAppUserByNickNameList(String nickName) throws Exception {
+		return (List<AppUser>)dao.findForObject("AppuserMapper.getAppUserByNickNameList",nickName);
+	}
+
 	/**
 	 * 获取用户更新的的账户余额
 	 * @param appUser
