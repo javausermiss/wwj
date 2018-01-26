@@ -36,6 +36,11 @@
 								<td><input type="text" name="DOLL_SN" id="DOLL_SN" value="${pd.DOLL_SN}" maxlength="50" placeholder="这里输入娃娃机SN" title="sn" style="width:98%;"/></td>
 							</tr>
 							<tr>
+								<td style="width:100px;text-align: right;padding-top: 13px;">设备编号:</td>
+								<td><input type="text" name="ROOM_ID" id="ROOM_ID" value="${pd.ROOM_ID}"
+								 maxlength="10" placeholder="这里输入娃娃机设备编号" title="ROOM_ID" style="width:98%;"/></td>
+							</tr>
+							<tr>
 								<td style="width:100px;text-align: right;padding-top: 13px;">娃娃机名字:</td>
 								<td><input type="text" name="DOLL_NAME" id="DOLL_NAME" value="${pd.DOLL_NAME}"
 								 maxlength="10" placeholder="这里输入娃娃机名字" title="DOLL_NAME" style="width:98%;"/></td>

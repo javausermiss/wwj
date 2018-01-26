@@ -94,7 +94,7 @@ public class DollController extends BaseController {
 		pd.put("DOLL_CONVERSIONGOLD", doll_conversiongold);
 		pd.put("RELEASE_STATUS", release_status);
 		pd.put("TOY_ID", req.getParameter("TOY_ID"));
-		
+		pd.put("ROOM_ID", req.getParameter("ROOM_ID"));
 		dollService.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
@@ -166,6 +166,7 @@ public class DollController extends BaseController {
 		pd.put("RELEASE_STATUS", req.getParameter("RELEASE_STATUS"));
 		pd.put("TOY_ID", req.getParameter("TOY_ID"));
 		pd.put("DOLL_URL", fileId);
+		pd.put("ROOM_ID", req.getParameter("ROOM_ID"));
 		dollService.edit(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
