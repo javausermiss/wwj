@@ -97,7 +97,7 @@
                                     <th class="center">娃娃机房间号</th>
                                     <th class="center">娃娃金币</th>
                                     <th class="center">娃娃可兑换金币</th>
-                                    <th class="center">状态</th>
+                                    <th class="center">设备编号</th>
                                     <th class="center">发布状态</th>
                                     <th class="center">操作</th>
                                 </tr>
@@ -121,14 +121,7 @@
                                                     <td class='center'>${var.DOLL_ID}</td>
                                                     <td class="center">${var.DOLL_GOLD}</td>
                                                     <td class="center">${var.DOLL_CONVERSIONGOLD}</td>
-                                                    <td style="width: 100px;" class='center'>
-                                                        <c:if test="${var.DOLL_STATE == '1' }"><span
-                                                                class="label label-success arrowed">游戏</span></c:if>
-                                                        <c:if test="${var.DOLL_STATE == '-1' }"><span
-                                                                class="label label-important arrowed-in">离线</span></c:if>
-                                                        <c:if test="${var.DOLL_STATE == '0' }"><span
-                                                                class="label label-success arrowed">空闲</span></c:if>
-                                                    </td>
+                                                     <td class="center">${var.ROOM_ID}</td>
                                                     <td style="width: 100px;" class='center'>
                                                         <c:if test="${var.RELEASE_STATUS == '0' }"><span
                                                                 class="label label-important arrowed-in">未发布</span></c:if>

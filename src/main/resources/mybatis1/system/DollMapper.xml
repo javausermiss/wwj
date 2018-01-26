@@ -101,6 +101,7 @@
         DOLL_CONVERSIONGOLD = #{DOLL_CONVERSIONGOLD},
         RELEASE_STATUS = #{RELEASE_STATUS},
         DOLL_URL = #{DOLL_URL},
+        ROOM_ID = #{ROOM_ID},
         TOY_ID = #{TOY_ID}
         where
         DOLL_ID = #{DOLL_ID}
@@ -131,6 +132,8 @@
 					DOLL_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
 					 or 
 					DOLL_SN LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+					or 
+					ROOM_ID LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
 				)
         </if>
         <if test="pd.DOLL_STATE != null and pd.DOLL_STATE != ''"><!-- 状态检索 -->

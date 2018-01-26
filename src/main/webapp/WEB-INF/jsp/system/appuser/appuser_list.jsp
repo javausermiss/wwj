@@ -112,9 +112,7 @@
                                     <th class="center"><i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>创建日期
                                     </th>
                                     <th class="center">手机号码</th>
-                                    <th class="center"><i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>最近登录
-                                    </th>
-                                    <th class="center">上次登录IP</th>
+                                    <th class="center">状态</th>
                                     <th class="center">金币余额</th>
                                     <th class="center">操作</th>
                                 </tr>
@@ -138,8 +136,7 @@
                                                     <td class="center">${user.ROLE_NAME }</td>
                                                     <td class="center">${user.CREATETIME }</td>
                                                     <td class="center">${user.PHONE }</td>
-                                                    <td class="center">${user.LAST_LOGIN}</td>
-                                                    <td class="center">${user.IP}</td>
+                                                    <td class="center">${user.STATUS}</td>
                                                     <td class="center">${user.BALANCE}</td>
                                                     <td class="center">
                                                         <c:if test="${QX.edit != 1 && QX.del != 1 }">

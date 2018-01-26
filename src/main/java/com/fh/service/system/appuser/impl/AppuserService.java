@@ -13,6 +13,7 @@ import com.fh.entity.system.Payment;
 import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.payment.PaymentManager;
 import com.fh.util.Const;
+import com.fh.util.EmojiUtil;
 import com.fh.util.NumberUtils;
 import com.fh.util.PageData;
 import com.fh.util.StrUtil;
@@ -269,11 +270,13 @@ public class AppuserService implements AppuserManager{
 
 	@Override
 	public int regwx(AppUser appUser) throws Exception {
+		appUser.setNICKNAME(EmojiUtil.emojiConverterToAlias(appUser.getNICKNAME())); //修改用户昵称转码
 		return (int) dao.save("AppuserMapper.regwx",appUser);
 	}
 
 	@Override
 	public int updateTencentUser(AppUser appUser) throws Exception {
+		appUser.setNICKNAME(EmojiUtil.emojiConverterToAlias(appUser.getNICKNAME())); //修改用户昵称转码
 		return (int)dao.update("AppuserMapper.updateTencentUser",appUser);
 	}
 
