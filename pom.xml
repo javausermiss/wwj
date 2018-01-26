@@ -608,6 +608,12 @@
             <artifactId>fastdfs-client</artifactId>
             <version>1.24</version>
         </dependency>
+        
+        <dependency>  
+		  <groupId>com.github.binarywang</groupId>  
+		  <artifactId>java-emoji-converter</artifactId>  
+		  <version>0.1.1</version>  
+		</dependency>
     </dependencies>
     <build>
         <finalName>pooh-web</finalName>
