@@ -236,7 +236,7 @@ public class DollToyController extends BaseController {
                   //  sb1.append(toyType1).append(",");
 
                 }
-                sb1.deleteCharAt(sb1.length()-1);
+               // sb1.deleteCharAt(sb1.length()-1);
                 sb.deleteCharAt(sb.length() - 1);
                 dollToyVo.setToy_type(sb.toString());
                 dolltoyService.updateToyType(dollToyVo);
