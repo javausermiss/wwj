@@ -21,6 +21,7 @@ import com.fh.service.system.appuserlogininfo.AppuserLoginInfoManager;
 import com.fh.service.system.doll.DollManager;
 import com.fh.service.system.payment.PaymentManager;
 import com.fh.util.Const;
+import com.fh.util.FastDFSClient;
 import com.fh.util.PropertiesUtils;
 import com.fh.util.wwjUtil.FaceImageUtil;
 import com.fh.util.wwjUtil.MyUUID;
@@ -133,6 +134,15 @@ public class TencentloginController extends BaseController {
                 }else{
                 	newFace = FaceImageUtil.downloadImage(imageUrl);
                 }
+                
+        		//如果当前用户图像不是默认头像，则先删除，再上传
+        		if(newFace !=null && appUser.getIMAGE_URL() !=null){
+        			String defaultUrl=PropertiesUtils.getCurrProperty("user.default.header.url"); //获取默认头像Id
+        			if(!defaultUrl.equals(appUser.getIMAGE_URL())){
+        				FastDFSClient.deleteFile(appUser.getIMAGE_URL());
+        			}
+        		}
+                
                 appUser.setNICKNAME(nickname);
                 appUser.setIMAGE_URL(newFace);
                 appuserService.updateTencentUser(appUser); //已注册用户 更新用户昵称和头像

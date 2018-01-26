@@ -1,6 +1,5 @@
 package com.fh.controller.wwjapp;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -8,18 +7,17 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.fh.entity.system.AppUser;
 import com.fh.service.system.appuser.AppuserManager;
 import com.fh.util.FastDFSClient;
 import com.fh.util.PropertiesUtils;
+import com.fh.util.wwjUtil.Base64Image;
 import com.fh.util.wwjUtil.Base64Util;
 import com.fh.util.wwjUtil.RespStatus;
 
@@ -111,30 +109,24 @@ public class AppUserController {
     @RequestMapping(value = "/updateUser", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject updateUser(@RequestParam("userId") String userId,
-    							 @RequestParam(value = "base64Image", required = false)CommonsMultipartFile  multipartFile //保存图片文件上传路径
+    							 @RequestParam(value = "base64Image", required = false)String  base64Image //保存图片文件上传路径
                                 ) {
         try {
             //String phone = new String(Base64Util.decryptBASE64(aPhone));
             AppUser appUser = appuserService.getUserByID(userId);
             if (appUser != null) {
-        		String faceName="";
-//                String faceName = MyUUID.createSessionId();
-//                if (!Base64Image.GenerateImage(base64Image, "/usr/local/tomcat/webapps/faceImage/" + faceName + ".png")) {
-//                    return RespStatus.fail("上传失败");
-//                }
-//                appUser.setIMAGE_URL("/" + faceName + ".png");
-//                int n = appuserService.updateAppUserImage(appUser);
-        		//头像上传
-        		try{
-        			String newFilename=multipartFile.getOriginalFilename();
-        			DiskFileItem fi = (DiskFileItem) multipartFile.getFileItem();
-        			File file = fi.getStoreLocation();
-        			faceName = FastDFSClient.uploadFile(file, newFilename);
-        		}catch(Exception ex){
-        			ex.printStackTrace();
+        		String faceName=Base64Image.GenerateImageBytes(base64Image, "defualt.png");
+        		
+        		//如果当前用户图像不是默认头像，则先删除，再上传
+        		if(faceName !=null && appUser.getIMAGE_URL() !=null){
+        			String defaultUrl=PropertiesUtils.getCurrProperty("user.default.header.url"); //获取默认头像Id
+        			if(!defaultUrl.equals(appUser.getIMAGE_URL())){
+        				FastDFSClient.deleteFile(appUser.getIMAGE_URL());
+        			}
         		}
-        		appUser.setIMAGE_URL(faceName);
+                appUser.setIMAGE_URL(faceName);
                 int n = appuserService.updateAppUserImage(appUser);
+        		//头像上传
                 if (n >0 ) {
                     Map<String, Object> map = new LinkedHashMap<>();
                     map.put("appUser", getAppUserInfoByID(userId));
