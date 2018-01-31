@@ -213,7 +213,7 @@
         ) values (
         #{DOLL_ID},
         #{DOLL_SN},
-        '1'
+        '0'
         )
 
     </insert>
