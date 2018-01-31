@@ -7,18 +7,16 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import com.fh.entity.system.ToyType;
-import com.fh.service.system.toytype.ToyTypeManager;
-import com.fh.service.system.toytype.impl.ToyTypeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.entity.system.ToyType;
 import com.fh.service.system.doll.DollManager;
+import com.fh.service.system.toytype.ToyTypeManager;
 import com.fh.util.NumberUtils;
 import com.fh.util.PageData;
 import com.fh.util.wwjUtil.RedisUtil;
@@ -66,8 +64,14 @@ public class AppDollController extends BaseController {
                  }else{
                      i--;//如果重复再来一次
                  }
-             }
-         	return RespStatus.successs().element("dollList", newList);*/
+             }*/
+             
+             //娃娃机网关信息
+            if (dollList != null && dollList.size() > 0) {
+                for (DollVo dollVo : dollList) {
+                    dollVo.setDollState(RedisUtil.getStr("roomInfo:" + dollVo.getDollId()));
+                }
+            }
             return RespStatus.successs().element("dollList", dollList);
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
