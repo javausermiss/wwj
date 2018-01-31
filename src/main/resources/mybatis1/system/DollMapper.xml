@@ -136,11 +136,11 @@
 					ROOM_ID LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
 				)
         </if>
-        <if test="pd.DOLL_STATE != null and pd.DOLL_STATE != ''"><!-- 状态检索 -->
-            and DOLL_STATE = #{pd.DOLL_STATE}
+        <if test="pd.RELEASE_STATUS != null and pd.RELEASE_STATUS != ''"><!-- 状态检索 -->
+            and RELEASE_STATUS = #{pd.RELEASE_STATUS}
         </if>
         
-		ORDER BY DOLL_ID DESC
+		ORDER BY RELEASE_STATUS DESC, DOLL_ID DESC
     </select>
 
     <!-- 列表(全部) -->
@@ -208,10 +208,12 @@
         <include refid="tableName"/>
         (
         DOLL_ID,
-        DOLL_SN
+        DOLL_SN,
+        RELEASE_STATUS
         ) values (
         #{DOLL_ID},
-        #{DOLL_SN}
+        #{DOLL_SN},
+        '1'
         )
 
     </insert>

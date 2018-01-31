@@ -58,6 +58,19 @@
 									<option value="">2</option> -->
 								  	</select>
 								</td>
+								<td style="vertical-align:top;padding-left:2px;">
+                                        <select class="chosen-select form-control" name="RELEASE_STATUS" id="RELEASE_STATUS"
+                                                data-placeholder="请选择发布状态" style="vertical-align:top;width: 120px;">
+                                            <option value=""></option>
+                                            <option value="">全部</option>
+                                            <option value="0"
+                                                    <c:if test="${pd.RELEASE_STATUS == '0' }">selected</c:if> >未发布
+                                            </option>
+                                            <option value="1"
+                                                    <c:if test="${pd.RELEASE_STATUS == '1' }">selected</c:if> >已发布
+                                            </option>
+                                        </select>
+                                    </td>
 								<c:if test="${QX.cha == 1 }">
 								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
 								</c:if>
@@ -72,10 +85,11 @@
 									<th class="center" style="width:35px;">
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
+									<th class="center">娃娃机编号</th>
+									<th class="center">网关SN</th>
 									<th class="center">DOLL_ID</th>
 									<th class="center">DOLL_NAME</th>
-									<th class="center">设备编号</th>
-									<th class="center">推流地址</th>
+									<th class="center">摄像头编号</th>
 									<th class="center">推流服务名称</th>
 									<th class="center">流媒体名称</th>
 									<th class="center">状态</th>
@@ -94,10 +108,11 @@
 											<td class='center'>
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.CAMERA_ID}" class="ace" /><span class="lbl"></span></label>
 											</td>
+											<td class='center'>${var.ROOM_ID}</td>
+											<td class='center'>${var.DOLL_SN}</td>
 											<td class='center'>${var.DOLL_ID}</td>
 											<td class='center'>${var.DOLL_NAME}</td>
 											<td class='center'>${var.CAMERA_NUM}</td>
-											<td class='center'>${var.RTMP_URL}</td>
 											<td class='center'>${var.SERVER_NAME}</td>
 											<td class='center'>${var.LIVESTREAM}</td>
 											<td style="width: 100px;" class='center'>

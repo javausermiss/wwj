@@ -60,10 +60,10 @@
                                             <option value=""></option>
                                             <option value="">全部</option>
                                             <option value="0"
-                                                    <c:if test="${pd.DOLL_STATE == '0' }">selected</c:if> >未发布
+                                                    <c:if test="${pd.RELEASE_STATUS == '0' }">selected</c:if> >未发布
                                             </option>
                                             <option value="1"
-                                                    <c:if test="${pd.DOLL_STATE == '1' }">selected</c:if> >已发布
+                                                    <c:if test="${pd.RELEASE_STATUS == '1' }">selected</c:if> >已发布
                                             </option>
                                         </select>
                                     </td>
@@ -129,10 +129,6 @@
                                                                 class="label label-success arrowed">已发布</span></c:if>
                                                     </td>
                                                     <td class="center">
-                                                        <c:if test="${QX.edit != 1 && QX.del != 1 }">
-                                                            <span class="label label-large label-grey arrowed-in-right arrowed-in"><i
-                                                                    class="ace-icon fa fa-lock" title="无权限"></i></span>
-                                                        </c:if>
                                                         <div class="hidden-sm hidden-xs btn-group">
                                                             <c:if test="${QX.edit == 1 }">
                                                                 <a class="btn btn-xs btn-success" title="编辑"
@@ -141,49 +137,6 @@
                                                                        title="编辑"></i>
                                                                 </a>
                                                             </c:if>
-                                                            <c:if test="${QX.del == 1 }">
-                                                                <a class="btn btn-xs btn-danger"
-                                                                   onclick="del('${var.DOLL_ID}');">
-                                                                    <i class="ace-icon fa fa-trash-o bigger-120"
-                                                                       title="删除"></i>
-                                                                </a>
-                                                            </c:if>
-                                                        </div>
-                                                        <div class="hidden-md hidden-lg">
-                                                            <div class="inline pos-rel">
-                                                                <button class="btn btn-minier btn-primary dropdown-toggle"
-                                                                        data-toggle="dropdown" data-position="auto">
-                                                                    <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-                                                                </button>
-
-                                                                <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                                                               
-                                                                    <c:if test="${QX.edit == 1 }">
-                                                                        <li>
-                                                                            <a style="cursor:pointer;"
-                                                                               onclick="edit('${var.DOLL_ID}');"
-                                                                               class="tooltip-success"
-                                                                               data-rel="tooltip" title="修改">
-																	<span class="green">
-																		<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																	</span>
-                                                                            </a>
-                                                                        </li>
-                                                                    </c:if>
-                                                                    <c:if test="${QX.del == 1 }">
-                                                                        <li>
-                                                                            <a style="cursor:pointer;"
-                                                                               onclick="del('${var.DOLL_ID}');"
-                                                                               class="tooltip-error" data-rel="tooltip"
-                                                                               title="删除">
-																	<span class="red">
-																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																	</span>
-                                                                            </a>
-                                                                        </li>
-                                                                    </c:if>
-                                                                </ul>
-                                                            </div>
                                                         </div>
                                                     </td>
                                                 </tr>
