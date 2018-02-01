@@ -129,8 +129,11 @@ public class AppDollController extends BaseController {
                         dollVo.setProb(prob);
                     }
                     
-                    //异常设备不展示
-                    if("FREE".equals(dollVo.getDollState()) || "BUSY".equals(dollVo.getDollState())){
+                    if(dollVo.getDollState()==null || "".equals(dollVo.getDollState())){
+                    	continue;
+                    }
+                    //异常设备不展示 FREE表正常，USING:游戏中
+                    if("FREE".equals(dollVo.getDollState().toUpperCase()) || "BUSY".equals(dollVo.getDollState().toUpperCase()) || "USING".equals(dollVo.getDollState().toUpperCase())){
                     	cameras=dollVo.getCameras();
                     	if(cameras !=null && cameras.size()==2){
                     		for(int i=0;i<cameras.size();i++){

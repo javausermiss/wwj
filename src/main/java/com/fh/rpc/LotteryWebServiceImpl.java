@@ -54,20 +54,38 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
      */
     @Override
     public RpcCommandResult startLottery(String dollId, String userId) {
+    	
+    	 RpcCommandResult rpcCommandResult = new RpcCommandResult();
         try {
             log.info("start时间-------------->"+ DateUtil.getTime());
+            
         	//查找娃娃机信息
             Doll doll= dollService.getDollByID(dollId);
+            if(doll==null){
+            	 rpcCommandResult.setRpcReturnCode(RpcReturnCode.FAILURE);
+                 rpcCommandResult.setInfo("设备不存在"); ///这里写期号
+            }
             
             //获取用户
             AppUser appUser = appuserService.getUserByID(userId);
+            if(appUser==null){
+           	 rpcCommandResult.setRpcReturnCode(RpcReturnCode.FAILURE);
+                rpcCommandResult.setInfo("用户不存在"); ///这里写期号
+           }
             
-            String b1 = appUser.getBALANCE();
-            int old = Integer.valueOf(b1);
-            int b2 = doll.getDOLL_GOLD();
-            if (Integer.valueOf(b1) < b2) {
+            //判断用户金币大于等于每次抓取的值
+            String appUserBalance = appUser.getBALANCE(); //用户余额
+            int userBalance = Integer.valueOf(appUserBalance);
+            int dollGold = doll.getDOLL_GOLD();//抓取金币额度
+          
+            
+            if (Integer.valueOf(userBalance) < dollGold) {
+            	 rpcCommandResult.setRpcReturnCode(RpcReturnCode.FAILURE);
+                 rpcCommandResult.setInfo("余额不足"); ///这里写期号
                 return null;
             }
+            
+            
             //添加游戏金币明细记录
             Payment payment = new Payment();
             payment.setCOST_TYPE("0");
@@ -78,7 +96,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
             paymentService.reg(payment);
 
             //修改金币数量
-            appUser.setBALANCE(String.valueOf(old - b2));
+            appUser.setBALANCE(String.valueOf(userBalance - dollGold));
             appuserService.updateAppUserBalanceById(appUser);
             
             //获取最新的场次
@@ -117,7 +135,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                 playDetailService.reg(newPlayDetail);
                 Pond pond = new Pond(newPlayDetail.getGUESS_ID(), dollId, null);
                 pondService.regPond(pond);
-                RpcCommandResult rpcCommandResult = new RpcCommandResult();
+               
                 rpcCommandResult.setRpcReturnCode(RpcReturnCode.SUCCESS);
                 rpcCommandResult.setInfo(guessId); ///这里写期号
                 return rpcCommandResult;
@@ -139,7 +157,6 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                     playDetailService.reg(newp);
                     Pond pond = new Pond(newp.getGUESS_ID(), dollId, null);
                     pondService.regPond(pond);
-                    RpcCommandResult rpcCommandResult = new RpcCommandResult();
                     rpcCommandResult.setRpcReturnCode(RpcReturnCode.SUCCESS);
                     rpcCommandResult.setInfo(newGuessId); ///这里写期号
                     return rpcCommandResult;
@@ -158,7 +175,6 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                     playDetailService.reg(playDetail1);
                     Pond pond = new Pond(playDetail1.getGUESS_ID(), dollId, null);
                     pondService.regPond(pond);
-                    RpcCommandResult rpcCommandResult = new RpcCommandResult();
                     rpcCommandResult.setRpcReturnCode(RpcReturnCode.SUCCESS);
                     rpcCommandResult.setInfo(newGuessID); ///这里写期号
                     return rpcCommandResult;
@@ -166,6 +182,9 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            
+            rpcCommandResult.setRpcReturnCode(RpcReturnCode.FAILURE);
+            rpcCommandResult.setInfo("设备异常"); ///这里写期号
             return null;
         }
 
