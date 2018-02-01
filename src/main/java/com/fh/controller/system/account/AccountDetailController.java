@@ -95,14 +95,14 @@ public class AccountDetailController extends BaseController {
 			}
 			page.setPd(pd);
 			List<PageData> varlist=paymentService.findRegTotallistPage(page);
-			List<PageData> total = paymentService.getUserTotal(page);	
+//			List<PageData> total = paymentService.getUserTotal(page);	
 			mv.setViewName("system/account/appuser_order_statistics");
-			mv.addObject("total",total);
+//			mv.addObject("total",total);
 			mv.addObject("varlist", varlist);
 			mv.addObject("pd", pd);
 			mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
 		} catch(Exception e){
-			logger.error(e.toString(), e);
+			logger.error(e.getMessage());
 		}
 		return mv;
 	}
