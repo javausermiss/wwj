@@ -79,6 +79,19 @@
                                             </option>
                                         </select>
                                     </td>
+                                    <td style="vertical-align:top;padding-left:2px;">
+                                        <select class="chosen-select form-control" name="ORDERSTR" id="ORDERSTR"
+                                                data-placeholder="金币余额排序" style="vertical-align:top;width: 79px;">
+                                            <option value=""></option>
+                                            <option value="">默认</option>
+                                            <option value="DESC"
+                                                    <c:if test="${pd.ORDERSTR == 'DESC' }">selected</c:if> >降序
+                                            </option>
+                                            <option value="ASC"
+                                                    <c:if test="${pd.ORDERSTR == 'ASC' }">selected</c:if> >升序
+                                            </option>
+                                        </select>
+                                    </td>
                                     <c:if test="${QX.cha == 1 }">
                                         <td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs"
                                                                                             onclick="searchs();"

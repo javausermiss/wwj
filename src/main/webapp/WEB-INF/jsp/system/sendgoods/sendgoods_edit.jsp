@@ -26,31 +26,10 @@
 			<div class="page-content">
 				<div class="row">
 					<div class="col-xs-12">
-					
-					<form action="sendgoods/${msg }.do" name="Form" id="Form" method="post">
+					<form action="sendgoods/edit.do" name="Form" id="Form" method="post">
 						<input type="hidden" name="ID" id="ID" value="${pd.ID}"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
-							<%--<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">主键ID:</td>
-								<td><input type="number" name="ID" id="ID" value="${pd.ID}" maxlength="32" placeholder="这里输入主键ID" title="主键ID" style="width:98%;"/></td>
-							</tr>--%>
-							<%--<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">发货数量:</td>
-								<td><input type="text" name="GOODS_NUM" id="GOODS_NUM" value="${pd.GOODS_NUM}" maxlength="255" placeholder="这里输入发货数量" title="发货数量" style="width:98%;"/></td>
-							</tr>--%>
-							<%--<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">收货人名字:</td>
-								<td><input type="text" name="CNEE_NAME" id="CNEE_NAME" value="${pd.CNEE_NAME}" maxlength="255" placeholder="这里输入收货人名字" title="收货人名字" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">收货人地址:</td>
-								<td><input type="text" name="CNEE_ADDRESS" id="CNEE_ADDRESS" value="${pd.CNEE_ADDRESS}" maxlength="255" placeholder="这里输入收货人地址" title="收货人地址" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">收货人手机号码:</td>
-								<td><input type="text" name="CNEE_PHONE" id="CNEE_PHONE" value="${pd.CNEE_PHONE}" maxlength="255" placeholder="这里输入收货人手机号码" title="收货人手机号码" style="width:98%;"/></td>
-							</tr>--%>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">是否发货:</td>
 									<td><select id="SENDBOOLEAN" name="SENDBOOLEAN">
@@ -59,8 +38,23 @@
 									</select>
 									</td>
 							</tr>
-
-							<<tr>
+							<tr>
+								<td style="width:75px;text-align: right;padding-top: 13px;">用户ID:</td>
+								<td><input type="text" name="USER_ID" id="USER_ID" value="${appuser.USER_ID}" maxlength="255"  style="width:98%;" disabled="disabled" /></td>
+							</tr>
+							<tr>
+								<td style="width:75px;text-align: right;padding-top: 13px;">用户昵称:</td>
+								<td><input type="text" name="NICKNAME" id="NICKNAME" value="${appuser.NICKNAME}" maxlength="255"  style="width:98%;" disabled="disabled" /></td>
+							</tr>
+							<tr>
+								<td style="width:75px;text-align: right;padding-top: 13px;">姓名:</td>
+								<td><input type="text" name="NAME" id="NAME" value="${appuser.NAME}" maxlength="255" style="width:98%;" disabled="disabled" /></td>
+							</tr>
+							<tr>
+								<td style="width:75px;text-align: right;padding-top: 13px;">总充值金额</td>
+								<td><input type="text" name="REGAMOUNT" id="REGAMOUNT" value="${appuser.REGAMOUNT/100}" maxlength="255" style="width:98%;" disabled="disabled" /></td>
+							</tr>
+							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">备注:</td>
 								<td><input type="text" name="REMARK" id="REMARK" value="${pd.REMARK}" maxlength="255" placeholder="这里输入备注" title="备注" style="width:98%;"/></td>
 							</tr>
@@ -72,10 +66,6 @@
 								<td style="width:75px;text-align: right;padding-top: 13px;">物流名称:</td>
 								<td><input type="text" name="FMS_NAME" id="FMS_NAME" value="${pd.FMS_NAME}" maxlength="255" placeholder="这里输入物流名称" title="物流名称" style="width:98%;"/></td>
 							</tr>
-						<%--	<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">更新时间:</td>
-								<td><input type="text" name="UPDATE_TIME" id="UPDATE_TIME" value="${pd.UPDATE_TIME}" maxlength="255" placeholder="这里输入更新时间" title="更新时间" style="width:98%;"/></td>
-							</tr>--%>
 							<tr>
 								<td style="text-align: center;" colspan="10">
 									<a class="btn btn-mini btn-primary" onclick="save();">保存</a>
