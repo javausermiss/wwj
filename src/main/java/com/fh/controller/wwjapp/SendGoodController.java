@@ -150,13 +150,13 @@ public class SendGoodController {
     @RequestMapping(value = "/sendGoods", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject sendGoods1(
-            @RequestParam("id") String playId,//抓取编号
-            @RequestParam("number") String number,
-            @RequestParam("consignee") String consignee,
-            @RequestParam("remark") String remark,
-            @RequestParam("userId") String userId,
-            @RequestParam(value = "mode") String mode,
-            @RequestParam(value = "costNum",required = false) String costNum
+            @RequestParam("id") String playId,//抓取编号(用户抓取记录ID，逗号拼接)例：5411,2223,5623
+            @RequestParam("number") String number,//娃娃数量
+            @RequestParam("consignee") String consignee,//例：名字,地址,手机号码(逗号拼接)
+            @RequestParam("remark") String remark,//用户留言
+            @RequestParam("userId") String userId, //用户ID
+            @RequestParam(value = "mode") String mode,//模式 0：免邮  1：金币抵扣
+            @RequestParam(value = "costNum",required = false) String costNum//省份编号
     ) {
         try {
             return sendGoodsService.doSendGoods(playId, number, consignee, remark, userId, mode,costNum);

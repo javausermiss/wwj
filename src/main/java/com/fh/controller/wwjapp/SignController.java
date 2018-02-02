@@ -172,7 +172,7 @@ public class SignController {
     }
 
     /**
-     * 定时器。0点刷新用户的签到标签
+     * 定时器。0点刷新用户的签到标签 ,竞猜次数标签
      */
     @Scheduled(cron = "0 0 0 * * ?")
     public void flushAppuserSign() {
@@ -181,6 +181,7 @@ public class SignController {
             for (int i = 0; i < list.size(); i++) {
                 AppUser appUser = list.get(i);
                 appUser.setSIGN_TAG("0");
+                appUser.setBET_NUM(0);
                 appuserService.updateAppUserSign(appUser);
             }
 

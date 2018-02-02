@@ -9,4 +9,5 @@ public class Sign {
     private String SIGNTIME;
     private String CSDATE;
     private String SIGN_TAG;
+    private String SIGNGOLD;
 }

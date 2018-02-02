@@ -4,9 +4,11 @@ import com.fh.dao.DaoSupport;
 import com.fh.entity.system.AppUser;
 import com.fh.entity.system.Payment;
 import com.fh.entity.system.Sign;
+import com.fh.entity.system.SignGold;
 import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.payment.PaymentManager;
 import com.fh.service.system.sign.SignManager;
+import com.fh.service.system.signgold.SignGoldManager;
 import com.fh.util.wwjUtil.RespStatus;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -18,34 +20,39 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service("signService")
-public class SignService implements SignManager{
+public class SignService implements SignManager {
 
     @Resource(name = "daoSupport")
     private DaoSupport dao;
 
     @Resource(name = "appuserService")
     private AppuserManager appuserService;
+
     @Resource(name = "paymentService")
     private PaymentManager paymentService;
 
+    @Resource(name = "signgoldService")
+    private SignGoldManager signgoldService;
+
     @Override
     public int insertSign(Sign sign) throws Exception {
-        return (int) dao.save("SignMapper.insertSign",sign);
+        return (int) dao.save("SignMapper.insertSign", sign);
     }
 
     @Override
     public Sign getSignLastByUserId(String userId) throws Exception {
-        return (Sign)dao.findForObject("SignMapper.getSignLastByUserId",userId);
+        return (Sign) dao.findForObject("SignMapper.getSignLastByUserId", userId);
     }
 
     @Override
     public int updateSign(Sign sign) throws Exception {
-        return (int)dao.update("SignMapper.updateSign",sign);
+        return (int) dao.update("SignMapper.updateSign", sign);
     }
 
 
     @Override
-    public JSONObject doSign(String userId, String signType) throws Exception {
+    public JSONObject
+    doSign(String userId, String signType) throws Exception {
         AppUser appUser1 = appuserService.getUserByID(userId);
         if (appUser1 == null) {
             return null;
@@ -65,7 +72,7 @@ public class SignService implements SignManager{
                 Map<String, Object> map = new HashMap<>();
                 map.put("sign", newSignLast1);
                 return RespStatus.successs().element("data", map);
-            }else if(newSignLast.getCSDATE().equals("7")) {
+            } else if (newSignLast.getCSDATE().equals("7")) {
                 sign.setCSDATE("0");
                 sign.setUSERID(userId);
                 sign.setSIGNTIME(dateString);
@@ -76,7 +83,7 @@ public class SignService implements SignManager{
                 return RespStatus.successs().element("data", map);
             }
             Map<String, Object> map = new HashMap<>();
-            map.put("sign",newSignLast);
+            map.put("sign", newSignLast);
             return RespStatus.successs().element("data", map);
         } else {
             Sign signLast = this.getSignLastByUserId(userId);//查询出用户最近的一条签到记录
@@ -85,16 +92,20 @@ public class SignService implements SignManager{
             if (signLast.getCSDATE().equals("0")) {
                 signLast.setCSDATE("1");
                 this.updateSign(signLast);
+
+                SignGold signGold =  signgoldService.getSignGoldByDay("1");
+                gold =  signGold.getGOLD_NUM();
+
                 AppUser appUser = appuserService.getUserByID(userId);
                 String oldBalance = appUser.getBALANCE();
-                int newBalance = Integer.valueOf(oldBalance) + Integer.valueOf("10");
+                int newBalance = Integer.valueOf(oldBalance) + Integer.valueOf(gold);
                 appUser.setBALANCE(String.valueOf(newBalance));
                 appUser.setSIGN_TAG("1");
                 appuserService.updateAppUserSB(appUser);
                 Payment payment = new Payment();
                 payment.setCOST_TYPE("8");
                 payment.setUSERID(userId);
-                payment.setGOLD("+10");
+                payment.setGOLD("+"+gold);
                 payment.setREMARK("签到奖励");
                 paymentService.reg(payment);
             } else {
@@ -103,10 +114,32 @@ public class SignService implements SignManager{
                 }
                 String signday = signLast.getCSDATE();//查询最近的签到天数
                 int h = Integer.valueOf(signday);
-                if (h != 7) {
+
+                SignGold signGold =  signgoldService.getSignGoldByDay(String.valueOf(h));
+                if (h!=7){
+                    gold =  signGold.getGOLD_NUM();
+                    signday = String.valueOf(h + 1);
+                    s.setUSERID(userId);
+                    s.setSIGNTIME(dateString);
+                    s.setCSDATE(signday);
+                    this.insertSign(s);
+                    AppUser appUser = appuserService.getUserByID(userId);
+                    String oldBalance = appUser.getBALANCE();
+                    int newBalance = Integer.valueOf(oldBalance) + Integer.valueOf(gold);
+                    appUser.setBALANCE(String.valueOf(newBalance));
+                    appUser.setSIGN_TAG("1");
+                    appuserService.updateAppUserSB(appUser);
+                    Payment payment = new Payment();
+                    payment.setCOST_TYPE("8");
+                    payment.setUSERID(userId);
+                    payment.setGOLD("+" + gold);
+                    payment.setREMARK("签到奖励");
+                    paymentService.reg(payment);
+
+                 /* if (h != 7) {
                     switch (String.valueOf(h + 1)) {
                         case "1":
-                            gold = "10";
+                            gold = "3";
                             break;
                         case "2":
                             gold = "10";
@@ -126,12 +159,17 @@ public class SignService implements SignManager{
                         case "7":
                             gold = "40";
                             break;
-                    }
-                    signday = String.valueOf(h + 1);
+                    }*/
+
+                } else {
                     s.setUSERID(userId);
                     s.setSIGNTIME(dateString);
-                    s.setCSDATE(signday);
+                    s.setCSDATE("1");
                     this.insertSign(s);
+
+                    SignGold signGold1 =  signgoldService.getSignGoldByDay("1");
+                    gold =  signGold1.getGOLD_NUM();
+
                     AppUser appUser = appuserService.getUserByID(userId);
                     String oldBalance = appUser.getBALANCE();
                     int newBalance = Integer.valueOf(oldBalance) + Integer.valueOf(gold);
@@ -141,29 +179,13 @@ public class SignService implements SignManager{
                     Payment payment = new Payment();
                     payment.setCOST_TYPE("8");
                     payment.setUSERID(userId);
-                    payment.setGOLD("+" + gold);
-                    payment.setREMARK("签到奖励");
-                    paymentService.reg(payment);
-                } else {
-                    s.setUSERID(userId);
-                    s.setSIGNTIME(dateString);
-                    s.setCSDATE("1");
-                    this.insertSign(s);
-                    AppUser appUser = appuserService.getUserByID(userId);
-                    String oldBalance = appUser.getBALANCE();
-                    int newBalance = Integer.valueOf(oldBalance) + Integer.valueOf("10");
-                    appUser.setBALANCE(String.valueOf(newBalance));
-                    appUser.setSIGN_TAG("1");
-                    appuserService.updateAppUserSB(appUser);
-                    Payment payment = new Payment();
-                    payment.setCOST_TYPE("8");
-                    payment.setUSERID(userId);
-                    payment.setGOLD("+10");
+                    payment.setGOLD("+"+gold);
                     payment.setREMARK("签到奖励");
                     paymentService.reg(payment);
                 }
             }
             Sign newSignLast = this.getSignLastByUserId(userId);
+            newSignLast.setSIGNGOLD(gold);
             Map<String, Object> map = new HashMap<>();
             map.put("sign", newSignLast);
             return RespStatus.successs().element("data", map);
