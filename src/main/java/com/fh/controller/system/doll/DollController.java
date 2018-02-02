@@ -35,6 +35,8 @@ import com.fh.util.FastDFSClient;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
+import com.fh.util.wwjUtil.RedisUtil;
+import com.fh.vo.system.DollVo;
 
 
 /** 
@@ -190,6 +192,16 @@ public class DollController extends BaseController {
 		}
 		page.setPd(pd);
 		List<PageData>	varList = dollService.list(page);	//列出Doll列表
+		
+		
+		//娃娃机概率
+		for (PageData dollVo : varList) {
+	        String prob =  RedisUtil.getStr("roomProbability:" + dollVo.getString("DOLL_ID"));
+	        if (prob != null){
+	        	dollVo.put("ROOMPROBABILITY", prob);
+	        }
+		 }
+        
 		mv.setViewName("system/doll/doll_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);

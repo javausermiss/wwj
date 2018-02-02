@@ -1,5 +1,6 @@
 package com.fh.controller.wwjapp;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,22 +8,21 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import com.fh.entity.system.ToyType;
-import com.fh.service.system.toytype.ToyTypeManager;
-import com.fh.service.system.toytype.impl.ToyTypeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.entity.system.ToyType;
 import com.fh.service.system.doll.DollManager;
+import com.fh.service.system.toytype.ToyTypeManager;
 import com.fh.util.NumberUtils;
 import com.fh.util.PageData;
 import com.fh.util.wwjUtil.RedisUtil;
 import com.fh.util.wwjUtil.RespStatus;
+import com.fh.vo.system.CameraVo;
 import com.fh.vo.system.DollVo;
 
 import net.sf.json.JSONObject;
@@ -66,8 +66,14 @@ public class AppDollController extends BaseController {
                  }else{
                      i--;//如果重复再来一次
                  }
-             }
-         	return RespStatus.successs().element("dollList", newList);*/
+             }*/
+             
+             //娃娃机网关信息
+            if (dollList != null && dollList.size() > 0) {
+                for (DollVo dollVo : dollList) {
+                    dollVo.setDollState(RedisUtil.getStr("roomInfo:" + dollVo.getDollId()));
+                }
+            }
             return RespStatus.successs().element("dollList", dollList);
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
@@ -101,22 +107,56 @@ public class AppDollController extends BaseController {
             pd.put("showCount", showCount);
             page.setPd(pd);
 
-
+            //娃娃机列表分页
             List<DollVo> dollList = dollService.getDollPage(page);
-
-            Map<String, Object> map = new HashMap<>();
+            
+            //前端展示集合
+            List<DollVo> tmpList =new ArrayList<DollVo>();
+            
             //娃娃机网关信息
             if (dollList != null && dollList.size() > 0) {
+            	  List<CameraVo> cameras =new ArrayList<CameraVo>(); //网关摄像头集合
+            	  boolean cState=true;
+            	  CameraVo cameraVo=null;
                 for (DollVo dollVo : dollList) {
+                	
+                	//获取娃娃机网关状态
                     dollVo.setDollState(RedisUtil.getStr("roomInfo:" + dollVo.getDollId()));
+                    
+                    //获取概率
                     String prob =  RedisUtil.getStr("roomProbability:" + dollVo.getDollId());
                     if (prob != null){
                         dollVo.setProb(prob);
                     }
+                    
+                    if(dollVo.getDollState()==null || "".equals(dollVo.getDollState())){
+                    	logger.info(dollVo.getDollId()+" dollState-------->"+dollVo.getDollState());
+                    	continue;
+                    }
+                    //异常设备不展示 FREE表正常，USING:游戏中
+                    if("FREE".equals(dollVo.getDollState().toUpperCase()) || "BUSY".equals(dollVo.getDollState().toUpperCase()) || "USING".equals(dollVo.getDollState().toUpperCase())){
+                    	cameras=dollVo.getCameras();
+                    	if(cameras !=null && cameras.size()==2){
+                    		for(int i=0;i<cameras.size();i++){
+                    			cameraVo=cameras.get(i);
+                    			if(!"0".equals(cameraVo.getDeviceState())){ // DEVICE_STATE:0 正常 ，1:不正常
+                    				logger.info(cameraVo.getCameraId()+",cameraType="+cameraVo.getCameraType()+" deviceState-------->"+cameraVo.getDeviceState());
+                    				cState=false;
+                    			}
+                    		}
+                    		if(cState){
+                    			//娃娃机网关正常，并且摄像头状态正常
+                    			tmpList.add(dollVo);
+                    		}
+                    	}
+                    }else{
+                    	logger.info(dollVo.getDollId()+" dollState-------->"+dollVo.getDollState());
+                    }
                 }
             }
-            map.put("dollList", dollList);
-
+            
+            Map<String, Object> map = new HashMap<>();
+            map.put("dollList", tmpList);
             //分页信息
             pd.put("currentPage", page.getCurrentPage());
             pd.put("showCount", (page.getShowCount() / 2));

@@ -120,14 +120,14 @@ public class TencentloginController extends BaseController {
                     appUser.setUSER_ID(userId);
                     appuserService.regwx(appUser); //未注册用户 先注册用户
                     
-                    logger.info("tencentLogin--> userId="+userId+",首次登陆，注册赠送金币...");
-                    //增加赠送金币明细
-                    Payment payment = new Payment();
-                    payment.setREMARK("注册赠送");
-                    payment.setGOLD("+19");
-                    payment.setCOST_TYPE("9");
-                    payment.setUSERID(userId);
-                    paymentService.reg(payment);
+//                    logger.info("tencentLogin--> userId="+userId+",首次登陆，注册赠送金币...");
+//                    //增加赠送金币明细
+//                    Payment payment = new Payment();
+//                    payment.setREMARK("注册赠送");
+//                    payment.setGOLD("+19");
+//                    payment.setCOST_TYPE("9");
+//                    payment.setUSERID(userId);
+//                    paymentService.reg(payment);
             }else{
                 if (imageUrl == null || imageUrl.equals("")) {
                 	newFace = PropertiesUtils.getCurrProperty("user.default.header.url"); //默认头像

@@ -302,5 +302,14 @@ public interface AppuserManager {
 	 * @throws Exception
 	 */
 	public List<PageData> listUserGames(Page page)throws Exception;
+	
+	
+	/**
+	 * 查看用户的充值总记录
+	 * @param userId
+	 * @return
+	 * @throws Exception
+	 */
+	public PageData getAppUesrRechargeToTal(String userId)throws Exception;
 }
 

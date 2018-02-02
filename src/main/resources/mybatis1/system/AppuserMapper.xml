@@ -134,7 +134,15 @@
         <if test="pd.STATUS != null and pd.STATUS != ''"><!-- 状态检索 -->
             and u.STATUS=#{pd.STATUS}
         </if>
-        order by u.CREATETIME DESC
+        
+        <if test="pd.ORDESTR != null and pd.ORDESTR != ''"><!-- 状态检索 -->
+       			 
+        </if>
+        <choose>  
+             <when test="pd.ORDERSTR == null || pd.ORDERSTR == '' ">order by u.CREATETIME DESC</when>  
+             <when test="pd.ORDERSTR != null and pd.ORDERSTR == 'ASC'">order by u.BALANCE+0 ASC</when>
+             <when test="pd.ORDERSTR != null and pd.ORDERSTR == 'DESC'">order by u.BALANCE+0 DESC</when>  
+          </choose>
     </select>
 
     <!-- 通过USERNAME获取数据 -->
@@ -587,4 +595,15 @@
         
         ) S ORDER BY PROBABILITY DESC
 	</select>
+	
+	 <select id="getAppUesrRechargeToTal" parameterType="String" resultType="pd">
+		SELECT 
+		au.USER_ID,
+		au.NICKNAME,
+		au.`NAME` ,
+		(
+			SELECT IFNULL(SUM(REGAMOUNT),0) as REGAMOUNT FROM SYS_APP_ORDER WHERE USER_ID=au.USER_ID AND `STATUS`='1'
+		) as REGAMOUNT
+		FROM SYS_APP_USER au WHERE  au.USER_ID=#{userId}
+		</select>
 </mapper>

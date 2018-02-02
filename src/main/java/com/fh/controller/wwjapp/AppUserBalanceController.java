@@ -254,7 +254,7 @@ public class AppUserBalanceController {
     ) {
         try {
             Order o = orderTestService.getOrderById(out_trade_no);
-            String ckey = PropertiesUtils.getCurrProperty("pay.ckey");
+            String ckey = PropertiesUtils.getCurrProperty("api.app.sdk.ckey");
             if (o == null) {
                 return "there is no order";
             }
@@ -446,7 +446,7 @@ public class AppUserBalanceController {
     ) {
         try {
             Order o = orderTestService.getOrderById(out_trade_no);
-            String ckey = PropertiesUtils.getCurrProperty("pay.ckey");
+            String ckey = PropertiesUtils.getCurrProperty("api.i5.sdk.ckey");
             if (o == null) {
                 return "there is no order";
             }

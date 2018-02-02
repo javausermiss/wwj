@@ -8,15 +8,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import com.fh.entity.system.PlayDetail;
-import com.fh.entity.system.SendGoods;
-import com.fh.service.system.playdetail.PlayDetailManage;
-import com.fh.util.*;
-import com.fh.util.wwjUtil.RespStatus;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -24,9 +19,20 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.entity.system.SendGoods;
+import com.fh.service.system.appuser.AppuserManager;
+import com.fh.service.system.playdetail.PlayDetailManage;
 import com.fh.service.system.sendgoods.SendGoodsManager;
+import com.fh.util.AppUtil;
+import com.fh.util.DateUtil;
+import com.fh.util.Jurisdiction;
+import com.fh.util.ObjectExcelView;
+import com.fh.util.PageData;
+
+import lombok.extern.slf4j.Slf4j;
 
 /** 
  * 说明：发货管理
@@ -44,6 +50,9 @@ public class SendGoodsController extends BaseController {
 
 	@Resource(name = "playDetailService")
 	private PlayDetailManage playDetailService;
+	
+	@Resource(name = "appuserService")
+	private AppuserManager appuserService;
 	
 	/**保存
 	 * @param
@@ -149,12 +158,18 @@ public class SendGoodsController extends BaseController {
 	@RequestMapping(value="/goEdit")
 	public ModelAndView goEdit()throws Exception{
 		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("system/sendgoods/sendgoods_edit");
+		
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd = sendgoodsService.findById(pd);	//根据ID读取
-		mv.setViewName("system/sendgoods/sendgoods_edit");
+		
+		//获取用户得充金额
+		PageData appUserRech= appuserService.getAppUesrRechargeToTal(pd.getString("USER_ID"));
+		
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
+		mv.addObject("appuser", appUserRech);
 		return mv;
 	}	
 	

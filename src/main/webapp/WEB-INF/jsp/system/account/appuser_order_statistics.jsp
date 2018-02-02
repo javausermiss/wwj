@@ -73,19 +73,6 @@
                                                 id="nav-search-icon"
                                                 class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a>
                                         </td>
-                                        	<c:forEach items="${total}" var="s" varStatus="vs">
-                                            <td class='center' ></td>
-                                            	<td class='center' style="width:80px;color:red" bgcolor=""><b>总金额:</b></td>
-                                        		<td class='center'><b>￥${s.money/100}</b></td>
-                                        	</c:forEach>
-<%--                                     <c:if test="${QX.toExcel == 1 }"> --%>
-<!--                                         <td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" -->
-<!--                                                                                             onclick="toExcel();" -->
-<!--                                                                                             title="导出到EXCEL"><i -->
-<!--                                                 id="nav-search-icon" -->
-<!--                                                 class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a> -->
-<!--                                         </td> -->
-<%--                                     </c:if> --%>
                                 </tr>
                             </table>
                             <!-- 检索  -->
@@ -94,11 +81,17 @@
                                    style="margin-top:5px;">
                                 <thead>
                                 <tr>
-                                    <th class="center">用户ID</th>
-                                    <th class="center">用户昵称</th>
-                                    <th class="center">交易时间</th>
-                                    <th class="center">支付金额</th>
-                                    <th class="center">状态</th>
+                                    <th class="center">交易日常</th>
+                                    <th class="center">总订单金额</th>
+                                    <th class="center">订单笔数</th>
+                                    
+                                    <th class="center">已支付金额</th>
+                                    <th class="center">已支付笔数</th>
+                                    <th class="center">成功概率</th>
+                                    
+                                    <th class="center">未支付金额</th>
+                                    <th class="center">未支付笔数</th>
+                                    <th class="center">失败概率</th>
                                 </tr>
                                 </thead>
 
@@ -108,18 +101,18 @@
                                     <c:when test="${not empty varlist}">
                                             <c:forEach items="${varlist}" var="var" varStatus="vs">
                                                 <tr>
-                                                    <td class='center'>${var.USER_ID}</td>
-                                                    <td class='center'>${var.NICKNAME}</td>
                                                     <td class='center'>${var.CREATETIME}</td>
-                                                    <th class="center">${var.REGAMOUNT/100}</th>
-                                                    <td style="width: 200px;" class='center'>
-                                                        <c:if test="${var.STATUS == '0' }">
-                                                       		 <span class="label label-important arrowed-in">未支付</span>
-                                                        </c:if>
-                                                         <c:if test="${var.STATUS == '1' }">
-                                                         	<span class="label label-success arrowed">支付</span>
-                                                         </c:if>
-                                                    </td>
+                                                    <td class='center'>${var.ALLREGAMOUNT}</td>
+                                                    <td class='center'>${var.ALLCOUNT}</td>
+                                                    
+                                                    <td class="center">${var.SUCREGAMOUNT}</td>
+                                                    <td class="center">${var.SUCCOUNT}</td>
+                                                    <td class="center">${var.SUCCOUNT/var.ALLCOUNT}</td>
+                                                    
+                                                    
+                                                    <td class="center">${var.FAILREGAMOUNT}</td>
+                                                    <td class="center">${var.FAILCOUNT}</td>
+                                                     <td class="center">${var.FAILCOUNT/var.ALLCOUNT}</td>
                                                 </tr>
                                             </c:forEach >
                                     </c:when>

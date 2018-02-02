@@ -402,5 +402,10 @@ public class AppuserService implements AppuserManager{
 		return (List<PageData>) dao.findForList("AppuserMapper.getAppUserGamelistPage", page);
 	}
 	
+	
+	/**查看用户的充值总记录**/
+	public PageData getAppUesrRechargeToTal(String userId)throws Exception{
+		return (PageData)dao.findForObject("AppuserMapper.getAppUesrRechargeToTal",userId);
+	}
 }
 
