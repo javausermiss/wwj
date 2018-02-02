@@ -130,6 +130,7 @@ public class AppDollController extends BaseController {
                     }
                     
                     if(dollVo.getDollState()==null || "".equals(dollVo.getDollState())){
+                    	logger.info(dollVo.getDollId()+" dollState-------->"+dollVo.getDollState());
                     	continue;
                     }
                     //异常设备不展示 FREE表正常，USING:游戏中
@@ -139,6 +140,7 @@ public class AppDollController extends BaseController {
                     		for(int i=0;i<cameras.size();i++){
                     			cameraVo=cameras.get(i);
                     			if(!"0".equals(cameraVo.getDeviceState())){ // DEVICE_STATE:0 正常 ，1:不正常
+                    				logger.info(cameraVo.getCameraId()+",cameraType="+cameraVo.getCameraType()+" deviceState-------->"+cameraVo.getDeviceState());
                     				cState=false;
                     			}
                     		}
@@ -147,6 +149,8 @@ public class AppDollController extends BaseController {
                     			tmpList.add(dollVo);
                     		}
                     	}
+                    }else{
+                    	logger.info(dollVo.getDollId()+" dollState-------->"+dollVo.getDollState());
                     }
                 }
             }
