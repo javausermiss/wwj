@@ -27,23 +27,19 @@ import net.sf.json.JSONObject;
 
 public class TokenVerify {
 	
-	 private static Logger logger = Logger.getLogger(TokenVerify.class);
+	private static Logger logger = Logger.getLogger(TokenVerify.class);
 	
-	
-    private final static String ckey = PropertiesUtils.getCurrProperty("api.app.sdk.ckey");
-    private final static String cid =  PropertiesUtils.getCurrProperty("api.app.skd.cid");
-
     private final static String key = "Pooh4token";
 
-
-    public static String verifyForH5(String acctoken) {
+    
+    public static String verifyForALL(String acctoken) {
+        String ckey = PropertiesUtils.getCurrProperty("api.i5.sdk.ckey");
+        String cid =  PropertiesUtils.getCurrProperty("api.i5.skd.cid");
         try {
             CloseableHttpClient httpClient = HttpClients.createDefault();
             String code = null;
             String timestamp = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
-            System.out.println(timestamp);
             String signatrue = md5(TokenVerify.getSignature(timestamp, ckey, cid, acctoken));
-            System.out.println(signatrue);
             //HttpClient httpclient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost(PropertiesUtils.getCurrProperty("api.app.sdk.url") + "cid=" + cid +
                     "&timestamp=" + timestamp + "&access_token=" + acctoken + "&signatrue=" + signatrue);
@@ -69,9 +65,10 @@ public class TokenVerify {
 
     }
 
-
-
     public static String verify(String acctoken) {
+    	
+         String ckey = PropertiesUtils.getCurrProperty("api.app.sdk.ckey");
+         String cid =  PropertiesUtils.getCurrProperty("api.app.skd.cid");
 
         try {
             CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -89,9 +86,7 @@ public class TokenVerify {
                 JSONObject object = new JSONObject();
                 object = object.fromObject(conResult);//将字符串转化为json对象
                 code = String.valueOf(object.get("msg"));
-                System.out.println(code);
             } else {
-                System.out.println("error!!!!!!!!!!!!!!");
                 return RespStatus.fail().toString();
             }
             response.close();
@@ -125,8 +120,6 @@ public class TokenVerify {
 
     public static String md5(String text) {
         try {
-
-
             MessageDigest m = MessageDigest.getInstance("MD5");
             m.update(text.getBytes("UTF8"));
             return hex(m.digest());
