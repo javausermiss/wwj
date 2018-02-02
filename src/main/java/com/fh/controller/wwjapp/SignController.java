@@ -181,7 +181,6 @@ public class SignController {
             for (int i = 0; i < list.size(); i++) {
                 AppUser appUser = list.get(i);
                 appUser.setSIGN_TAG("0");
-                appUser.setBET_NUM(0);
                 appuserService.updateAppUserSign(appUser);
             }
 
