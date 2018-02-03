@@ -32,7 +32,7 @@
 
     <!-- 列表 -->
     <select id="datalistPage" parameterType="page" resultType="pd">
-select
+		select
         g.GUESS_ID,
         g.APP_USER_ID,
         g.DOLL_ID,
@@ -44,14 +44,11 @@ select
         g.SETTLEMENT_GOLD,
         g.SETTLEMENT_FLAG,
         g.SETTLEMENT_DATE,
-        u.NICKNAME,
-        d.STATE
+        u.NICKNAME
         FROM
         TB_DOLL_GUESS_DETAIL g ,
-        SYS_APP_USER  u ,
-        TB_DOLL_PLAY_DETAIL  d
+        SYS_APP_USER  u
         where u.USER_ID=g.APP_USER_ID
-        and d.GUESS_ID=g.PLAYBACK_ID  AND  d.DOLLID=g.DOLL_ID
         <if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
             and
             (
