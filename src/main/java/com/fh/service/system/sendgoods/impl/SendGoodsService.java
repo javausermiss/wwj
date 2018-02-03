@@ -393,6 +393,15 @@ public class SendGoodsService implements SendGoodsManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        
+    }
+    
+    /**
+     * 冻结用户，更新改用户的所有订单为异常订单
+     * @param playDetail
+     * @throws Exception
+     */
+    public void dofreezeUserOrder(String userId)throws Exception{
+    	 dao.update("SendGoodsMapper.dofreezeUserOrder", userId);
     }
 }

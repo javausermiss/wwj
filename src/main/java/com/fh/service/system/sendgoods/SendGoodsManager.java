@@ -94,13 +94,12 @@ public interface SendGoodsManager {
     public void doConversionGoldAuto(PlayDetail playDetail)throws Exception;
 
 
-
-
-
-
-
-
-
+    /**
+     * 冻结用户，更新改用户的所有订单为异常订单
+     * @param playDetail
+     * @throws Exception
+     */
+    public void dofreezeUserOrder(String userId)throws Exception;
 
 
 
