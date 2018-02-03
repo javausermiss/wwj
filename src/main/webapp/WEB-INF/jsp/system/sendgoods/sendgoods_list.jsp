@@ -57,8 +57,9 @@
 								 	<select class="chosen-select form-control" name="SENDBOOLEAN" id="SENDBOOLEAN" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
 									<option value=""></option>
 									<option value="">全部</option>
-										<option value="1" <c:if test="${pd.SENDBOOLEAN == '1' }">selected</c:if>>已发货</option>
 										<option value="0" <c:if test="${pd.SENDBOOLEAN == '0' }">selected</c:if>>未发货</option>
+										<option value="1" <c:if test="${pd.SENDBOOLEAN == '1' }">selected</c:if>>已发货</option>
+										<option value="9" <c:if test="${pd.SENDBOOLEAN == '9' }">selected</c:if>>异常订单</option>
 								  	</select>
 								</td>
 								<c:if test="${QX.cha == 1 }">
@@ -76,7 +77,6 @@
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
 									<th class="center" style="width:50px;">序号</th>
-									<th class="center">用户ID</th>
 									<th class="center">收货人名字</th>
 									<th class="center">收货人地址</th>
 									<th class="center">收货人手机号码</th>
@@ -103,7 +103,6 @@
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.ID}" class="ace" /><span class="lbl"></span></label>
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center'>${var.USER_ID}</td>
 											<td class='center'>${var.CNEE_NAME}</td>
 											<td class='center'>${var.CNEE_ADDRESS}</td>
 											<td class='center'>${var.CNEE_PHONE}</td>

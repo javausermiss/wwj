@@ -119,19 +119,10 @@ public class AppDollController extends BaseController {
             	  boolean cState=true;
             	  CameraVo cameraVo=null;
                 for (DollVo dollVo : dollList) {
-                	
-                	//获取娃娃机网关状态
-                    dollVo.setDollState(RedisUtil.getStr("roomInfo:" + dollVo.getDollId()));
-                    
                     //获取概率
                     String prob =  RedisUtil.getStr("roomProbability:" + dollVo.getDollId());
                     if (prob != null){
                         dollVo.setProb(prob);
-                    }
-                    
-                    if(dollVo.getDollState()==null || "".equals(dollVo.getDollState())){
-                    	logger.info(dollVo.getDollId()+" dollState-------->"+dollVo.getDollState());
-                    	continue;
                     }
                     //异常设备不展示 FREE表正常，USING:游戏中
                     if("FREE".equals(dollVo.getDollState().toUpperCase()) || "BUSY".equals(dollVo.getDollState().toUpperCase()) || "USING".equals(dollVo.getDollState().toUpperCase())){

@@ -87,6 +87,7 @@
 									</th>
 									<th class="center">娃娃机编号</th>
 									<th class="center">网关SN</th>
+									<th class="center">网关状态</th>
 									<th class="center">DOLL_ID</th>
 									<th class="center">DOLL_NAME</th>
 									<th class="center">摄像头编号</th>
@@ -110,6 +111,7 @@
 											</td>
 											<td class='center'>${var.ROOM_ID}</td>
 											<td class='center'>${var.DOLL_SN}</td>
+											<td class='center'>${var.DOLL_STATE}</td>
 											<td class='center'>${var.DOLL_ID}</td>
 											<td class='center'>${var.DOLL_NAME}</td>
 											<td class='center'>${var.CAMERA_NUM}</td>
@@ -117,7 +119,7 @@
 											<td class='center'>${var.LIVESTREAM}</td>
 											<td style="width: 100px;" class='center'>
                                                         <c:if test="${var.DEVICE_STATE == '1' }"><span
-                                                                class="label label-success arrowed">不可用</span></c:if>
+                                                                class="label label-important arrowed-in">不可用</span></c:if>
                                                         
                                                         <c:if test="${var.DEVICE_STATE == '0' }"><span
                                                                 class="label label-success arrowed-in">正常</span></c:if>

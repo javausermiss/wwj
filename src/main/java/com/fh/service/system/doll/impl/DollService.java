@@ -197,5 +197,23 @@ public class DollService implements DollManager {
 	public List<DollVo> getDollTypeList(Integer typeid) throws Exception {
 		return (List<DollVo>) dao.findForList("DollMapper.getDollTypeList",typeid);
 	}
+	
+	/**
+	 * 获取所有已经发布娃娃机列表
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> getAllDollListByRelease()throws Exception{
+		return (List<PageData>) dao.findForList("DollMapper.getAllDollListByRelease",null);
+	}
+	
+	/**
+	 * 更新网关状态
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void updateDollStateByDollId(PageData pd)throws Exception{
+		dao.update("DollMapper.updateDollStateByDollId", pd);
+	}
 }
 

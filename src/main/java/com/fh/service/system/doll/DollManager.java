@@ -147,6 +147,21 @@ public interface DollManager{
 	public List<DollVo> getDollVoListByTag(String tag)throws Exception;
 
 	public List<DollVo> getDollTypeList(Integer typeid)throws Exception;
-
+	
+	
+	/**
+	 * 获取所有已经发布娃娃机列表
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> getAllDollListByRelease()throws Exception;
+	
+	/**
+	 * 更新网关状态
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void updateDollStateByDollId(PageData pd)throws Exception;
+		
 }
 

@@ -300,10 +300,11 @@
 			  INNER  JOIN tb_toytype ty on ty.ID=td.TOY_TYPE_ID ) t GROUP BY TOY_ID 
 			  ) t1 on t1.TOY_ID=d.TOY_ID
 				
-		WHERE d.RELEASE_STATUS ='1'
+		WHERE d.RELEASE_STATUS ='1' 
 		 <if test="pd.currentType!= null and pd.currentType != ''"><!-- 关键词检索 -->
 			AND t1.TYPE_ID_LIST LIKE CONCAT(CONCAT('%',#{pd.currentType},'%'))
 		 </if>
+		 AND d.DOLL_STATE in ('FREE','USING','BUSY')
 	ORDER BY DOLL_SN ,CAMERA_TYPE
 	
     </select>
@@ -425,5 +426,24 @@
             ORDER BY DOLL_SN ,CAMERA_TYPE
     </select>
 
+    <select id="getAllDollListByRelease" resultType="pd">
+        SELECT
+        DOLL_ID,
+        DOLL_SN,	
+		DOLL_STATE,	
+		RELEASE_STATUS
+        FROM
+        <include refid="tableName"/>
+        WHERE
+        RELEASE_STATUS = '1'
+    </select>
 
+	<update id="updateDollStateByDollId" parameterType="pd">
+        update
+        <include refid="tableName"></include>
+        set
+        DOLL_STATE = #{DOLL_STATE}
+        where
+        DOLL_ID = #{DOLL_ID}
+    </update>
 </mapper>

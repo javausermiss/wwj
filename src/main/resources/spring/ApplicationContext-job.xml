@@ -23,7 +23,7 @@
 	</bean>
 	
 		
-	<!--触发的时间  每次相隔6s执行 -->
+	<!--触发的时间  每次相隔20s执行 -->
 	<bean id="srsCameraBizTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail">
 			<ref bean="srsCameraBizTask" />
@@ -33,10 +33,39 @@
 		</property>
 	</bean>
 	
+	
+	
+	<!-- 定时获取网关状态-->
+	<bean id="dollStateBizJob" class="com.fh.job.DollStateBizJob"></bean>
+
+    <bean id="dollStateBizTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="dollStateBizJob" />
+		</property>
+		<property name="targetMethod">
+			<value>getDollStateJob</value>
+		</property>
+	    <property name="concurrent">  
+	        <value>false</value>  
+	    </property>  		
+	</bean>
+	
+		
+	<!--触发的时间  每次相隔1分钟执行 -->
+	<bean id="dollStateBizTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="dollStateBizTask" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0/1 * * * ?</value>
+		</property>
+	</bean>
+	
 	<bean autowire="no" id="startQuartz" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
 				<ref bean="srsCameraBizTrigger" />
+				<ref bean="dollStateBizTrigger" />
 			</list>
 		</property>
 	</bean>	
