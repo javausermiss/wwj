@@ -20,6 +20,15 @@ public class DollVo {
     private List<CameraVo> cameras;
     private String dollTag;
     private String prob;//娃娃机概率
+	private String reward;//奖金
+
+	public String getReward() {
+		return reward;
+	}
+
+	public void setReward(String reward) {
+		this.reward = reward;
+	}
 
 	public String getDollConversiongold() {
 		return dollConversiongold;

@@ -197,10 +197,34 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
     @Override
     public RpcCommandResult endLottery(String roomId, String userName) {
         try {
-            log.info("下抓时间----------------->"+DateUtil.getTime());
-            PlayDetail playDetail = playDetailService.getPlayIdForPeople(roomId);
+            //获取下爪毫秒最后一位作为开奖数字
+            String catch_time = DateUtil.getTimeSSS();
+            log.info("下爪时间----------------->"+catch_time);
+            String reword_num = catch_time.substring(catch_time.length()-1,catch_time.length());
+
+            PlayDetail playDetail = playDetailService.getPlayIdForPeople(roomId);//根据房间取得最新的游戏记录
+            String gold = playDetail.getGOLD();//获取下注金币，即竞猜用户扣除的金币数
+           //设置游戏列表中的开奖数字
             playDetail.setSTOP_FLAG("-1");
+            playDetail.setREWARD_NUM(reword_num);
             playDetailService.updatePlayDetailStopFlag(playDetail);
+
+            //设置奖池表的中奖数字
+            Pond p = new Pond();
+            p.setDOLLID(roomId);
+            p.setGUESS_ID(playDetail.getGUESS_ID());
+            Pond pond = pondService.getPondByPlayId(p);//查询对应奖池信息
+            pond.setGUESS_STATE(reword_num);
+            pond.setPOND_FLAG("-1");//此标签代表禁止再次结算
+            pond.setALLPEOPLE(pond.getGUESS_N()+pond.getGUESS_Y());//获取竞猜总人数
+            int an = pond.getGUESS_N()*Integer.valueOf(gold);
+            int ay = pond.getGUESS_Y()*Integer.valueOf(gold);
+            pond.setGOLD_N(an);//猜不中人下注总金额
+            pond.setGOLD_Y(ay);//猜中的人下注总金额
+            pond.setGUESS_STATE(reword_num);//本局抓中状态
+            pondService.updatePondFlag(pond);//更新标签
+
+
             RpcCommandResult rpcCommandResult = new RpcCommandResult();
             rpcCommandResult.setRpcReturnCode(RpcReturnCode.SUCCESS);
             rpcCommandResult.setInfo("结束下抓，禁止竞猜");
@@ -218,6 +242,8 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
     @Override
     public RpcCommandResult drawLottery(String roomId, Integer gifinumber) {
         try {
+
+          /*
             log.info("执行复位时间----------------->"+DateUtil.getTime());
             PlayDetail playDetail = playDetailService.getPlayIdForPeople(roomId);//根据房间取得最新的游戏记录
             if (playDetail==null){
@@ -493,7 +519,8 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                 log.info("通知失败");
             }
             rpcCommandResult.setRpcReturnCode(result);
-            return rpcCommandResult;
+            return rpcCommandResult;*/
+         return betGameService.doFree(roomId,gifinumber);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

@@ -32,7 +32,7 @@
 
     <!-- 列表 -->
     <select id="datalistPage" parameterType="page" resultType="pd">
-select
+        select
         g.GUESS_ID,
         g.APP_USER_ID,
         g.DOLL_ID,
@@ -48,14 +48,14 @@ select
         d.STATE
         FROM
         TB_DOLL_GUESS_DETAIL g ,
-        SYS_APP_USER  u ,
-        TB_DOLL_PLAY_DETAIL  d
+        SYS_APP_USER u ,
+        TB_DOLL_PLAY_DETAIL d
         where u.USER_ID=g.APP_USER_ID
-        and d.GUESS_ID=g.PLAYBACK_ID  AND  d.DOLLID=g.DOLL_ID
+        and d.GUESS_ID=g.PLAYBACK_ID AND d.DOLLID=g.DOLL_ID
         <if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
             and
             (
-                u.NICKNAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            u.NICKNAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
             )
         </if>
         ORDER BY g.CREATE_DATE DESC
@@ -108,12 +108,14 @@ select
         GUESS_TYPE = #{GUESS_TYPE},
         SETTLEMENT_FLAG = #{SETTLEMENT_FLAG},
         SETTLEMENT_DATE = now(),
-        SETTLEMENT_GOLD = #{SETTLEMENT_GOLD}
+        SETTLEMENT_GOLD = #{SETTLEMENT_GOLD},
+
         WHERE
         GUESS_ID = #{GUESS_ID}
     </update>
 
-    <select id="getFailer" parameterType="com.fh.entity.system.GuessDetailL" resultType="com.fh.entity.system.GuessDetailL">
+    <select id="getFailer" parameterType="com.fh.entity.system.GuessDetailL"
+            resultType="com.fh.entity.system.GuessDetailL">
        select
        *
        from
@@ -128,7 +130,8 @@ select
 
     </select>
 
-    <select id="getWinner" parameterType="com.fh.entity.system.GuessDetailL" resultType="com.fh.entity.system.GuessDetailL">
+    <select id="getWinner" parameterType="com.fh.entity.system.GuessDetailL"
+            resultType="com.fh.entity.system.GuessDetailL">
        select
        *
        from
@@ -159,8 +162,9 @@ select
         WHERE
         GUESS_ID = #{GUESS_ID}
     </update>
-    
-    <select id="getGuessDetail" parameterType="com.fh.entity.system.GuessDetailL" resultType="com.fh.entity.system.GuessDetailL">
+
+    <select id="getGuessDetail" parameterType="com.fh.entity.system.GuessDetailL"
+            resultType="com.fh.entity.system.GuessDetailL">
         SELECT
         *
         FROM
@@ -172,12 +176,12 @@ select
     </select>
 
 
-
-	<select id="getGuessDetailTop10ByUserId" parameterType="String" resultType="pd">
+    <select id="getGuessDetailTop10ByUserId" parameterType="String" resultType="pd">
 			SELECT  dgd.APP_USER_ID,
 				    dgd.GUESS_TYPE,
         			dgd.GUESS_KEY,
                     dgd.GUESS_GOLD,
+                    dgd.GUSESS_Y_PEOPLE,
 			        dgd.CREATE_DATE,
 			        dgd.SETTLEMENT_FLAG,
 					dgd.SETTLEMENT_GOLD,
@@ -188,6 +192,34 @@ select
 			 	ORDER BY dgd.CREATE_DATE DESC
 				LIMIT 0,10
 	</select>
+
+
+    <select id="getWinByNum" parameterType="com.fh.entity.system.GuessDetailL"
+            resultType="com.fh.entity.system.GuessDetailL">
+
+        SELECT * from TB_DOLL_GUESS_DETAIL WHERE
+         GUESS_KEY  = #{GUESS_KEY}
+       AND
+       PLAYBACK_ID = #{PLAYBACK_ID}
+       AND
+       DOLL_ID = #{DOLL_ID}
+
+
+    </select>
+
+
+    <select id="getFailerByNum" parameterType="com.fh.entity.system.GuessDetailL"
+            resultType="com.fh.entity.system.GuessDetailL">
+
+         SELECT * from TB_DOLL_GUESS_DETAIL WHERE
+         GUESS_KEY  != #{GUESS_KEY}
+       AND
+       PLAYBACK_ID = #{PLAYBACK_ID}
+       AND
+       DOLL_ID = #{DOLL_ID}
+
+
+    </select>
 
 
 </mapper>

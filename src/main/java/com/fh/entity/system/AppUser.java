@@ -29,6 +29,7 @@ public class AppUser {
     private String CNEE_PHONE;
     private String SIGN_TAG;
     private String RANK;
+    private Integer BET_NUM;
 
     public AppUser() {
     }
@@ -71,6 +72,14 @@ public class AppUser {
         this.CREATETIME = CREATETIME;
         this.USERNAME = USERNAME;
         this.NICKNAME = NICKNAME;
+    }
+
+    public Integer getBET_NUM() {
+        return BET_NUM;
+    }
+
+    public void setBET_NUM(Integer BET_NUM) {
+        this.BET_NUM = BET_NUM;
     }
 
     public String getRANK() {

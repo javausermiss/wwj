@@ -199,7 +199,6 @@ public class TencentloginForH5 {
     ) {
         try {
             String a = TokenVerify.verifyForH5(accessToken.trim());//请求sdk后台效验token是否合法
-            System.out.println("------------------------------------" + accessToken + "--------------------------------------");
             if (a.equals("SUCCESS")) {
                 if (appuserService.getUserByID(userId) == null) {
                     return RespStatus.fail("用户不存在");

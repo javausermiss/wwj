@@ -1,5 +1,6 @@
 package com.fh.service.system.betgame.impl;
 
+import com.fh.controller.base.BaseController;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.entity.system.*;
@@ -12,17 +13,25 @@ import com.fh.service.system.playdetail.PlayDetailManage;
 import com.fh.service.system.pond.PondManager;
 import com.fh.util.PageData;
 
+import com.fh.util.wwjUtil.RedisUtil;
 import com.fh.util.wwjUtil.RespStatus;
+import com.iot.game.pooh.server.rpc.interfaces.LotteryServerRpcService;
+import com.iot.game.pooh.server.rpc.interfaces.bean.RpcCommandResult;
+import com.iot.game.pooh.server.rpc.interfaces.bean.RpcReturnCode;
+import com.iot.game.pooh.web.rpc.interfaces.entity.GuessDetail;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 @Service("betGameService")
-public class BetGameService implements BetGameManager {
+@Slf4j
+public class BetGameService extends BaseController implements BetGameManager {
 
     @Resource(name = "daoSupport")
     private DaoSupport dao;
@@ -39,6 +48,9 @@ public class BetGameService implements BetGameManager {
     private PlayDetailManage playDetailService;
     @Resource(name = "paymentService")
     private PaymentManager paymentService;
+    @Resource
+    private LotteryServerRpcService lotteryServerRpcService;
+
 
     /**
      * 奖池信息
@@ -67,65 +79,76 @@ public class BetGameService implements BetGameManager {
 
     }
 
-    /**列表
+    /**
+     * 列表
+     *
      * @param page
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    public List<PageData> list(Page page)throws Exception{
-        return (List<PageData>)dao.findForList("GuessDetailMapper.datalistPage", page);
+    public List<PageData> list(Page page) throws Exception {
+        return (List<PageData>) dao.findForList("GuessDetailMapper.datalistPage", page);
     }
 
-    /**列表(全部)
+    /**
+     * 列表(全部)
+     *
      * @param pd
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    public List<PageData> listAll(PageData pd)throws Exception{
-        return (List<PageData>)dao.findForList("GuessDetailMapper.listAll", pd);
+    public List<PageData> listAll(PageData pd) throws Exception {
+        return (List<PageData>) dao.findForList("GuessDetailMapper.listAll", pd);
     }
 
-    /**通过id获取数据
+    /**
+     * 通过id获取数据
+     *
      * @param pd
      * @throws Exception
      */
-    public PageData findById(PageData pd)throws Exception{
-        return (PageData)dao.findForObject("GuessDetailMapper.findById", pd);
+    public PageData findById(PageData pd) throws Exception {
+        return (PageData) dao.findForObject("GuessDetailMapper.findById", pd);
     }
 
-    /**批量删除
+    /**
+     * 批量删除
+     *
      * @param ArrayDATA_IDS
      * @throws Exception
      */
-    public void deleteAll(String[] ArrayDATA_IDS)throws Exception{
+    public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
         dao.delete("GuessDetailMapper.deleteAll", ArrayDATA_IDS);
     }
 
     /**
      * 增加竞猜记录
+     *
      * @param guessDetailL
      * @return
      * @throws Exception
      */
     @Override
     public int regGuessDetail(GuessDetailL guessDetailL) throws Exception {
-        return (int)dao.save("GuessDetailMapper.regGuessDetail", guessDetailL);
+        return (int) dao.save("GuessDetailMapper.regGuessDetail", guessDetailL);
     }
+
     /**
      * 修改竞猜记录
+     *
      * @param guessDetailL
      * @return
      * @throws Exception
      */
     @Override
     public int updateGuessDetail(GuessDetailL guessDetailL) throws Exception {
-        return (int)dao.update("GuessDetailMapper.updateGuessDetail", guessDetailL);
+        return (int) dao.update("GuessDetailMapper.updateGuessDetail", guessDetailL);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public List<GuessDetailL> getWin(Integer playID) throws Exception {
-        return (List<GuessDetailL>) dao.findForList("GuessDetailMapper.getWin",playID);
+        return (List<GuessDetailL>) dao.findForList("GuessDetailMapper.getWin", playID);
     }
 
     @SuppressWarnings("unchecked")
@@ -139,38 +162,37 @@ public class BetGameService implements BetGameManager {
     public List<GuessDetailL> getWinner(GuessDetailL guessDetailL) throws Exception {
         return (List<GuessDetailL>) dao.findForList("GuessDetailMapper.getWinner", guessDetailL);
     }
+
     @SuppressWarnings("unchecked")
     @Override
     public List<GuessDetailL> getAllGuesser(String guessid) throws Exception {
-        return (List<GuessDetailL>) dao.findForList("GuessDetailMapper.getAllGuesser",guessid);
+        return (List<GuessDetailL>) dao.findForList("GuessDetailMapper.getAllGuesser", guessid);
     }
 
     @Override
     public int updateGuessDetailGuessType(GuessDetailL guessDetailL) throws Exception {
-        return (int)dao.update("GuessDetailMapper.updateGuessDetailGuessType", guessDetailL);
+        return (int) dao.update("GuessDetailMapper.updateGuessDetailGuessType", guessDetailL);
     }
 
     @Override
     public GuessDetailL getGuessDetail(GuessDetailL guessDetailL) throws Exception {
         return (GuessDetailL) dao.findForObject("GuessDetailMapper.getGuessDetail", guessDetailL);
     }
-    
+
     /**
      * 通过 userId 查询 最新10条竞猜记录
+     *
      * @param userId
      * @return
      * @throws Exception
      */
-    public List<PageData> getGuessDetailTop10ByUserId(String userId) throws Exception{
-    	 return (List<PageData>) dao.findForList("GuessDetailMapper.getGuessDetailTop10ByUserId",userId);
+    public List<PageData> getGuessDetailTop10ByUserId(String userId) throws Exception {
+        return (List<PageData>) dao.findForList("GuessDetailMapper.getGuessDetailTop10ByUserId", userId);
     }
 
     @Override
     public JSONObject doBet(String userId, String dollId, int wager, String guessId, String guessKey) throws Exception {
-        AppUser appUser1 = appuserService.getAppUserRanklist(userId);
-        if (appUser1==null){
-            return null;
-        }
+
         PlayDetail p1 = new PlayDetail();
         p1.setDOLLID(dollId);
         p1.setGUESS_ID(guessId);
@@ -181,6 +203,10 @@ public class BetGameService implements BetGameManager {
             return RespStatus.fail("禁止投注！");
         }
         AppUser appUser = appuserService.getUserByID(userId);
+        if (appUser == null) {
+            return null;
+        }
+
         String balance = appUser.getBALANCE();
         if (Integer.parseInt(balance) > wager) {
             int n = Integer.parseInt(balance) - wager;
@@ -194,8 +220,8 @@ public class BetGameService implements BetGameManager {
         payment.setCOST_TYPE("1");
         payment.setDOLLID(dollId);
         payment.setUSERID(userId);
-        payment.setGOLD("-"+String.valueOf(wager));
-        payment.setREMARK("竞猜"+dollService.getDollByID(dollId).getDOLL_NAME());
+        payment.setGOLD("-" + String.valueOf(wager));
+        payment.setREMARK("竞猜" + dollService.getDollByID(dollId).getDOLL_NAME());
         paymentService.reg(payment);
         //增加竞猜记录
         GuessDetailL guessDetailL = new GuessDetailL(userId, dollId, guessKey, wager, guessId);
@@ -205,29 +231,125 @@ public class BetGameService implements BetGameManager {
         pond1.setGUESS_ID(guessId);
         pond1.setDOLLID(dollId);
         Pond pond = pondService.getPondByPlayId(pond1);
-        if (guessKey.trim().equals("1")) {
-            int people = pond.getGUESS_Y();
-            int money = pond.getGUESS_GOLD();
-            pond.setGUESS_GOLD(money + wager);
-            pond.setGUESS_Y(people + 1);
-            int cy = pondService.updatePondY(pond);
-            if (cy == 0) {
-                return RespStatus.fail("更新失败Y");
-            }
-        }
-        if (guessKey.trim().equals("0")) {
-            int people = pond.getGUESS_N();
-            int money = pond.getGUESS_GOLD();
-            pond.setGUESS_GOLD(money + wager);
-            pond.setGUESS_N(people + 1);
-            int cn = pondService.updatePondN(pond);
-            if (cn == 0) {
-                return RespStatus.fail("更新失败N");
-            }
-        }
         Map<String, Object> map = new HashMap<>();
         map.put("pond", getPondInfo(pond.getPOND_ID()));
         map.put("appUser", getAppUserInfo(appUser.getUSER_ID()));
         return RespStatus.successs().element("data", map);
     }
+
+    @Override
+    public List<GuessDetailL> getWinByNum(GuessDetailL num) throws Exception {
+        return (List<GuessDetailL>) dao.findForList("GuessDetailMapper.getWinByNum", num);
+    }
+
+    @Override
+    public List<GuessDetailL> getFailerByNum(GuessDetailL num) throws Exception {
+        return (List<GuessDetailL>) dao.findForList("GuessDetailMapper.getFailerByNum", num);
+    }
+
+    @Override
+    public RpcCommandResult doFree(String dollId, Integer gifinumber) throws Exception {
+        //预期奖金
+        logger.info("dollId------------------------->" + dollId);
+        Integer doll_gold = dollService.getDollByID(dollId).getDOLL_GOLD();
+        logger.info("doll_gold------------------------->" + doll_gold);
+        int reword = 5 * doll_gold;
+        logger.info("reword------------------------->" + reword);
+
+        PlayDetail playDetail = playDetailService.getPlayIdForPeople(dollId);//根据房间ID取得最新的游戏记录
+
+        if (playDetail == null) {
+            return null;
+        }
+
+        if (gifinumber != 0) {
+            gifinumber = 1;
+        }
+
+
+        String state = playDetail.getPOST_STATE();//获取娃娃发送状态
+        //网关自检发送多次free进入此判断逻辑,POST_STATE初始值为"-1"，判断是否已经结算过
+        //STOP_FLAG 初始值为"0",下抓后为"-1",判断流程是否走完
+        if (playDetail.getSTOP_FLAG().equals("0") //流程未走完
+                || state.equals("0") //结算过
+                || state.equals("1") //待发货
+                || state.equals("2") //已兑换
+                || state.equals("3") //已发货
+                ) {
+            return null;
+        }
+
+        //更新玩家抓取记录
+        playDetail.setSTATE(String.valueOf(gifinumber));//是否抓中
+        playDetail.setPOST_STATE("0"); //初始化娃娃状态
+        playDetail.setDOLLID(dollId);
+        playDetailService.updatePlayDetailState(playDetail);
+        String play_user_Id = playDetail.getUSERID();//获取玩家ID
+        //更新用户的娃娃数量
+        if (gifinumber == 1) {
+            AppUser appUser = appuserService.getUserByID(play_user_Id);
+            Integer new_dolltotal = appUser.getDOLLTOTAL() + 1;
+            appUser.setDOLLTOTAL(new_dolltotal);
+            appuserService.updateAppUserDollTotalById(appUser);
+        }
+
+        //给中奖用户结算奖金
+        String reward_num = playDetail.getSTATE();
+        GuessDetailL guessDetailL = new GuessDetailL();
+        guessDetailL.setDOLL_ID(dollId);
+        guessDetailL.setPLAYBACK_ID(playDetail.getID());
+        guessDetailL.setGUESS_KEY(reward_num);
+        List<GuessDetailL> list = this.getWinByNum(guessDetailL);
+        List<GuessDetail> guessDetail_list = new LinkedList<>();
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                //更新竞猜记录消息
+                GuessDetailL winPerson = list.get(i);
+                winPerson.setSETTLEMENT_GOLD(reword);
+                winPerson.setSETTLEMENT_FLAG("Y");
+                winPerson.setGUESS_TYPE(playDetail.getREWARD_NUM());
+                this.updateGuessDetail(winPerson);
+
+                //更新用户余额
+                String guess_win_user = winPerson.getAPP_USER_ID();
+                AppUser appUser = appuserService.getUserByID(guess_win_user);
+                String old_balance = appUser.getBALANCE();
+                String new_balance = String.valueOf(Integer.valueOf(old_balance) + reword);
+                appUser.setBALANCE(new_balance);
+                appuserService.updateAppUserBalanceById(appUser);
+
+                //统计中奖用户昵称 ID
+                String nickname = appUser.getNICKNAME();
+                GuessDetail guessDetail = new GuessDetail();
+                guessDetail.setNickname(nickname);
+                guessDetail.setAppUserId(guess_win_user);
+                guessDetail_list.add(guessDetail);
+            }
+
+        }
+        //竞猜失败的用户
+        List<GuessDetailL > failer  = this.getFailerByNum(guessDetailL);
+        if (failer!=null){
+            for (int i = 0; i <failer.size() ; i++) {
+                //更新竞猜记录消息
+                GuessDetailL filePerson = list.get(i);
+                filePerson.setSETTLEMENT_GOLD(0);
+                filePerson.setSETTLEMENT_FLAG("Y");
+                filePerson.setGUESS_TYPE(playDetail.getREWARD_NUM());
+                this.updateGuessDetail(filePerson);
+            }
+        }
+
+        RpcCommandResult rpcCommandResult = new RpcCommandResult();
+        RpcReturnCode result = lotteryServerRpcService.noticeDrawLottery(dollId, playDetail.getGUESS_ID(), guessDetail_list);
+        if (RpcReturnCode.SUCCESS == rpcCommandResult.getRpcReturnCode()) {
+            log.info("通知成功");
+        } else {
+            log.info("通知失败");
+        }
+        rpcCommandResult.setRpcReturnCode(result);
+        return rpcCommandResult;
+    }
+
+
 }

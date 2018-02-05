@@ -161,12 +161,13 @@
         limit
         0,1
     </select>
-
+<!--更改停止竞猜标签和开奖数字,初始化娃娃记录状态-->
     <update id="updatePlayDetailStopFlag" parameterType="com.fh.entity.system.PlayDetail">
         UPDATE
         TB_DOLL_PLAY_DETAIL
         SET
-        STOP_FLAG = #{STOP_FLAG}
+        STOP_FLAG = #{STOP_FLAG},
+        REWARD_NUM = #{REWARD_NUM},
         WHERE
         GUESS_ID = #{GUESS_ID}
 

@@ -89,7 +89,6 @@ public class TokenVerify {
                 JSONObject object = new JSONObject();
                 object = object.fromObject(conResult);//将字符串转化为json对象
                 code = String.valueOf(object.get("msg"));
-                System.out.println(code);
             } else {
                 System.out.println("error!!!!!!!!!!!!!!");
                 return RespStatus.fail().toString();

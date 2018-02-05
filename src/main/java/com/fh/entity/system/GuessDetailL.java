@@ -18,6 +18,7 @@ public class GuessDetailL implements Serializable {
     private Integer SETTLEMENT_GOLD;//获取竞猜金额
     private String SETTLEMENT_FLAG;//Y 清算 N 未清算
     private String SETTLEMENT_DATE;
+    private String GUSESS_Y_PEOPLE;
 
     public GuessDetailL() {
     }
@@ -34,6 +35,14 @@ public class GuessDetailL implements Serializable {
         this.DOLL_ID = DOLL_ID;
         this.GUESS_KEY = GUESS_KEY;
         this.PLAYBACK_ID = PLAYBACK_ID;
+    }
+
+    public String getGUSESS_Y_PEOPLE() {
+        return GUSESS_Y_PEOPLE;
+    }
+
+    public void setGUSESS_Y_PEOPLE(String GUSESS_Y_PEOPLE) {
+        this.GUSESS_Y_PEOPLE = GUSESS_Y_PEOPLE;
     }
 
     public Integer getSETTLEMENT_GOLD() {

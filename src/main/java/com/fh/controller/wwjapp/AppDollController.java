@@ -122,6 +122,8 @@ public class AppDollController extends BaseController {
                 	
                 	//获取娃娃机网关状态
                     dollVo.setDollState(RedisUtil.getStr("roomInfo:" + dollVo.getDollId()));
+                    //预计奖金
+                    dollVo.setReward(String.valueOf(dollVo.getDollGold()*5));
                     
                     //获取概率
                     String prob =  RedisUtil.getStr("roomProbability:" + dollVo.getDollId());

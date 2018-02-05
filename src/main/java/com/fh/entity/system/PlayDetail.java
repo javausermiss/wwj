@@ -26,7 +26,15 @@ public class PlayDetail {
     private String FREE_DATE;//娃娃机FREE状态更新时间
     private String SEND_ORDER_ID;//发货订单主键ID
     private Integer TOY_ID;//娃娃编号
+    private String REWARD_NUM;//开奖号码
 
+    public String getREWARD_NUM() {
+        return REWARD_NUM;
+    }
+
+    public void setREWARD_NUM(String REWARD_NUM) {
+        this.REWARD_NUM = REWARD_NUM;
+    }
 
     public PlayDetail() {
     }

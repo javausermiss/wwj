@@ -3,6 +3,7 @@ package com.fh.service.system.betgame;
 import com.fh.entity.Page;
 import com.fh.entity.system.GuessDetailL;
 import com.fh.util.PageData;
+import com.iot.game.pooh.server.rpc.interfaces.bean.RpcCommandResult;
 import net.sf.json.JSONObject;
 
 import java.util.List;
@@ -127,7 +128,18 @@ public interface BetGameManager {
 
     public JSONObject doBet(String userId, String dollId, int wager, String guessId, String guessKey) throws Exception;
 
+    /**
+     *娃娃机复位执行结算逻辑（第二种结算逻辑）
+     * @param dollId
+     * @param  gifinumber
+     * @throws Exception
+     */
+    public RpcCommandResult doFree(String dollId, Integer gifinumber)throws Exception;
 
-    public void doFree(String dollId)throws Exception;
+
+    public List<GuessDetailL> getWinByNum(GuessDetailL num)throws Exception;
+
+    public List<GuessDetailL> getFailerByNum(GuessDetailL num)throws Exception;
+
 
 }

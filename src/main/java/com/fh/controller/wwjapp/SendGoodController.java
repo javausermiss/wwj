@@ -243,6 +243,11 @@ public class SendGoodController {
 
     public static void main(String[] a) {
 
+        String catch_time = DateUtil.getTimeSSS();
+        log.info("下抓时间----------------->"+catch_time);
+        String reword = catch_time.substring(catch_time.length()-1,catch_time.length());
+        log.info(reword);
+
 
     }
 
