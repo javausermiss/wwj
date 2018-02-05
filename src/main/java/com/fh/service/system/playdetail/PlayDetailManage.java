@@ -183,5 +183,10 @@ public interface PlayDetailManage {
     public List<PlayDetail> getConversionToy()throws Exception;
 
 
+	/**获取娃娃机的游戏概率
+	 * @param pd
+	 * @throws Exception
+	 */
+	public PageData getDollGameProbability()throws Exception;
 
 }

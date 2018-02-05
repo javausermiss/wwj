@@ -113,10 +113,7 @@
         <if test="pd.SENDBOOLEAN != null and pd.SENDBOOLEAN != ''"><!-- 状态检索 -->
             and SENDBOOLEAN = #{pd.SENDBOOLEAN}
         </if>
-        ORDER
-        BY
-        CREATE_TIME
-        DESC
+        ORDER BY SENDBOOLEAN ASC,CREATE_TIME DESC
     </select>
 
     <!-- 列表(全部) -->
@@ -226,5 +223,15 @@
         WHERE
         ID = #{ID}
     </select>
+    
+    
+    <update id="dofreezeUserOrder" parameterType="String">
+        update
+        <include refid="tableName"></include>
+        set SENDBOOLEAN = '9',
+        UPDATE_TIME=now()
+        where
+        USER_ID = #{userId}
+    </update>
 
 </mapper>

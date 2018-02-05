@@ -1,15 +1,17 @@
 package com.fh.service.system.playdetail.impl;
 
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
 import com.fh.dao.DaoSupport;
+import com.fh.entity.Page;
 import com.fh.entity.system.PlayDetail;
 import com.fh.service.system.playdetail.PlayDetailManage;
 import com.fh.service.system.sendgoods.SendGoodsManager;
 import com.fh.util.PageData;
-import com.fh.entity.Page;
-import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-import java.util.List;
 
 @Service("playDetailService")
 public class PlayDetailService implements PlayDetailManage {
@@ -178,4 +180,12 @@ public class PlayDetailService implements PlayDetailManage {
     public List<PlayDetail> getConversionToy() throws Exception {
         return (List<PlayDetail>) dao.update("PlayDetailMapper.getConversionToy", null);
     }
+    
+	/**获取娃娃机的游戏概率
+	 * @param pd
+	 * @throws Exception
+	 */
+	public PageData getDollGameProbability()throws Exception{
+		return (PageData) dao.findForObject("PlayDetailMapper.getDollGameProbability", null);
+	}
 }
