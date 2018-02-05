@@ -67,6 +67,25 @@
                                             </option>
                                         </select>
                                     </td>
+                                    
+                                     <td style="vertical-align:top;padding-left:2px;">
+                                        <select class="chosen-select form-control" name="DOLL_TYPE" id="DOLL_TYPE"
+                                                data-placeholder="发布渠道" style="vertical-align:top;width: 120px;">
+                                             <option value=""></option>   
+                                            <option value="ALL"
+                                                    <c:if test="${pd.DOLL_TYPE == 'ALL' }">selected</c:if> >全部
+                                            </option>
+                                            <option value="IOS"
+                                                    <c:if test="${pd.DOLL_TYPE == 'IOS' }">selected</c:if> >IOS
+                                            </option>
+                                            <option value="H5"
+                                                    <c:if test="${pd.DOLL_TYPE == 'H5' }">selected</c:if> >H5
+                                            </option>
+                                            <option value="ANDROID"
+                                                    <c:if test="${pd.DOLL_TYPE == 'ANDROID' }">selected</c:if> >ANDROID
+                                            </option>
+                                        </select>
+                                    </td>
                                         <td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs"
                                                                                            onclick="tosearch();"
                                                                                            title="检索"><i
@@ -100,6 +119,7 @@
                                     <th class="center">设备编号</th>
                                     <th class="center">网关状态</th>
                                     <th class="center">概率</th>
+                                    <th class="center">发布渠道</th>
                                     <th class="center">发布状态</th>
                                     <th class="center">操作</th>
                                 </tr>
@@ -124,8 +144,9 @@
                                                     <td class="center">${var.DOLL_GOLD}</td>
                                                     <td class="center">${var.DOLL_CONVERSIONGOLD}</td>
                                                     <td class="center">${var.ROOM_ID}</td>
-                                                    <td class="center">${var.DOLL_STATE}</td>
                                                     <td class="center">${var.ROOMPROBABILITY}</td>
+                                                    <td class="center">${var.DOLL_STATE}</td>
+                                                    <td class="center">${var.DOLL_TYPE}</td>
                                                     <td style="width: 100px;" class='center'>
                                                         <c:if test="${var.RELEASE_STATUS == '0' }"><span
                                                                 class="label label-important arrowed-in">未发布</span></c:if>

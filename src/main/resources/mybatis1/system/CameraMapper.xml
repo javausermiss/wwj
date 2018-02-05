@@ -141,7 +141,8 @@
 			d.DOLL_NAME,
 			d.DOLL_SN,
 			d.ROOM_ID,
-			d.DOLL_STATE
+			d.DOLL_STATE,
+			d.DOLL_TYPE
 		FROM 
 		
 		TB_DEVICE_CAMERA c LEFT JOIN SYS_APP_DOLL d on d.DOLL_ID=c.DOLL_ID
@@ -162,6 +163,9 @@
 		<if test="pd.RELEASE_STATUS != null and pd.RELEASE_STATUS != ''"><!-- 状态检索 -->
             and d.RELEASE_STATUS = #{pd.RELEASE_STATUS}
         </if>
+        <if test="pd.DOLL_TYPE != null and pd.DOLL_TYPE != ''"><!-- 状态检索 -->
+           AND	(d.DOLL_TYPE='ALL' or d.DOLL_TYPE =#{pd.DOLL_TYPE} )
+        </if>                                 
 		<if test="pd.DEVICE_STATE != null and pd.DEVICE_STATE != ''"><!-- 状态检索 -->
             and c.DEVICE_STATE = #{pd.DEVICE_STATE}
         </if>

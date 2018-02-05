@@ -79,6 +79,26 @@
 									</span>
 								</td>
 							</tr>
+							<td style="width:75px;text-align: right;padding-top: 13px;">发布渠道:</td>
+								<td>
+								<span style="font-size:12px;">
+									<select id="DOLL_TYPE" name="DOLL_TYPE">
+                                            <option value="ALL"
+                                                    <c:if test="${pd.DOLL_TYPE == 'ALL' }">selected</c:if> >全部
+                                            </option>
+                                            <option value="IOS"
+                                                    <c:if test="${pd.DOLL_TYPE == 'IOS' }">selected</c:if> >IOS
+                                            </option>
+                                            <option value="H5"
+                                                    <c:if test="${pd.DOLL_TYPE == 'H5' }">selected</c:if> >H5
+                                            </option>
+                                            <option value="ANDROID"
+                                                    <c:if test="${pd.DOLL_TYPE == 'ANDROID' }">selected</c:if> >ANDROID
+                                            </option>
+									</select>
+									</span>
+								</td>
+							</tr>
 							<tr>
 								<td style="width:100px;text-align: right;padding-top: 13px;">文件域：</td>
 								<td><input type="file" id="DOLL_FILE" name="DOLL_FILE" /></td>

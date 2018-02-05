@@ -52,7 +52,8 @@
 		CAMERA_NAME_02,
 		TOY_ID,
 		RELEASE_STATUS,
-		DOLL_TAG
+		DOLL_TAG,
+		DOLL_TYPE
 	</sql>
 
     <!-- 字段值 -->
@@ -69,7 +70,8 @@
 		#{CAMERA_NAME_02},
 		#{TOY_ID},
 		#{RELEASE_STATUS},
-		#{DOLL_TAG}
+		#{DOLL_TAG},
+		#{DOLL_TYPE}
 	</sql>
 
     <!-- 新增-->
@@ -97,13 +99,36 @@
         <include refid="tableName"></include>
         set
         DOLL_NAME = #{DOLL_NAME},
-        DOLL_SN = #{DOLL_SN},
-        DOLL_GOLD = #{DOLL_GOLD},
-        DOLL_CONVERSIONGOLD = #{DOLL_CONVERSIONGOLD},
-        RELEASE_STATUS = #{RELEASE_STATUS},
-        DOLL_URL = #{DOLL_URL},
-        ROOM_ID = #{ROOM_ID},
-        TOY_ID = #{TOY_ID}
+        
+         <if test="DOLL_SN != null and DOLL_SN != ''">
+        	DOLL_SN = #{DOLL_SN},
+        </if>
+        
+        <if test="DOLL_GOLD != null and DOLL_GOLD != ''">
+        	DOLL_GOLD = #{DOLL_GOLD},
+        </if>
+        
+         <if test="DOLL_CONVERSIONGOLD != null and DOLL_CONVERSIONGOLD != ''">
+         	DOLL_CONVERSIONGOLD = #{DOLL_CONVERSIONGOLD},
+        </if>
+        
+        <if test="RELEASE_STATUS != null and RELEASE_STATUS != ''">
+       		 RELEASE_STATUS = #{RELEASE_STATUS},
+       	</if>
+       	
+        <if test="DOLL_URL != null and DOLL_URL != ''">
+       	 	DOLL_URL = #{DOLL_URL},
+        </if>
+        <if test="ROOM_ID != null and ROOM_ID != ''">
+        	ROOM_ID = #{ROOM_ID},
+        </if>
+        
+        <if test="TOY_ID != null and TOY_ID != ''">
+        	TOY_ID = #{TOY_ID},
+         </if>
+        
+        DOLL_TYPE = #{DOLL_TYPE}
+        
         where
         DOLL_ID = #{DOLL_ID}
     </update>
@@ -139,6 +164,9 @@
         </if>
         <if test="pd.RELEASE_STATUS != null and pd.RELEASE_STATUS != ''"><!-- 状态检索 -->
             and RELEASE_STATUS = #{pd.RELEASE_STATUS}
+        </if>
+        <if test="pd.DOLL_TYPE != null and pd.DOLL_TYPE != ''"><!-- 状态检索 -->
+           AND	(DOLL_TYPE='ALL' or DOLL_TYPE =#{pd.DOLL_TYPE} )
         </if>
         
 		ORDER BY RELEASE_STATUS DESC, DOLL_ID DESC

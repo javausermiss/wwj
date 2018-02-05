@@ -71,6 +71,23 @@
                                             </option>
                                         </select>
                                     </td>
+                                     <td style="vertical-align:top;padding-left:2px;">
+                                        <select class="chosen-select form-control" name="DOLL_TYPE" id="DOLL_TYPE"
+                                                data-placeholder="发布渠道" style="vertical-align:top;width: 120px;">
+                                            <option value="ALL"
+                                                    <c:if test="${pd.DOLL_TYPE == 'ALL' }">selected</c:if> >全部
+                                            </option>
+                                            <option value="IOS"
+                                                    <c:if test="${pd.DOLL_TYPE == 'IOS' }">selected</c:if> >IOS
+                                            </option>
+                                            <option value="H5"
+                                                    <c:if test="${pd.DOLL_TYPE == 'H5' }">selected</c:if> >H5
+                                            </option>
+                                            <option value="ANDROID"
+                                                    <c:if test="${pd.DOLL_TYPE == 'ANDROID' }">selected</c:if> >ANDROID
+                                            </option>
+                                        </select>
+                                    </td>
 								<c:if test="${QX.cha == 1 }">
 								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
 								</c:if>
@@ -89,6 +106,7 @@
 									<th class="center">网关SN</th>
 									<th class="center">网关状态</th>
 									<th class="center">DOLL_ID</th>
+									<th class="center">发布渠道</th>
 									<th class="center">DOLL_NAME</th>
 									<th class="center">摄像头编号</th>
 									<th class="center">推流服务名称</th>
@@ -113,6 +131,7 @@
 											<td class='center'>${var.DOLL_SN}</td>
 											<td class='center'>${var.DOLL_STATE}</td>
 											<td class='center'>${var.DOLL_ID}</td>
+											<td class='center'>${var.DOLL_TYPE}</td>
 											<td class='center'>${var.DOLL_NAME}</td>
 											<td class='center'>${var.CAMERA_NUM}</td>
 											<td class='center'>${var.SERVER_NAME}</td>
