@@ -12,6 +12,7 @@ public class CameraVo {
 	private String cameraName;
 	private String cameraNum;
 	private String rtmpUrl;
+	private String h5Url;
 	private String serverName;
 	private String livestream;
 	private String serverId;
@@ -51,6 +52,12 @@ public class CameraVo {
 	}
 	public void setRtmpUrl(String rtmpUrl) {
 		this.rtmpUrl = rtmpUrl;
+	}
+	public String getH5Url() {
+		return h5Url;
+	}
+	public void setH5Url(String h5Url) {
+		this.h5Url = h5Url;
 	}
 	public String getServerName() {
 		return serverName;

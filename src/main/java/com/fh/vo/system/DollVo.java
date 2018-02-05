@@ -20,6 +20,7 @@ public class DollVo {
     private List<CameraVo> cameras;
     private String dollTag;
     private String prob;//娃娃机概率
+    private String dollType; //娃娃显示渠道类型
 
 	public String getDollConversiongold() {
 		return dollConversiongold;
@@ -132,5 +133,12 @@ public class DollVo {
 	public void setCameras(List<CameraVo> cameras) {
 		this.cameras = cameras;
 	}
-    
+
+	public String getDollType() {
+		return dollType;
+	}
+
+	public void setDollType(String dollType) {
+		this.dollType = dollType;
+	}
 }

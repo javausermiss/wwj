@@ -17,10 +17,11 @@
 		<result column="CAMERA_NAME_02" property="cameraName02"/>
         <result column="DOLL_TAG" property="dollTag"/>
 		<!-- <result column="TOY_ID" property="toy_id"/> -->
-			
+		<result column="DOLL_TYPE" property="DOLL_TYPE"/>	
 		<collection property="cameras" column="DOLL_ID" ofType="com.fh.vo.system.CameraVo">
 	        <id property="cameraId" column="CAMERA_ID"/>
 	        <result property="rtmpUrl" column="RTMP_URL"/>
+	        <result property="h5Url" column="H5_URL"/>
 	        <result property="serverName" column="SERVER_NAME"/>
 	        <result property="livestream" column="LIVESTREAM"/>
 	        <result property="cameraType" column="CAMERA_TYPE"/>
@@ -207,13 +208,15 @@
         insert into
         <include refid="tableName"/>
         (
-        DOLL_ID,
-        DOLL_SN,
-        RELEASE_STATUS
+	        DOLL_ID,
+	        DOLL_SN,
+	        RELEASE_STATUS,
+	        DOLL_TYPE
         ) values (
-        #{DOLL_ID},
-        #{DOLL_SN},
-        '0'
+	        #{DOLL_ID},
+	        #{DOLL_SN},
+	        '0',
+	        'ALL'
         )
 
     </insert>
@@ -261,6 +264,7 @@
 			c.CAMERA_ID,
 			c.CAMERA_TYPE,
 			c.RTMP_URL,
+			c.H5_URL,
 			c.SERVER_NAME,
 			c.LIVESTREAM,
 			c.DEVICE_STATE from
@@ -284,6 +288,7 @@
 			c.CAMERA_ID,
 			c.CAMERA_TYPE,
 			c.RTMP_URL,
+			c.H5_URL,
 			c.SERVER_NAME,
 			c.LIVESTREAM,
 			c.DEVICE_STATE
@@ -303,6 +308,9 @@
 		WHERE d.RELEASE_STATUS ='1' 
 		 <if test="pd.currentType!= null and pd.currentType != ''"><!-- 关键词检索 -->
 			AND t1.TYPE_ID_LIST LIKE CONCAT(CONCAT('%',#{pd.currentType},'%'))
+		 </if>
+		 <if test="pd.channel != null and pd.channel != ''"><!-- 关键词检索 -->
+		 	AND	(d.DOLL_TYPE='ALL' or d.DOLL_TYPE =#{pd.channel} )
 		 </if>
 		 AND d.DOLL_STATE in ('FREE','USING','BUSY')
 	ORDER BY DOLL_SN ,CAMERA_TYPE

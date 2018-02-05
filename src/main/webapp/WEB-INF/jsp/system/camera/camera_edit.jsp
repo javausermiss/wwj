@@ -67,9 +67,14 @@
 								maxlength="16" placeholder="这里输入设备编号" title="CAMERA_NUM" style="width:98%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">推流地址:</td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">RTMP拉流地址:</td>
 								<td><input type="text" name="RTMP_URL" id="RTMP_URL" value="${pd.RTMP_URL}" 
-								maxlength="255" placeholder="这里输入推流地址" title="RTMP_URL" style="width:98%;"/></td>
+								maxlength="255" placeholder="这里输入RTMP拉流地址" title="RTMP_URL" style="width:98%;"/></td>
+							</tr>
+							<tr>
+								<td style="width:75px;text-align: right;padding-top: 13px;">H5拉流地址:</td>
+								<td><input type="text" name="H5_URL" id="H5_URL" value="${pd.H5_URL}" 
+								maxlength="255" placeholder="这里输入H5拉流地址" title="H5_URL" style="width:98%;"/></td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">推流服务名称:</td>

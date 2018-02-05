@@ -15,7 +15,8 @@
 		DOLL_ID,	
 		CAMERA_NAME,	
 		CAMERA_NUM,	
-		RTMP_URL,	
+		RTMP_URL,
+		H5_URL,
 		SERVER_NAME,	
 		LIVESTREAM,	
 		SERVER_ID,
@@ -33,7 +34,8 @@
 		#{DOLL_ID},	
 		#{CAMERA_NAME},	
 		#{CAMERA_NUM},	
-		#{RTMP_URL},	
+		#{RTMP_URL},
+		#{H5_URL},
 		#{SERVER_NAME},	
 		#{LIVESTREAM},	
 		#{SERVER_ID},
@@ -69,19 +71,45 @@
 		update
 		<include refid="tableName"></include>
 		set 
-			DOLL_ID = #{DOLL_ID},
-			CAMERA_NAME = #{CAMERA_NAME},
-			CAMERA_NUM = #{CAMERA_NUM},
-			RTMP_URL = #{RTMP_URL},
-			SERVER_NAME = #{SERVER_NAME},
-			LIVESTREAM = #{LIVESTREAM},	
-			SERVER_ID = #{SERVER_ID},
-			CLIENT_ID =#{CLIENT_ID},
-			DEVICE_STATE=#{DEVICE_STATE},
-			CAMERA_TYPE=#{CAMERA_TYPE},
+			<if test="DOLL_ID != null and DOLL_ID != ''">
+				DOLL_ID = #{DOLL_ID},
+			</if>
+			<if test="CAMERA_NAME != null and CAMERA_NAME != ''">
+				CAMERA_NAME = #{CAMERA_NAME},
+			</if>
+			<if test="CAMERA_NUM != null and CAMERA_NUM != ''">
+				CAMERA_NUM = #{CAMERA_NUM},
+			</if>
+			<if test="RTMP_URL != null and RTMP_URL != ''">
+				RTMP_URL = #{RTMP_URL},
+			</if>
+			<if test="H5_URL != null and H5_URL != ''">
+				H5_URL = #{H5_URL},
+			</if>
+			<if test="SERVER_NAME != null and SERVER_NAME != ''">
+				SERVER_NAME = #{SERVER_NAME},
+			</if>
+			<if test="LIVESTREAM != null and LIVESTREAM != ''">
+				LIVESTREAM = #{LIVESTREAM},	
+			</if>
+			<if test="SERVER_ID != null and SERVER_ID != ''">
+				SERVER_ID = #{SERVER_ID},
+			</if>
+			
+			<if test="CLIENT_ID != null and CLIENT_ID != ''">
+				CLIENT_ID =#{CLIENT_ID},
+			</if>
+			
+			<if test="DEVICE_STATE != null and DEVICE_STATE != ''">
+				DEVICE_STATE=#{DEVICE_STATE},
+			</if>
+			
+			<if test="CAMERA_TYPE != null and CAMERA_TYPE != ''">
+				CAMERA_TYPE=#{CAMERA_TYPE},
+			</if>
 			UPDATE_DATE = now(),
 			LOCK_VERSION = LOCK_VERSION+1
-		where 
+		where
 		CAMERA_ID = #{CAMERA_ID}
 	</update>
 	
@@ -102,7 +130,8 @@
 			c.DOLL_ID,	
 			c.CAMERA_NAME,	
 			c.CAMERA_NUM,	
-			c.RTMP_URL,	
+			c.RTMP_URL,
+			c.H5_URL,
 			c.SERVER_NAME,	
 			c.LIVESTREAM,	
 			c.SERVER_ID,
