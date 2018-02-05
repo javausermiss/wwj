@@ -323,6 +323,19 @@
         select * from tb_doll_play_detail where state = '1' and post_state = '0'
     </select>
 
+ 	<select id="getDollGameProbability" resultType="pd">
+		SELECT b1.ALLCOUNT,b2.SUCCOUNT,b2.SUCCOUNT/b1.ALLCOUNT as SUCPROBABILITY,b3.FAILCOUNT,b3.FAILCOUNT/b1.ALLCOUNT as FAILPROBABILITY  from (
+		
+		(select COUNT(1) as ALLCOUNT from TB_DOLL_PLAY_DETAIL c ) b1
+		
+		LEFT JOIN
+		
+		(select COUNT(1) as SUCCOUNT from TB_DOLL_PLAY_DETAIL c where c.STATE='1' ) b2 on 1=1
 
-
+		LEFT JOIN
+		
+		(select COUNT(1) as FAILCOUNT from TB_DOLL_PLAY_DETAIL c where c.STATE='0') b3 ON 1=1
+		
+		)
+	</select>
 </mapper>

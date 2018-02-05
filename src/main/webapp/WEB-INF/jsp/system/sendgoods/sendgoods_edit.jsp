@@ -32,15 +32,17 @@
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">是否发货:</td>
-									<td><select id="SENDBOOLEAN" name="SENDBOOLEAN">
-										<option value="1" <c:if test="${pd.SENDBOOLEAN == '1' }">selected</c:if>>已发货</option>
-										<option value="0" <c:if test="${pd.SENDBOOLEAN == '0' }">selected</c:if>>未发货</option>
-									</select>
+									<td>
+										<select id="SENDBOOLEAN" name="SENDBOOLEAN">
+											<option value="0" <c:if test="${pd.SENDBOOLEAN == '0' || pd.SENDBOOLEAN == '' }">selected</c:if>>未发货</option>
+											<option value="1" <c:if test="${pd.SENDBOOLEAN == '1' }">selected</c:if>>已发货</option>
+											<option value="9" <c:if test="${pd.SENDBOOLEAN == '9' }">selected</c:if>>异常订单</option>
+										</select>
 									</td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">用户ID:</td>
-								<td><input type="text" name="USER_ID" id="USER_ID" value="${appuser.USER_ID}" maxlength="255"  style="width:98%;" disabled="disabled" /></td>
+								<td><input type="text" name="USER_ID" id="USER_ID" value="${appuser.USER_ID}" maxlength="255"  style="width:98%;" readonly="readonly"/></td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">用户昵称:</td>
@@ -67,7 +69,10 @@
 								<td><input type="text" name="FMS_NAME" id="FMS_NAME" value="${pd.FMS_NAME}" maxlength="255" placeholder="这里输入物流名称" title="物流名称" style="width:98%;"/></td>
 							</tr>
 							<tr>
-								<td style="text-align: center;" colspan="10">
+								<td style="width:75px;text-align: right;padding-top: 13px;">
+									<a class="btn btn-mini btn-danger" onclick="freeze();">冻结用户</a>
+								</td>
+								<td style="text-align: center;" >
 									<a class="btn btn-mini btn-primary" onclick="save();">保存</a>
 									<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
 								</td>
@@ -91,6 +96,10 @@
 
 	<!-- 页面底部js¨ -->
 	<%@ include file="../../system/index/foot.jsp"%>
+	
+		<!-- 删除时确认窗口 -->
+	<script src="static/ace/js/bootbox.js"></script>
+	
 	<!-- 下拉框 -->
 	<script src="static/ace/js/chosen.jquery.js"></script>
 	<!-- 日期框 -->
@@ -173,6 +182,7 @@
 				$("#MODE_DESPATCH").focus();
 			return false;
 			}*/
+			var SENDBOOLEAN=$("#SENDBOOLEAN").val();
 			if($("#SENDBOOLEAN").val()==""){
 				$("#SENDBOOLEAN").tips({
 					side:3,
@@ -203,35 +213,27 @@
 				$("#REMARK").focus();
 			return false;
 			}*/
-			if($("#FMS_TIME").val()==""){
-				$("#FMS_TIME").tips({
-					side:3,
-		            msg:'请输入发货时间',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#FMS_TIME").focus();
-			return false;
-			}
-			if($("#FMS_ORDER_NO").val()==""){
-				$("#FMS_ORDER_NO").tips({
-					side:3,
-		            msg:'请输入物流单号',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#FMS_ORDER_NO").focus();
-			return false;
-			}
-			if($("#FMS_NAME").val()==""){
-				$("#FMS_NAME").tips({
-					side:3,
-		            msg:'请输入物流名称',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#FMS_NAME").focus();
-			return false;
+			if(SENDBOOLEAN!='9'){
+				if($("#FMS_ORDER_NO").val()==""){
+					$("#FMS_ORDER_NO").tips({
+						side:3,
+			            msg:'请输入物流单号',
+			            bg:'#AE81FF',
+			            time:2
+			        });
+					$("#FMS_ORDER_NO").focus();
+				return false;
+				}
+				if($("#FMS_NAME").val()==""){
+					$("#FMS_NAME").tips({
+						side:3,
+			            msg:'请输入物流名称',
+			            bg:'#AE81FF',
+			            time:2
+			        });
+					$("#FMS_NAME").focus();
+				return false;
+				}
 			}
 			/*if($("#UPDATE_TIME").val()==""){
 				$("#UPDATE_TIME").tips({
@@ -246,6 +248,18 @@
 			$("#Form").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();
+		}
+		
+		//冻结用户
+		function freeze(){
+			bootbox.confirm("确定要冻结改用户吗?", function(result) {
+				if(result) {
+					$("#Form").attr("action","sendgoods/freeze.do");
+					$("#Form").submit();
+					$("#zhongxin").hide();
+					$("#zhongxin2").show();
+				};
+			});
 		}
 		
 		$(function() {

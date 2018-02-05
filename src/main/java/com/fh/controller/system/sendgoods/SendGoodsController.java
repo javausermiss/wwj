@@ -54,6 +54,25 @@ public class SendGoodsController extends BaseController {
 	@Resource(name = "appuserService")
 	private AppuserManager appuserService;
 	
+	
+	/**冻结用户
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/freeze")
+	public ModelAndView freeze() throws Exception{
+		logBefore(logger, Jurisdiction.getUsername()+"冻结用户freeze");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		sendgoodsService.dofreezeUserOrder(pd.getString("USER_ID"));
+		mv.addObject("msg","success");
+		mv.setViewName("save_result");
+		return mv;
+	}
+	
+	
 	/**保存
 	 * @param
 	 * @throws Exception

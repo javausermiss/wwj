@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +16,6 @@ import com.fh.controller.base.BaseController;
 import com.fh.entity.system.AppUser;
 import com.fh.entity.system.AppuserLogin;
 import com.fh.entity.system.Doll;
-import com.fh.entity.system.Payment;
 import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.appuserlogininfo.AppuserLoginInfoManager;
 import com.fh.service.system.doll.DollManager;
@@ -92,15 +92,23 @@ public class TencentloginController extends BaseController {
     @RequestMapping(value = "/tencentLogin", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject tencentLogin(
+    		HttpServletRequest req,
             @RequestParam("uid") String userId,
             @RequestParam("accessToken") String token,
             @RequestParam("imageUrl") String imageUrl,
-            @RequestParam("nickName") String nickname
-    ) {
+            @RequestParam("nickName") String nickname) {
         try {
-        	logger.info("tencentLogin--> userId="+userId+",accessToken="+token+",imageUrl="+imageUrl+",nickName"+nickname);
+        	String ctype=req.getParameter("ctype"); //SDK
+        	String channel=req.getParameter("channel");//渠道
+        	
+        	logger.info("tencentLogin--> userId="+userId+",accessToken="+token+",imageUrl="+imageUrl+",nickName"+nickname+",ctype-->"+ctype+",channel-->"+channel);
         	//验证token 是否合法
-        	String code = TokenVerify.verify(token);
+         	String code ="";
+         	if(Const.SDKMenuType.YSDK.getValue().equals(ctype) || (ctype==null || "".equals(ctype)) ){
+         		code= TokenVerify.verify(token); //应用宝SDK验证
+         	}else{
+         		code= TokenVerify.verifyForALL(token); //官方验证
+         	}
         	if (!"SUCCESS".equals(code)) {
         		return RespStatus.fail("token不合法");
         	}
@@ -196,13 +204,22 @@ public class TencentloginController extends BaseController {
     @RequestMapping(value = "/tencentAutoLogin", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject tencentAutoLogin(
+    		HttpServletRequest req,
             @RequestParam("userId") String userId,
             @RequestParam("accessToken") String accessToken
     ) {
-    	logger.info("tencentAutoLogin--> userId="+userId+",accessToken="+accessToken);
+    	String ctype=req.getParameter("ctype"); //SDK
+    	String channel=req.getParameter("channel");//渠道
+    	
+    	logger.info("tencentAutoLogin--> userId="+userId+",accessToken="+accessToken+",ctype-->"+ctype+",channel-->"+channel);
         try {
-            String a = TokenVerify.verify(accessToken.trim());//请求sdk后台效验token是否合法
-            if (a.equals("SUCCESS")) {
+         	String code ="";
+         	if(Const.SDKMenuType.YSDK.getValue().equals(ctype) || (ctype==null || "".equals(ctype)) ){
+         		code= TokenVerify.verify(accessToken); //应用宝SDK验证
+         	}else{
+         		code= TokenVerify.verifyForALL(accessToken); //官方验证
+         	}
+            if (code.equals("SUCCESS")) {
                 if (appuserService.getUserByID(userId) == null) {
                     return RespStatus.fail("用户不存在");
                 }

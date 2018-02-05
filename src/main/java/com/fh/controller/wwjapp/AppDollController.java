@@ -119,41 +119,28 @@ public class AppDollController extends BaseController {
             	  boolean cState=true;
             	  CameraVo cameraVo=null;
                 for (DollVo dollVo : dollList) {
-                	
-                	//获取娃娃机网关状态
-                    dollVo.setDollState(RedisUtil.getStr("roomInfo:" + dollVo.getDollId()));
-                    //预计奖金
-                    dollVo.setReward(String.valueOf(dollVo.getDollGold()*5));
-                    
                     //获取概率
                     String prob =  RedisUtil.getStr("roomProbability:" + dollVo.getDollId());
                     if (prob != null){
                         dollVo.setProb(prob);
                     }
-                    
-                    if(dollVo.getDollState()==null || "".equals(dollVo.getDollState())){
-                    	logger.info(dollVo.getDollId()+" dollState-------->"+dollVo.getDollState());
-                    	continue;
-                    }
+                    //预计奖金
+                    dollVo.setReward(String.valueOf(dollVo.getDollGold()*5));
                     //异常设备不展示 FREE表正常，USING:游戏中
-                    if("FREE".equals(dollVo.getDollState().toUpperCase()) || "BUSY".equals(dollVo.getDollState().toUpperCase()) || "USING".equals(dollVo.getDollState().toUpperCase())){
-                    	cameras=dollVo.getCameras();
-                    	if(cameras !=null && cameras.size()==2){
-                    		for(int i=0;i<cameras.size();i++){
-                    			cameraVo=cameras.get(i);
-                    			if(!"0".equals(cameraVo.getDeviceState())){ // DEVICE_STATE:0 正常 ，1:不正常
-                    				logger.info(cameraVo.getCameraId()+",cameraType="+cameraVo.getCameraType()+" deviceState-------->"+cameraVo.getDeviceState());
-                    				cState=false;
-                    			}
-                    		}
-                    		if(cState){
-                    			//娃娃机网关正常，并且摄像头状态正常
-                    			tmpList.add(dollVo);
-                    		}
-                    	}
-                    }else{
-                    	logger.info(dollVo.getDollId()+" dollState-------->"+dollVo.getDollState());
-                    }
+                	cameras=dollVo.getCameras();
+                	if(cameras !=null && cameras.size()>=1){
+                		for(int i=0;i<cameras.size();i++){
+                			cameraVo=cameras.get(i);
+                			if(!"0".equals(cameraVo.getDeviceState())){ // DEVICE_STATE:0 正常 ，1:不正常
+                				logger.info(cameraVo.getCameraId()+",cameraType="+cameraVo.getCameraType()+" deviceState-------->"+cameraVo.getDeviceState());
+                				cState=false;
+                			}
+                		}
+                		if(cState){
+                			//娃娃机网关正常，并且摄像头状态正常
+                			tmpList.add(dollVo);
+                		}
+                	}
                 }
             }
             

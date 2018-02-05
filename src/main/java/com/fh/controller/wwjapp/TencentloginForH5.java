@@ -1,24 +1,40 @@
 package com.fh.controller.wwjapp;
 
-import com.fh.entity.system.AppUser;
-import com.fh.entity.system.Doll;
-import com.fh.service.system.appuser.AppuserManager;
-import com.fh.service.system.doll.DollManager;
-import com.fh.util.PropertiesUtils;
-import com.fh.util.wwjUtil.*;
-import net.sf.json.JSONObject;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import com.fh.controller.base.BaseController;
+import com.fh.entity.system.AppUser;
+import com.fh.entity.system.Doll;
+import com.fh.service.system.appuser.AppuserManager;
+import com.fh.service.system.doll.DollManager;
+import com.fh.util.Const;
+import com.fh.util.PropertiesUtils;
+import com.fh.util.wwjUtil.FaceImageUtil;
+import com.fh.util.wwjUtil.MyUUID;
+import com.fh.util.wwjUtil.RedisUtil;
+import com.fh.util.wwjUtil.RespStatus;
+import com.fh.util.wwjUtil.TokenVerify;
+
+import net.sf.json.JSONObject;
 @Controller
 @RequestMapping("/app")
-public class TencentloginForH5 {
+public class TencentloginForH5 extends BaseController {
+	
     @Resource(name = "appuserService")
     private AppuserManager appuserService;
 
@@ -67,21 +83,31 @@ public class TencentloginForH5 {
     @RequestMapping(value = "/tencentLoginH5", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject tencentLogin(
+    		HttpServletRequest req,
             @RequestParam("uid") String userId,
             @RequestParam("accessToken") String token,
             @RequestParam("imageUrl") String imageUrl,
             @RequestParam("nickName") String nickname
     ) {
+       	String ctype=req.getParameter("ctype"); //SDK
+    	String channel=req.getParameter("channel");//渠道
+    	
+    	logger.info("userId-->"+userId+",ctype-->"+ctype+",channel-->"+channel);
         try {
             AppUser appUser = appuserService.getUserByID(userId);
             if (appUser == null) {
-                String code = TokenVerify.verifyForH5(token);
+            	 String code ="";
+            	if(Const.SDKMenuType.YSDK.getValue().equals(ctype) || (ctype==null || "".equals(ctype)) ){
+            		code= TokenVerify.verify(token); //应用宝SDK验证
+            	}else{
+            		code= TokenVerify.verifyForALL(token); //官方验证
+            	}
+              
                 if (code.equals("SUCCESS")) {
                     AppUser appUser1 = new AppUser();
                     if (imageUrl == null||imageUrl.equals("") ) {
                         imageUrl = PropertiesUtils.getCurrProperty("user.default.header.url"); //默认头像
                     }
-
                     appUser1.setNICKNAME(nickname);
                     appUser1.setIMAGE_URL(imageUrl);
                     appUser1.setUSER_ID(userId);
@@ -126,7 +152,12 @@ public class TencentloginForH5 {
                     return RespStatus.fail("token不合法");
                 }
             } else {
-                String code = TokenVerify.verifyForH5(token);
+             	String code ="";
+             	if(Const.SDKMenuType.YSDK.getValue().equals(ctype) || (ctype==null || "".equals(ctype)) ){
+             		code= TokenVerify.verify(token); //应用宝SDK验证
+             	}else{
+             		code= TokenVerify.verifyForALL(token); //官方验证
+             	}
                 if (code.equals("SUCCESS")) {
                     if ( imageUrl == null||imageUrl.equals("")  ) {
 //                        imageUrl = "/default.png";
@@ -194,12 +225,21 @@ public class TencentloginForH5 {
     @RequestMapping(value = "/tencentAutoLoginH5", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject tencentAutoLogin(
+    		HttpServletRequest req,
             @RequestParam("userId") String userId,
             @RequestParam("accessToken") String accessToken
     ) {
+     	String ctype=req.getParameter("ctype"); //SDK
+    	String channel=req.getParameter("channel");//渠道
+    	logger.info("userId-->"+userId+",ctype-->"+ctype+",channel-->"+channel);
         try {
-            String a = TokenVerify.verifyForH5(accessToken.trim());//请求sdk后台效验token是否合法
-            if (a.equals("SUCCESS")) {
+          	 String code ="";
+          	if(Const.SDKMenuType.YSDK.getValue().equals(ctype)){
+          		code= TokenVerify.verify(accessToken); //应用宝SDK验证
+          	}else{
+          		code= TokenVerify.verifyForALL(accessToken); //官方验证
+          	}
+            if ("SUCCESS".equals(code)) {
                 if (appuserService.getUserByID(userId) == null) {
                     return RespStatus.fail("用户不存在");
                 }

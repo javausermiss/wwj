@@ -115,4 +115,46 @@ public class Const {
 			return null;
 		}
 	}
+	
+	
+
+	/**
+	 * SDK TYPE
+	 *
+	 */
+	public enum SDKMenuType{
+		
+		YSDK("YSDK"),
+		ASDK("ASDK");
+		
+		private String value;
+		
+		SDKMenuType(String value){
+			this.value=value;
+		}
+		public String getValue() {
+			return value;
+		}
+	}
+	
+	
+	/**
+	 * Channel TYPE
+	 *
+	 */
+	public enum ChannelMenuType{
+		
+		H5("H5"),
+		ANDROID("ANDROID"),
+		IOS("IOS");
+		
+		private String value;
+		
+		ChannelMenuType(String value){
+			this.value=value;
+		}
+		public String getValue() {
+			return value;
+		}
+	}
 }
