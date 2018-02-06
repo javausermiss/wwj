@@ -163,10 +163,10 @@
 				)
         </if>
         <if test="pd.RELEASE_STATUS != null and pd.RELEASE_STATUS != ''"><!-- 状态检索 -->
-            and RELEASE_STATUS = #{pd.RELEASE_STATUS}
+            AND RELEASE_STATUS = #{pd.RELEASE_STATUS}
         </if>
-        <if test="pd.DOLL_TYPE != null and pd.DOLL_TYPE != ''"><!-- 状态检索 -->
-           AND	(DOLL_TYPE='ALL' or DOLL_TYPE =#{pd.DOLL_TYPE} )
+        <if test="pd.DOLL_TYPE != null and pd.DOLL_TYPE == 'Y'"><!-- 状态检索 -->
+           	AND	DOLL_TYPE='Y'
         </if>
         
 		ORDER BY RELEASE_STATUS DESC, DOLL_ID DESC
@@ -244,7 +244,7 @@
 	        #{DOLL_ID},
 	        #{DOLL_SN},
 	        '0',
-	        'ALL'
+	        'N'
         )
 
     </insert>
@@ -337,8 +337,8 @@
 		 <if test="pd.currentType!= null and pd.currentType != ''"><!-- 关键词检索 -->
 			AND t1.TYPE_ID_LIST LIKE CONCAT(CONCAT('%',#{pd.currentType},'%'))
 		 </if>
-		 <if test="pd.channel != null and pd.channel != ''"><!-- 关键词检索 -->
-		 	AND	(d.DOLL_TYPE='ALL' or d.DOLL_TYPE =#{pd.channel} )
+		 <if test="pd.channel != null and pd.channel == 'H5'"><!-- 关键词检索 -->
+		 	AND	d.DOLL_TYPE='Y'
 		 </if>
 		 AND d.DOLL_STATE in ('FREE','USING','BUSY')
 	ORDER BY DOLL_SN ,CAMERA_TYPE

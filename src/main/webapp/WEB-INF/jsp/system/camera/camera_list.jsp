@@ -73,18 +73,13 @@
                                     </td>
                                      <td style="vertical-align:top;padding-left:2px;">
                                         <select class="chosen-select form-control" name="DOLL_TYPE" id="DOLL_TYPE"
-                                                data-placeholder="发布渠道" style="vertical-align:top;width: 120px;">
-                                            <option value="ALL"
-                                                    <c:if test="${pd.DOLL_TYPE == 'ALL' }">selected</c:if> >全部
+                                                data-placeholder="请选择H5是否可见" style="vertical-align:top;width: 120px;">
+                                        	<option value=""></option>
+                                            <option value="Y"
+                                                    <c:if test="${pd.DOLL_TYPE == 'Y' }">selected</c:if> >H5可见
                                             </option>
-                                            <option value="IOS"
-                                                    <c:if test="${pd.DOLL_TYPE == 'IOS' }">selected</c:if> >IOS
-                                            </option>
-                                            <option value="H5"
-                                                    <c:if test="${pd.DOLL_TYPE == 'H5' }">selected</c:if> >H5
-                                            </option>
-                                            <option value="ANDROID"
-                                                    <c:if test="${pd.DOLL_TYPE == 'ANDROID' }">selected</c:if> >ANDROID
+                                            <option value="N"
+                                                    <c:if test="${pd.DOLL_TYPE == 'N' }">selected</c:if> >H5不可见
                                             </option>
                                         </select>
                                     </td>
@@ -106,7 +101,7 @@
 									<th class="center">网关SN</th>
 									<th class="center">网关状态</th>
 									<th class="center">DOLL_ID</th>
-									<th class="center">发布渠道</th>
+									<th class="center">H5可见</th>
 									<th class="center">DOLL_NAME</th>
 									<th class="center">摄像头编号</th>
 									<th class="center">推流服务名称</th>

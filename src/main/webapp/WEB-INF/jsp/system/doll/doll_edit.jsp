@@ -81,21 +81,16 @@
 							</tr>
 							<td style="width:75px;text-align: right;padding-top: 13px;">发布渠道:</td>
 								<td>
-								<span style="font-size:12px;">
-									<select id="DOLL_TYPE" name="DOLL_TYPE">
-                                            <option value="ALL"
-                                                    <c:if test="${pd.DOLL_TYPE == 'ALL' }">selected</c:if> >全部
-                                            </option>
-                                            <option value="IOS"
-                                                    <c:if test="${pd.DOLL_TYPE == 'IOS' }">selected</c:if> >IOS
-                                            </option>
-                                            <option value="H5"
-                                                    <c:if test="${pd.DOLL_TYPE == 'H5' }">selected</c:if> >H5
-                                            </option>
-                                            <option value="ANDROID"
-                                                    <c:if test="${pd.DOLL_TYPE == 'ANDROID' }">selected</c:if> >ANDROID
-                                            </option>
-									</select>
+									<span style="font-size:12px;">
+										<select class="chosen-select form-control" id="DOLL_TYPE" name="DOLL_TYPE">
+												<option value=""></option>
+	                                           <option value="Y"
+	                                                    <c:if test="${pd.DOLL_TYPE == 'Y' }">selected</c:if> >H5可见
+	                                            </option>
+	                                            <option value="N"
+	                                                    <c:if test="${pd.DOLL_TYPE == 'N' }">selected</c:if> >H5不可见
+	                                            </option>
+										</select>
 									</span>
 								</td>
 							</tr>
