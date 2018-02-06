@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -31,6 +32,23 @@ public class TokenVerify {
 	
     private final static String key = "Pooh4token";
 
+    /**
+     * 微8游戏平台
+     * @param paramsMap
+     * @return
+     */
+    public static String verifyForW8sdk(SortedMap<String, String> paramsMap) {
+    	 String ckey = PropertiesUtils.getCurrProperty("api.app.w8sdk.ckey");
+    	 StringBuffer basestring = new StringBuffer();
+    	 Map<String, Object> sortedParams = new TreeMap<String, Object>(paramsMap);
+         Set<Map.Entry<String, Object>> entrys = sortedParams.entrySet();
+         // 遍历排序后的字典，将所有参数按"key=value"格式拼接在一起
+         for (Map.Entry<String, Object> param : entrys) {
+             basestring.append(param.getKey()).append('=').append(param.getValue()).append('&');
+         }
+         basestring.append("signatrue=").append(ckey);
+         return TokenVerify.md5(basestring.toString());
+    }
     
     public static String verifyForALL(String acctoken) {
         String ckey = PropertiesUtils.getCurrProperty("api.i5.sdk.ckey");

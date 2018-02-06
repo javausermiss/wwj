@@ -2,6 +2,8 @@ package com.fh.controller.wwjapp;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -95,17 +97,30 @@ public class TencentloginController extends BaseController {
     		HttpServletRequest req,
             @RequestParam("uid") String userId,
             @RequestParam("accessToken") String token,
-            @RequestParam("imageUrl") String imageUrl,
             @RequestParam("nickName") String nickname) {
         try {
         	String ctype=req.getParameter("ctype"); //SDK
         	String channel=req.getParameter("channel");//渠道
+        	String imageUrl=req.getParameter("imageUrl");//头像
         	
         	logger.info("tencentLogin--> userId="+userId+",accessToken="+token+",imageUrl="+imageUrl+",nickName"+nickname+",ctype-->"+ctype+",channel-->"+channel);
         	//验证token 是否合法
-         	String code ="";
+         	String code ="fail";
          	if(Const.SDKMenuType.YSDK.getValue().equals(ctype) || (ctype==null || "".equals(ctype)) ){
          		code= TokenVerify.verify(token); //应用宝SDK验证
+         	}else if(Const.SDKMenuType.W8SDK.getValue().equals(ctype)){
+         		
+         		//token 验证
+         		SortedMap<String, String> paramsMap=new TreeMap<String, String>();
+         		paramsMap.put("uid", userId);
+         		paramsMap.put("nickName", nickname);
+         		paramsMap.put("imageUrl", imageUrl);
+         		paramsMap.put("ctype", ctype);
+         		paramsMap.put("channel", channel);
+         		String sign= TokenVerify.verifyForW8sdk(paramsMap); //w8SDK
+         		if(sign.equals(token)){
+         			code="SUCCESS";
+         		}
          	}else{
          		code= TokenVerify.verifyForALL(token); //官方验证
          	}
@@ -210,7 +225,7 @@ public class TencentloginController extends BaseController {
     ) {
     	String ctype=req.getParameter("ctype"); //SDK
     	String channel=req.getParameter("channel");//渠道
-    	
+
     	logger.info("tencentAutoLogin--> userId="+userId+",accessToken="+accessToken+",ctype-->"+ctype+",channel-->"+channel);
         try {
          	String code ="";
