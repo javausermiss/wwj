@@ -76,7 +76,7 @@
                                                     <c:if test="${pd.DOLL_TYPE == 'Y' }">selected</c:if> >H5可见
                                             </option>
                                             <option value="N"
-                                                    <c:if test="${pd.DOLL_TYPE == 'N' }">selected</c:if> >H5不可见
+                                                    <c:if test="${pd.DOLL_TYPE == 'N' }">selected</c:if> >其他可见
                                             </option>
                                         </select>
                                     </td>
