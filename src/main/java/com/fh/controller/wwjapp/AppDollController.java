@@ -121,7 +121,7 @@ public class AppDollController extends BaseController {
             //娃娃机网关信息
             if (dollList != null && dollList.size() > 0) {
             	  List<CameraVo> cameras =new ArrayList<CameraVo>(); //网关摄像头集合
-            	  boolean cState=true;
+            	 
             	  CameraVo cameraVo=null;
                 for (DollVo dollVo : dollList) {
                     //获取概率
@@ -134,6 +134,7 @@ public class AppDollController extends BaseController {
                     //异常设备不展示 FREE表正常，USING:游戏中
                 	cameras=dollVo.getCameras();
                 	if(cameras !=null && cameras.size()>=1){
+                		boolean cState=true;
                 		for(int i=0;i<cameras.size();i++){
                 			cameraVo=cameras.get(i);
                 			if(!"0".equals(cameraVo.getDeviceState())){ // DEVICE_STATE:0 正常 ，1:不正常
