@@ -231,6 +231,16 @@ public class TencentloginController extends BaseController {
          	String code ="";
          	if(Const.SDKMenuType.YSDK.getValue().equals(ctype) || (ctype==null || "".equals(ctype)) ){
          		code= TokenVerify.verify(accessToken); //应用宝SDK验证
+         	}else if(Const.SDKMenuType.W8SDK.getValue().equals(ctype)){
+         		//token 验证
+         		SortedMap<String, String> paramsMap=new TreeMap<String, String>();
+         		paramsMap.put("uid", userId);
+         		paramsMap.put("ctype", ctype);
+         		paramsMap.put("channel", channel);
+         		String sign= TokenVerify.verifyForW8sdk(paramsMap); //w8SDK
+         		if(sign.equals(accessToken)){
+         			code="SUCCESS";
+         		}
          	}else{
          		code= TokenVerify.verifyForALL(accessToken); //官方验证
          	}
