@@ -250,16 +250,20 @@ public class BetGameService extends BaseController implements BetGameManager {
 
     @Override
     public RpcCommandResult doFree(String dollId, Integer gifinumber) throws Exception {
-        //预期奖金
-        Integer doll_gold = dollService.getDollByID(dollId).getDOLL_GOLD();
-        int reword = 5 * doll_gold;
-        logger.info("机器复位时间----------------------->" + DateUtil.getTime());
-
+        logger.info("机器复位，房间号为--->" + dollId);
+        Doll doll = dollService.getDollByID(dollId);
+        if (doll == null) {
+            logger.info("机器复位，房间号为空");
+            return null;
+        }
         PlayDetail playDetail = playDetailService.getPlayIdForPeople(dollId);//根据房间ID取得最新的游戏记录
-
         if (playDetail == null) {
             return null;
         }
+        //预期奖金
+        Integer doll_gold = doll.getDOLL_GOLD();
+        int reword = 5 * doll_gold;
+        logger.info("机器复位时间----------------------->" + DateUtil.getTime());
 
         if (gifinumber != 0) {
             gifinumber = 1;
@@ -354,7 +358,7 @@ public class BetGameService extends BaseController implements BetGameManager {
                 this.updateGuessDetail(filePerson);
             }
         }
-        logger.info("前端展示的获胜者数量为-->"+guessDetail_list.size());
+        logger.info("前端展示的获胜者数量为-->" + guessDetail_list.size());
 
         RpcCommandResult rpcCommandResult = new RpcCommandResult();
         RpcReturnCode result = lotteryServerRpcService.noticeDrawLottery(dollId, playDetail.getGUESS_ID(), guessDetail_list);
