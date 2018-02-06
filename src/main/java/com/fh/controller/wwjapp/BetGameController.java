@@ -136,7 +136,9 @@ public class BetGameController {
             @RequestParam("dollId") String dollId,
             @RequestParam("wager") int wager,
             @RequestParam("guessId") String guessId,
-            @RequestParam("guessKey") String guessKey) {
+            @RequestParam("guessKey") String guessKey
+            )
+    {
 
         try {
           return  betGameService.doBet(userId,dollId,wager,guessId,guessKey);

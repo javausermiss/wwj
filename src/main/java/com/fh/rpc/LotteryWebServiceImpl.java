@@ -199,7 +199,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
         try {
             //获取下爪毫秒最后一位作为开奖数字
             String catch_time = DateUtil.getTimeSSS();
-            log.info("下爪时间----------------->"+catch_time);
+            log.info(roomId+"--------下爪");
             String reword_num = catch_time.substring(catch_time.length()-1,catch_time.length());
 
             PlayDetail playDetail = playDetailService.getPlayIdForPeople(roomId);//根据房间取得最新的游戏记录
@@ -207,7 +207,18 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
            //设置游戏列表中的开奖数字
             playDetail.setSTOP_FLAG("-1");
             playDetail.setREWARD_NUM(reword_num);
-            playDetailService.updatePlayDetailStopFlag(playDetail);
+            int a = playDetailService.updatePlayDetailStopFlag(playDetail);
+            if (a==1){
+                log.info("机器下抓--------->获得开奖数存储成功");
+            }
+            List<GuessDetailL> guessDetailLS =  betGameService.getAllGuesser(playDetail.getGUESS_ID());
+            for (int i = 0; i < guessDetailLS.size(); i++) {
+                GuessDetailL guessDetailL =  guessDetailLS.get(i);
+                guessDetailL.setGUESS_TYPE(reword_num);
+                guessDetailL.setSETTLEMENT_FLAG("Y");//此标签已不具有结算意义
+                betGameService.updateGuessDetailGuessType(guessDetailL);
+            }
+
 
             //设置奖池表的中奖数字
             Pond p = new Pond();

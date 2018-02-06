@@ -187,4 +187,32 @@
 	</select>
 
 
+    <select id="getWinByNum" parameterType="com.fh.entity.system.GuessDetailL"
+            resultType="com.fh.entity.system.GuessDetailL">
+
+        SELECT * from TB_DOLL_GUESS_DETAIL WHERE
+        GUESS_KEY  = #{GUESS_KEY}
+        AND
+        PLAYBACK_ID = #{PLAYBACK_ID}
+        AND
+        DOLL_ID = #{DOLL_ID}
+
+
+    </select>
+
+
+    <select id="getFailerByNum" parameterType="com.fh.entity.system.GuessDetailL"
+            resultType="com.fh.entity.system.GuessDetailL">
+
+        SELECT * from TB_DOLL_GUESS_DETAIL WHERE
+        GUESS_KEY  != #{GUESS_KEY}
+        AND
+        PLAYBACK_ID = #{PLAYBACK_ID}
+        AND
+        DOLL_ID = #{DOLL_ID}
+
+
+    </select>
+
+
 </mapper>

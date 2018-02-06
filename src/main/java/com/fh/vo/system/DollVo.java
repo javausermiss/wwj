@@ -20,6 +20,7 @@ public class DollVo {
     private List<CameraVo> cameras;
     private String dollTag;
     private String prob;//娃娃机概率
+    private String dollType; //娃娃显示渠道类型
 	private String reward;//奖金
 
 	public String getReward() {

@@ -48,7 +48,7 @@ public class AppDollController extends BaseController {
      * @param req
      * @return
      */
-    @RequestMapping(value = "/getDollList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/getDollList", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject getDollLists(HttpServletRequest req) {
         try {
@@ -95,6 +95,9 @@ public class AppDollController extends BaseController {
             Page page = new Page();
             int currentPage = NumberUtils.parseInt(request.getParameter("nextPage"), 1);
             page.setCurrentPage(currentPage); //当前页数
+            
+        	String ctype=request.getParameter("ctype"); //SDK
+        	String channel=request.getParameter("channel");//渠道
 
             int showCount = 8 * 2;
             page.setShowCount(showCount);//
@@ -105,6 +108,8 @@ public class AppDollController extends BaseController {
             pd.put("currentType", currentType);
             pd.put("currentPage", currentPage);
             pd.put("showCount", showCount);
+            pd.put("channel", channel);
+            
             page.setPd(pd);
 
             //娃娃机列表分页

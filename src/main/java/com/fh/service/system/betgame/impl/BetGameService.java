@@ -11,6 +11,7 @@ import com.fh.service.system.payment.PaymentManager;
 import com.fh.service.system.playback.PlayBackManage;
 import com.fh.service.system.playdetail.PlayDetailManage;
 import com.fh.service.system.pond.PondManager;
+import com.fh.util.DateUtil;
 import com.fh.util.PageData;
 
 import com.fh.util.wwjUtil.RedisUtil;
@@ -250,11 +251,9 @@ public class BetGameService extends BaseController implements BetGameManager {
     @Override
     public RpcCommandResult doFree(String dollId, Integer gifinumber) throws Exception {
         //预期奖金
-        logger.info("dollId------------------------->" + dollId);
         Integer doll_gold = dollService.getDollByID(dollId).getDOLL_GOLD();
-        logger.info("doll_gold------------------------->" + doll_gold);
         int reword = 5 * doll_gold;
-        logger.info("reword------------------------->" + reword);
+        logger.info("机器复位时间----------------------->" + DateUtil.getTime());
 
         PlayDetail playDetail = playDetailService.getPlayIdForPeople(dollId);//根据房间ID取得最新的游戏记录
 
@@ -294,14 +293,16 @@ public class BetGameService extends BaseController implements BetGameManager {
         }
 
         //给中奖用户结算奖金
-        String reward_num = playDetail.getSTATE();
+        String reward_num = playDetail.getREWARD_NUM();
         GuessDetailL guessDetailL = new GuessDetailL();
         guessDetailL.setDOLL_ID(dollId);
-        guessDetailL.setPLAYBACK_ID(playDetail.getID());
+        guessDetailL.setPLAYBACK_ID(playDetail.getGUESS_ID());
         guessDetailL.setGUESS_KEY(reward_num);
         List<GuessDetailL> list = this.getWinByNum(guessDetailL);
+
         List<GuessDetail> guessDetail_list = new LinkedList<>();
-        if (list != null) {
+        if (list.size() != 0) {
+            logger.info("竞猜成功者数量--------------->" + list.size());
             for (int i = 0; i < list.size(); i++) {
                 //更新竞猜记录消息
                 GuessDetailL winPerson = list.get(i);
@@ -318,27 +319,42 @@ public class BetGameService extends BaseController implements BetGameManager {
                 appUser.setBALANCE(new_balance);
                 appuserService.updateAppUserBalanceById(appUser);
 
+                logger.info("获奖用户ID------------->" + guess_win_user);
+
                 //统计中奖用户昵称 ID
                 String nickname = appUser.getNICKNAME();
                 GuessDetail guessDetail = new GuessDetail();
                 guessDetail.setNickname(nickname);
                 guessDetail.setAppUserId(guess_win_user);
                 guessDetail_list.add(guessDetail);
+
+                //更新收支表
+                Payment payment = new Payment();
+                payment.setGOLD("+" + String.valueOf(reword));
+                payment.setUSERID(winPerson.getAPP_USER_ID());
+                payment.setDOLLID(dollId);
+                payment.setCOST_TYPE("3");
+                payment.setREMARK("竞猜成功");
+                paymentService.reg(payment);
+
             }
 
         }
         //竞猜失败的用户
-        List<GuessDetailL > failer  = this.getFailerByNum(guessDetailL);
-        if (failer!=null){
-            for (int i = 0; i <failer.size() ; i++) {
+        List<GuessDetailL> failer = this.getFailerByNum(guessDetailL);
+
+        if (failer.size() != 0) {
+            logger.info("竞猜失败者数量--------------->" + failer.size());
+            for (int i = 0; i < failer.size(); i++) {
                 //更新竞猜记录消息
-                GuessDetailL filePerson = list.get(i);
+                GuessDetailL filePerson = failer.get(i);
                 filePerson.setSETTLEMENT_GOLD(0);
                 filePerson.setSETTLEMENT_FLAG("Y");
                 filePerson.setGUESS_TYPE(playDetail.getREWARD_NUM());
                 this.updateGuessDetail(filePerson);
             }
         }
+        logger.info("前端展示的获胜者数量为-->"+guessDetail_list.size());
 
         RpcCommandResult rpcCommandResult = new RpcCommandResult();
         RpcReturnCode result = lotteryServerRpcService.noticeDrawLottery(dollId, playDetail.getGUESS_ID(), guessDetail_list);
