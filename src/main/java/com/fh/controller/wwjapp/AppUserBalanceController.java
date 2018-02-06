@@ -1,5 +1,6 @@
 package com.fh.controller.wwjapp;
 
+import com.fh.controller.base.BaseController;
 import com.fh.entity.system.*;
 import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.doll.DollManager;
@@ -14,6 +15,8 @@ import com.fh.util.wwjUtil.MyUUID;
 import com.fh.util.wwjUtil.RedisUtil;
 import com.fh.util.wwjUtil.RespStatus;
 import com.fh.util.wwjUtil.TokenVerify;
+import com.sun.media.jfxmedia.logging.Logger;
+
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +31,7 @@ import java.util.*;
 
 @Controller
 @RequestMapping(value = "/pay")
-public class AppUserBalanceController {
+public class AppUserBalanceController extends BaseController {
 
     //  private final String ckey = "y3WfBKF1FY4=";
     @Resource(name = "appuserService")
@@ -625,6 +628,7 @@ public class AppUserBalanceController {
             String md5param = "orderid=" +orderid+"&username=" +username+"&productname="+URLDecoder.decode(productname, "utf-8")+
      			   "&amount=" +amount+"&roleid=" +roleid+"&serverid=" +serverid+"&appid=" +appid+"&paytime="+paytime+
      			   "&remarks="+remarks+"&appkey=" +ckey;
+            logger.info("md5param-->"+md5param);
             String md5token = TokenVerify.md5(md5param);
      
             if (!token.toLowerCase().equals(md5token.toLowerCase())) {
