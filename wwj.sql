@@ -116,6 +116,21 @@ ADD COLUMN `TOY_TYPE`  varchar(255) NULL COMMENT '类别' AFTER `DOOL_GOLD`;
 ALTER TABLE `tb_doll_play_detail`
 ADD COLUMN `TOY_ID`  int(11) NULL COMMENT '娃娃编号' AFTER `CREATE_DATE`;
 
+
+
+
+/*2018 02 02*/
+/**更新未充值的用户账户余额  慎用**/
+UPDATE sys_app_user u set u.BALANCE='0' WHERE u.USER_ID NOT IN (
+	SELECT o.USER_ID  from sys_app_order o where 1=1 and o.STATUS='1' GROUP BY o.USER_ID
+)
+
+
+/*2018 02 05*/
+ALTER TABLE `sys_app_doll` ADD COLUMN `DOLL_TYPE`  varchar(255) NULL;
+
+ALTER TABLE `tb_device_camera` ADD COLUMN `H5_URL`  varchar(255) NULL COMMENT 'H5播放地址' AFTER `RTMP_URL`;
+
 /* 2018 01 26*/
 ALTER TABLE `sys_app_user`
 ADD COLUMN `BET_NUM`  int(11) NULL DEFAULT 0 COMMENT '竞猜次数，10次为上限' AFTER `CNEE_NAME`;

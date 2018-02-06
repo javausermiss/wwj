@@ -79,6 +79,21 @@
 									</span>
 								</td>
 							</tr>
+							<td style="width:75px;text-align: right;padding-top: 13px;">发布渠道:</td>
+								<td>
+									<span style="font-size:12px;">
+										<select class="chosen-select form-control" id="DOLL_TYPE" name="DOLL_TYPE">
+												<option value=""></option>
+	                                           <option value="Y"
+	                                                    <c:if test="${pd.DOLL_TYPE == 'Y' }">selected</c:if> >H5可见
+	                                            </option>
+	                                            <option value="N"
+	                                                    <c:if test="${pd.DOLL_TYPE == 'N' }">selected</c:if> >H5不可见
+	                                            </option>
+										</select>
+									</span>
+								</td>
+							</tr>
 							<tr>
 								<td style="width:100px;text-align: right;padding-top: 13px;">文件域：</td>
 								<td><input type="file" id="DOLL_FILE" name="DOLL_FILE" /></td>

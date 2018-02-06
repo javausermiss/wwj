@@ -1,5 +1,6 @@
 package com.fh.controller.wwjapp;
 
+import com.fh.controller.base.BaseController;
 import com.fh.entity.system.*;
 import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.doll.DollManager;
@@ -14,6 +15,8 @@ import com.fh.util.wwjUtil.MyUUID;
 import com.fh.util.wwjUtil.RedisUtil;
 import com.fh.util.wwjUtil.RespStatus;
 import com.fh.util.wwjUtil.TokenVerify;
+import com.sun.media.jfxmedia.logging.Logger;
+
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +31,7 @@ import java.util.*;
 
 @Controller
 @RequestMapping(value = "/pay")
-public class AppUserBalanceController {
+public class AppUserBalanceController extends BaseController {
 
     //  private final String ckey = "y3WfBKF1FY4=";
     @Resource(name = "appuserService")
@@ -583,5 +586,155 @@ public class AppUserBalanceController {
         }
     }
 
+    
+    
+    
+    /**
+     * 微玩8游戏平台 支付回调接口
+     *
+	 *	username	string	用户名
+	 *	productname	string	商品名称
+	 *	amount	double	金额
+	 *	roleid	string	角色id
+	 *	serverid	string	开服id
+	 *	appid	int	游戏id
+	 *	token	string	签名
+	 *	remarks	string	CP方的扩展参数
+     * @return
+     */
+
+    @RequestMapping(value = "/w8OrderCallBack", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public String w8OrderCallBack(
+            @RequestParam("orderid") String orderid,
+            @RequestParam("username") String username,
+            @RequestParam("productname") String productname,
+            @RequestParam("amount") double amount,
+            @RequestParam("roleid") String roleid,
+            @RequestParam("serverid") String serverid,
+            @RequestParam("appid") int appid,
+            @RequestParam("paytime") String paytime,
+            @RequestParam("token") String token,
+            @RequestParam("remarks") String remarks
+    ) {
+        try {
+        	
+        	String ckey = PropertiesUtils.getCurrProperty("api.app.w8sdk.ckey");
+        	//step1 签名验证
+       
+            if(token ==null || "".equals(token)){
+            	 return "SIGN IS NULL";
+            }
+            String md5param = "orderid=" +orderid+"&username=" +username+"&productname="+URLDecoder.decode(productname, "utf-8")+
+     			   "&amount=" +amount+"&roleid=" +roleid+"&serverid=" +serverid+"&appid=" +appid+"&paytime="+paytime+
+     			   "&remarks="+remarks+"&appkey=" +ckey;
+            logger.info("md5param-->"+md5param);
+            String md5token = TokenVerify.md5(md5param);
+     
+            if (!token.toLowerCase().equals(md5token.toLowerCase())) {
+                return "SIGN IS ERROR";
+            }
+            
+            //step2 订单查询
+            Order o = orderTestService.getOrderById(remarks);
+            
+            if(o==null){
+            	return "order is null";
+            }
+            if (o.getSTATUS().equals("1")) {
+                return "SUCCESS";
+            }
+            
+            //step3 根据订单金额查询支付充值金币数量（巨坑，小心...）
+            Paycard paycard = paycardService.getGold(String.valueOf(amount / 100));
+            if (paycard == null) {
+            	
+	                AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
+	                int reggold = Integer.valueOf(o.getREGAMOUNT()) / 10;
+	                int a = Integer.valueOf(appUser.getBALANCE()) + reggold;
+	                appUser.setBALANCE(String.valueOf(a));
+	                appuserService.updateAppUserBalanceById(appUser);
+	                Payment payment = new Payment();
+	                payment.setGOLD(String.valueOf(reggold));
+	                payment.setUSERID(o.getUSER_ID());
+	                payment.setDOLLID(null);
+	                payment.setCOST_TYPE("5"); //交易类型
+	                payment.setREMARK( URLDecoder.decode(username, "utf-8"));
+	                paymentService.reg(payment);
+	                
+	                
+	                o.setORDER_NO(orderid);
+	                o.setREGGOLD(String.valueOf(reggold));
+	                o.setSTATUS("1");
+	                orderTestService.update(o);
+	                return "SUCCESS";
+             }
+            	//充值的金币数量
+                int gold = Integer.valueOf(paycard.getGOLD());
+                String award = "";
+                String rechare = "";
+                switch (gold) {
+                    case 65:
+                        rechare = "60";
+                        award = "5";
+                        break;
+                    case 335:
+                        rechare = "300";
+                        award = "35";
+                        break;
+                    case 800:
+                        rechare = "680";
+                        award = "120";
+                        break;
+                    case 1600:
+                        rechare = "1280";
+                        award = "320";
+                        break;
+                    case 4375:
+                        rechare = "3280";
+                        award = "1095";
+                        break;
+                    case 9260:
+                        rechare = "6480";
+                        award = "2780";
+                        break;
+                }
+                
+                //step4 更新账户金币余额
+                AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
+                int a = Integer.valueOf(appUser.getBALANCE()) + gold;
+                appUser.setBALANCE(String.valueOf(a));
+                appuserService.updateAppUserBalanceById(appUser);
+                
+                //step5 更新收支表
+                Payment payment = new Payment();
+                payment.setGOLD("+" + rechare);
+                payment.setUSERID(o.getUSER_ID());
+                payment.setDOLLID(null);
+                payment.setCOST_TYPE("5");
+                payment.setREMARK("充值" + rechare);
+                paymentService.reg(payment);
+                
+                //step6 更新奖励明细
+                Payment payment1 = new Payment();
+                payment1.setGOLD("+" + award);
+                payment1.setUSERID(o.getUSER_ID());
+                payment1.setDOLLID(null);
+                payment1.setCOST_TYPE("9");
+                payment1.setREMARK("奖励" + award);
+                paymentService.reg(payment1);
+      
+                //step7 更新订单
+                o.setORDER_NO(orderid);
+                o.setREGGOLD(String.valueOf(gold));
+                o.setSTATUS("1");
+                orderTestService.update(o);
+                
+            return "SUCCESS";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "SYSTEM ERROR";
+        }
+    }
 
 }

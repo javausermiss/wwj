@@ -125,7 +125,8 @@ public class Const {
 	public enum SDKMenuType{
 		
 		YSDK("YSDK"),
-		ASDK("ASDK");
+		ASDK("ASDK"),
+		W8SDK("W8SDK");
 		
 		private String value;
 		

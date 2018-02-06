@@ -71,6 +71,18 @@
                                             </option>
                                         </select>
                                     </td>
+                                     <td style="vertical-align:top;padding-left:2px;">
+                                        <select class="chosen-select form-control" name="DOLL_TYPE" id="DOLL_TYPE"
+                                                data-placeholder="请选择H5是否可见" style="vertical-align:top;width: 120px;">
+                                        	<option value=""></option>
+                                            <option value="Y"
+                                                    <c:if test="${pd.DOLL_TYPE == 'Y' }">selected</c:if> >H5可见
+                                            </option>
+                                            <option value="N"
+                                                    <c:if test="${pd.DOLL_TYPE == 'N' }">selected</c:if> >H5不可见
+                                            </option>
+                                        </select>
+                                    </td>
 								<c:if test="${QX.cha == 1 }">
 								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
 								</c:if>
@@ -89,6 +101,7 @@
 									<th class="center">网关SN</th>
 									<th class="center">网关状态</th>
 									<th class="center">DOLL_ID</th>
+									<th class="center">H5可见</th>
 									<th class="center">DOLL_NAME</th>
 									<th class="center">摄像头编号</th>
 									<th class="center">推流服务名称</th>
@@ -113,6 +126,7 @@
 											<td class='center'>${var.DOLL_SN}</td>
 											<td class='center'>${var.DOLL_STATE}</td>
 											<td class='center'>${var.DOLL_ID}</td>
+											<td class='center'>${var.DOLL_TYPE}</td>
 											<td class='center'>${var.DOLL_NAME}</td>
 											<td class='center'>${var.CAMERA_NUM}</td>
 											<td class='center'>${var.SERVER_NAME}</td>
