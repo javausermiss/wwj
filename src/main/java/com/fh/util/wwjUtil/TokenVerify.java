@@ -38,7 +38,7 @@ public class TokenVerify {
      * @return
      */
     public static String verifyForW8sdk(SortedMap<String, String> paramsMap) {
-    	 String ckey = PropertiesUtils.getCurrProperty("api.app.w8sdk.ckey");
+    	 String cid = PropertiesUtils.getCurrProperty("api.app.w8sdk.cid");
     	 StringBuffer basestring = new StringBuffer();
     	 Map<String, Object> sortedParams = new TreeMap<String, Object>(paramsMap);
          Set<Map.Entry<String, Object>> entrys = sortedParams.entrySet();
@@ -46,7 +46,8 @@ public class TokenVerify {
          for (Map.Entry<String, Object> param : entrys) {
              basestring.append(param.getKey()).append('=').append(param.getValue()).append('&');
          }
-         basestring.append("signatrue=").append(ckey);
+         basestring.append("appkey=").append(cid);
+         logger.info(basestring.toString());
          return TokenVerify.md5(basestring.toString());
     }
     
