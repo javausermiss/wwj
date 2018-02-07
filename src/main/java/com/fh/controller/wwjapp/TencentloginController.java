@@ -234,7 +234,7 @@ public class TencentloginController extends BaseController {
          	}else if(Const.SDKMenuType.W8SDK.getValue().equals(ctype)){
          		//token 验证
          		SortedMap<String, String> paramsMap=new TreeMap<String, String>();
-         		paramsMap.put("uid", userId);
+         		paramsMap.put("userId", userId);
          		paramsMap.put("ctype", ctype);
          		paramsMap.put("channel", channel);
          		String sign= TokenVerify.verifyForW8sdk(paramsMap); //w8SDK
