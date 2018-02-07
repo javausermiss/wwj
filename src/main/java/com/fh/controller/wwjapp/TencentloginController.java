@@ -238,6 +238,7 @@ public class TencentloginController extends BaseController {
          		paramsMap.put("ctype", ctype);
          		paramsMap.put("channel", channel);
          		String sign= TokenVerify.verifyForW8sdk(paramsMap); //w8SDK
+         		
          		if(sign.equals(accessToken)){
          			code="SUCCESS";
          		}
