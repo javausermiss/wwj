@@ -61,11 +61,39 @@
 		</property>
 	</bean>
 	
+	
+	<!-- 定时刷新字典数据-->
+	<bean id="baseDictBizJob" class="com.fh.job.BaseDictBizJob"></bean>
+
+    <bean id="baseDictBizTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="baseDictBizJob" />
+		</property>
+		<property name="targetMethod">
+			<value>doBaseDictJob</value>
+		</property>
+	    <property name="concurrent">  
+	        <value>false</value>  
+	    </property>  		
+	</bean>
+	
+		
+	<!--触发的时间  每次相隔1分钟执行 -->
+	<bean id="baseDictBizTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="baseDictBizTask" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0/1 * * * ?</value>
+		</property>
+	</bean>
+	
 	<bean autowire="no" id="startQuartz" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-				<ref bean="srsCameraBizTrigger" />
-				<ref bean="dollStateBizTrigger" />
+<!-- 				<ref bean="srsCameraBizTrigger" /> -->
+<!-- 				<ref bean="dollStateBizTrigger" /> -->
+				<ref bean="baseDictBizTrigger" />
 			</list>
 		</property>
 	</bean>	

@@ -16,7 +16,7 @@ public interface AppUserCodeManager{
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void save(PageData pd)throws Exception;
+	public int save(PageData pd)throws Exception;
 	
 	/**删除
 	 * @param pd
@@ -53,6 +53,18 @@ public interface AppUserCodeManager{
 	 * @throws Exception
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception;
+	
+	/**根据code查询用户兑换码
+	 * @param pd
+	 * @throws Exception
+	 */
+	public PageData getUserCodeByCode(String randomCode)throws Exception;
+	
+	/**根据userId查询用户兑换码
+	 * @param pd
+	 * @throws Exception
+	 */
+	public PageData getUserCodeByUserId(String userId)throws Exception;
 	
 }
 

@@ -73,6 +73,25 @@
 			CODE_ID = #{CODE_ID}
 	</select>
 	
+
+	<select id="getUserCodeByCode" parameterType="String" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			CODE_VALUE = #{CODE_VALUE}
+	</select>
+	
+	<select id="getUserCodeByUserId" parameterType="String" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			USER_ID = #{USER_ID}
+	</select>
+	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
 		select

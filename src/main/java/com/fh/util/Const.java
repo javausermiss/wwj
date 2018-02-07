@@ -80,7 +80,9 @@ public class Const {
 		cost_type07("兑换娃娃","7"),
 		cost_type08("签到奖励","8"),
 		cost_type09("充值奖励","9"),
-		cost_type10("内调","10");
+		cost_type10("内调","10"),
+		cost_type11("邀请码兑换奖励","11"),
+		cost_type12("邀请码分享奖励","12");
 		
 		private  String name;
 		private  String value;
@@ -156,6 +158,95 @@ public class Const {
 		}
 		public String getValue() {
 			return value;
+		}
+	}
+	
+	
+	/**
+	 * 
+	 * @author JAVA_DEV
+	 *
+	 */
+	public enum RedisDictKeyConst{
+		
+		USER_AWARD_CODE_NUM("邀请兑换次数","USER_AWARD_CODE_NUM"),
+		USER_AWARD_CODE_AMOUNT("兑换奖励金额","USER_AWARD_CODE_AMOUNT");
+		
+		private  String name;
+		private  String value;
+
+		RedisDictKeyConst(String name, String value) {
+			this.name = name;
+			this.value = value;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getValue() {
+			return value;
+		}
+
+		public void setValue(String value) {
+			this.value = value;
+		}
+
+		public static PlayMentCostType findByCode(String value) {
+			for (PlayMentCostType t : PlayMentCostType.values()) {
+				if (t.value.equalsIgnoreCase(value)) {
+					return t;
+				}
+			}
+			return null;
+		}
+	}
+	
+	
+	/**
+	 * 
+	 * @author JAVA_DEV
+	 *
+	 */
+	public enum BaseDictRedisHsetKey{
+		
+		USER_AWARD_REDIS_HSET("金币兑换","USER_AWARD_REDIS_HSET");
+		
+		private  String name;
+		private  String value;
+
+		BaseDictRedisHsetKey(String name, String value) {
+			this.name = name;
+			this.value = value;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getValue() {
+			return value;
+		}
+
+		public void setValue(String value) {
+			this.value = value;
+		}
+
+		public static PlayMentCostType findByCode(String value) {
+			for (PlayMentCostType t : PlayMentCostType.values()) {
+				if (t.value.equalsIgnoreCase(value)) {
+					return t;
+				}
+			}
+			return null;
 		}
 	}
 }

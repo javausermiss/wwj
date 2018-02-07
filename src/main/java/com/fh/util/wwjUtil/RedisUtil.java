@@ -543,7 +543,7 @@ public class RedisUtil {
      * @param value
      * @return 如果存在返回0 异常返回null
      */
-    public Long hset(String key, String field, String value) {
+    public static Long hset(String key, String field, String value) {
         Jedis jedis = null;
         Long res = null;
         try {
@@ -630,6 +630,8 @@ public class RedisUtil {
         }
         return res;
     }
+    
+
 
     /**
      * <p>

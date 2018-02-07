@@ -38,7 +38,7 @@ public class TokenVerify {
      * @return
      */
     public static String verifyForW8sdk(SortedMap<String, String> paramsMap) {
-    	 String cid = PropertiesUtils.getCurrProperty("api.app.w8sdk.cid");
+    	 String cid ="04BgZOnKvyR8l7DtGRTTDQadKHwg9gEx";
     	 StringBuffer basestring = new StringBuffer();
     	 Map<String, Object> sortedParams = new TreeMap<String, Object>(paramsMap);
          Set<Map.Entry<String, Object>> entrys = sortedParams.entrySet();
@@ -175,18 +175,13 @@ public class TokenVerify {
 
     public static void main(String[] a) throws IOException {
 
-        // String s = TokenVerify.md5(getSignature("20171214145904274", "rcWhucD6efT=", "aed34f22d80e430a868c083da0e4de07", "a1ad355608497f73f0bc31831197e103235b5b28c95967a76680ba7cb9cca23f949ebc1d236ce4b7e95e1d4e9dd88da01dcbf0e7571db6031af35f379932d0237d91e33b90ce235bd10382ec9b684191c5aaeec4"));
-
-        //String s1 = TokenVerify.verify("64aa295a37af4df8b3075c8ed302294c");
-        // System.out.println(s1);
-        Map<String, Object> map = new HashMap<>();
-        map.put("expire", 3600);
-        map.put("sdasd", "sadasdasdasdw");
-        String a1 = TokenVerify.md5("123");
-        System.out.println(a1);
-        String S = "http://wx.qlogo.cn/mmopen/vi_32/ZQTY6hsXAECWXNic3416yKEfAuyHaWWcZ4rMAvw2DpHEEacG9g6bmXpPia5HraHdnn1P965JILptY02Sd7yUamDQ/46";
-
-
+   		SortedMap<String, String> paramsMap=new TreeMap<String, String>();
+ 		paramsMap.put("userId", "wx1505750717983412");
+ 		paramsMap.put("ctype", "W8SDK");
+ 		paramsMap.put("channel", "H5");
+ 		String sign= TokenVerify.verifyForW8sdk(paramsMap); //w8SDK
+ 		
+ 		System.out.println(sign);
     }
 
 

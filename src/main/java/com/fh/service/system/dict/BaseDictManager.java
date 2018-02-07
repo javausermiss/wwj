@@ -1,7 +1,6 @@
-package com.fh.service.system.appuser;
+package com.fh.service.system.dict;
 
 import java.util.List;
-
 import com.fh.entity.Page;
 import com.fh.util.PageData;
 
@@ -11,13 +10,13 @@ import com.fh.util.PageData;
  * 创建时间：2018-02-06
  * @version
  */
-public interface AppUserAwardListManager{
+public interface BaseDictManager{
 
 	/**新增
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void save(PageData pd)throws Exception;
+	public int save(PageData pd)throws Exception;
 	
 	/**删除
 	 * @param pd
@@ -55,36 +54,6 @@ public interface AppUserAwardListManager{
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception;
 	
-	/**
-	 * 查找用户兑换码获取奖励得金币
-	 * @param userId
-	 * @return
-	 * @throws Exception
-	 */
-	public PageData  findAwardCountByUserId(String userId)throws Exception;
 	
-	
-	/**
-	 * awarkPd 用户邀请码
-	 * userId  当前提交邀请码的userId
-	 * @throws Exception
-	 */
-	public void doAwardByUserCode(PageData awarkPd,String userId,String IMEI_ID)throws Exception;
-	
-	/**
-	 * 查询用户Id是否已经兑换
-	 * @param pd
-	 * @return
-	 * @throws Exception
-	 */
-	public int findUserAwardByUserId(String userId)throws Exception;
-	
-	/**
-	 * 查询用户APP是否已经兑换
-	 * @param pd
-	 * @return
-	 * @throws Exception
-	 */
-	public int findUserAwardByAppId(String userId)throws Exception;
 }
 
