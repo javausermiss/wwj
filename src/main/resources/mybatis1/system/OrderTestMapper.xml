@@ -11,7 +11,8 @@
         ORDER_ID,
         USER_ID,
         CREATETIME ,
-        REGAMOUNT
+        REGAMOUNT,
+        REGGOLD
         )
         VALUES
         (
@@ -19,7 +20,8 @@
         #{ORDER_ID},
         #{USER_ID},
         now(),
-        #{REGAMOUNT}
+        #{REGAMOUNT},
+        #{REGGOLD}
         )
     </insert>
 
