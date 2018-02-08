@@ -170,7 +170,7 @@ public class AppUserBalanceController extends BaseController {
             String glodNum = "";
             switch (Integer.parseInt(paycard.getAMOUNT())) {
                 case 6:
-                	glodNum = "605";
+                	glodNum = "65";
                     break;
                 case 30:
                 	glodNum = "335";
