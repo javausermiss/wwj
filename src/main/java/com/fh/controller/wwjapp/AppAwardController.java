@@ -139,7 +139,7 @@ public class AppAwardController extends BaseController {
 				//当前用户是否已经兑换
 				s=appUserAwardListService.findUserAwardByAppId(reqData.getString("sfId"));
 				if(s>0){
-					return RespStatus.fail("当前用户App已经兑换");
+					return RespStatus.fail("当前设备已经兑换");
 				}
 			}
     		
