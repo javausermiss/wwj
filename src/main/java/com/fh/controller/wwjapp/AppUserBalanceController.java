@@ -76,7 +76,6 @@ public class AppUserBalanceController extends BaseController {
      * @param phone
      * @return
      */
-
     public JSONObject getAppUserInfo(String phone) {
         try {
             AppUser appUser = appuserService.getUserByPhone(phone);
