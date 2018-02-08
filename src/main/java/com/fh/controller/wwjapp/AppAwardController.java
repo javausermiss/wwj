@@ -75,10 +75,31 @@ public class AppAwardController extends BaseController {
 			//查询统计用户分享数 和 分享奖励金币数量
 			PageData awardPd=appUserAwardListService.findAwardCountByUserId(userId);
 			
+			//兑换奖励限制
+			PageData setPd=new PageData();
+			//兑换金币数
+			setPd.put("exchangeAmount", RedisUtil.hget(BaseDictRedisHsetKey.USER_AWARD_REDIS_HSET.getValue(),RedisDictKeyConst.USER_AWARD_CODE_AMOUNT.getValue()));
+			//邀请金币数量
+			setPd.put("inviteAmount", RedisUtil.hget(BaseDictRedisHsetKey.USER_AWARD_REDIS_HSET.getValue(),RedisDictKeyConst.USER_AWARD_CODE_INVITE_AMOUNT.getValue()));
+			//邀请可兑换次数
+			setPd.put("inviteTotalNum", RedisUtil.hget(BaseDictRedisHsetKey.USER_AWARD_REDIS_HSET.getValue(),RedisDictKeyConst.USER_AWARD_CODE_NUM.getValue()));
+			
+
+			
 			//返回
 			 Map<String, Object> dataMap = new HashMap<>();
 			 dataMap.put("awardPd", awardPd);
+			 dataMap.put("setPd", setPd);
 			 dataMap.put("codeVale", userCode.getString("CODE_VALUE"));
+			 
+			/**查看用户是否已经兑换*/
+			int s=appUserAwardListService.findUserAwardByUserId(userId);
+			if(s>0){
+				 dataMap.put("awradFlag", "Y");
+			}else{
+				 dataMap.put("awradFlag", "N");
+			}
+	
              return RespStatus.successs().element("data", dataMap);
 		} catch (Exception e) {
 			logger.info(e.getMessage());
@@ -153,11 +174,34 @@ public class AppAwardController extends BaseController {
 			}
 			appUserAwardListService.doAwardByUserCode(awarkPd, userId, reqData.getString("sfId"));
 			
+			//兑换奖励限制
+			PageData setPd=new PageData();
+			//兑换金币数
+			setPd.put("exchangeAmount", RedisUtil.hget(BaseDictRedisHsetKey.USER_AWARD_REDIS_HSET.getValue(),RedisDictKeyConst.USER_AWARD_CODE_AMOUNT.getValue()));
+			//邀请金币数量
+			setPd.put("inviteAmount", RedisUtil.hget(BaseDictRedisHsetKey.USER_AWARD_REDIS_HSET.getValue(),RedisDictKeyConst.USER_AWARD_CODE_INVITE_AMOUNT.getValue()));
+			//邀请可兑换次数
+			setPd.put("inviteTotalNum", RedisUtil.hget(BaseDictRedisHsetKey.USER_AWARD_REDIS_HSET.getValue(),RedisDictKeyConst.USER_AWARD_CODE_NUM.getValue()));
+			 
+			
+			Map<String, Object> dataMap = new HashMap<>();
+			dataMap.put("setPd", setPd);
+			
+			/**查看用户是否已经兑换*/
+			s=appUserAwardListService.findUserAwardByUserId(userId);
+			if(s>0){
+				 dataMap.put("awradFlag", "Y");
+			}else{
+				 dataMap.put("awradFlag", "N");
+			}
+			
+			return RespStatus.successs().element("data", dataMap);
+			
 		} catch (Exception e) {
 			logger.info(e.getMessage());
 			return RespStatus.fail();
 		}
-    	return RespStatus.successs();
+    
     }
 
 }
