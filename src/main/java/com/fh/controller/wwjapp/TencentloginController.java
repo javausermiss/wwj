@@ -114,7 +114,7 @@ public class TencentloginController extends BaseController {
          		SortedMap<String, String> paramsMap=new TreeMap<String, String>();
          		paramsMap.put("uid", userId);
          		paramsMap.put("nickName", nickname);
-         		paramsMap.put("imageUrl", imageUrl);
+         		paramsMap.put("imageUrl", "");
          		paramsMap.put("ctype", ctype);
          		paramsMap.put("channel", channel);
          		String sign= TokenVerify.verifyForW8sdk(paramsMap); //w8SDK
