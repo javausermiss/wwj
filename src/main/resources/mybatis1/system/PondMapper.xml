@@ -17,7 +17,7 @@
         CREATE_DATE,
         UPDATA_DATE,
         POND_FLAG,
-        DOLLID
+        DOLL_ID
 
     </sql>
 
@@ -114,6 +114,21 @@
       ASC
 
     </select>
+
+    <update id="updatePondGuesser" parameterType="com.fh.entity.system.Pond">
+        UPDATE
+        <include refid="tableName"/>
+        SET
+        GUESSER_NAME = #{GUESSER_NAME}
+        WHERE
+        POND_ID = #{POND_ID}
+    </update>
+
+    <select id="getGuesserlast10" resultType="com.fh.entity.system.Pond">
+        SELECT *  FROM <include refid="tableName"/> where GUESSER_NAME != '' ORDER BY CREATE_DATE DESC limit 0,10
+    </select>
+
+
 
 
 

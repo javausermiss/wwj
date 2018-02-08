@@ -63,5 +63,24 @@ public interface PondManager {
      */
     public List<Pond> getGuessList (String dollId) throws Exception;
 
+    /**
+     * 添加竞猜获胜者昵称
+     * @param pond
+     * @return
+     * @throws Exception
+     */
+    public int updatePondGuesser(Pond pond)throws Exception;
+
+    /**
+     * 获取最近的10场竞猜记录
+     * @return
+     * @throws Exception
+     */
+    public List<Pond> getGuesserlast10()throws Exception;
+
+
+
+
+
 
 }

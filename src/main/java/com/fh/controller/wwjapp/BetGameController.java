@@ -180,7 +180,7 @@ public class BetGameController {
 
         try {
             Pond pond = new Pond();
-            pond.setDOLLID(dollId);
+            pond.setDOLL_ID(dollId);
             pond.setGUESS_ID(guessid);
             Pond pond1 = pondService.getPondByPlayId(pond);
             if (pond1 == null) {
@@ -244,6 +244,26 @@ public class BetGameController {
 
     }
 
+    /**
+     * 获取最近的10条竞猜记录(不包含无人竞猜的记录)
+     * @return
+     */
+    @RequestMapping(value = "/getGuesserlast10", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+
+    public JSONObject getGuesserlast10(){
+        try {
+            List<Pond> list = pondService.getGuesserlast10();
+            Map<String,Object> map = new HashMap<>();
+            map.put("pondList",list);
+            return RespStatus.successs().element("data",map);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return RespStatus.fail();
+        }
+
+    }
 
 
 
@@ -251,4 +271,9 @@ public class BetGameController {
 
 
 
-}
+
+
+
+
+
+    }

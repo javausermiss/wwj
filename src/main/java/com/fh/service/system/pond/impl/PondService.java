@@ -46,4 +46,14 @@ public class PondService implements PondManager {
     public List<Pond> getGuessList(String dollId) throws Exception {
         return (List<Pond>)dao.findForList("PondMapper.getGuessList",dollId);
     }
+
+    @Override
+    public int updatePondGuesser(Pond pond) throws Exception {
+        return (int)dao.update("PondMapper.updatePondGuesser",pond);
+    }
+
+    @Override
+    public List<Pond> getGuesserlast10() throws Exception {
+        return (List<Pond>)dao.findForList("PondMapper.getGuesserlast10",null);
+    }
 }
