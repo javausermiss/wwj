@@ -17,6 +17,8 @@ public class Pond {
     private String DOLL_ID;
     private String GUESS_STATE;//实际抓取结果
     private Integer ALLPEOPLE;//竞猜总人数
+    private String GUESSER_NAME;//获胜者昵称
+
 
     public Pond() {
 
@@ -26,6 +28,14 @@ public class Pond {
         this.GUESS_ID = GUESS_ID;
         this.CREATE_DATE = CREATE_DATE;
         this.DOLL_ID = DOLLID;
+    }
+
+    public String getGUESSER_NAME() {
+        return GUESSER_NAME;
+    }
+
+    public void setGUESSER_NAME(String GUESSER_NAME) {
+        this.GUESSER_NAME = GUESSER_NAME;
     }
 
     public Integer getALLPEOPLE() {
@@ -72,13 +82,6 @@ public class Pond {
         return POND_FLAG;
     }
 
-    public String getDOLLID() {
-        return DOLL_ID;
-    }
-
-    public void setDOLLID(String DOLL_ID) {
-        this.DOLL_ID = DOLL_ID;
-    }
 
     public void setPOND_FLAG(String POND_FLAG) {
         this.POND_FLAG = POND_FLAG;
@@ -139,4 +142,6 @@ public class Pond {
     public void setUPDATE_DATE(String UPDATE_DATE) {
         this.UPDATE_DATE = UPDATE_DATE;
     }
+
+
 }

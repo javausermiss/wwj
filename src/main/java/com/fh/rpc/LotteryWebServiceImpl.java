@@ -222,7 +222,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
 
             //设置奖池表的中奖数字
             Pond p = new Pond();
-            p.setDOLLID(roomId);
+            p.setDOLL_ID(roomId);
             p.setGUESS_ID(playDetail.getGUESS_ID());
             Pond pond = pondService.getPondByPlayId(p);//查询对应奖池信息
             pond.setGUESS_STATE(reword_num);

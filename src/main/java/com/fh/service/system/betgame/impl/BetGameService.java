@@ -230,7 +230,7 @@ public class BetGameService extends BaseController implements BetGameManager {
         //更新奖池信息
         Pond pond1 = new Pond();
         pond1.setGUESS_ID(guessId);
-        pond1.setDOLLID(dollId);
+        pond1.setDOLL_ID(dollId);
         Pond pond = pondService.getPondByPlayId(pond1);
         Map<String, Object> map = new HashMap<>();
         map.put("pond", getPondInfo(pond.getPOND_ID()));
@@ -305,6 +305,9 @@ public class BetGameService extends BaseController implements BetGameManager {
         List<GuessDetailL> list = this.getWinByNum(guessDetailL);
 
         List<GuessDetail> guessDetail_list = new LinkedList<>();
+
+        StringBuilder sb  = new StringBuilder();
+
         if (list.size() != 0) {
             logger.info("竞猜成功者数量--------------->" + list.size());
             for (int i = 0; i < list.size(); i++) {
@@ -341,7 +344,18 @@ public class BetGameService extends BaseController implements BetGameManager {
                 payment.setREMARK("竞猜成功");
                 paymentService.reg(payment);
 
+                sb.append(appUser.getNICKNAME()).append(",");
+
             }
+
+            sb.deleteCharAt(sb.length()-1);
+            //获取每期中奖者的昵称
+            Pond pond_n = new Pond();
+            pond_n.setGUESS_ID(playDetail.getGUESS_ID());
+            pond_n.setDOLL_ID(dollId);
+            Pond pond = pondService.getPondByPlayId(pond_n);//查询对应奖池信息
+            pond.setGUESSER_NAME(sb.toString());
+            pondService.updatePondGuesser(pond);
 
         }
         //竞猜失败的用户
