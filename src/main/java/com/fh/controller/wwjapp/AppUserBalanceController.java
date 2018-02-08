@@ -1,7 +1,29 @@
 package com.fh.controller.wwjapp;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.fh.controller.base.BaseController;
-import com.fh.entity.system.*;
+import com.fh.entity.system.AppUser;
+import com.fh.entity.system.Order;
+import com.fh.entity.system.Paycard;
+import com.fh.entity.system.Payment;
 import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.doll.DollManager;
 import com.fh.service.system.ordertest.OrderTestManager;
@@ -15,19 +37,8 @@ import com.fh.util.wwjUtil.MyUUID;
 import com.fh.util.wwjUtil.RedisUtil;
 import com.fh.util.wwjUtil.RespStatus;
 import com.fh.util.wwjUtil.TokenVerify;
-import com.sun.media.jfxmedia.logging.Logger;
 
 import net.sf.json.JSONObject;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.annotation.Resource;
-import java.net.URLDecoder;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 @Controller
 @RequestMapping(value = "/pay")
@@ -144,7 +155,7 @@ public class AppUserBalanceController extends BaseController {
     public JSONObject getTradeOrder(
             @RequestParam("userId") String userId,
             @RequestParam("accessToken") String accessToken,
-            @RequestParam("amount") String amounr
+            @RequestParam("amount") String amount
     ) {
         try {
 
@@ -154,6 +165,32 @@ public class AppUserBalanceController extends BaseController {
             }
             String datetime = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
             boolean a = RedisUtil.getRu().exists("tradeOrder");
+            
+            //获取金币数量 临时解决方案  begin 请注意 坑................
+            Paycard paycard = paycardService.getGold(String.valueOf(Integer.parseInt(amount) / 100));
+            String glodNum = "";
+            switch (Integer.parseInt(paycard.getAMOUNT())) {
+                case 6:
+                	glodNum = "605";
+                    break;
+                case 30:
+                	glodNum = "335";
+                    break;
+                case 68:
+                	glodNum = "800";
+                    break;
+                case 128:
+                	glodNum = "1600";
+                    break;
+                case 328:
+                	glodNum = "4375";
+                    break;
+                case 648:
+                	glodNum = "9260";
+                    break;
+            }
+            //获取金币数量 临时解决方案  end 请注意 坑................
+            
             if (a) {
                 String tradeOrder = RedisUtil.getRu().get("tradeOrder");
                 String x = tradeOrder.substring(0, 8);//取前八位进行判断
@@ -165,8 +202,9 @@ public class AppUserBalanceController extends BaseController {
                     Order order = new Order();
                     order.setUSER_ID(userId);
                     order.setREC_ID(MyUUID.getUUID32());
-                    order.setREGAMOUNT(amounr);
+                    order.setREGAMOUNT(amount);
                     order.setORDER_ID(newOrder);
+                    order.setREGGOLD(glodNum);//充值的金币数量
                     orderTestService.regmount(order);
                     Map<String, Object> map = new HashMap<>();
                     map.put("Order", getOrderInfo(order.getORDER_ID()));
@@ -177,8 +215,9 @@ public class AppUserBalanceController extends BaseController {
                     Order order = new Order();
                     order.setUSER_ID(userId);
                     order.setREC_ID(MyUUID.getUUID32());
-                    order.setREGAMOUNT(amounr);
+                    order.setREGAMOUNT(amount);
                     order.setORDER_ID(newOrder);
+                    order.setREGGOLD(glodNum);//充值的金币数量
                     orderTestService.regmount(order);
                     Map<String, Object> map = new HashMap<>();
                     map.put("Order", getOrderInfo(order.getORDER_ID()));
@@ -190,8 +229,9 @@ public class AppUserBalanceController extends BaseController {
                 Order order = new Order();
                 order.setUSER_ID(userId);
                 order.setREC_ID(MyUUID.getUUID32());
-                order.setREGAMOUNT(amounr);
+                order.setREGAMOUNT(amount);
                 order.setORDER_ID(newOrder);
+                order.setREGGOLD(glodNum); //充值的金币数量
                 orderTestService.regmount(order);
                 Map<String, Object> map = new HashMap<>();
                 map.put("Order", getOrderInfo(order.getORDER_ID()));
@@ -605,29 +645,28 @@ public class AppUserBalanceController extends BaseController {
 
     @RequestMapping(value = "/w8OrderCallBack", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public String w8OrderCallBack(
-            @RequestParam("orderid") String orderid,
-            @RequestParam("username") String username,
-            @RequestParam("productname") String productname,
-            @RequestParam("amount") double amount,
-            @RequestParam("roleid") String roleid,
-            @RequestParam("serverid") String serverid,
-            @RequestParam("appid") int appid,
-            @RequestParam("paytime") String paytime,
-            @RequestParam("token") String token,
-            @RequestParam("remarks") String remarks
-    ) {
+    public String w8OrderCallBack(HttpServletRequest request) {
+    	 String orderid=request.getParameter("orderid");
+         String username=request.getParameter("username");
+         String productname=request.getParameter("productname");
+         double amount=new Double(request.getParameter("amount"));
+         String roleid=request.getParameter("roleid");
+         String serverid=request.getParameter("serverid");
+         String appid=request.getParameter("appid");
+         String paytime=request.getParameter("paytime");
+         String token=request.getParameter("token");
+         String remarks=request.getParameter("remarks");
         try {
         	
-        	String ckey = PropertiesUtils.getCurrProperty("api.app.w8sdk.ckey");
+        	String cid = PropertiesUtils.getCurrProperty("api.app.w8sdk.cid");
         	//step1 签名验证
        
             if(token ==null || "".equals(token)){
             	 return "SIGN IS NULL";
             }
-            String md5param = "orderid=" +orderid+"&username=" +username+"&productname="+URLDecoder.decode(productname, "utf-8")+
+            String md5param = "orderid=" +orderid+"&username=" +username+"&productname="+URLEncoder.encode(productname, "utf-8")+
      			   "&amount=" +amount+"&roleid=" +roleid+"&serverid=" +serverid+"&appid=" +appid+"&paytime="+paytime+
-     			   "&remarks="+remarks+"&appkey=" +ckey;
+     			   "&remarks="+remarks+"&appkey=" +cid;
             logger.info("md5param-->"+md5param);
             String md5token = TokenVerify.md5(md5param);
      
@@ -645,32 +684,9 @@ public class AppUserBalanceController extends BaseController {
                 return "SUCCESS";
             }
             
-            //step3 根据订单金额查询支付充值金币数量（巨坑，小心...）
-            Paycard paycard = paycardService.getGold(String.valueOf(amount / 100));
-            if (paycard == null) {
-            	
-	                AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
-	                int reggold = Integer.valueOf(o.getREGAMOUNT()) / 10;
-	                int a = Integer.valueOf(appUser.getBALANCE()) + reggold;
-	                appUser.setBALANCE(String.valueOf(a));
-	                appuserService.updateAppUserBalanceById(appUser);
-	                Payment payment = new Payment();
-	                payment.setGOLD(String.valueOf(reggold));
-	                payment.setUSERID(o.getUSER_ID());
-	                payment.setDOLLID(null);
-	                payment.setCOST_TYPE("5"); //交易类型
-	                payment.setREMARK( URLDecoder.decode(username, "utf-8"));
-	                paymentService.reg(payment);
-	                
-	                
-	                o.setORDER_NO(orderid);
-	                o.setREGGOLD(String.valueOf(reggold));
-	                o.setSTATUS("1");
-	                orderTestService.update(o);
-	                return "SUCCESS";
-             }
+
             	//充值的金币数量
-                int gold = Integer.valueOf(paycard.getGOLD());
+                int gold = Integer.valueOf(o.getREGGOLD());
                 String award = "";
                 String rechare = "";
                 switch (gold) {
