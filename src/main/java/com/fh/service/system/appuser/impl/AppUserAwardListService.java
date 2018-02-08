@@ -17,6 +17,7 @@ import com.fh.util.Const.BaseDictRedisHsetKey;
 import com.fh.util.Const.PlayMentCostType;
 import com.fh.util.Const.RedisDictKeyConst;
 import com.fh.util.wwjUtil.RedisUtil;
+import com.fh.util.Logger;
 import com.fh.util.PageData;
 
 /** 
@@ -28,7 +29,8 @@ import com.fh.util.PageData;
 @Service("appUserAwardListService")
 public class AppUserAwardListService implements AppUserAwardListManager{
 	
-	
+	 Logger logger = Logger.getLogger(this.getClass());
+	 
     @Resource(name = "appuserService")
     private AppuserManager appuserService;
     
@@ -141,7 +143,7 @@ public class AppUserAwardListService implements AppUserAwardListManager{
 			String awardNumStr =RedisUtil.hget(BaseDictRedisHsetKey.USER_AWARD_REDIS_HSET.getValue(),RedisDictKeyConst.USER_AWARD_CODE_AMOUNT.getValue());
 			awardNum=Integer.parseInt(awardNumStr);
 		}catch(Exception ex){
-			
+			logger.info(ex.getMessage());
 		}
 		PageData appUserAwardList=new PageData();
 		appUserAwardList.put("USER_ID", userId);
@@ -159,34 +161,41 @@ public class AppUserAwardListService implements AppUserAwardListManager{
         
      
         Payment payment = new Payment();
-        payment.setGOLD("+" + userBlance1);
+        payment.setGOLD("+" + awardNum);
         payment.setUSERID(userId);
         payment.setDOLLID(null);
         payment.setCOST_TYPE(PlayMentCostType.cost_type11.getValue());
-        payment.setREMARK("邀请码兑换奖励" + awardNum);
+        payment.setREMARK("邀请码兑换奖励");
         paymentService.reg(payment);
 		
 		
 		//邀请码分享奖励
+		int invite_awardNum=10;
+		try{
+			String award_Invite_NumStr =RedisUtil.hget(BaseDictRedisHsetKey.USER_AWARD_REDIS_HSET.getValue(),RedisDictKeyConst.USER_AWARD_CODE_INVITE_AMOUNT.getValue());
+			invite_awardNum=Integer.parseInt(award_Invite_NumStr);
+		}catch(Exception ex){
+			logger.info(ex.getMessage());
+		}
 		appUserAwardList=new PageData();
 		appUserAwardList.put("USER_ID", awarkPd.getString("USER_ID"));
 		appUserAwardList.put("CODE_ID", awarkPd.get("CODE_ID").toString()); //1：分享邀请人，2:兑换邀请码人
 		appUserAwardList.put("AWARD_TYPE", "1");
-		appUserAwardList.put("AWARD_NUM",awardNum);
+		appUserAwardList.put("AWARD_NUM",invite_awardNum);
 		this.save(appUserAwardList);
 		
         appUser = appuserService.getUserByID(awarkPd.getString("USER_ID"));
-        int userBlance2 = Integer.valueOf(appUser.getBALANCE()) + awardNum;
+        int userBlance2 = Integer.valueOf(appUser.getBALANCE()) + invite_awardNum;
         appUser.setBALANCE(String.valueOf(userBlance2));
         appuserService.updateAppUserBalanceById(appUser);
         
      
         payment = new Payment();
-        payment.setGOLD("+" + userBlance2);
+        payment.setGOLD("+" + invite_awardNum);
         payment.setUSERID(awarkPd.getString("USER_ID"));
         payment.setDOLLID(null);
         payment.setCOST_TYPE(PlayMentCostType.cost_type12.getValue());
-        payment.setREMARK("邀请码分享奖励" + awardNum);
+        payment.setREMARK("邀请码分享奖励");
         paymentService.reg(payment);
 	}
 }

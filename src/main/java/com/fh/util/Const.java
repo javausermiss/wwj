@@ -170,7 +170,9 @@ public class Const {
 	public enum RedisDictKeyConst{
 		
 		USER_AWARD_CODE_NUM("邀请兑换次数","USER_AWARD_CODE_NUM"),
-		USER_AWARD_CODE_AMOUNT("兑换奖励金额","USER_AWARD_CODE_AMOUNT");
+		USER_AWARD_CODE_AMOUNT("兑换奖励金额","USER_AWARD_CODE_AMOUNT"),
+		USER_AWARD_CODE_INVITE_AMOUNT("邀请奖励金额","USER_AWARD_CODE_INVITE_AMOUNT"),
+		USER_AWARD_CODE_MAX_AMOUNT("兑换奖励总金额","USER_AWARD_CODE_MAX_AMOUNT");
 		
 		private  String name;
 		private  String value;

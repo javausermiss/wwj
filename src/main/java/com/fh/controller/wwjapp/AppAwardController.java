@@ -16,6 +16,9 @@ import com.fh.service.system.appuser.impl.AppUserAwardListService;
 import com.fh.util.PageData;
 import com.fh.util.RandomUtils;
 import com.fh.util.StringUtils;
+import com.fh.util.Const.BaseDictRedisHsetKey;
+import com.fh.util.Const.RedisDictKeyConst;
+import com.fh.util.wwjUtil.RedisUtil;
 import com.fh.util.wwjUtil.RespStatus;
 
 import net.sf.json.JSONObject;
@@ -137,7 +140,15 @@ public class AppAwardController extends BaseController {
 				//已经兑换的次数
 				awardCount=Integer.parseInt(awardTotal.get("AWARDCOUNT").toString());
 			}
-			if(awardCount>100){
+			int invite_awardTotal=100;
+			try{
+				String award_Total_NumStr =RedisUtil.hget(BaseDictRedisHsetKey.USER_AWARD_REDIS_HSET.getValue(),RedisDictKeyConst.USER_AWARD_CODE_NUM.getValue());
+				invite_awardTotal=Integer.parseInt(award_Total_NumStr);
+			}catch(Exception ex){
+				logger.info(ex.getMessage());
+			}
+			
+			if(awardCount>invite_awardTotal){
 				return RespStatus.fail("兑换码次数已经超过限制");
 			}
 			appUserAwardListService.doAwardByUserCode(awarkPd, userId, reqData.getString("sfId"));
