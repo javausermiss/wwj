@@ -133,13 +133,12 @@
 	</delete>
 	
 	<select id="findAwardCountByUserId" parameterType="String" resultType="pd">
-		SELECT l.USER_ID, 
+		SELECT 
 			IFNULL(sum(l.AWARD_NUM),0) as AWARDSUM,
 		    COUNT(l.USER_ID) as AWARDCOUNT 
 		FROM SYS_APP_USER_AWARD_LIST l 
 			where l.CODE_ID=(SELECT c.CODE_ID from SYS_APP_USER_CODE c where c.USER_ID=#{userId} AND c.CODE_TYPE='1' )
 			AND l.AWARD_TYPE='2'
-			GROUP BY l.USER_ID
 	</select>
 
 </mapper>
