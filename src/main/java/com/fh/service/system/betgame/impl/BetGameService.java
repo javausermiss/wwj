@@ -260,9 +260,7 @@ public class BetGameService extends BaseController implements BetGameManager {
         if (playDetail == null) {
             return null;
         }
-        //预期奖金
-        Integer doll_gold = doll.getDOLL_GOLD();
-        int reword = 5 * doll_gold;
+
         logger.info("机器复位时间----------------------->" + DateUtil.getTime());
 
         if (gifinumber != 0) {
@@ -313,6 +311,10 @@ public class BetGameService extends BaseController implements BetGameManager {
             for (int i = 0; i < list.size(); i++) {
                 //更新竞猜记录消息
                 GuessDetailL winPerson = list.get(i);
+
+                //预期奖金
+                int reword  =  winPerson.getGUESS_GOLD()*5;
+
                 winPerson.setSETTLEMENT_GOLD(reword);
                 winPerson.setSETTLEMENT_FLAG("Y");
                 winPerson.setGUESS_TYPE(playDetail.getREWARD_NUM());
