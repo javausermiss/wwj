@@ -12,7 +12,9 @@
         USER_ID,
         CREATETIME ,
         REGAMOUNT,
-        REGGOLD
+        REGGOLD,
+        CTYPE,
+        CHANNEL
         )
         VALUES
         (
@@ -21,7 +23,9 @@
         #{USER_ID},
         now(),
         #{REGAMOUNT},
-        #{REGGOLD}
+        #{REGGOLD},
+        #{CTYPE},
+        #{CHANNEL}
         )
     </insert>
 

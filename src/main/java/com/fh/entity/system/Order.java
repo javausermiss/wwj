@@ -12,8 +12,26 @@ public class Order {
     private String STATUS;
     private String REGGOLD;
     private String ORDER_NO;//外部订单
+    private String CTYPE;
+    private String CHANNEL;
 
     public Order() {
+    }
+
+    public String getCTYPE() {
+        return CTYPE;
+    }
+
+    public void setCTYPE(String CTYPE) {
+        this.CTYPE = CTYPE;
+    }
+
+    public String getCHANNEL() {
+        return CHANNEL;
+    }
+
+    public void setCHANNEL(String CHANNEL) {
+        this.CHANNEL = CHANNEL;
     }
 
     public String getORDER_NO() {

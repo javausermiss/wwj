@@ -154,7 +154,10 @@ public class AppUserBalanceController extends BaseController {
     public JSONObject getTradeOrder(
             @RequestParam("userId") String userId,
             @RequestParam("accessToken") String accessToken,
-            @RequestParam("amount") String amount
+            @RequestParam("amount") String amount,
+            @RequestParam(value="ctype" ,required = false) String ctype,
+            @RequestParam(value = "channel" ,required = false) String channel
+
     ) {
         try {
 
@@ -204,6 +207,8 @@ public class AppUserBalanceController extends BaseController {
                     order.setREGAMOUNT(amount);
                     order.setORDER_ID(newOrder);
                     order.setREGGOLD(glodNum);//充值的金币数量
+                    order.setCHANNEL(channel);
+                    order.setCTYPE(ctype);
                     orderTestService.regmount(order);
                     Map<String, Object> map = new HashMap<>();
                     map.put("Order", getOrderInfo(order.getORDER_ID()));
@@ -217,6 +222,8 @@ public class AppUserBalanceController extends BaseController {
                     order.setREGAMOUNT(amount);
                     order.setORDER_ID(newOrder);
                     order.setREGGOLD(glodNum);//充值的金币数量
+                    order.setCHANNEL(channel);
+                    order.setCTYPE(ctype);
                     orderTestService.regmount(order);
                     Map<String, Object> map = new HashMap<>();
                     map.put("Order", getOrderInfo(order.getORDER_ID()));
@@ -231,6 +238,8 @@ public class AppUserBalanceController extends BaseController {
                 order.setREGAMOUNT(amount);
                 order.setORDER_ID(newOrder);
                 order.setREGGOLD(glodNum); //充值的金币数量
+                order.setCHANNEL(channel);
+                order.setCTYPE(ctype);
                 orderTestService.regmount(order);
                 Map<String, Object> map = new HashMap<>();
                 map.put("Order", getOrderInfo(order.getORDER_ID()));
