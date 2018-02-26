@@ -38,7 +38,7 @@ public class TokenVerify {
      * @return
      */
     public static String verifyForW8sdk(SortedMap<String, String> paramsMap) {
-    	 String cid ="04BgZOnKvyR8l7DtGRTTDQadKHwg9gEx";
+    	 String cid = PropertiesUtils.getCurrProperty("api.app.w8sdk.cid");
     	 StringBuffer basestring = new StringBuffer();
     	 Map<String, Object> sortedParams = new TreeMap<String, Object>(paramsMap);
          Set<Map.Entry<String, Object>> entrys = sortedParams.entrySet();
@@ -175,13 +175,6 @@ public class TokenVerify {
 
     public static void main(String[] a) throws IOException {
 
-   		SortedMap<String, String> paramsMap=new TreeMap<String, String>();
- 		paramsMap.put("userId", "wx1505750717983412");
- 		paramsMap.put("ctype", "W8SDK");
- 		paramsMap.put("channel", "H5");
- 		String sign= TokenVerify.verifyForW8sdk(paramsMap); //w8SDK
- 		
- 		System.out.println(sign);
     }
 
 
