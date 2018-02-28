@@ -13,6 +13,7 @@ import java.util.TreeMap;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import com.fh.util.Const;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -142,11 +143,110 @@ public class AppUserBalanceController extends BaseController {
     }
 
     /**
+     * 订单新接口，以编号获取相应的金币数
+     * @param userId
+     * @param accessToken
+     * @param pid
+     * @param ctype
+     * @param channel
+     * @return
+     */
+
+    @RequestMapping(value = "/getTradeOrder_new", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public JSONObject getTradeOrder_new(
+            @RequestParam("userId") String userId,
+            @RequestParam(value = "accessToken",required = false) String accessToken,
+            @RequestParam("pid") String pid,
+            @RequestParam(value="ctype" ,required = false) String ctype,
+            @RequestParam(value = "channel" ,required = false) String channel
+
+    ) {
+        try {
+
+            AppUser appUser = appuserService.getUserByID(userId);
+            if (appUser == null) {
+                return null;
+            }
+            String datetime = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
+            Paycard paycard =  paycardService.getPayCardById(pid);
+            if (paycard==null){
+                return null;
+            }
+            String glodNum = paycard.getGOLD();//金币数量
+            int amount = Integer.valueOf(paycard.getAMOUNT());//金额
+            boolean a = RedisUtil.getRu().exists("tradeOrder");
+            if (a) {
+                String tradeOrder = RedisUtil.getRu().get("tradeOrder");
+                String x = tradeOrder.substring(0, 8);//取前八位进行判断
+                if (datetime.substring(0, 8).equals(x)) {
+                    String six = tradeOrder.substring(tradeOrder.length() - 6, tradeOrder.length());
+                    String newsix = String.format("%06d", (Integer.valueOf(six) + 1));
+                    String newOrder = datetime + newsix;//新的订单编号
+                    RedisUtil.getRu().set("tradeOrder", newOrder);
+                    Order order = new Order();
+                    order.setUSER_ID(userId);
+                    order.setREC_ID(MyUUID.getUUID32());
+                    order.setREGAMOUNT(String.valueOf(amount*100));//充值金额
+                    order.setORDER_ID(newOrder);
+                    order.setREGGOLD(glodNum);//充值的金币数量
+                    order.setCHANNEL(channel);
+                    order.setCTYPE(ctype);
+                    orderTestService.regmount(order);
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("Order", getOrderInfo(order.getORDER_ID()));
+                    return RespStatus.successs().element("data", map);
+                } else {
+                    String newOrder = datetime + "000001";//新的订单编号
+                    RedisUtil.getRu().set("tradeOrder", newOrder);
+                    Order order = new Order();
+                    order.setUSER_ID(userId);
+                    order.setREC_ID(MyUUID.getUUID32());
+                    order.setREGAMOUNT(String.valueOf(amount*100));
+                    order.setORDER_ID(newOrder);
+                    order.setREGGOLD(glodNum);//充值的金币数量
+                    order.setCHANNEL(channel);
+                    order.setCTYPE(ctype);
+                    orderTestService.regmount(order);
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("Order", getOrderInfo(order.getORDER_ID()));
+                    return RespStatus.successs().element("data", map);
+                }
+            } else {
+                String newOrder = datetime + "000001";//新的订单编号
+                RedisUtil.getRu().set("tradeOrder", newOrder);
+                Order order = new Order();
+                order.setUSER_ID(userId);
+                order.setREC_ID(MyUUID.getUUID32());
+                order.setREGAMOUNT(String.valueOf(amount*100));
+                order.setORDER_ID(newOrder);
+                order.setREGGOLD(glodNum); //充值的金币数量
+                order.setCHANNEL(channel);
+                order.setCTYPE(ctype);
+                orderTestService.regmount(order);
+                Map<String, Object> map = new HashMap<>();
+                map.put("Order", getOrderInfo(order.getORDER_ID()));
+                return RespStatus.successs().element("data", map);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return RespStatus.fail();
+        }
+
+
+    }
+
+
+
+
+
+    /**
      * 获取订单信息
      *
      * @param userId
      * @param accessToken
-     * @param amounr      金额
+     * @param amount      金额
      * @return
      */
     @RequestMapping(value = "/getTradeOrder", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -378,35 +478,11 @@ public class AppUserBalanceController extends BaseController {
                     orderTestService.update(o);
                     return "SUCCESS";
                 }
+
                 int gold = Integer.valueOf(paycard.getGOLD());
-                String award = "";
-                String rechare = "";
-                switch (gold) {
-                    case 65:
-                        rechare = "60";
-                        award = "5";
-                        break;
-                    case 335:
-                        rechare = "300";
-                        award = "35";
-                        break;
-                    case 800:
-                        rechare = "680";
-                        award = "120";
-                        break;
-                    case 1600:
-                        rechare = "1280";
-                        award = "320";
-                        break;
-                    case 4375:
-                        rechare = "3280";
-                        award = "1095";
-                        break;
-                    case 9260:
-                        rechare = "6480";
-                        award = "2780";
-                        break;
-                }
+                String award = paycard.getAWARD();
+                String rechare = paycard.getRECHARE();
+
                 AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
                 int a = Integer.valueOf(appUser.getBALANCE()) + gold;
                 appUser.setBALANCE(String.valueOf(a));
@@ -570,35 +646,11 @@ public class AppUserBalanceController extends BaseController {
                     orderTestService.update(o);
                     return "SUCCESS";
                 }
+
                 int gold = Integer.valueOf(paycard.getGOLD());
-                String award = "";
-                String rechare = "";
-                switch (gold) {
-                    case 65:
-                        rechare = "60";
-                        award = "5";
-                        break;
-                    case 335:
-                        rechare = "300";
-                        award = "35";
-                        break;
-                    case 800:
-                        rechare = "680";
-                        award = "120";
-                        break;
-                    case 1600:
-                        rechare = "1280";
-                        award = "320";
-                        break;
-                    case 4375:
-                        rechare = "3280";
-                        award = "1095";
-                        break;
-                    case 9260:
-                        rechare = "6480";
-                        award = "2780";
-                        break;
-                }
+                String award = paycard.getAWARD();
+                String rechare = paycard.getRECHARE();
+
                 AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
                 int a = Integer.valueOf(appUser.getBALANCE()) + gold;
                 appUser.setBALANCE(String.valueOf(a));
@@ -760,5 +812,62 @@ public class AppUserBalanceController extends BaseController {
             return "SYSTEM ERROR";
         }
     }
+
+    /**
+     * H5推广充值
+     * @param key
+     * @param sign
+     * @return
+     */
+    @RequestMapping(value = "/promoteForH5", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public JSONObject promoteForH5(
+            @RequestParam("key") String key,
+            @RequestParam("sign") String sign
+    ){
+        try{
+             String ckey = PropertiesUtils.getCurrProperty("api.i5.t_sdk.ckey");
+             String c_sign = TokenVerify.md5(key+ckey);
+             if (!sign.equals(c_sign)){
+                 return RespStatus.fail("签名错误");
+             }
+
+            if (key!=null&&!key.equals("")){
+                String[] kv_list =  key.split("\\|");
+                for (int i = 0; i <kv_list.length ; i++) {
+                    String a =  kv_list[i];
+                    String[] key_value = a.split("\\:");
+                    String userid = key_value[0];
+                    String gold = key_value[1];
+                     AppUser appUser = appuserService.getUserByID(userid);
+                    if (appUser==null){
+                        return RespStatus.fail(userid+"该用户不存在");
+                    }
+                    String new_balance =  String.valueOf(Integer.valueOf(appUser.getBALANCE())+Integer.valueOf(gold));
+                    appUser.setBALANCE(new_balance);
+                    appuserService.updateAppUserBalanceById(appUser);
+
+                    // 更新收支表
+                    Payment payment = new Payment();
+                    payment.setGOLD("+" + gold);
+                    payment.setUSERID(userid);
+                    payment.setDOLLID(null);
+                    payment.setCOST_TYPE(Const.PlayMentCostType.cost_type13.getValue());
+                    payment.setREMARK(Const.PlayMentCostType.cost_type13.getName());
+                    paymentService.reg(payment);
+                }
+                return RespStatus.successs();
+            }else {
+                return RespStatus.fail("key为空");
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return RespStatus.fail();
+        }
+
+
+    }
+
 
 }

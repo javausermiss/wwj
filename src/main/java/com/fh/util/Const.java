@@ -82,7 +82,8 @@ public class Const {
 		cost_type09("充值奖励","9"),
 		cost_type10("内调","10"),
 		cost_type11("邀请码兑换奖励","11"),
-		cost_type12("邀请码分享奖励","12");
+		cost_type12("邀请码分享奖励","12"),
+		cost_type13("推广收入","13");
 		
 		private  String name;
 		private  String value;
