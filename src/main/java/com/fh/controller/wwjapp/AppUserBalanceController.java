@@ -3,12 +3,7 @@ package com.fh.controller.wwjapp;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -826,11 +821,12 @@ public class AppUserBalanceController extends BaseController {
             @RequestParam("sign") String sign
     ){
         try{
-             String ckey = PropertiesUtils.getCurrProperty("api.i5.t_sdk.ckey");
+             String ckey = PropertiesUtils.getCurrProperty("api.i5.sdk.ckey");
              String c_sign = TokenVerify.md5(key+ckey);
              if (!sign.equals(c_sign)){
                  return RespStatus.fail("签名错误");
              }
+             List<String> null_userid = new ArrayList<>();
 
             if (key!=null&&!key.equals("")){
                 String[] kv_list =  key.split("\\|");
@@ -840,23 +836,24 @@ public class AppUserBalanceController extends BaseController {
                     String userid = key_value[0];
                     String gold = key_value[1];
                      AppUser appUser = appuserService.getUserByID(userid);
-                    if (appUser==null){
-                        return RespStatus.fail(userid+"该用户不存在");
+                    if (appUser!=null){
+                        String new_balance =  String.valueOf(Integer.valueOf(appUser.getBALANCE())+Integer.valueOf(gold));
+                        appUser.setBALANCE(new_balance);
+                        appuserService.updateAppUserBalanceById(appUser);
+                        // 更新收支表
+                        Payment payment = new Payment();
+                        payment.setGOLD("+" + gold);
+                        payment.setUSERID(userid);
+                        payment.setDOLLID(null);
+                        payment.setCOST_TYPE(Const.PlayMentCostType.cost_type13.getValue());
+                        payment.setREMARK(Const.PlayMentCostType.cost_type13.getName());
+                        paymentService.reg(payment);
+                    }else {
+                        null_userid.add(userid);
                     }
-                    String new_balance =  String.valueOf(Integer.valueOf(appUser.getBALANCE())+Integer.valueOf(gold));
-                    appUser.setBALANCE(new_balance);
-                    appuserService.updateAppUserBalanceById(appUser);
-
-                    // 更新收支表
-                    Payment payment = new Payment();
-                    payment.setGOLD("+" + gold);
-                    payment.setUSERID(userid);
-                    payment.setDOLLID(null);
-                    payment.setCOST_TYPE(Const.PlayMentCostType.cost_type13.getValue());
-                    payment.setREMARK(Const.PlayMentCostType.cost_type13.getName());
-                    paymentService.reg(payment);
                 }
-                return RespStatus.successs();
+
+                return RespStatus.successs().element("data",null_userid);
             }else {
                 return RespStatus.fail("key为空");
             }
