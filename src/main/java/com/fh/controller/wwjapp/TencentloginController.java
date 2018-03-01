@@ -8,6 +8,7 @@ import java.util.TreeMap;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import com.fh.entity.system.Payment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -49,7 +50,7 @@ public class TencentloginController extends BaseController {
     @Resource(name = "paymentService")
     private PaymentManager paymentService;
 
-    @Resource(name="appuserlogininfoService")
+    @Resource(name = "appuserlogininfoService")
     private AppuserLoginInfoManager appuserlogininfoService;
 
     /**
@@ -94,89 +95,91 @@ public class TencentloginController extends BaseController {
     @RequestMapping(value = "/tencentLogin", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject tencentLogin(
-    		HttpServletRequest req,
+            HttpServletRequest req,
             @RequestParam("uid") String userId,
             @RequestParam("accessToken") String token,
             @RequestParam("nickName") String nickname) {
         try {
-        	String ctype=req.getParameter("ctype"); //SDK
-        	String channel=req.getParameter("channel");//渠道
-        	String imageUrl=req.getParameter("imageUrl");//头像
-        	
-        	logger.info("tencentLogin--> userId="+userId+",accessToken="+token+",imageUrl="+imageUrl+",nickName"+nickname+",ctype-->"+ctype+",channel-->"+channel);
-        	//验证token 是否合法
-         	String code ="fail";
-         	if(Const.SDKMenuType.YSDK.getValue().equals(ctype) || (ctype==null || "".equals(ctype)) ){
-         		code= TokenVerify.verify(token); //应用宝SDK验证
-         	}else if(Const.SDKMenuType.W8SDK.getValue().equals(ctype)){
-         		
-         		//token 验证
-         		SortedMap<String, String> paramsMap=new TreeMap<String, String>();
-         		paramsMap.put("uid", userId);
-         		paramsMap.put("nickName", nickname);
-         		paramsMap.put("imageUrl", "");
-         		paramsMap.put("ctype", ctype);
-         		paramsMap.put("channel", channel);
-         		String sign= TokenVerify.verifyForW8sdk(paramsMap); //w8SDK
-         		if(sign.equals(token)){
-         			code="SUCCESS";
-         		}
-         	}else{
-         		code= TokenVerify.verifyForALL(token); //官方验证
-         	}
-        	if (!"SUCCESS".equals(code)) {
-        		return RespStatus.fail("token不合法");
-        	}
-        	
-        	//判断用户是否存在
-            AppUser appUser = appuserService.getUserByID(userId);
-            String newFace ="";
-            if (appUser == null) {
-                    appUser = new AppUser();
-                    if (imageUrl == null || imageUrl.equals("")) {
-                    	newFace = PropertiesUtils.getCurrProperty("user.default.header.url"); //默认头像
-                    }else{
-                    	newFace=FaceImageUtil.downloadImage(imageUrl);
-                    }
-                    appUser.setNICKNAME(nickname);
-                    appUser.setIMAGE_URL(newFace);
-                    appUser.setUSER_ID(userId);
-                    appuserService.regwx(appUser); //未注册用户 先注册用户
-                    
-//                    logger.info("tencentLogin--> userId="+userId+",首次登陆，注册赠送金币...");
-//                    //增加赠送金币明细
-//                    Payment payment = new Payment();
-//                    payment.setREMARK("注册赠送");
-//                    payment.setGOLD("+19");
-//                    payment.setCOST_TYPE("9");
-//                    payment.setUSERID(userId);
-//                    paymentService.reg(payment);
-            }else{
-                if (imageUrl == null || imageUrl.equals("")) {
-                	newFace = PropertiesUtils.getCurrProperty("user.default.header.url"); //默认头像
-                }else{
-                	newFace = FaceImageUtil.downloadImage(imageUrl);
+            String ctype = req.getParameter("ctype"); //SDK
+            String channel = req.getParameter("channel");//渠道
+            String imageUrl = req.getParameter("imageUrl");//头像
+
+            logger.info("tencentLogin--> userId=" + userId + ",accessToken=" + token + ",imageUrl=" + imageUrl + ",nickName" + nickname + ",ctype-->" + ctype + ",channel-->" + channel);
+            //验证token 是否合法
+            String code = "fail";
+            if (Const.SDKMenuType.YSDK.getValue().equals(ctype) || (ctype == null || "".equals(ctype))) {
+                code = TokenVerify.verify(token); //应用宝SDK验证
+            } else if (Const.SDKMenuType.W8SDK.getValue().equals(ctype)) {
+
+                //token 验证
+                SortedMap<String, String> paramsMap = new TreeMap<String, String>();
+                paramsMap.put("uid", userId);
+                paramsMap.put("nickName", nickname);
+                paramsMap.put("imageUrl", "");
+                paramsMap.put("ctype", ctype);
+                paramsMap.put("channel", channel);
+                String sign = TokenVerify.verifyForW8sdk(paramsMap); //w8SDK
+                if (sign.equals(token)) {
+                    code = "SUCCESS";
                 }
-                
-        		//如果当前用户图像不是默认头像，则先删除，再上传
-        		if(newFace !=null && appUser.getIMAGE_URL() !=null){
-        			String defaultUrl=PropertiesUtils.getCurrProperty("user.default.header.url"); //获取默认头像Id
-        			if(!defaultUrl.equals(appUser.getIMAGE_URL())){
-        				FastDFSClient.deleteFile(appUser.getIMAGE_URL());
-        			}
-        		}
-                
+            } else {
+                code = TokenVerify.verifyForALL(token); //官方验证
+            }
+            if (!"SUCCESS".equals(code)) {
+                return RespStatus.fail("token不合法");
+            }
+
+            //判断用户是否存在
+            AppUser appUser = appuserService.getUserByID(userId);
+            String newFace = "";
+            if (appUser == null) {
+                appUser = new AppUser();
+                if (imageUrl == null || imageUrl.equals("")) {
+                    newFace = PropertiesUtils.getCurrProperty("user.default.header.url"); //默认头像
+                } else {
+                    newFace = FaceImageUtil.downloadImage(imageUrl);
+                }
+
+                //未注册用户 先注册用户
+                appUser.setNICKNAME(nickname);
+                appUser.setIMAGE_URL(newFace);
+                appUser.setUSER_ID(userId);
+                appuserService.regwx(appUser);
+
+                logger.info("tencentLogin--> userId=" + userId + ",首次登陆，注册赠送金币...");
+                //增加赠送金币明细
+                Payment payment = new Payment();
+                payment.setREMARK(Const.PlayMentCostType.cost_type14.getName());
+                payment.setGOLD("+3");
+                payment.setCOST_TYPE(Const.PlayMentCostType.cost_type14.getValue());
+                payment.setUSERID(userId);
+                paymentService.reg(payment);
+            } else {
+                if (imageUrl == null || imageUrl.equals("")) {
+                    newFace = PropertiesUtils.getCurrProperty("user.default.header.url"); //默认头像
+                } else {
+                    newFace = FaceImageUtil.downloadImage(imageUrl);
+                }
+
+                //如果当前用户图像不是默认头像，则先删除，再上传
+                if (newFace != null && appUser.getIMAGE_URL() != null) {
+                    String defaultUrl = PropertiesUtils.getCurrProperty("user.default.header.url"); //获取默认头像Id
+                    if (!defaultUrl.equals(appUser.getIMAGE_URL())) {
+                        FastDFSClient.deleteFile(appUser.getIMAGE_URL());
+                    }
+                }
+
                 appUser.setNICKNAME(nickname);
                 appUser.setIMAGE_URL(newFace);
                 appuserService.updateTencentUser(appUser); //已注册用户 更新用户昵称和头像
             }
-                    
+
             //登录日志
             AppuserLogin appuserLogin = new AppuserLogin();
             appuserLogin.setAPPUSERLOGININFO_ID(MyUUID.getUUID32());
             appuserLogin.setUSER_ID(userId);
             appuserlogininfoService.insertLoginLog(appuserLogin);
-            
+
             //SRS推流
             SrsConnectModel sc = new SrsConnectModel();
             long time = System.currentTimeMillis();
@@ -186,17 +189,17 @@ public class TencentloginController extends BaseController {
             sc.setTime(time);
             sc.setToken(SrsSignUtil.genSign(sc, SrsConstants.SRS_CONNECT_KEY));
             String sessionID = MyUUID.createSessionId();
-            RedisUtil.getRu().set(Const.REDIS_APPUSER_SESSIONID  + userId, sessionID);
-            RedisUtil.getRu().set(Const.REDIS_APPUSER_LOGIN_TENCENTTOKEN  + userId, token);
-            
+            RedisUtil.getRu().set(Const.REDIS_APPUSER_SESSIONID + userId, sessionID);
+            RedisUtil.getRu().set(Const.REDIS_APPUSER_LOGIN_TENCENTTOKEN + userId, token);
+
             //用户登陆存储redis log
             logger.info("用户 appUser is null tencentLogin 登陆accessToken sessionID:");
-            logger.info("redis " +Const.REDIS_APPUSER_LOGIN_TENCENTTOKEN + userId+"-->"+token);
-            logger.info("redis "+Const.REDIS_APPUSER_SESSIONID + userId+"-->"+sessionID);
-            
+            logger.info("redis " + Const.REDIS_APPUSER_LOGIN_TENCENTTOKEN + userId + "-->" + token);
+            logger.info("redis " + Const.REDIS_APPUSER_SESSIONID + userId + "-->" + sessionID);
+
             Map<String, Object> map = new HashMap<>();
-            
-            
+
+
             map.put("appUser", getAppUserInfo(userId));//重新查询用户信息
             map.put("sessionID", sessionID);
             map.put("accessToken", token);
@@ -219,32 +222,32 @@ public class TencentloginController extends BaseController {
     @RequestMapping(value = "/tencentAutoLogin", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject tencentAutoLogin(
-    		HttpServletRequest req,
+            HttpServletRequest req,
             @RequestParam("userId") String userId,
             @RequestParam("accessToken") String accessToken
     ) {
-    	String ctype=req.getParameter("ctype"); //SDK
-    	String channel=req.getParameter("channel");//渠道
+        String ctype = req.getParameter("ctype"); //SDK
+        String channel = req.getParameter("channel");//渠道
 
-    	logger.info("tencentAutoLogin--> userId="+userId+",accessToken="+accessToken+",ctype-->"+ctype+",channel-->"+channel);
+        logger.info("tencentAutoLogin--> userId=" + userId + ",accessToken=" + accessToken + ",ctype-->" + ctype + ",channel-->" + channel);
         try {
-         	String code ="";
-         	if(Const.SDKMenuType.YSDK.getValue().equals(ctype) || (ctype==null || "".equals(ctype)) ){
-         		code= TokenVerify.verify(accessToken); //应用宝SDK验证
-         	}else if(Const.SDKMenuType.W8SDK.getValue().equals(ctype)){
-         		//token 验证
-         		SortedMap<String, String> paramsMap=new TreeMap<String, String>();
-         		paramsMap.put("userId", userId);
-         		paramsMap.put("ctype", ctype);
-         		paramsMap.put("channel", channel);
-         		String sign= TokenVerify.verifyForW8sdk(paramsMap); //w8SDK
-         		
-         		if(sign.equals(accessToken)){
-         			code="SUCCESS";
-         		}
-         	}else{
-         		code= TokenVerify.verifyForALL(accessToken); //官方验证
-         	}
+            String code = "";
+            if (Const.SDKMenuType.YSDK.getValue().equals(ctype) || (ctype == null || "".equals(ctype))) {
+                code = TokenVerify.verify(accessToken); //应用宝SDK验证
+            } else if (Const.SDKMenuType.W8SDK.getValue().equals(ctype)) {
+                //token 验证
+                SortedMap<String, String> paramsMap = new TreeMap<String, String>();
+                paramsMap.put("userId", userId);
+                paramsMap.put("ctype", ctype);
+                paramsMap.put("channel", channel);
+                String sign = TokenVerify.verifyForW8sdk(paramsMap); //w8SDK
+
+                if (sign.equals(accessToken)) {
+                    code = "SUCCESS";
+                }
+            } else {
+                code = TokenVerify.verifyForALL(accessToken); //官方验证
+            }
             if (code.equals("SUCCESS")) {
                 if (appuserService.getUserByID(userId) == null) {
                     return RespStatus.fail("用户不存在");
@@ -265,13 +268,13 @@ public class TencentloginController extends BaseController {
                 String sessionID = MyUUID.createSessionId();
                 RedisUtil.getRu().set(Const.REDIS_APPUSER_LOGIN_TENCENTTOKEN + userId, accessToken);
                 RedisUtil.getRu().set(Const.REDIS_APPUSER_SESSIONID + userId, sessionID);
-                
-                
+
+
                 //用户登陆存储redis log 
                 logger.info("用户 tencentAutoLogin accessToken sessionID:");
-                logger.info("redis" +Const.REDIS_APPUSER_LOGIN_TENCENTTOKEN + userId+"-->"+accessToken);
-                logger.info("redis "+Const.REDIS_APPUSER_SESSIONID + userId+"-->"+sessionID);
-                
+                logger.info("redis" + Const.REDIS_APPUSER_LOGIN_TENCENTTOKEN + userId + "-->" + accessToken);
+                logger.info("redis " + Const.REDIS_APPUSER_SESSIONID + userId + "-->" + sessionID);
+
                 Map<String, Object> map1 = new HashMap<>();
                 map1.put("appUser", getAppUserInfo(userId));
                 map1.put("sessionID", sessionID);

@@ -11,6 +11,10 @@ import java.util.TreeMap;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import com.fh.entity.system.AppuserLogin;
+import com.fh.entity.system.Payment;
+import com.fh.service.system.appuserlogininfo.AppuserLoginInfoManager;
+import com.fh.service.system.payment.PaymentManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,6 +44,12 @@ public class TencentloginForH5 extends BaseController {
 
     @Resource(name = "dollService")
     private DollManager dollService;
+
+    @Resource(name = "paymentService")
+    private PaymentManager paymentService;
+
+    @Resource(name = "appuserlogininfoService")
+    private AppuserLoginInfoManager appuserlogininfoService;
 
     /**
      * 个人信息
@@ -112,6 +122,23 @@ public class TencentloginForH5 extends BaseController {
                     appUser1.setIMAGE_URL(imageUrl);
                     appUser1.setUSER_ID(userId);
                     appuserService.regwx(appUser1);
+
+                    logger.info("tencentLogin--> userId=" + userId + ",首次登陆，注册赠送金币...");
+                    //增加赠送金币明细
+                    Payment payment = new Payment();
+                    payment.setREMARK(Const.PlayMentCostType.cost_type14.getName());
+                    payment.setGOLD("+3");
+                    payment.setCOST_TYPE(Const.PlayMentCostType.cost_type14.getValue());
+                    payment.setUSERID(userId);
+                    paymentService.reg(payment);
+
+                    //登录日志
+                    AppuserLogin appuserLogin = new AppuserLogin();
+                    appuserLogin.setAPPUSERLOGININFO_ID(MyUUID.getUUID32());
+                    appuserLogin.setUSER_ID(userId);
+                    appuserlogininfoService.insertLoginLog(appuserLogin);
+
+
                     //SRS推流
                     Date currentTime = new Date();
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -167,6 +194,13 @@ public class TencentloginForH5 extends BaseController {
                     appUser.setNICKNAME(nickname);
                     appUser.setIMAGE_URL(newFace);
                     appuserService.updateTencentUser(appUser);
+
+                    //登录日志
+                    AppuserLogin appuserLogin = new AppuserLogin();
+                    appuserLogin.setAPPUSERLOGININFO_ID(MyUUID.getUUID32());
+                    appuserLogin.setUSER_ID(userId);
+                    appuserlogininfoService.insertLoginLog(appuserLogin);
+
                     //SRS推流
                     Date currentTime = new Date();
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -278,6 +312,12 @@ public class TencentloginForH5 extends BaseController {
                 map1.put("expire",3600);
                 map1.put("SRSUsertoken",SRStoken);
                 map1.put("time",dateString);
+
+                //登录日志
+                AppuserLogin appuserLogin = new AppuserLogin();
+                appuserLogin.setAPPUSERLOGININFO_ID(MyUUID.getUUID32());
+                appuserLogin.setUSER_ID(userId);
+                appuserlogininfoService.insertLoginLog(appuserLogin);
 
                 return RespStatus.successs().element("data", map1);
             } else {
