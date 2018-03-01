@@ -34,8 +34,8 @@
                                     <tr>
                                         <td style="width:100px;text-align: right;padding-top: 13px;">分类标签:</td>
                                         <td><input type="checkbox" name="TOY_TYPE_ID" value="100001">爆款<br>
-                                            <input type="checkbox" name="TOY_TYPE_ID" value="100003">红包<br>
-                                            <input type="checkbox" name="TOY_TYPE_ID" value="100002">易中<br>
+                                            <input type="checkbox" name="TOY_TYPE_ID" value="100003">推荐<br>
+                                            <input type="checkbox" name="TOY_TYPE_ID" value="100002">折扣<br>
                                         </td>
                                         <input type="hidden" value="${pd.TOY_TYPE}" id="meidaHidden">
                                     </tr>
