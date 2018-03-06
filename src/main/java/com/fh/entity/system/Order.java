@@ -14,6 +14,8 @@ public class Order {
     private String ORDER_NO;//外部订单
     private String CTYPE;
     private String CHANNEL;
+    private String PAY_TYPE;  //支付的类型
+    private String PRO_USER_ID;//订单用户所属的推广用户ID
 
     public Order() {
     }
@@ -97,4 +99,22 @@ public class Order {
     public void setSTATUS(String STATUS) {
         this.STATUS = STATUS;
     }
+
+	public String getPAY_TYPE() {
+		return PAY_TYPE;
+	}
+
+	public void setPAY_TYPE(String PAY_TYPE) {
+		this.PAY_TYPE = PAY_TYPE;
+	}
+
+	public String getPRO_USER_ID() {
+		return PRO_USER_ID;
+	}
+
+	public void setPRO_USER_ID(String PRO_USER_ID) {
+		this.PRO_USER_ID = PRO_USER_ID;
+	}
+    
+    
 }

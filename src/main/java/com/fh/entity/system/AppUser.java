@@ -30,6 +30,7 @@ public class AppUser {
     private String SIGN_TAG;
     private String RANK;
     private Integer BET_NUM;
+    private String PRO_USER_ID; //
 
     public AppUser() {
     }
@@ -306,5 +307,12 @@ public class AppUser {
         this.CREATETIME = CREATETIME;
     }
 
+	public String getPRO_USER_ID() {
+		return PRO_USER_ID;
+	}
 
+	public void setPRO_USER_ID(String PRO_USER_ID) {
+		this.PRO_USER_ID = PRO_USER_ID;
+	}
+    
 }
