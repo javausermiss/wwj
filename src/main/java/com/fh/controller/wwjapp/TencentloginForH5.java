@@ -1,6 +1,7 @@
 package com.fh.controller.wwjapp;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +34,9 @@ import com.fh.util.wwjUtil.MyUUID;
 import com.fh.util.wwjUtil.RedisUtil;
 import com.fh.util.wwjUtil.RespStatus;
 import com.fh.util.wwjUtil.TokenVerify;
+import com.iot.game.pooh.admin.srs.core.entity.httpback.SrsConnectModel;
+import com.iot.game.pooh.admin.srs.core.util.SrsConstants;
+import com.iot.game.pooh.admin.srs.core.util.SrsSignUtil;
 
 import net.sf.json.JSONObject;
 @Controller
@@ -226,13 +230,13 @@ public class TencentloginForH5 extends BaseController {
                     RedisUtil.getRu().setex("SRStoken:appUser:"+userId,SRStoken,21600);
 
                     String sessionID = MyUUID.createSessionId();
-                    List<Doll> doll = dollService.getAllDoll();
+//                    List<Doll> doll = dollService.getAllDoll();
                     RedisUtil.getRu().set("tencentToken:" + userId, token);
                     RedisUtil.getRu().set("sessionId:appUser:" + userId, sessionID);
                     Map<String, Object> map1 = new HashMap<>();
                     map1.put("appUser", getAppUserInfo(userId));
                     map1.put("sessionID", sessionID);
-                    map1.put("dollList", doll);
+//                    map1.put("dollList", doll);
                     map1.put("expire",3600);
                     map1.put("SRSUsertoken",SRStoken);
                     map1.put("time",dateString);
@@ -301,13 +305,13 @@ public class TencentloginForH5 extends BaseController {
                 String SRStoken =  TokenVerify.md5(basestring.toString());
                 RedisUtil.getRu().setex("SRStoken:appUser:"+userId,SRStoken,21600);
                 String sessionID = MyUUID.createSessionId();
-                List<Doll> doll = dollService.getAllDoll();
+//                List<Doll> doll = dollService.getAllDoll();
                 RedisUtil.getRu().set("tencentToken:" + userId, accessToken);
                 RedisUtil.getRu().set("sessionId:appUser:" + userId, sessionID);
                 Map<String, Object> map1 = new HashMap<>();
                 map1.put("appUser", getAppUserInfo(userId));
                 map1.put("sessionID", sessionID);
-                map1.put("dollList", doll);
+//                map1.put("dollList", doll);
                 map1.put("accessToken", accessToken);
                 map1.put("expire",3600);
                 map1.put("SRSUsertoken",SRStoken);
@@ -331,7 +335,40 @@ public class TencentloginForH5 extends BaseController {
     }
 
 
-
+    
+    @RequestMapping(value = "/robotLoginToList", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public JSONObject robotLoginToList(HttpServletRequest req){
+    	
+    	String[] userArray=new String[]{"jzzww888888888888888888888888881",
+    									"jzzww888888888888888888888888882",
+    									"jzzww888888888888888888888888883",
+    									"jzzww888888888888888888888888884",
+    									"jzzww888888888888888888888888885"};
+    	
+    	List<Map> data=new ArrayList<>();
+    	
+    	for (String userId : userArray) {
+    		 //SRS推流
+            SrsConnectModel sc = new SrsConnectModel();
+            long time = System.currentTimeMillis();
+            sc.setType("U");
+            sc.setTid(userId);
+            sc.setExpire(3600 * 24);
+            sc.setTime(time);
+            sc.setToken(SrsSignUtil.genSign(sc, SrsConstants.SRS_CONNECT_KEY));
+            String sessionID = MyUUID.createSessionId();
+            RedisUtil.getRu().set(Const.REDIS_APPUSER_SESSIONID + userId, sessionID);
+            
+            Map<String, Object> map = new HashMap<>();
+            map.put("appUser", getAppUserInfo(userId));//重新查询用户信息
+            map.put("sessionID", sessionID);
+            map.put("srsToken", sc);
+            
+            data.add(map);
+    	}
+        return RespStatus.successs().element("data", data);
+    }
 
 
 }
