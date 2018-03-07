@@ -407,5 +407,20 @@ public class AppuserService implements AppuserManager{
 	public PageData getAppUesrRechargeToTal(String userId)throws Exception{
 		return (PageData)dao.findForObject("AppuserMapper.getAppUesrRechargeToTal",userId);
 	}
+
+	@Override
+	public AppUser updateAppUserBlAndBnById(AppUser appUser) throws Exception {
+		return (AppUser)dao.update("AppuserMapper.updateAppUserBlAndBnById",appUser);
+	}
+
+	@Override
+	public List<PageData> rankBetList() throws Exception {
+		return (List<PageData>)dao.findForList("AppuserMapper.rankBetList",null);
+	}
+
+	@Override
+	public PageData getAppUserBetRanklist(String userid) throws Exception {
+		return (PageData) dao.findForObject("AppuserMapper.getAppUserBetRanklist",userid);
+	}
 }
 

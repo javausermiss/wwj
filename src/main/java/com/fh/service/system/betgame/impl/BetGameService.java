@@ -193,6 +193,15 @@ public class BetGameService extends BaseController implements BetGameManager {
 
     @Override
     public JSONObject doBet(String userId, String dollId, int wager, String guessId, String guessKey) throws Exception {
+        //判断用户是否竞猜过
+        GuessDetailL gs = new GuessDetailL();
+        gs.setAPP_USER_ID(userId);
+        gs.setPLAYBACK_ID(guessId);
+        gs.setDOLL_ID(dollId);
+        GuessDetailL guessDetailL1 = this.getGuessDetail(gs);
+        if (guessDetailL1 != null) {
+            return RespStatus.fail("该用户已经竞猜过");
+        }
 
         PlayDetail p1 = new PlayDetail();
         p1.setDOLLID(dollId);
@@ -304,7 +313,7 @@ public class BetGameService extends BaseController implements BetGameManager {
 
         List<GuessDetail> guessDetail_list = new LinkedList<>();
 
-        StringBuilder sb  = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
         if (list.size() != 0) {
             logger.info("竞猜成功者数量--------------->" + list.size());
@@ -313,20 +322,23 @@ public class BetGameService extends BaseController implements BetGameManager {
                 GuessDetailL winPerson = list.get(i);
 
                 //预期奖金
-                int reword  =  winPerson.getGUESS_GOLD()*5;
+                int reword = winPerson.getGUESS_GOLD() * 5;
 
                 winPerson.setSETTLEMENT_GOLD(reword);
                 winPerson.setSETTLEMENT_FLAG("Y");
                 winPerson.setGUESS_TYPE(playDetail.getREWARD_NUM());
                 this.updateGuessDetail(winPerson);
 
-                //更新用户余额
+                //更新用户余额及竞猜次数
                 String guess_win_user = winPerson.getAPP_USER_ID();
                 AppUser appUser = appuserService.getUserByID(guess_win_user);
                 String old_balance = appUser.getBALANCE();
+                Integer guessNum = appUser.getBET_NUM();
+                Integer new_betnum = gifinumber + 1;
                 String new_balance = String.valueOf(Integer.valueOf(old_balance) + reword);
                 appUser.setBALANCE(new_balance);
-                appuserService.updateAppUserBalanceById(appUser);
+                appUser.setBET_NUM(new_betnum);
+                appuserService.updateAppUserBlAndBnById(appUser);
 
                 logger.info("获奖用户ID------------->" + guess_win_user);
 
@@ -350,7 +362,7 @@ public class BetGameService extends BaseController implements BetGameManager {
 
             }
 
-            sb.deleteCharAt(sb.length()-1);
+            sb.deleteCharAt(sb.length() - 1);
             //获取每期中奖者的昵称
             Pond pond_n = new Pond();
             pond_n.setGUESS_ID(playDetail.getGUESS_ID());

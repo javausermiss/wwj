@@ -311,5 +311,28 @@ public interface AppuserManager {
 	 * @throws Exception
 	 */
 	public PageData getAppUesrRechargeToTal(String userId)throws Exception;
+
+    /**
+     * 更新用户余额和竞猜获胜的次数
+     * @param appUser
+     * @return
+     * @throws Exception
+     */
+	public AppUser updateAppUserBlAndBnById(AppUser appUser)throws Exception;
+
+    /**
+     * 竞猜获胜排行榜
+     * @return
+     * @throws Exception
+     */
+	public List<PageData> rankBetList()throws Exception;
+
+    /**
+     * 查询竞猜个人名次
+     * @param userid
+     * @return
+     * @throws Exception
+     */
+	public PageData getAppUserBetRanklist(String userid)throws Exception;
 }
 

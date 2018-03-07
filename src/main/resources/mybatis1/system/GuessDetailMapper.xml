@@ -166,6 +166,9 @@
         PLAYBACK_ID = #{PLAYBACK_ID}
         and
         APP_USER_ID = #{APP_USER_ID}
+        AND
+        DOLL_ID = #{DOLL_ID}
+
     </select>
 
 

@@ -2,6 +2,7 @@ package com.fh.controller.wwjapp;
 
 import com.fh.entity.system.AppUser;
 import com.fh.service.system.appuser.AppuserManager;
+import com.fh.util.PageData;
 import com.fh.util.wwjUtil.RespStatus;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,7 @@ import java.util.Map;
  * 抓娃娃排行榜
  */
 @Controller
-@RequestMapping(value = "/rank")
+@RequestMapping(value = "/app/rank")
 public class RankListController {
 
     @Resource(name = "appuserService")
@@ -68,14 +69,14 @@ public class RankListController {
      */
     @RequestMapping(value = "/rankSelfList", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public JSONObject rankSelfList(@RequestParam ("userId") String userId) {
+    public JSONObject rankSelfList(@RequestParam("userId") String userId) {
         try {
             AppUser appUser = appuserService.getAppUserRanklist(userId);
-            if (appUser==null){
+            if (appUser == null) {
                 return null;
             }
             Map<String, Object> map = new HashMap<>();
-            map.put("appUser",appUser);
+            map.put("appUser", appUser);
             return RespStatus.successs().element("data", map);
         } catch (Exception e) {
             return RespStatus.fail();
@@ -83,6 +84,60 @@ public class RankListController {
 
     }
 
+    /**
+     * 排行榜及个人所在名次
+     *
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "/rankAndSelfList", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public JSONObject rankAndSelfList(@RequestParam("userId") String userId) {
+        try {
+            List<AppUser> list = appuserService.rankList();
+            AppUser appUser = appuserService.getAppUserRanklist(userId);
+            if (appUser == null) {
+                return null;
+            }
+            Map<String, Object> map = new HashMap<>();
+            map.put("list", list);
+            map.put("appUser", appUser);
+            return RespStatus.successs().element("data", map);
+        } catch (Exception e) {
+            return RespStatus.fail();
+        }
+
+    }
+
+
+    /**
+     * 竞猜排行榜及个人所在名次
+     *
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "/rankBetList", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public JSONObject rankBetList(@RequestParam("userId") String userId) {
+        try {
+            List<PageData> list = appuserService.rankBetList();
+            PageData appUser = appuserService.getAppUserBetRanklist(userId);
+
+            if (appUser == null) {
+                return null;
+            }
+            double c = (double) appUser.get("RANK");
+            int i = (new Double(c)).intValue();
+            appUser.put("RANK", String.valueOf(i));
+            Map<String, Object> map = new HashMap<>();
+            map.put("list", list);
+            map.put("appUser", appUser);
+            return RespStatus.successs().element("data", map);
+        } catch (Exception e) {
+            return RespStatus.fail();
+        }
+
+    }
 
 
 }

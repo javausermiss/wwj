@@ -265,6 +265,23 @@ public class BetGameController {
 
     }
 
+    /**
+     * 获取最新场次的下爪状态("0"为初始值，"-1"则为已经下爪，待用)
+     * @param dollId
+     * @return
+     */
+    @RequestMapping(value = "/getGuessGameState",method = RequestMethod.POST,produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public JSONObject getGuessGameState (@RequestParam("dollId") String dollId){
+        try {
+            PlayDetail playDetail = playDetailService.getPlayIdForPeople(dollId);
+            String state =  playDetail.getSTOP_FLAG();
+            return RespStatus.successs().element("data",state);
+        }catch (Exception e){
+            e.printStackTrace();
+            return RespStatus.fail();
+        }
+    }
 
 
 
