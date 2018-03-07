@@ -21,7 +21,7 @@ import java.util.Map;
  * 抓娃娃排行榜
  */
 @Controller
-@RequestMapping(value = "/app/rank")
+@RequestMapping(value = "/rank")
 public class RankListController {
 
     @Resource(name = "appuserService")
