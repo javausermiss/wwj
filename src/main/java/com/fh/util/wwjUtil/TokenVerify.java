@@ -172,9 +172,16 @@ public class TokenVerify {
     }
 
 
-
+//uid=wx1517989889685161&nickName=%E5%AE%89%E5%90%91%E9%98%B3&imageUrl=http%3A%2F%2Fthirdwx.qlogo.cn%2Fmmopen%2Fvi_32%2FgADIIoI3oMvH6hpdIhw3Z30xNF1Nso4hwc4eVAak3y2GNzdvJN3wXQqfALBFZJaD8kaO7T6www4LgNmeImSCzg%2F132&ctype=W8SDK&channel=H5
     public static void main(String[] a) throws IOException {
-
+ 		SortedMap<String, String> paramsMap=new TreeMap<String, String>();
+ 		paramsMap.put("uid", "wx1517989889685161");
+ 		paramsMap.put("nickName", "%E5%AE%89%E5%90%91%E9%98%B3");
+ 		paramsMap.put("imageUrl", "");
+ 		paramsMap.put("ctype", "W8SDK");
+ 		paramsMap.put("channel", "H5");
+ 		String sign= TokenVerify.verifyForW8sdk(paramsMap); //w8SDK
+ 		System.out.println(sign);
     }
 
 

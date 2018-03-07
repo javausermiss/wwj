@@ -111,8 +111,8 @@
                                     <th class="center">娃娃金币</th>
                                     <th class="center">娃娃可兑换金币</th>
                                     <th class="center">设备编号</th>
-                                    <th class="center">网关状态</th>
                                     <th class="center">概率</th>
+                                    <th class="center">网关状态</th>
                                     <th class="center">H5可见</th>
                                     <th class="center">发布状态</th>
                                     <th class="center">操作</th>

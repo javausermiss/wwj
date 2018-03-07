@@ -381,6 +381,7 @@ public class AppUserBalanceController extends BaseController {
     @RequestMapping(value = "/orderCallBack", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String orderCallBack(
+    		HttpServletRequest request,
             @RequestParam("chid") String chid,
             @RequestParam("order_no") String order_no,
             @RequestParam("subject") String subject,
@@ -398,6 +399,7 @@ public class AppUserBalanceController extends BaseController {
             @RequestParam("sign_type") String sign_type,
             @RequestParam("sign") String sign
     ) {
+    	logger.info("orderCallBack request param is -->"+request.getQueryString());
         try {
             Order o = orderTestService.getOrderById(out_trade_no);
             String ckey = PropertiesUtils.getCurrProperty("api.app.sdk.ckey");
@@ -549,6 +551,7 @@ public class AppUserBalanceController extends BaseController {
     @RequestMapping(value = "/i5OrderCallBack", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String i5OrderCallBack(
+    		HttpServletRequest request,
             @RequestParam("chid") String chid,
             @RequestParam("order_no") String order_no,
             @RequestParam("subject") String subject,
@@ -566,6 +569,8 @@ public class AppUserBalanceController extends BaseController {
             @RequestParam("sign_type") String sign_type,
             @RequestParam("sign") String sign
     ) {
+    	logger.info("i5OrderCallBack request param is -->"+request.getQueryString());
+    	
         try {
             Order o = orderTestService.getOrderById(out_trade_no);
             String ckey = PropertiesUtils.getCurrProperty("api.i5.sdk.ckey");
@@ -704,7 +709,7 @@ public class AppUserBalanceController extends BaseController {
     	 String orderid=request.getParameter("orderid");
          String username=request.getParameter("username");
          String productname=request.getParameter("productname");
-         double amount=new Double(request.getParameter("amount"));
+         String amount=request.getParameter("amount");
          String roleid=request.getParameter("roleid");
          String serverid=request.getParameter("serverid");
          String appid=request.getParameter("appid");
@@ -712,10 +717,11 @@ public class AppUserBalanceController extends BaseController {
          String token=request.getParameter("token");
          String remarks=request.getParameter("remarks");
         try {
+        	logger.info("w8OrderCallBack request param is -->"+request.getQueryString());
         	
         	String cid = PropertiesUtils.getCurrProperty("api.app.w8sdk.cid");
+        	
         	//step1 签名验证
-       
             if(token ==null || "".equals(token)){
             	 return "SIGN IS NULL";
             }
@@ -723,6 +729,7 @@ public class AppUserBalanceController extends BaseController {
      			   "&amount=" +amount+"&roleid=" +roleid+"&serverid=" +serverid+"&appid=" +appid+"&paytime="+paytime+
      			   "&remarks="+remarks+"&appkey=" +cid;
             logger.info("md5param-->"+md5param);
+            
             String md5token = TokenVerify.md5(md5param);
      
             if (!token.toLowerCase().equals(md5token.toLowerCase())) {

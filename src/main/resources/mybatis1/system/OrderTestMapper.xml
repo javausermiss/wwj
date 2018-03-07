@@ -3,6 +3,22 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="OrderMapper">
 
+
+	 <sql id="Field">
+		REC_ID,
+		ORDER_ID,
+		USER_ID,
+		CREATETIME,
+		REGAMOUNT,
+		`STATUS`,
+		REGMODE,
+		UCTIME,
+		ORDER_NO,
+		REGGOLD,
+		CTYPE,
+		CHANNEL
+	</sql>
+
     <insert id="regmount" parameterType="com.fh.entity.system.Order">
         INSERT INTO
         SYS_APP_ORDER
@@ -43,7 +59,7 @@
 
     <select id="getOrderById" parameterType="String" resultType="com.fh.entity.system.Order">
         SELECT
-        *
+        <include refid="Field"/>
         FROM
         sys_app_order
         WHERE
