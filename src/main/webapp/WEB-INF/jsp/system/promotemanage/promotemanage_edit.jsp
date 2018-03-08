@@ -27,29 +27,25 @@
 				<div class="row">
 					<div class="col-xs-12">
 					
-					<form action="promotemanage/${msg }.do" name="Form" id="Form" method="post">
+					<form action="promotemanage/${msg }.do" name="Form" id="Form" method="post" enctype="multipart/form-data">
 						<input type="hidden" name="PRO_MANAGE_ID" id="PRO_MANAGE_ID" value="${pd.PRO_MANAGE_ID}"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">支付金额:</td>
-								<td><input type="text" name="PAY_AMOUNT" id="PAY_AMOUNT" value="${pd.PAY_AMOUNT}" maxlength="12" placeholder="这里输入支付金额" title="支付金额" style="width:98%;"/></td>
+								<td><input type="number" name="PAY_AMOUNT" id="PAY_AMOUNT" value="${pd.PAY_AMOUNT}" maxlength="12" placeholder="这里输入支付金额" title="支付金额" style="width:98%;"/></td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">获取金币数:</td>
-								<td><input type="text" name="GOLD" id="GOLD" value="${pd.GOLD}" maxlength="12" placeholder="这里输入获取金币数" title="获取金币数" style="width:98%;"/></td>
+								<td><input type="number" name="GOLD" id="GOLD" value="${pd.GOLD}" maxlength="12" placeholder="这里输入获取金币数" title="获取金币数" style="width:98%;"/></td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">图片地址:</td>
-								<td><input type="number" name="IMG_URL" id="IMG_URL" value="${pd.IMG_URL}" maxlength="32" placeholder="这里输入图片地址" title="图片地址" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">类型:</td>
-								<td><input type="text" name="TYPE" id="TYPE" value="${pd.TYPE}" maxlength="1" placeholder="这里输入类型" title="类型" style="width:98%;"/></td>
+								<td><input type="text" name="IMG_URL" id="IMG_URL" value="${pd.IMG_URL}" maxlength="32" placeholder="这里输入图片地址" title="图片地址" style="width:98%;"/><td><input type="file" id="IMG_FILE" name="IMG_FILE" /></td></td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">返回比例:</td>
-								<td><input type="text" name="RETURN_RATIO" id="RETURN_RATIO" value="${pd.RETURN_RATIO}" maxlength="12" placeholder="这里输入返回比例" title="返回比例" style="width:98%;"/></td>
+								<td><input type="number" name="RETURN_RATIO" id="RETURN_RATIO" value="${pd.RETURN_RATIO}" maxlength="12" placeholder="这里输入返回比例" title="返回比例" style="width:98%;"/></td>
 							</tr>
 							<tr>
 								<td style="text-align: center;" colspan="10">
@@ -106,26 +102,6 @@
 				$("#GOLD").focus();
 			return false;
 			}
-			if($("#IMG_URL").val()==""){
-				$("#IMG_URL").tips({
-					side:3,
-		            msg:'请输入图片地址',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#IMG_URL").focus();
-			return false;
-			}
-			if($("#TYPE").val()==""){
-				$("#TYPE").tips({
-					side:3,
-		            msg:'请输入类型',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#TYPE").focus();
-			return false;
-			}
 			if($("#RETURN_RATIO").val()==""){
 				$("#RETURN_RATIO").tips({
 					side:3,
@@ -134,26 +110,6 @@
 		            time:2
 		        });
 				$("#RETURN_RATIO").focus();
-			return false;
-			}
-			if($("#CREATE_TIME").val()==""){
-				$("#CREATE_TIME").tips({
-					side:3,
-		            msg:'请输入创建时间',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#CREATE_TIME").focus();
-			return false;
-			}
-			if($("#UPDATE_TIME").val()==""){
-				$("#UPDATE_TIME").tips({
-					side:3,
-		            msg:'请输入更新时间',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#UPDATE_TIME").focus();
 			return false;
 			}
 			$("#Form").submit();

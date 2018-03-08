@@ -1,5 +1,6 @@
 package com.fh.controller.system.promotemanage;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -9,18 +10,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.util.AppUtil;
+import com.fh.util.FastDFSClient;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
+import com.fh.util.StringUtils;
 import com.fh.util.Jurisdiction;
 import com.fh.util.Tools;
 import com.fh.service.system.promotemanage.PromoteManageManager;
@@ -43,13 +51,39 @@ public class PromoteManageController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/save")
-	public ModelAndView save() throws Exception{
+	public ModelAndView save(
+			HttpServletRequest req,
+			@RequestParam(value = "IMG_FILE", required = false)CommonsMultipartFile  multipartFile //保存图片文件上传路径
+		) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"新增PromoteManage");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
 		ModelAndView mv = this.getModelAndView();
+		
+		
+		String PAY_AMOUNT = req.getParameter("PAY_AMOUNT");
+		String GOLD = req.getParameter("GOLD");
+		String RETURN_RATIO = req.getParameter("RETURN_RATIO");
+		
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd.put("PRO_MANAGE_ID", this.get32UUID());	//主键
+		
+		//文件上传
+		String fileId="";
+		try{
+			String newFilename=multipartFile.getOriginalFilename();
+			DiskFileItem fi = (DiskFileItem) multipartFile.getFileItem();
+			File file = fi.getStoreLocation();
+			fileId = FastDFSClient.uploadFile(file, newFilename);
+			logger.info("---------fileId-------------"+fileId);
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		
+		pd.put("IMG_URL", fileId);//图片地址
+		pd.put("PAY_AMOUNT", PAY_AMOUNT);//支付金额
+		pd.put("GOLD", GOLD);//推广用户兑换金币数量
+		pd.put("RETURN_RATIO", RETURN_RATIO);//权益比例
+		
 		promotemanageService.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
@@ -76,13 +110,49 @@ public class PromoteManageController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/edit")
-	public ModelAndView edit() throws Exception{
+	public ModelAndView edit(
+			HttpServletRequest req,
+			@RequestParam(value = "IMG_FILE", required = false)CommonsMultipartFile  multipartFile //保存图片文件上传路径
+		) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"修改PromoteManage");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
 		ModelAndView mv = this.getModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		promotemanageService.edit(pd);
+		
+		String PAY_AMOUNT = req.getParameter("PAY_AMOUNT");
+		String GOLD = req.getParameter("GOLD");
+		String RETURN_RATIO = req.getParameter("RETURN_RATIO");
+		
+		PageData  managePd=promotemanageService.findById(req.getParameter("PRO_MANAGE_ID"));
+		
+		
+		//上传的文件
+		String newFilename=multipartFile.getOriginalFilename();
+		DiskFileItem fi = (DiskFileItem) multipartFile.getFileItem();
+		File file = fi.getStoreLocation();
+		
+		//文件上传，编辑操作
+		String fileId="";
+		if (managePd !=null && managePd.get("IMG_URL")==null){
+			try{
+				fileId = FastDFSClient.uploadFile(file, newFilename);
+				logger.info("---------fileId-------------"+fileId);
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}
+		}else{
+			 //判断当前文件是否为空
+			if(file !=null && !multipartFile.isEmpty() && multipartFile.getSize() >0){
+				fileId = FastDFSClient.modifyFile(String.valueOf(managePd.get("IMG_URL")), file, newFilename);
+			}
+		}
+				
+		managePd.put("IMG_URL", fileId);//图片地址
+		managePd.put("PAY_AMOUNT", PAY_AMOUNT);//支付金额
+		managePd.put("GOLD", GOLD);//推广用户兑换金币数量
+		managePd.put("RETURN_RATIO", RETURN_RATIO);//权益比例
+		
+		promotemanageService.edit(managePd);
+		
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
@@ -136,7 +206,7 @@ public class PromoteManageController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd = promotemanageService.findById(pd);	//根据ID读取
+		pd = promotemanageService.findById(pd.getString("PRO_MANAGE_ID"));	//根据ID读取
 		mv.setViewName("system/promotemanage/promotemanage_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);

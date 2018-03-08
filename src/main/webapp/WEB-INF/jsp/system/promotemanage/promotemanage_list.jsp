@@ -289,7 +289,7 @@
 			bootbox.confirm("确定要删除吗?", function(result) {
 				if(result) {
 					top.jzts();
-					var url = "<%=basePath%>promotemanage/delete.do?PROMOTEMANAGE_ID="+Id+"&tm="+new Date().getTime();
+					var url = "<%=basePath%>promotemanage/delete.do?PRO_MANAGE_ID="+Id+"&tm="+new Date().getTime();
 					$.get(url,function(data){
 						tosearch();
 					});
@@ -303,7 +303,7 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="编辑";
-			 diag.URL = '<%=basePath%>promotemanage/goEdit.do?PROMOTEMANAGE_ID='+Id;
+			 diag.URL = '<%=basePath%>promotemanage/goEdit.do?PRO_MANAGE_ID='+Id;
 			 diag.Width = 450;
 			 diag.Height = 355;
 			 diag.Modal = true;				//有无遮罩窗口
