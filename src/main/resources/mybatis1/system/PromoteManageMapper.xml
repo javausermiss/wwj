@@ -60,15 +60,13 @@
 			IMG_URL = #{IMG_URL},
 			TYPE = #{TYPE},
 			RETURN_RATIO = #{RETURN_RATIO},
-			CREATE_TIME = #{CREATE_TIME},
-			UPDATE_TIME = #{UPDATE_TIME},
-		PRO_MANAGE_ID = PRO_MANAGE_ID
+			UPDATE_TIME = now()
 		where 
 		PRO_MANAGE_ID = #{PRO_MANAGE_ID}
 	</update>
 	
 	<!-- 通过ID获取数据 -->
-	<select id="findById" parameterType="pd" resultType="pd">
+	<select id="findById" parameterType="java.lang.String" resultType="pd">
 		select 
 		<include refid="Field"></include>
 		from 

@@ -4,6 +4,12 @@ import java.util.Date;
 
 public class AccountLog implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9109681345495448564L;
+	
+
 	private String logId;
 
 	private String accId;
@@ -12,9 +18,11 @@ public class AccountLog implements java.io.Serializable {
 
 	private String lastTxnTime;
 
-	private String transId;
+	private String transType;
 
 	private String transAmt;
+	
+	private String orgTransAmt;
 
 	private String accAmt;
 
@@ -68,12 +76,12 @@ public class AccountLog implements java.io.Serializable {
 		this.lastTxnTime = lastTxnTime;
 	}
 
-	public String getTransId() {
-		return transId;
+	public String getTransType() {
+		return transType;
 	}
 
-	public void setTransId(String transId) {
-		this.transId = transId;
+	public void setTransType(String transType) {
+		this.transType = transType;
 	}
 
 	public String getTransAmt() {
@@ -82,6 +90,14 @@ public class AccountLog implements java.io.Serializable {
 
 	public void setTransAmt(String transAmt) {
 		this.transAmt = transAmt;
+	}
+
+	public String getOrgTransAmt() {
+		return orgTransAmt;
+	}
+
+	public void setOrgTransAmt(String orgTransAmt) {
+		this.orgTransAmt = orgTransAmt;
 	}
 
 	public String getAccAmt() {

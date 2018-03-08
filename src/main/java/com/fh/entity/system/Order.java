@@ -16,6 +16,9 @@ public class Order {
     private String CHANNEL;
     private String PAY_TYPE;  //支付的类型
     private String PRO_USER_ID;//订单用户所属的推广用户ID
+    
+    private String ADD_INFO; //追加信息
+    private String OUT_ORDER_ID; //外部订单信息
 
     public Order() {
     }
@@ -115,6 +118,20 @@ public class Order {
 	public void setPRO_USER_ID(String PRO_USER_ID) {
 		this.PRO_USER_ID = PRO_USER_ID;
 	}
-    
-    
+
+	public String getADD_INFO() {
+		return ADD_INFO;
+	}
+
+	public void setADD_INFO(String aDD_INFO) {
+		ADD_INFO = aDD_INFO;
+	}
+
+	public String getOUT_ORDER_ID() {
+		return OUT_ORDER_ID;
+	}
+
+	public void setOUT_ORDER_ID(String oUT_ORDER_ID) {
+		OUT_ORDER_ID = oUT_ORDER_ID;
+	}
 }

@@ -3,12 +3,17 @@ package com.fh.controller.wwjapp;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import com.fh.util.Const;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,6 +33,7 @@ import com.fh.service.system.payment.PaymentManager;
 import com.fh.service.system.playback.PlayBackManage;
 import com.fh.service.system.playdetail.PlayDetailManage;
 import com.fh.service.system.pond.PondManager;
+import com.fh.util.Const;
 import com.fh.util.PropertiesUtils;
 import com.fh.util.wwjUtil.MyUUID;
 import com.fh.util.wwjUtil.RedisUtil;
@@ -154,9 +160,8 @@ public class AppUserBalanceController extends BaseController {
             @RequestParam(value = "accessToken",required = false) String accessToken,
             @RequestParam("pid") String pid,
             @RequestParam(value="ctype" ,required = false) String ctype,
-            @RequestParam(value = "channel" ,required = false) String channel
-
-    ) {
+            @RequestParam(value = "channel" ,required = false) String channel,
+            @RequestParam(value="payType" ,required = false) String payType) {
         try {
 
             AppUser appUser = appuserService.getUserByID(userId);
@@ -187,6 +192,7 @@ public class AppUserBalanceController extends BaseController {
                     order.setREGGOLD(glodNum);//充值的金币数量
                     order.setCHANNEL(channel);
                     order.setCTYPE(ctype);
+                    order.setPAY_TYPE(payType);
                     orderTestService.regmount(order);
                     Map<String, Object> map = new HashMap<>();
                     map.put("Order", getOrderInfo(order.getORDER_ID()));
@@ -202,6 +208,7 @@ public class AppUserBalanceController extends BaseController {
                     order.setREGGOLD(glodNum);//充值的金币数量
                     order.setCHANNEL(channel);
                     order.setCTYPE(ctype);
+                    order.setPAY_TYPE(payType);
                     orderTestService.regmount(order);
                     Map<String, Object> map = new HashMap<>();
                     map.put("Order", getOrderInfo(order.getORDER_ID()));
@@ -218,6 +225,7 @@ public class AppUserBalanceController extends BaseController {
                 order.setREGGOLD(glodNum); //充值的金币数量
                 order.setCHANNEL(channel);
                 order.setCTYPE(ctype);
+                order.setPAY_TYPE(payType);
                 orderTestService.regmount(order);
                 Map<String, Object> map = new HashMap<>();
                 map.put("Order", getOrderInfo(order.getORDER_ID()));
@@ -251,8 +259,8 @@ public class AppUserBalanceController extends BaseController {
             @RequestParam("accessToken") String accessToken,
             @RequestParam("amount") String amount,
             @RequestParam(value="ctype" ,required = false) String ctype,
-            @RequestParam(value = "channel" ,required = false) String channel
-
+            @RequestParam(value = "channel" ,required = false) String channel,
+            @RequestParam(value="payType" ,required = false) String payType
     ) {
         try {
 
@@ -304,6 +312,7 @@ public class AppUserBalanceController extends BaseController {
                     order.setREGGOLD(glodNum);//充值的金币数量
                     order.setCHANNEL(channel);
                     order.setCTYPE(ctype);
+                    order.setPAY_TYPE(payType);
                     orderTestService.regmount(order);
                     Map<String, Object> map = new HashMap<>();
                     map.put("Order", getOrderInfo(order.getORDER_ID()));
@@ -319,6 +328,8 @@ public class AppUserBalanceController extends BaseController {
                     order.setREGGOLD(glodNum);//充值的金币数量
                     order.setCHANNEL(channel);
                     order.setCTYPE(ctype);
+                    order.setPAY_TYPE(payType);
+             
                     orderTestService.regmount(order);
                     Map<String, Object> map = new HashMap<>();
                     map.put("Order", getOrderInfo(order.getORDER_ID()));
@@ -335,6 +346,7 @@ public class AppUserBalanceController extends BaseController {
                 order.setREGGOLD(glodNum); //充值的金币数量
                 order.setCHANNEL(channel);
                 order.setCTYPE(ctype);
+                order.setPAY_TYPE(payType);
                 orderTestService.regmount(order);
                 Map<String, Object> map = new HashMap<>();
                 map.put("Order", getOrderInfo(order.getORDER_ID()));
@@ -456,51 +468,55 @@ public class AppUserBalanceController extends BaseController {
                     return "SUCCESS";
                 }
                 Paycard paycard = paycardService.getGold(String.valueOf(amount / 100));
-                if (paycard == null) {
-                    AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
-                    int reggold = Integer.valueOf(o.getREGAMOUNT()) / 10;
-                    int a = Integer.valueOf(appUser.getBALANCE()) + reggold;
-                    appUser.setBALANCE(String.valueOf(a));
-                    appuserService.updateAppUserBalanceById(appUser);
-                    Payment payment = new Payment();
-                    payment.setGOLD(String.valueOf(reggold));
-                    payment.setUSERID(o.getUSER_ID());
-                    payment.setDOLLID(null);
-                    payment.setCOST_TYPE("5");
-                    payment.setREMARK("充值测试");
-                    paymentService.reg(payment);
-                    o.setORDER_NO(order_no);
-                    o.setREGGOLD(String.valueOf(reggold));
-                    o.setSTATUS("1");
-                    orderTestService.update(o);
-                    return "SUCCESS";
+                
+                //用户充值 增加用户金币
+                if(Const.OrderPayType.R_TYPE.getValue().equals(o.getPAY_TYPE())){
+                
+//                if (paycard == null) {
+//                    AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
+//                    int reggold = Integer.valueOf(o.getREGAMOUNT()) / 10;
+//                    int a = Integer.valueOf(appUser.getBALANCE()) + reggold;
+//                    appUser.setBALANCE(String.valueOf(a));
+//                    appuserService.updateAppUserBalanceById(appUser);
+//                    Payment payment = new Payment();
+//                    payment.setGOLD(String.valueOf(reggold));
+//                    payment.setUSERID(o.getUSER_ID());
+//                    payment.setDOLLID(null);
+//                    payment.setCOST_TYPE("5");
+//                    payment.setREMARK("充值测试");
+//                    paymentService.reg(payment);
+//                    o.setORDER_NO(order_no);
+//                    o.setREGGOLD(String.valueOf(reggold));
+//                    o.setSTATUS("1");
+//                    orderTestService.update(o);
+//                    return "SUCCESS";
+//                }
+
+	                int gold = Integer.valueOf(paycard.getGOLD());
+	                String award = paycard.getAWARD();
+	                String rechare = paycard.getRECHARE();
+	
+	                AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
+	                int a = Integer.valueOf(appUser.getBALANCE()) + gold;
+	                appUser.setBALANCE(String.valueOf(a));
+	                appuserService.updateAppUserBalanceById(appUser);
+	                //更新收支表
+	                Payment payment = new Payment();
+	                payment.setGOLD("+" + rechare);
+	                payment.setUSERID(o.getUSER_ID());
+	                payment.setDOLLID(null);
+	                payment.setCOST_TYPE("5");
+	                payment.setREMARK("充值" + rechare);
+	                paymentService.reg(payment);
+	                //奖励记录
+	                Payment payment1 = new Payment();
+	                payment1.setGOLD("+" + award);
+	                payment1.setUSERID(o.getUSER_ID());
+	                payment1.setDOLLID(null);
+	                payment1.setCOST_TYPE("9");
+	                payment1.setREMARK("奖励" + award);
+	                paymentService.reg(payment1);
                 }
-
-                int gold = Integer.valueOf(paycard.getGOLD());
-                String award = paycard.getAWARD();
-                String rechare = paycard.getRECHARE();
-
-                AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
-                int a = Integer.valueOf(appUser.getBALANCE()) + gold;
-                appUser.setBALANCE(String.valueOf(a));
-                appuserService.updateAppUserBalanceById(appUser);
-                //更新收支表
-                Payment payment = new Payment();
-                payment.setGOLD("+" + rechare);
-                payment.setUSERID(o.getUSER_ID());
-                payment.setDOLLID(null);
-                payment.setCOST_TYPE("5");
-                payment.setREMARK("充值" + rechare);
-                paymentService.reg(payment);
-                //奖励记录
-                Payment payment1 = new Payment();
-                payment1.setGOLD("+" + award);
-                payment1.setUSERID(o.getUSER_ID());
-                payment1.setDOLLID(null);
-                payment1.setCOST_TYPE("9");
-                payment1.setREMARK("奖励" + award);
-                paymentService.reg(payment1);
-                o.setREGGOLD(String.valueOf(gold));
                 o.setORDER_NO(order_no);
                 o.setSTATUS("1");
                 orderTestService.update(o);
@@ -626,52 +642,56 @@ public class AppUserBalanceController extends BaseController {
                 if (o.getSTATUS().equals("1")) {
                     return "SUCCESS";
                 }
-                Paycard paycard = paycardService.getGold(String.valueOf(amount / 100));
-                if (paycard == null) {
-                    AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
-                    int reggold = Integer.valueOf(o.getREGAMOUNT()) / 10;
-                    int a = Integer.valueOf(appUser.getBALANCE()) + reggold;
-                    appUser.setBALANCE(String.valueOf(a));
-                    appuserService.updateAppUserBalanceById(appUser);
-                    Payment payment = new Payment();
-                    payment.setGOLD(String.valueOf(reggold));
-                    payment.setUSERID(o.getUSER_ID());
-                    payment.setDOLLID(null);
-                    payment.setCOST_TYPE("5");
-                    payment.setREMARK("充值测试");
-                    paymentService.reg(payment);
-                    o.setORDER_NO(order_no);
-                    o.setREGGOLD(String.valueOf(reggold));
-                    o.setSTATUS("1");
-                    orderTestService.update(o);
-                    return "SUCCESS";
+                //用户充值 增加用户金币
+                if(Const.OrderPayType.R_TYPE.getValue().equals(o.getPAY_TYPE())){
+                	
+                	Paycard paycard = paycardService.getGold(String.valueOf(amount / 100));
+	//                if (paycard == null) {
+	//                    AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
+	//                    int reggold = Integer.valueOf(o.getREGAMOUNT()) / 10;
+	//                    int a = Integer.valueOf(appUser.getBALANCE()) + reggold;
+	//                    appUser.setBALANCE(String.valueOf(a));
+	//                    appuserService.updateAppUserBalanceById(appUser);
+	//                    Payment payment = new Payment();
+	//                    payment.setGOLD(String.valueOf(reggold));
+	//                    payment.setUSERID(o.getUSER_ID());
+	//                    payment.setDOLLID(null);
+	//                    payment.setCOST_TYPE("5");
+	//                    payment.setREMARK("充值测试");
+	//                    paymentService.reg(payment);
+	//                    o.setORDER_NO(order_no);
+	//                    o.setREGGOLD(String.valueOf(reggold));
+	//                    o.setSTATUS("1");
+	//                    orderTestService.update(o);
+	//                    return "SUCCESS";
+	//                }
+	
+	                int gold = Integer.valueOf(paycard.getGOLD());
+	                String award = paycard.getAWARD();
+	                String rechare = paycard.getRECHARE();
+	
+	                AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
+	                int a = Integer.valueOf(appUser.getBALANCE()) + gold;
+	                appUser.setBALANCE(String.valueOf(a));
+	                appuserService.updateAppUserBalanceById(appUser);
+	                //更新收支表
+	                Payment payment = new Payment();
+	                payment.setGOLD("+" + rechare);
+	                payment.setUSERID(o.getUSER_ID());
+	                payment.setDOLLID(null);
+	                payment.setCOST_TYPE("5");
+	                payment.setREMARK("充值" + rechare);
+	                paymentService.reg(payment);
+	                //奖励记录
+	                Payment payment1 = new Payment();
+	                payment1.setGOLD("+" + award);
+	                payment1.setUSERID(o.getUSER_ID());
+	                payment1.setDOLLID(null);
+	                payment1.setCOST_TYPE("9");
+	                payment1.setREMARK("奖励" + award);
+	                paymentService.reg(payment1);
                 }
 
-                int gold = Integer.valueOf(paycard.getGOLD());
-                String award = paycard.getAWARD();
-                String rechare = paycard.getRECHARE();
-
-                AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
-                int a = Integer.valueOf(appUser.getBALANCE()) + gold;
-                appUser.setBALANCE(String.valueOf(a));
-                appuserService.updateAppUserBalanceById(appUser);
-                //更新收支表
-                Payment payment = new Payment();
-                payment.setGOLD("+" + rechare);
-                payment.setUSERID(o.getUSER_ID());
-                payment.setDOLLID(null);
-                payment.setCOST_TYPE("5");
-                payment.setREMARK("充值" + rechare);
-                paymentService.reg(payment);
-                //奖励记录
-                Payment payment1 = new Payment();
-                payment1.setGOLD("+" + award);
-                payment1.setUSERID(o.getUSER_ID());
-                payment1.setDOLLID(null);
-                payment1.setCOST_TYPE("9");
-                payment1.setREMARK("奖励" + award);
-                paymentService.reg(payment1);
-                o.setREGGOLD(String.valueOf(gold));
                 o.setORDER_NO(order_no);
                 o.setSTATUS("1");
                 orderTestService.update(o);
@@ -746,7 +766,9 @@ public class AppUserBalanceController extends BaseController {
                 return "SUCCESS";
             }
             
-
+            
+            //用户充值 增加用户金币
+            if(Const.OrderPayType.R_TYPE.getValue().equals(o.getPAY_TYPE())){
             	//充值的金币数量
                 int gold = Integer.valueOf(o.getREGGOLD());
                 String award = "";
@@ -801,10 +823,9 @@ public class AppUserBalanceController extends BaseController {
                 payment1.setCOST_TYPE("9");
                 payment1.setREMARK("奖励" + award);
                 paymentService.reg(payment1);
-      
+            }
                 //step7 更新订单
                 o.setORDER_NO(orderid);
-                o.setREGGOLD(String.valueOf(gold));
                 o.setSTATUS("1");
                 orderTestService.update(o);
                 

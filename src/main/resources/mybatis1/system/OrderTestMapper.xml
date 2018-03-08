@@ -16,7 +16,8 @@
 		ORDER_NO,
 		REGGOLD,
 		CTYPE,
-		CHANNEL
+		CHANNEL,
+		ADD_INFO
 	</sql>
 
     <insert id="regmount" parameterType="com.fh.entity.system.Order">
@@ -30,7 +31,9 @@
         REGAMOUNT,
         REGGOLD,
         CTYPE,
-        CHANNEL
+        CHANNEL,
+        ADD_INFO,
+        OUT_ORDER_ID
         )
         VALUES
         (
@@ -41,12 +44,29 @@
         #{REGAMOUNT},
         #{REGGOLD},
         #{CTYPE},
-        #{CHANNEL}
+        #{CHANNEL},
+        #{ADD_INFO},
+        #{OUT_ORDER_ID}
         )
     </insert>
 
 
     <update id="update" parameterType="com.fh.entity.system.Order">
+
+        UPDATE sys_app_order
+        SET
+        ORDER_NO = #{ORDER_NO},
+        STATUS=#{STATUS},
+        REGGOLD = #{REGGOLD}
+         <if test="OUT_ORDER_ID != null and OUT_ORDER_ID != ''">
+        	,OUT_ORDER_ID=#{OUT_ORDER_ID}
+        </if>
+        WHERE
+        ORDER_ID = #{ORDER_ID}
+    </update>
+    
+    
+	<update id="doRegCallbackUpdateOrder" parameterType="com.fh.entity.system.Order">
 
         UPDATE sys_app_order
         SET

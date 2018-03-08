@@ -211,6 +211,8 @@ public class Const {
 	}
 	
 	
+	
+	
 	/**
 	 * 
 	 * @author JAVA_DEV
@@ -246,6 +248,95 @@ public class Const {
 
 		public static PlayMentCostType findByCode(String value) {
 			for (PlayMentCostType t : PlayMentCostType.values()) {
+				if (t.value.equalsIgnoreCase(value)) {
+					return t;
+				}
+			}
+			return null;
+		}
+	}
+	
+	
+	/**
+	 * 
+	 * @author JAVA_DEV
+	 *
+	 */
+	public enum OrderPayType{
+		
+		R_TYPE("金币充值","R"),
+		P_TYPE("用户购买加盟权益","P");
+		
+		private  String name;
+		private  String value;
+
+		OrderPayType(String name, String value) {
+			this.name = name;
+			this.value = value;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getValue() {
+			return value;
+		}
+
+		public void setValue(String value) {
+			this.value = value;
+		}
+
+		public static OrderPayType findByCode(String value) {
+			for (OrderPayType t : OrderPayType.values()) {
+				if (t.value.equalsIgnoreCase(value)) {
+					return t;
+				}
+			}
+			return null;
+		}
+	}
+	
+	
+	public enum AccountTransType{
+		
+		TRANS_1000("充值","1000"),
+		TRANS_1001("推广分成","1001"),
+		TRANS_2000("消费","2000"),
+		TRANS_3000("转账","3000"),
+		TRANS_4000("内扣","4000"),
+		TRANS_5000("提现","5000");
+		
+		private  String name;
+		private  String value;
+
+		AccountTransType(String name, String value) {
+			this.name = name;
+			this.value = value;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getValue() {
+			return value;
+		}
+
+		public void setValue(String value) {
+			this.value = value;
+		}
+
+		public static AccountTransType findByCode(String value) {
+			for (AccountTransType t : AccountTransType.values()) {
 				if (t.value.equalsIgnoreCase(value)) {
 					return t;
 				}

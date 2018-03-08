@@ -7,8 +7,9 @@
 		<result column="ACC_ID" property="accId"/>
 		<result column="LAST_TXN_DATE" property="lastTxnDate"/>
 		<result column="LAST_TXN_TIME" property="lastTxnTime"/>
-		<result column="TRANS_ID" property="transId"/>
+		<result column="TRANS_TYPE" property="transType"/>
 		<result column="TRANS_AMT" property="transAmt"/>
+		<result column="ORG_TRANS_AMT" property="orgTransAmt"/>
 		<result column="ACC_AMT" property="accAmt"/>
 		<result column="ACC_TOTAL_AMT" property="accTotalAmt"/>
 		<result column="RES_COLUMN1" property="resColumn1"/>
@@ -32,8 +33,9 @@
 		ACC_ID,
 		LAST_TXN_DATE,
 		LAST_TXN_TIME,
-		TRANS_ID,
+		TRANS_TYPE,
 		TRANS_AMT,
+		ORG_TRANS_AMT,
 		ACC_AMT,
 		ACC_TOTAL_AMT,
 		RES_COLUMN1,
@@ -52,8 +54,9 @@
 		#{accId},
 		#{lastTxnDate},
 		#{lastTxnTime},
-		#{transId},
+		#{transType},
 		#{transAmt},
+		#{orgTransAmt},
 		#{accAmt},
 		#{accTotalAmt},
 		#{resColumn1},
@@ -91,7 +94,7 @@
 		<include refid="tableName"></include>
 		SET 
 			ACC_ID= #{accId},
-			TRANS_ID=#{transId},
+			TRANS_TYPE=#{transType},
 			RES_COLUMN1 =#{resColumn1},
 			RES_COLUMN2 =#{resColumn2},
 			RES_COLUMN3 =#{resColumn3},

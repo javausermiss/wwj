@@ -66,8 +66,8 @@ public class PromoteManageService implements PromoteManageManager{
 	 * @param pd
 	 * @throws Exception
 	 */
-	public PageData findById(PageData pd)throws Exception{
-		return (PageData)dao.findForObject("PromoteManageMapper.findById", pd);
+	public PageData findById(String id)throws Exception{
+		return (PageData)dao.findForObject("PromoteManageMapper.findById", id);
 	}
 	
 	/**批量删除

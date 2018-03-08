@@ -16,6 +16,7 @@ public class TransLog implements java.io.Serializable {
 	private String orgTransId;
 	private String dmsRelatedKey;
 	private String orgDmsRelatedKey;
+	private String transType;
 	private String orderSt;
 	private String transSt;
 	private String transCode;
@@ -39,6 +40,10 @@ public class TransLog implements java.io.Serializable {
 	private Date updateDate;
 	private String lockVersion;
 	private String mchntId;
+	
+	private String resColumn1;
+	private String resColumn2;
+	private String resColumn3;
 	
 	public String getTransId() {
 		return transId;
@@ -202,5 +207,28 @@ public class TransLog implements java.io.Serializable {
 	public void setMchntId(String mchntId) {
 		this.mchntId = mchntId;
 	}
-	
+	public String getResColumn1() {
+		return resColumn1;
+	}
+	public void setResColumn1(String resColumn1) {
+		this.resColumn1 = resColumn1;
+	}
+	public String getResColumn2() {
+		return resColumn2;
+	}
+	public void setResColumn2(String resColumn2) {
+		this.resColumn2 = resColumn2;
+	}
+	public String getResColumn3() {
+		return resColumn3;
+	}
+	public void setResColumn3(String resColumn3) {
+		this.resColumn3 = resColumn3;
+	}
+	public String getTransType() {
+		return transType;
+	}
+	public void setTransType(String transType) {
+		this.transType = transType;
+	}
 }

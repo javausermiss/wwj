@@ -22,6 +22,16 @@ public interface OrderTestManager {
      * @throws Exception
      */
     public int update(Order order)throws Exception;
+    
+    
+    
+    /**
+     * 用户充值，支付回掉，修改订单状态
+     * @param order
+     * @return
+     * @throws Exception
+     */
+    public int doRegCallbackUpdateOrder(Order order)throws Exception;
 
     /**
      * 通过ID查询订单信息
