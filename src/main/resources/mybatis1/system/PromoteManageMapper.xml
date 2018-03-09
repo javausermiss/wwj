@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="PromoteManageMapper">
 	
 	<!--表名 -->
@@ -10,9 +11,10 @@
 	<!-- 字段 -->
 	<sql id="Field">
 		PAY_AMOUNT,	
-		GOLD,	
+		PAY_GOLD,
+		CONVER_GOLD,	
 		IMG_URL,	
-		TYPE,	
+		PRO_TYPE,	
 		RETURN_RATIO,	
 		CREATE_TIME,	
 		UPDATE_TIME,	
@@ -22,11 +24,12 @@
 	<!-- 字段值 -->
 	<sql id="FieldValue">
 		#{PAY_AMOUNT},	
-		#{GOLD},	
+		#{PAY_GOLD},
+		#{CONVER_GOLD},	
 		#{IMG_URL},	
-		#{TYPE},	
+		#{PRO_TYPE},	
 		#{RETURN_RATIO},	
-		#{CREATE_TIME},	
+		now(),	
 		#{UPDATE_TIME},	
 		#{PRO_MANAGE_ID}
 	</sql>
@@ -56,9 +59,10 @@
 		<include refid="tableName"></include>
 		set 
 			PAY_AMOUNT = #{PAY_AMOUNT},
-			GOLD = #{GOLD},
+			PAY_GOLD   =#{PAY_GOLD},
+			CONVER_GOLD = #{CONVER_GOLD},
 			IMG_URL = #{IMG_URL},
-			TYPE = #{TYPE},
+			PRO_TYPE = #{PRO_TYPE},
 			RETURN_RATIO = #{RETURN_RATIO},
 			UPDATE_TIME = now()
 		where 

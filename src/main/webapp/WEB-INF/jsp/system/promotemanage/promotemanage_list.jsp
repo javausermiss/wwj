@@ -66,13 +66,10 @@
 									<th class="center" style="width:35px;">
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
-									<th class="center">支付金额</th>
-									<th class="center">获取金币数</th>
-									<th class="center">图片地址</th>
-									<th class="center">类型</th>
+									<th class="center">支付金币数量</th>
+									<th class="center">下级兑换金币</th>
 									<th class="center">返回比例</th>
 									<th class="center">创建时间</th>
-									<th class="center">更新时间</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -87,13 +84,10 @@
 											<td class='center'>
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.PRO_MANAGE_ID}" class="ace" /><span class="lbl"></span></label>
 											</td>
-											<td class='center'>${var.PAY_AMOUNT}</td>
-											<td class='center'>${var.GOLD}</td>
-											<td class='center'>${var.IMG_URL}</td>
-											<td class='center'>${var.TYPE}</td>
+											<td class='center'>${var.PAY_GOLD}</td>
+											<td class='center'>${var.CONVER_GOLD}</td>
 											<td class='center'>${var.RETURN_RATIO}</td>
 											<td class='center'>${var.CREATE_TIME}</td>
-											<td class='center'>${var.UPDATE_TIME}</td>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>

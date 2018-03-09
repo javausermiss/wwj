@@ -35,8 +35,8 @@
 		NICKNAME,
 		CNEE_PHONE,
 		CNEE_ADDRESS,
-		CNEE_NAME
-
+		CNEE_NAME,
+		PRO_USER_ID
 	</sql>
 
     <!-- 字段值 -->
@@ -66,7 +66,8 @@
 		#{NICKNAME},
 		#{CNEE_PHONE},
 		#{CNEE_ADDRESS},
-		#{CNEE_NAME}
+		#{CNEE_NAME},
+		#{PRO_USER_ID}
 	</sql>
 
     <!-- 角色表 -->
@@ -218,6 +219,10 @@
         <if test="PASSWORD != null and PASSWORD != ''">
             ,PASSWORD = #{PASSWORD}
         </if>
+        <if test="PRO_USER_ID != null and PRO_USER_ID != ''">
+            ,PRO_USER_ID = #{PRO_USER_ID}
+        </if>
+        
         where
         USER_ID = #{USER_ID}
     </update>
@@ -478,6 +483,17 @@
 		WHERE
 		USER_ID = #{USER_ID}
 	</update>
+	
+	<update id="updateProUserId" parameterType="com.fh.entity.system.AppUser">
+		UPDATE
+		sys_app_user
+		SET
+		PRO_USER_ID = #{PRO_USER_ID}
+		WHERE
+		USER_ID = #{USER_ID}
+	</update>
+	
+	
 
     <select id="testuser" parameterType="com.fh.entity.system.AppUser" resultType="com.fh.entity.system.AppUser">
         SELECT * FROM sys_app_user where nickname = #{NICKNAME} AND phone = #{PHONE}

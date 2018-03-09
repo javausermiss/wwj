@@ -334,5 +334,14 @@ public interface AppuserManager {
      * @throws Exception
      */
 	public PageData getAppUserBetRanklist(String userid)throws Exception;
+	
+	
+    /**
+     * 修改用户的所属推广用户信息
+     * @param appUser
+     * @return
+     * @throws Exception
+     */
+    public int updateProUserId(AppUser appUser)throws Exception;
 }
 

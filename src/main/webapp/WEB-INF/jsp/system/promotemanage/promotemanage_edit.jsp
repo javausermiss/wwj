@@ -32,16 +32,16 @@
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">支付金额:</td>
-								<td><input type="number" name="PAY_AMOUNT" id="PAY_AMOUNT" value="${pd.PAY_AMOUNT}" maxlength="12" placeholder="这里输入支付金额" title="支付金额" style="width:98%;"/></td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">支付金币数:</td>
+								<td><input type="number" name="PAY_GOLD" id="PAY_GOLD" value="${pd.PAY_GOLD}" maxlength="12" placeholder="这里输入支付金币数" title="获取金币数" style="width:98%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">获取金币数:</td>
-								<td><input type="number" name="GOLD" id="GOLD" value="${pd.GOLD}" maxlength="12" placeholder="这里输入获取金币数" title="获取金币数" style="width:98%;"/></td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">下级可获金币数:</td>
+								<td><input type="number" name="CONVER_GOLD" id="CONVER_GOLD" value="${pd.CONVER_GOLD}" maxlength="12" placeholder="这里输入下级可获金币数" title="下级可获金币数" style="width:98%;"/></td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">图片地址:</td>
-								<td><input type="text" name="IMG_URL" id="IMG_URL" value="${pd.IMG_URL}" maxlength="32" placeholder="这里输入图片地址" title="图片地址" style="width:98%;"/><td><input type="file" id="IMG_FILE" name="IMG_FILE" /></td></td>
+								<td><input type="text" name="IMG_URL" id="IMG_URL" value="${pd.IMG_URL}" maxlength="32" placeholder="这里输入图片地址" title="图片地址" style="width:98%;"/> &nbsp;&nbsp;<input type="file" id="IMG_FILE" name="IMG_FILE" /></td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">返回比例:</td>
@@ -82,24 +82,25 @@
 		$(top.hangge());
 		//保存
 		function save(){
-			if($("#PAY_AMOUNT").val()==""){
-				$("#PAY_AMOUNT").tips({
-					side:3,
-		            msg:'请输入支付金额',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#PAY_AMOUNT").focus();
-			return false;
-			}
-			if($("#GOLD").val()==""){
-				$("#GOLD").tips({
+
+			if($("#PAY_GOLD").val()==""){
+				$("#PAY_GOLD").tips({
 					side:3,
 		            msg:'请输入获取金币数',
 		            bg:'#AE81FF',
 		            time:2
 		        });
-				$("#GOLD").focus();
+				$("#PAY_GOLD").focus();
+			return false;
+			}
+			if($("#CONVER_GOLD").val()==""){
+				$("#CONVER_GOLD").tips({
+					side:3,
+		            msg:'请输入获取金币数',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#CONVER_GOLD").focus();
 			return false;
 			}
 			if($("#RETURN_RATIO").val()==""){

@@ -33,7 +33,9 @@ import com.fh.service.system.payment.PaymentManager;
 import com.fh.service.system.playback.PlayBackManage;
 import com.fh.service.system.playdetail.PlayDetailManage;
 import com.fh.service.system.pond.PondManager;
+import com.fh.service.system.promotemanage.PromoteManageManager;
 import com.fh.util.Const;
+import com.fh.util.PageData;
 import com.fh.util.PropertiesUtils;
 import com.fh.util.wwjUtil.MyUUID;
 import com.fh.util.wwjUtil.RedisUtil;
@@ -70,6 +72,12 @@ public class AppUserBalanceController extends BaseController {
 
     @Resource(name = "paycardService")
     private PaycardManager paycardService;
+    
+    /**
+     * 渠道信息
+     */
+    @Resource(name = "promotemanageService")
+    private PromoteManageManager promotemanageService;
 
 
     /**
@@ -176,70 +184,124 @@ public class AppUserBalanceController extends BaseController {
             String glodNum = paycard.getGOLD();//金币数量
             int amount = Integer.valueOf(paycard.getAMOUNT());//金额
             boolean a = RedisUtil.getRu().exists("tradeOrder");
+            
+            //=======创建订单号 begin=======
+            String newOrder=""; //订单号
             if (a) {
                 String tradeOrder = RedisUtil.getRu().get("tradeOrder");
                 String x = tradeOrder.substring(0, 8);//取前八位进行判断
                 if (datetime.substring(0, 8).equals(x)) {
                     String six = tradeOrder.substring(tradeOrder.length() - 6, tradeOrder.length());
                     String newsix = String.format("%06d", (Integer.valueOf(six) + 1));
-                    String newOrder = datetime + newsix;//新的订单编号
+                    newOrder = datetime + newsix;//新的订单编号
                     RedisUtil.getRu().set("tradeOrder", newOrder);
-                    Order order = new Order();
-                    order.setUSER_ID(userId);
-                    order.setREC_ID(MyUUID.getUUID32());
-                    order.setREGAMOUNT(String.valueOf(amount*100));//充值金额
-                    order.setORDER_ID(newOrder);
-                    order.setREGGOLD(glodNum);//充值的金币数量
-                    order.setCHANNEL(channel);
-                    order.setCTYPE(ctype);
-                    order.setPAY_TYPE(payType);
-                    orderTestService.regmount(order);
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("Order", getOrderInfo(order.getORDER_ID()));
-                    return RespStatus.successs().element("data", map);
                 } else {
-                    String newOrder = datetime + "000001";//新的订单编号
+                    newOrder = datetime + "000001";//新的订单编号
                     RedisUtil.getRu().set("tradeOrder", newOrder);
-                    Order order = new Order();
-                    order.setUSER_ID(userId);
-                    order.setREC_ID(MyUUID.getUUID32());
-                    order.setREGAMOUNT(String.valueOf(amount*100));
-                    order.setORDER_ID(newOrder);
-                    order.setREGGOLD(glodNum);//充值的金币数量
-                    order.setCHANNEL(channel);
-                    order.setCTYPE(ctype);
-                    order.setPAY_TYPE(payType);
-                    orderTestService.regmount(order);
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("Order", getOrderInfo(order.getORDER_ID()));
-                    return RespStatus.successs().element("data", map);
                 }
             } else {
-                String newOrder = datetime + "000001";//新的订单编号
+                newOrder = datetime + "000001";//新的订单编号
                 RedisUtil.getRu().set("tradeOrder", newOrder);
-                Order order = new Order();
-                order.setUSER_ID(userId);
-                order.setREC_ID(MyUUID.getUUID32());
-                order.setREGAMOUNT(String.valueOf(amount*100));
-                order.setORDER_ID(newOrder);
-                order.setREGGOLD(glodNum); //充值的金币数量
-                order.setCHANNEL(channel);
-                order.setCTYPE(ctype);
-                order.setPAY_TYPE(payType);
-                orderTestService.regmount(order);
-                Map<String, Object> map = new HashMap<>();
-                map.put("Order", getOrderInfo(order.getORDER_ID()));
-                return RespStatus.successs().element("data", map);
             }
-
+            //=======创建订单号 end=======
+            
+            Order order = new Order();
+            order.setUSER_ID(userId);
+            order.setREC_ID(newOrder);
+            order.setREGAMOUNT(String.valueOf(amount*100));
+            order.setORDER_ID(newOrder);
+            order.setREGGOLD(glodNum); //充值的金币数量
+            order.setCHANNEL(channel);
+            order.setCTYPE(ctype);
+            order.setPAY_TYPE(payType);
+            orderTestService.regmount(order);
+            Map<String, Object> map = new HashMap<>();
+            map.put("Order", getOrderInfo(order.getORDER_ID()));
+            return RespStatus.successs().element("data", map);
         }catch (Exception e){
             e.printStackTrace();
             return RespStatus.fail();
         }
-
-
     }
 
+    
+    
+    /**
+     * 购买推广权益，提交订单接口
+     * @param userId
+     * @param accessToken
+     * @param pid
+     * @param ctype
+     * @param channel
+     * @return
+     */
+
+    @RequestMapping(value = "/commitPromoteOrderToGold", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public JSONObject commitPromoteOrderToGold(
+            @RequestParam("userId") String userId,
+            @RequestParam(value = "accessToken",required = false) String accessToken,
+            @RequestParam("proManageId") String proManageId,
+            @RequestParam(value="ctype" ,required = false) String ctype,
+            @RequestParam(value = "channel" ,required = false) String channel,
+            @RequestParam(value="payType" ,required = false) String payType) {
+        try {
+
+            AppUser appUser = appuserService.getUserByID(userId);
+            if (appUser == null) {
+                return RespStatus.fail();
+            }
+           
+            PageData proPd =  promotemanageService.findById(proManageId);
+            if (proPd==null){
+                return RespStatus.fail();
+            }
+            
+            String datetime = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
+            String glodNum = proPd.getString("GOLD");//金币数量
+            int amount = Integer.valueOf(proPd.getString("PAY_AMOUNT"));//金额
+            boolean a = RedisUtil.getRu().exists("tradeOrder");
+            
+            //=======创建订单号 begin=======
+            String newOrder=""; //订单号
+            if (a) {
+                String tradeOrder = RedisUtil.getRu().get("tradeOrder");
+                String x = tradeOrder.substring(0, 8);//取前八位进行判断
+                if (datetime.substring(0, 8).equals(x)) {
+                    String six = tradeOrder.substring(tradeOrder.length() - 6, tradeOrder.length());
+                    String newsix = String.format("%06d", (Integer.valueOf(six) + 1));
+                    newOrder = datetime + newsix;//新的订单编号
+                    RedisUtil.getRu().set("tradeOrder", newOrder);
+                } else {
+                    newOrder = datetime + "000001";//新的订单编号
+                    RedisUtil.getRu().set("tradeOrder", newOrder);
+                }
+            } else {
+                newOrder = datetime + "000001";//新的订单编号
+                RedisUtil.getRu().set("tradeOrder", newOrder);
+            }
+            //=======创建订单号 end=======
+            
+            Order order = new Order();
+            order.setUSER_ID(userId);
+            order.setREC_ID(newOrder);
+            order.setREGAMOUNT(String.valueOf(amount));
+            order.setORDER_ID(newOrder);
+            order.setREGGOLD(glodNum); //充值的金币数量
+            order.setCHANNEL(channel);
+            order.setCTYPE(ctype);
+            order.setPAY_TYPE(payType);
+            order.setADD_INFO(proManageId); //权益推广ID
+            order.setPRO_USER_ID(appUser.getPRO_USER_ID());  //渠道推广用户
+            orderTestService.regmount(order);
+            Map<String, Object> map = new HashMap<>();
+            map.put("Order", getOrderInfo(order.getORDER_ID()));
+            return RespStatus.successs().element("data", map);
+        }catch (Exception e){
+            e.printStackTrace();
+            return RespStatus.fail();
+        }
+    }
 
 
 
@@ -296,62 +358,41 @@ public class AppUserBalanceController extends BaseController {
             }
             //获取金币数量 临时解决方案  end 请注意 坑................
             
+            //=======创建订单号 begin=======
+            String newOrder=""; //订单号
             if (a) {
                 String tradeOrder = RedisUtil.getRu().get("tradeOrder");
                 String x = tradeOrder.substring(0, 8);//取前八位进行判断
                 if (datetime.substring(0, 8).equals(x)) {
                     String six = tradeOrder.substring(tradeOrder.length() - 6, tradeOrder.length());
                     String newsix = String.format("%06d", (Integer.valueOf(six) + 1));
-                    String newOrder = datetime + newsix;//新的订单编号
+                    newOrder = datetime + newsix;//新的订单编号
                     RedisUtil.getRu().set("tradeOrder", newOrder);
-                    Order order = new Order();
-                    order.setUSER_ID(userId);
-                    order.setREC_ID(MyUUID.getUUID32());
-                    order.setREGAMOUNT(amount);
-                    order.setORDER_ID(newOrder);
-                    order.setREGGOLD(glodNum);//充值的金币数量
-                    order.setCHANNEL(channel);
-                    order.setCTYPE(ctype);
-                    order.setPAY_TYPE(payType);
-                    orderTestService.regmount(order);
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("Order", getOrderInfo(order.getORDER_ID()));
-                    return RespStatus.successs().element("data", map);
+                   
                 } else {
-                    String newOrder = datetime + "000001";//新的订单编号
+                    newOrder = datetime + "000001";//新的订单编号
                     RedisUtil.getRu().set("tradeOrder", newOrder);
-                    Order order = new Order();
-                    order.setUSER_ID(userId);
-                    order.setREC_ID(MyUUID.getUUID32());
-                    order.setREGAMOUNT(amount);
-                    order.setORDER_ID(newOrder);
-                    order.setREGGOLD(glodNum);//充值的金币数量
-                    order.setCHANNEL(channel);
-                    order.setCTYPE(ctype);
-                    order.setPAY_TYPE(payType);
-             
-                    orderTestService.regmount(order);
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("Order", getOrderInfo(order.getORDER_ID()));
-                    return RespStatus.successs().element("data", map);
                 }
             } else {
-                String newOrder = datetime + "000001";//新的订单编号
+                newOrder = datetime + "000001";//新的订单编号
                 RedisUtil.getRu().set("tradeOrder", newOrder);
-                Order order = new Order();
-                order.setUSER_ID(userId);
-                order.setREC_ID(MyUUID.getUUID32());
-                order.setREGAMOUNT(amount);
-                order.setORDER_ID(newOrder);
-                order.setREGGOLD(glodNum); //充值的金币数量
-                order.setCHANNEL(channel);
-                order.setCTYPE(ctype);
-                order.setPAY_TYPE(payType);
-                orderTestService.regmount(order);
-                Map<String, Object> map = new HashMap<>();
-                map.put("Order", getOrderInfo(order.getORDER_ID()));
-                return RespStatus.successs().element("data", map);
             }
+            //=======创建订单号 end=======
+            
+            Order order = new Order();
+            order.setUSER_ID(userId);
+            order.setREC_ID(newOrder);
+            order.setREGAMOUNT(amount);
+            order.setORDER_ID(newOrder);
+            order.setREGGOLD(glodNum);//充值的金币数量
+            order.setCHANNEL(channel);
+            order.setCTYPE(ctype);
+            order.setPAY_TYPE(payType);
+            orderTestService.regmount(order);
+            Map<String, Object> map = new HashMap<>();
+            map.put("Order", getOrderInfo(order.getORDER_ID()));
+            return RespStatus.successs().element("data", map);
+            
         } catch (Exception e) {
             e.printStackTrace();
             return RespStatus.fail();

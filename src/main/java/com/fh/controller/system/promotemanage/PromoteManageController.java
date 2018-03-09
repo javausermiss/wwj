@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -22,16 +23,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.service.system.promotemanage.PromoteManageManager;
 import com.fh.util.AppUtil;
 import com.fh.util.FastDFSClient;
+import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
-import com.fh.util.StringUtils;
-import com.fh.util.Jurisdiction;
-import com.fh.util.Tools;
-import com.fh.service.system.promotemanage.PromoteManageManager;
 
 /** 
  * 说明：渠道推广
@@ -60,8 +60,8 @@ public class PromoteManageController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		
 		
-		String PAY_AMOUNT = req.getParameter("PAY_AMOUNT");
-		String GOLD = req.getParameter("GOLD");
+		String PAY_GOLD = req.getParameter("PAY_GOLD");
+		String CONVER_GOLD = req.getParameter("CONVER_GOLD");
 		String RETURN_RATIO = req.getParameter("RETURN_RATIO");
 		
 		PageData pd = new PageData();
@@ -80,8 +80,9 @@ public class PromoteManageController extends BaseController {
 		}
 		
 		pd.put("IMG_URL", fileId);//图片地址
-		pd.put("PAY_AMOUNT", PAY_AMOUNT);//支付金额
-		pd.put("GOLD", GOLD);//推广用户兑换金币数量
+		pd.put("PAY_GOLD", PAY_GOLD);//支付金额
+		pd.put("CONVER_GOLD", CONVER_GOLD);//推广用户兑换金币数量
+		pd.put("PRO_TYPE","1");
 		pd.put("RETURN_RATIO", RETURN_RATIO);//权益比例
 		
 		promotemanageService.save(pd);
@@ -118,8 +119,8 @@ public class PromoteManageController extends BaseController {
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
 		ModelAndView mv = this.getModelAndView();
 		
-		String PAY_AMOUNT = req.getParameter("PAY_AMOUNT");
-		String GOLD = req.getParameter("GOLD");
+		String PAY_GOLD = req.getParameter("PAY_GOLD");
+		String CONVER_GOLD = req.getParameter("CONVER_GOLD");
 		String RETURN_RATIO = req.getParameter("RETURN_RATIO");
 		
 		PageData  managePd=promotemanageService.findById(req.getParameter("PRO_MANAGE_ID"));
@@ -147,8 +148,8 @@ public class PromoteManageController extends BaseController {
 		}
 				
 		managePd.put("IMG_URL", fileId);//图片地址
-		managePd.put("PAY_AMOUNT", PAY_AMOUNT);//支付金额
-		managePd.put("GOLD", GOLD);//推广用户兑换金币数量
+		managePd.put("PAY_GOLD", PAY_GOLD);//支付金额
+		managePd.put("CONVER_GOLD", CONVER_GOLD);//推广用户兑换金币数量
 		managePd.put("RETURN_RATIO", RETURN_RATIO);//权益比例
 		
 		promotemanageService.edit(managePd);

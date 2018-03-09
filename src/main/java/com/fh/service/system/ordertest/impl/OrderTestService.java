@@ -68,47 +68,46 @@ public class OrderTestService  implements OrderTestManager{
      * @throws Exception
      */
     public int doRegCallbackUpdateOrder(Order order)throws Exception{
-    	
-    	try{
-	    	 //如果当前用户是购买加盟推广权益
-	    	 if(Const.OrderPayType.P_TYPE.getValue().equals(order.getPAY_TYPE())){
-	    		 //用户现金账户开户
-	    		accountOperService.openAccountInfByUser(order.getUSER_ID());
-	    		
-	    		//权益分成
-	    		PageData promotepd= promoteAppUserService.findByUserId(order.getUSER_ID());
-	    		if(promotepd==null){
-	    			promotepd=new PageData();
-	    			promotepd.put("USER_ID", order.getUSER_ID());
-		    		promotepd.put("PRO_MANAGE_ID", "");
-		    		promotepd.put("RETURN_RATIO", "");
-		    		promoteAppUserService.save(promotepd);
-	    		}else{
-		    		promotepd.put("PRO_MANAGE_ID", "");
-		    		promotepd.put("RETURN_RATIO", "");
-		    		promoteAppUserService.edit(promotepd);
-	    		}
-
-	    		promoteAppUserListService.save(promotepd); //权益分成明细表
-	    		
-	    	 }else{
-	    		 
-	    		 //如果当前用户的上级，推广用户ID不为空，则为用户增加权益
-	    		if(StringUtils.isNotEmpty(order.getPRO_USER_ID())){
-	    			//推广用户开户
-	    			TxnResp txnResp=accountOperService.openAccountInfByUser(order.getPRO_USER_ID());
-	    			if(txnResp !=null && txnResp.isRespCode()){
-	       		 		/***添加账户交易订单**/
-		       		 	TransLog transLog=new TransLog();
-		       		    transLog.setTransType(AccountTransType.TRANS_1001.getValue());
-		       		    transLog.setPriAccId(txnResp.getPriAccId()); //用户的主账户ID
-		       		 	translogService.save(transLog);
-	    			}
-	    		}
-	    	 }
-    	}catch(Exception ex){
-    		logger.error("doRegCallbackUpdateOrder Exception:", ex);
-    	}
+//    	try{
+//	    	 //如果当前用户是购买加盟推广权益
+//	    	 if(Const.OrderPayType.P_TYPE.getValue().equals(order.getPAY_TYPE())){
+//	    		 //用户现金账户开户
+//	    		accountOperService.openAccountInfByUser(order.getUSER_ID());
+//	    		
+//	    		//权益分成
+//	    		PageData promotepd= promoteAppUserService.findByUserId(order.getUSER_ID());
+//	    		if(promotepd==null){
+//	    			promotepd=new PageData();
+//	    			promotepd.put("USER_ID", order.getUSER_ID());
+//		    		promotepd.put("PRO_MANAGE_ID", "");
+//		    		promotepd.put("RETURN_RATIO", "");
+//		    		promoteAppUserService.save(promotepd);
+//	    		}else{
+//		    		promotepd.put("PRO_MANAGE_ID", "");
+//		    		promotepd.put("RETURN_RATIO", "");
+//		    		promoteAppUserService.edit(promotepd);
+//	    		}
+//
+//	    		promoteAppUserListService.save(promotepd); //权益分成明细表
+//	    		
+//	    	 }else{
+//	    		 
+//	    		 //如果当前用户的上级，推广用户ID不为空，则为用户增加权益
+//	    		if(StringUtils.isNotEmpty(order.getPRO_USER_ID())){
+//	    			//推广用户开户
+//	    			TxnResp txnResp=accountOperService.openAccountInfByUser(order.getPRO_USER_ID());
+//	    			if(txnResp !=null && txnResp.isRespCode()){
+//	       		 		/***添加账户交易订单**/
+//		       		 	TransLog transLog=new TransLog();
+//		       		    transLog.setTransType(AccountTransType.TRANS_1001.getValue());
+//		       		    transLog.setPriAccId(txnResp.getPriAccId()); //用户的主账户ID
+//		       		 	translogService.save(transLog);
+//	    			}
+//	    		}
+//	    	 }
+//    	}catch(Exception ex){
+//    		logger.error("doRegCallbackUpdateOrder Exception:", ex);
+//    	}
     	 
     	 return (int)dao.update("OrderMapper.doRegCallbackUpdateOrder", order);
     }

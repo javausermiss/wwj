@@ -123,15 +123,15 @@ public class Order {
 		return ADD_INFO;
 	}
 
-	public void setADD_INFO(String aDD_INFO) {
-		ADD_INFO = aDD_INFO;
+	public void setADD_INFO(String ADD_INFO) {
+		this.ADD_INFO = ADD_INFO;
 	}
 
 	public String getOUT_ORDER_ID() {
 		return OUT_ORDER_ID;
 	}
 
-	public void setOUT_ORDER_ID(String oUT_ORDER_ID) {
-		OUT_ORDER_ID = oUT_ORDER_ID;
+	public void setOUT_ORDER_ID(String OUT_ORDER_ID) {
+		this.OUT_ORDER_ID = OUT_ORDER_ID;
 	}
 }
