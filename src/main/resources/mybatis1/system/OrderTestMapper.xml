@@ -16,6 +16,8 @@
 		ORDER_NO,
 		REGGOLD,
 		CTYPE,
+		PAY_TYPE,
+		PRO_USER_ID,
 		CHANNEL,
 		ADD_INFO
 	</sql>
@@ -32,6 +34,8 @@
         REGGOLD,
         CTYPE,
         CHANNEL,
+        PAY_TYPE,
+		PRO_USER_ID,
         ADD_INFO,
         OUT_ORDER_ID
         )
@@ -45,6 +49,8 @@
         #{REGGOLD},
         #{CTYPE},
         #{CHANNEL},
+        #{PAY_TYPE},
+		#{PRO_USER_ID},
         #{ADD_INFO},
         #{OUT_ORDER_ID}
         )

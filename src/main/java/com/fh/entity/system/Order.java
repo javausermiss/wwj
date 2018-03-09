@@ -19,6 +19,9 @@ public class Order {
     
     private String ADD_INFO; //追加信息
     private String OUT_ORDER_ID; //外部订单信息
+    
+    /***业务扩展字段***/
+    private String userNickName;
 
     public Order() {
     }
@@ -134,4 +137,13 @@ public class Order {
 	public void setOUT_ORDER_ID(String OUT_ORDER_ID) {
 		this.OUT_ORDER_ID = OUT_ORDER_ID;
 	}
+
+	public String getUserNickName() {
+		return userNickName;
+	}
+
+	public void setUserNickName(String userNickName) {
+		this.userNickName = userNickName;
+	}
+	
 }

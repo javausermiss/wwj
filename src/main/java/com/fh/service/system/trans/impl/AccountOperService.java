@@ -109,7 +109,7 @@ public class AccountOperService implements AccountOperManager{
 		}
 		
 		//查找账户信息
-		AccountInf accountInf=accountInfService.findByUserId(transLog.getPriAccId());
+		AccountInf accountInf=accountInfService.findById(transLog.getPriAccId());
 		if(accountInf==null){
 			txnResp.setResultCode("10002"); //返回状态
 			txnResp.setMsg("账户信息不存在");

@@ -38,7 +38,7 @@ public class TransLog implements java.io.Serializable {
 	private Date createDate;
 	private String updateUser;
 	private Date updateDate;
-	private String lockVersion;
+	private long lockVersion;
 	private String mchntId;
 	
 	private String resColumn1;
@@ -195,10 +195,10 @@ public class TransLog implements java.io.Serializable {
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
 	}
-	public String getLockVersion() {
+	public long getLockVersion() {
 		return lockVersion;
 	}
-	public void setLockVersion(String lockVersion) {
+	public void setLockVersion(long lockVersion) {
 		this.lockVersion = lockVersion;
 	}
 	public String getMchntId() {

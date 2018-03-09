@@ -160,6 +160,18 @@
 	</update>
 	
 	
+	<update id="editOrderResp" parameterType="TransLog">
+		UPDATE
+		<include refid="tableName"></include>
+		SET 
+			TRANS_ST = #{transSt},
+			RESP_CODE = #{respCode},
+			LOCK_VERSION = LOCK_VERSION+1
+		WHERE 
+		TRANS_ID = #{transId}
+	</update>
+	
+	
 	<!-- 修改交易订单状态 -->
 	<update id="updateTransLogByST" parameterType="TransLog">
 		UPDATE
