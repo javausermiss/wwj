@@ -99,9 +99,15 @@
 	</select>
 	
 	<!-- 列表(全部) -->
-	<select id="listAll" parameterType="pd" resultType="pd">
+	<select id="listAll"  resultType="pd">
 		select
-		<include refid="Field"></include>
+		PRO_MANAGE_ID,
+		PAY_AMOUNT,	
+		PAY_GOLD,
+		CONVER_GOLD,	
+		IMG_URL,	
+		PRO_TYPE,	
+		RETURN_RATIO
 		from 
 		<include refid="tableName"></include>
 	</select>
