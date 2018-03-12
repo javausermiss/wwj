@@ -13,6 +13,7 @@ import com.fh.service.system.trans.AccountLogManager;
 import com.fh.service.system.trans.AccountOperManager;
 import com.fh.service.system.trans.TransLogManager;
 import com.fh.util.AccountUtil;
+import com.fh.util.DateUtil;
 import com.fh.util.NumberUtils;
 import com.fh.util.resp.TxnResp;
 
@@ -128,6 +129,8 @@ public class AccountOperService implements AccountOperManager{
 		
 		//记录账户日志记录
 		AccountLog accountLog=new AccountLog();
+		accountLog.setLastTxnDate(DateUtil.getDays());
+		accountLog.setLastTxnTime(DateUtil.getTimeHHmmss());
 		accountLog.setAccId(accountInf.getAccId());
 		accountLog.setTransType(transLog.getTransType());//交易类型
 		accountLog.setTransAmt(transLog.getTransAmt()); //交易流水表 充值金币金额
@@ -159,7 +162,7 @@ public class AccountOperService implements AccountOperManager{
 		}
 		
 		//查找账户信息
-		AccountInf accountInf=accountInfService.findByUserId(transLog.getPriAccId());
+		AccountInf accountInf=accountInfService.findById(transLog.getPriAccId());
 		if(accountInf==null){
 			txnResp.setResultCode("10002"); //返回状态
 			txnResp.setMsg("账户信息不存在");
@@ -188,6 +191,8 @@ public class AccountOperService implements AccountOperManager{
 		//记录账户日志记录
 		AccountLog accountLog=new AccountLog();
 		accountLog.setAccId(accountInf.getAccId());
+		accountLog.setLastTxnDate(DateUtil.getDays());
+		accountLog.setLastTxnTime(DateUtil.getTimeHHmmss());
 		accountLog.setTransType(transLog.getTransType());//交易类型
 		accountLog.setTransAmt(transLog.getTransAmt()); //交易流水表 充值金币金额
 		accountLog.setOrgTransAmt(transLog.getOrgTransAmt()); //原交易金额

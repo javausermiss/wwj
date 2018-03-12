@@ -142,6 +142,27 @@
 		<include refid="tableName"></include>
 	</select>
 	
+	
+	<select id="getAccountLogByTypelistAll" parameterType="pd" resultType="pd">
+		select
+		LOG_ID,
+		LAST_TXN_DATE,
+		LAST_TXN_TIME,
+		TRANS_TYPE,
+		TRANS_AMT,
+		ORG_TRANS_AMT,
+		ACC_AMT,
+		ACC_TOTAL_AMT,
+		RES_COLUMN1,
+		RES_COLUMN2,
+		RES_COLUMN3
+		from 
+		TB_ACCOUNT_LOG
+		where
+			ACC_ID=(SELECT ACC_ID FROM tb_account_inf t where t.user_ID=#{userId})
+			AND TRANS_TYPE=#{transType}
+	</select>
+	
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">
 		delete from

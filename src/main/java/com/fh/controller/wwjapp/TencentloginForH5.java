@@ -29,6 +29,7 @@ import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.doll.DollManager;
 import com.fh.util.Const;
 import com.fh.util.PropertiesUtils;
+import com.fh.util.StringUtils;
 import com.fh.util.wwjUtil.FaceImageUtil;
 import com.fh.util.wwjUtil.MyUUID;
 import com.fh.util.wwjUtil.RedisUtil;
@@ -348,6 +349,8 @@ public class TencentloginForH5 extends BaseController {
     	
     	List<Map> data=new ArrayList<>();
     	
+    	
+    	//遍历用户ID
     	for (String userId : userArray) {
     		 //SRS推流
             SrsConnectModel sc = new SrsConnectModel();
@@ -357,9 +360,14 @@ public class TencentloginForH5 extends BaseController {
             sc.setExpire(3600 * 24);
             sc.setTime(time);
             sc.setToken(SrsSignUtil.genSign(sc, SrsConstants.SRS_CONNECT_KEY));
-            String sessionID = MyUUID.createSessionId();
-            RedisUtil.getRu().set(Const.REDIS_APPUSER_SESSIONID + userId, sessionID);
             
+            //用户session存储
+            String sessionID =  RedisUtil.getRu().get(Const.REDIS_APPUSER_SESSIONID + userId);
+            if(StringUtils.isEmpty(sessionID)){
+            	sessionID=MyUUID.createSessionId();
+            	 RedisUtil.getRu().set(Const.REDIS_APPUSER_SESSIONID + userId, sessionID);
+            }	
+            //return data
             Map<String, Object> map = new HashMap<>();
             map.put("appUser", getAppUserInfo(userId));//重新查询用户信息
             map.put("sessionID", sessionID);
@@ -370,5 +378,6 @@ public class TencentloginForH5 extends BaseController {
         return RespStatus.successs().element("data", data);
     }
 
+    
 
 }
