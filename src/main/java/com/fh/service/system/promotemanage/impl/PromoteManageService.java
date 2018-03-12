@@ -58,8 +58,8 @@ public class PromoteManageService implements PromoteManageManager{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public List<PageData> listAll(PageData pd)throws Exception{
-		return (List<PageData>)dao.findForList("PromoteManageMapper.listAll", pd);
+	public List<PageData> listAll()throws Exception{
+		return (List<PageData>)dao.findForList("PromoteManageMapper.listAll",null);
 	}
 	
 	/**通过id获取数据

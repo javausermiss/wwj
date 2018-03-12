@@ -261,7 +261,7 @@ public class PromoteManageController extends BaseController {
 		titles.add("创建时间");	//6
 		titles.add("更新时间");	//7
 		dataMap.put("titles", titles);
-		List<PageData> varOList = promotemanageService.listAll(pd);
+		List<PageData> varOList = promotemanageService.listAll();
 		List<PageData> varList = new ArrayList<PageData>();
 		for(int i=0;i<varOList.size();i++){
 			PageData vpd = new PageData();
@@ -285,4 +285,7 @@ public class PromoteManageController extends BaseController {
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
 	}
+	
+	
+	
 }
