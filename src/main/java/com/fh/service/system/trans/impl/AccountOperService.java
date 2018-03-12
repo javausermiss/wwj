@@ -137,6 +137,7 @@ public class AccountOperService implements AccountOperManager{
 		accountLog.setOrgTransAmt(transLog.getOrgTransAmt());
 		accountLog.setAccAmt(accountLog.getTransAmt());
 		accountLog.setAccTotalAmt(accountInf.getAccBal()); //账户处理后的总金额
+		accountLog.setLogType("1");//加款
 		accountLog.setResColumn1(transLog.getResColumn1());
 		accountLogService.save(accountLog);
 		txnResp.setResultCode("00"); //操作成功
@@ -198,6 +199,7 @@ public class AccountOperService implements AccountOperManager{
 		accountLog.setOrgTransAmt(transLog.getOrgTransAmt()); //原交易金额
 		accountLog.setAccAmt(accountLog.getTransAmt());
 		accountLog.setAccTotalAmt(accountInf.getAccBal()); //账户处理后的总金额
+		accountLog.setLogType("2"); //减款
 		accountLog.setResColumn1(transLog.getResColumn1());
 		accountLogService.save(accountLog);
 		txnResp.setResultCode("00"); //操作成功

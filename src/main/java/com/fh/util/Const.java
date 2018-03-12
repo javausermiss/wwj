@@ -304,7 +304,7 @@ public class Const {
 	
 	
 	public enum AccountTransType{
-		
+		TRANS_OTHER("其他","0000"),
 		TRANS_1000("充值","1000"),
 		TRANS_1001("推广分成","1001"),
 		TRANS_2000("消费","2000"),
@@ -342,7 +342,7 @@ public class Const {
 					return t;
 				}
 			}
-			return null;
+			return TRANS_OTHER;
 		}
 	}
 }

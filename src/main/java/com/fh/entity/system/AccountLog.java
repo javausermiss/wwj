@@ -27,6 +27,8 @@ public class AccountLog implements java.io.Serializable {
 	private String accAmt;
 
 	private String accTotalAmt;
+	
+	private String logType;
 
 	private String resColumn1;
 
@@ -178,6 +180,14 @@ public class AccountLog implements java.io.Serializable {
 
 	public void setLockVersion(String lockVersion) {
 		this.lockVersion = lockVersion;
+	}
+
+	public String getLogType() {
+		return logType;
+	}
+
+	public void setLogType(String logType) {
+		this.logType = logType;
 	}
 
 }

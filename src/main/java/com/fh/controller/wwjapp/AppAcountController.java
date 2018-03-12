@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fh.controller.base.BaseController;
+import com.fh.entity.Page;
 import com.fh.entity.system.AccountInf;
 import com.fh.entity.system.TransOrder;
 import com.fh.service.system.trans.AccountInfManager;
@@ -97,6 +98,58 @@ public class AppAcountController extends BaseController {
     }
     
     
+    /**
+     * 获取用户收支明细
+     * @return
+     */
+    @RequestMapping(value = "/getUserAccountDetailPage", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public JSONObject getUserAccountDetailPage(HttpServletRequest request) {
+    	String userId=request.getParameter("userId");
+    	
+    	if(StringUtils.isEmpty(userId)){
+    		return RespStatus.fail("用户不存在");
+    	}
+    	
+        //获取前端分类
+        PageData pd = new PageData();
+        pd.put("userId", userId);
+        //获取当前页
+        Page page = new Page();
+        int currentPage = NumberUtils.parseInt(request.getParameter("nextPage"), 1);
+        page.setCurrentPage(currentPage); //当前页数
+
+        //分页查询条件
+        page.setPd(pd);
+        
+    	try{
+    	    List<PageData> varList=accountLogService.findAccountPage(page);
+	    	Map dataMap=new HashMap<>();
+	    	
+	    	for (PageData pageData : varList) {
+				
+	    		if(!StringUtils.isEmpty(pageData.getString("TRANS_TYPE"))){
+		    		if(AccountTransType.findByCode(pageData.getString("TRANS_TYPE")).getValue().equals(AccountTransType.TRANS_1001.getValue())){
+		    			pageData.put("LOG_STR", AccountTransType.TRANS_1001.getName()+"-"+pageData.getString("RES_COLUMN1")+"充值");
+		    		}else{
+		    			pageData.put("LOG_STR",AccountTransType.findByCode(pageData.getString("TRANS_TYPE")).getName());
+		    		}
+	    		}
+			}
+	    	dataMap.put("logList", varList);
+	    	
+	         //分页信息
+            pd.put("currentPage", page.getCurrentPage());
+            pd.put("showCount", (page.getShowCount()));
+            pd.put("totalPage", (page.getTotalPage()));
+            dataMap.put("pd", pd); //搜索的顺序
+	    	
+            return RespStatus.successs().element("data", dataMap);
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+			return RespStatus.fail();
+		}
+    }
     
     /**
      * 用户提现申请
