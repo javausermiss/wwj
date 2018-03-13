@@ -167,6 +167,32 @@ public class SendGoodController {
     }
 
     /**
+     * 取消发货
+     * @param sid 订单编号
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/RecallingGoods",method = RequestMethod.POST,produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public JSONObject RecallingGoods(
+            @RequestParam("sid") String sid
+    )throws Exception{
+        try {
+
+            return null;
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return RespStatus.fail();
+        }
+
+
+
+
+
+    }
+
+    /**
      * 兑换娃娃币
      *
      * @param id

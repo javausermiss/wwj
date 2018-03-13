@@ -31,6 +31,7 @@ import com.fh.util.wwjUtil.RespStatus;
 import com.fh.vo.system.DollToyVo;
 
 import net.sf.json.JSONObject;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Service("sendGoodsService")
 public class SendGoodsService implements SendGoodsManager {
@@ -242,7 +243,7 @@ public class SendGoodsService implements SendGoodsManager {
         sendGoods.setCNEE_NAME(name);
         sendGoods.setCNEE_ADDRESS(address);
         sendGoods.setCNEE_PHONE(phone);
-        sendGoods.setPLAYBACK_ID(null);//抓取的娃娃编号
+        sendGoods.setPLAYBACK_ID(playId);//抓取的娃娃编号
         sendGoods.setGOODS_NUM(number);
         sendGoods.setREMARK(remark);//留言
         sendGoods.setUSER_ID(userId);
@@ -273,6 +274,10 @@ public class SendGoodsService implements SendGoodsManager {
         map.put("playback", playDetails);
         return RespStatus.successs().element("data", map);
     }
+
+
+
+
 
     /**
      * 兑换金币

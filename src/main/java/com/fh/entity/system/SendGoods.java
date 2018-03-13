@@ -2,7 +2,7 @@ package com.fh.entity.system;
 
 public class SendGoods {
     private Integer ID;
-    private Integer PLAYBACK_ID;
+    private String PLAYBACK_ID;
     private String USER_ID;
     private String GOODS_NUM;
     private String CNEE_NAME;
@@ -24,7 +24,7 @@ public class SendGoods {
 
     public SendGoods(){}
 
-    public SendGoods(Integer PLAYBACK_ID, String USER_ID, String GOODS_NUM, String CNEE_NAME, String CNEE_ADDRESS, String CNEE_PHONE, String CREATE_TIME, String REMARK) {
+    public SendGoods(String PLAYBACK_ID, String USER_ID, String GOODS_NUM, String CNEE_NAME, String CNEE_ADDRESS, String CNEE_PHONE, String CREATE_TIME, String REMARK) {
         this.PLAYBACK_ID = PLAYBACK_ID;
         this.USER_ID = USER_ID;
         this.GOODS_NUM = GOODS_NUM;
@@ -107,11 +107,11 @@ public class SendGoods {
         this.ID = ID;
     }
 
-    public Integer getPLAYBACK_ID() {
+    public String getPLAYBACK_ID() {
         return PLAYBACK_ID;
     }
 
-    public void setPLAYBACK_ID(Integer PLAYBACK_ID) {
+    public void setPLAYBACK_ID(String PLAYBACK_ID) {
         this.PLAYBACK_ID = PLAYBACK_ID;
     }
 
