@@ -160,12 +160,13 @@
 	</update>
 	
 	
-	<update id="editOrderResp" parameterType="TransLog">
+	<update id="editOrderLogResp" parameterType="TransLog">
 		UPDATE
 		<include refid="tableName"></include>
 		SET 
 			TRANS_ST = #{transSt},
 			RESP_CODE = #{respCode},
+			UPDATE_DATE = now(),
 			LOCK_VERSION = LOCK_VERSION+1
 		WHERE 
 		TRANS_ID = #{transId}

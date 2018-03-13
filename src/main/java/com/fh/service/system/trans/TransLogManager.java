@@ -59,7 +59,7 @@ public interface TransLogManager{
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void editOrderResp(TransLog transLog)throws Exception;
+	public void editOrderLogResp(TransLog transLog)throws Exception;
 	
 }
 

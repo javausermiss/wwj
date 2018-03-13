@@ -86,8 +86,8 @@ public class TransLogService implements TransLogManager{
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void editOrderResp(TransLog transLog)throws Exception{
-		dao.update("TransLogMapper.editOrderResp", transLog);
+	public void editOrderLogResp(TransLog transLog)throws Exception{
+		dao.update("TransLogMapper.editOrderLogResp", transLog);
 	}
 }
 

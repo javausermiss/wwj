@@ -10,11 +10,13 @@ import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.entity.system.Order;
 import com.fh.entity.system.TransLog;
+import com.fh.entity.system.TransOrder;
 import com.fh.service.system.ordertest.OrderTestManager;
 import com.fh.service.system.promote.PromoteAppUserListManager;
 import com.fh.service.system.promote.PromoteAppUserManager;
 import com.fh.service.system.trans.AccountOperManager;
 import com.fh.service.system.trans.TransLogManager;
+import com.fh.service.system.trans.TransOrderManager;
 import com.fh.util.Const;
 import com.fh.util.Const.AccountTransType;
 import com.fh.util.Logger;
@@ -34,9 +36,14 @@ public class OrderTestService  implements OrderTestManager{
     @Resource(name = "accountOperService")
     public AccountOperManager accountOperService;
     
+    /**
+     * 交易订单表
+     */
+    @Resource(name = "transOrderService")
+    public TransOrderManager transOrderService;
     
     /**
-     * 账户交易订单
+     * 账户交易明细
      */
     @Resource(name = "translogService")
     public TransLogManager translogService;
@@ -80,27 +87,45 @@ public class OrderTestService  implements OrderTestManager{
 		    			//购买的权益
 		    			PageData promotepd= promoteAppUserService.findByUserId(order.getPRO_USER_ID());
 		    			if(txnResp !=null && txnResp.isRespCode()){
-		       		 		/***添加账户交易订单**/
+		    				
+		    				/***添加交易订单**/
+		    				TransOrder transOrder=new TransOrder();
+		    				transOrder.setOrderSt("0"); //创建订单
+		    				transOrder.setUserId(order.getPRO_USER_ID());
+		    				transOrder.setPriAccId(txnResp.getPriAccId()); //用户的主账户ID
+		    				transOrder.setTransType(AccountTransType.TRANS_1001.getValue());
+		    				transOrder.setTransAmt(String.valueOf(NumberUtils.mul(order.getREGAMOUNT(), promotepd.getString("RETURN_RATIO"))));
+		    				transOrder.setOrgTransAmt(order.getREGAMOUNT()); //订单充值金额
+		    				transOrder.setResColumn1(order.getUserNickName()); //当前操作用户昵称
+		    				transOrderService.save(transOrder);
+			       		    
+		       		 		/***添加交易明细**/
 			       		 	TransLog transLog=new TransLog();
-			       		 	transLog.setDmsRelatedKey(order.getORDER_ID());  //
+			       		 	transLog.setDmsRelatedKey(transOrder.getOrderId());  //
 			       		    transLog.setTransType(AccountTransType.TRANS_1001.getValue());
 			       		    transLog.setPriAccId(txnResp.getPriAccId()); //用户的主账户ID
 			       		    transLog.setTransSt("0");
-			       		    transLog.setTransAmt(String.valueOf(NumberUtils.mul(order.getREGAMOUNT(), promotepd.getString("RETURN_RATIO"))));
-			       		    transLog.setOrgTransAmt(order.getREGAMOUNT()); //订单充值金额
-			       		    transLog.setResColumn1(order.getUserNickName()); //当前操作用户昵称
-			       		    transLog.setAddInfo(order.getUSER_ID()); //当前操作的用户ID
+			       		    transLog.setTransAmt(transOrder.getTransAmt());
+			       		    transLog.setOrgTransAmt(transOrder.getOrgTransAmt()); //订单充值金额
+			       		    transLog.setResColumn1(transOrder.getResColumn1()); //当前操作用户昵称
+			       		    transLog.setDmsUserId(order.getUSER_ID()); //当前操作的用户ID
+			       		    transLog.setDmsUserUnionId(order.getPRO_USER_ID()); //执行账户的USER_ID
 			       		 	translogService.save(transLog);
 			       		 	
 			       		 	//账户充值
 			       		  TxnResp regResp=accountOperService.rechargeAccountInf(transLog.getTransId());
 			       		  if(regResp ==null){
 			       			regResp=new TxnResp();
-			       			regResp.setResultCode("99");;	
+			       			regResp.setResultCode("99");
 			       		  }
 			       		  transLog.setTransSt("1");
 			       		  transLog.setRespCode(regResp.getResultCode());
-			       		  translogService.editOrderResp(transLog);
+			       		  translogService.editOrderLogResp(transLog);
+			       		  
+			       		  if("00".equals(txnResp.getResultCode())){
+				    			transOrder.setOrderSt("9"); //订单处理中
+				    			transOrderService.editOrderSt(transOrder);
+			      			}
 		    			}
 		    		}
 	    	 }else{
