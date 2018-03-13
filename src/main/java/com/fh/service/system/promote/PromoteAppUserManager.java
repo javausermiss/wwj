@@ -61,5 +61,12 @@ public interface PromoteAppUserManager{
 	 */
 	public PageData findByUserId(String userId)throws Exception;
 	
+	
+	/**通过推广码获取数据
+	 * @param pd
+	 * @throws Exception
+	 */
+	public PageData findByProCode(String proCode)throws Exception;
+	
 }
 

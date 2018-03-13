@@ -117,5 +117,14 @@
 		</foreach>
 	</delete>
 	
+	
+	<select id="findByProCode" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			PRO_ID = #{proCode}
+	</select>
 	<!-- fh313596790qq(青苔) -->
 </mapper>

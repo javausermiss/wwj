@@ -32,8 +32,12 @@
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
+								<td style="width:75px;text-align: right;padding-top: 13px;">活动名称:</td>
+								<td><input type="text" name=PRO_MANAGE_NAME id="PRO_MANAGE_NAME" value="${pd.PRO_MANAGE_NAME}" maxlength="30" placeholder="这里输入活动名称" title="活动名称" style="width:98%;"/></td>
+							</tr>
+							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">支付金币数:</td>
-								<td><input type="number" name="PAY_GOLD" id="PAY_GOLD" value="${pd.PAY_GOLD}" maxlength="12" placeholder="这里输入支付金币数" title="获取金币数" style="width:98%;"/></td>
+								<td><input type="number" name="PAY_GOLD" id="PAY_GOLD" value="${pd.PAY_GOLD}" maxlength="12" placeholder="这里输入支付金币数" title="支付金币数" style="width:98%;"/></td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">下级可获金币数:</td>
@@ -82,7 +86,17 @@
 		$(top.hangge());
 		//保存
 		function save(){
-
+			
+			if($("#PRO_MANAGE_NAME").val()==""){
+				$("#PRO_MANAGE_NAME").tips({
+					side:3,
+		            msg:'请输入活动名称',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#PRO_MANAGE_NAME").focus();
+			return false;
+			}
 			if($("#PAY_GOLD").val()==""){
 				$("#PAY_GOLD").tips({
 					side:3,

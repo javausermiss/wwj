@@ -66,6 +66,7 @@
 									<th class="center" style="width:35px;">
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
+									<th class="center">活动名称</th>
 									<th class="center">支付金币数量</th>
 									<th class="center">下级兑换金币</th>
 									<th class="center">返回比例</th>
@@ -84,6 +85,7 @@
 											<td class='center'>
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.PRO_MANAGE_ID}" class="ace" /><span class="lbl"></span></label>
 											</td>
+											<td class='center'>${var.PRO_MANAGE_NAME}</td>
 											<td class='center'>${var.PAY_GOLD}</td>
 											<td class='center'>${var.CONVER_GOLD}</td>
 											<td class='center'>${var.RETURN_RATIO}</td>

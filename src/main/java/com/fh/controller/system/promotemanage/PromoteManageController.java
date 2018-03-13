@@ -59,7 +59,7 @@ public class PromoteManageController extends BaseController {
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
 		ModelAndView mv = this.getModelAndView();
 		
-		
+		String PRO_MANAGE_NAME = req.getParameter("PRO_MANAGE_NAME");
 		String PAY_GOLD = req.getParameter("PAY_GOLD");
 		String CONVER_GOLD = req.getParameter("CONVER_GOLD");
 		String RETURN_RATIO = req.getParameter("RETURN_RATIO");
@@ -79,6 +79,7 @@ public class PromoteManageController extends BaseController {
 			ex.printStackTrace();
 		}
 		
+		pd.put("PRO_MANAGE_NAME", PRO_MANAGE_NAME);
 		pd.put("IMG_URL", fileId);//图片地址
 		pd.put("PAY_GOLD", PAY_GOLD);//支付金额
 		pd.put("CONVER_GOLD", CONVER_GOLD);//推广用户兑换金币数量
@@ -119,6 +120,7 @@ public class PromoteManageController extends BaseController {
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
 		ModelAndView mv = this.getModelAndView();
 		
+		String PRO_MANAGE_NAME = req.getParameter("PRO_MANAGE_NAME");
 		String PAY_GOLD = req.getParameter("PAY_GOLD");
 		String CONVER_GOLD = req.getParameter("CONVER_GOLD");
 		String RETURN_RATIO = req.getParameter("RETURN_RATIO");
@@ -146,7 +148,7 @@ public class PromoteManageController extends BaseController {
 				fileId = FastDFSClient.modifyFile(String.valueOf(managePd.get("IMG_URL")), file, newFilename);
 			}
 		}
-				
+		managePd.put("PRO_MANAGE_NAME", PRO_MANAGE_NAME);		
 		managePd.put("IMG_URL", fileId);//图片地址
 		managePd.put("PAY_GOLD", PAY_GOLD);//支付金额
 		managePd.put("CONVER_GOLD", CONVER_GOLD);//推广用户兑换金币数量

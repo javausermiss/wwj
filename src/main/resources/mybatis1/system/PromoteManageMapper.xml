@@ -10,6 +10,7 @@
 	
 	<!-- 字段 -->
 	<sql id="Field">
+	    PRO_MANAGE_NAME,
 		PAY_AMOUNT,	
 		PAY_GOLD,
 		CONVER_GOLD,	
@@ -23,6 +24,7 @@
 	
 	<!-- 字段值 -->
 	<sql id="FieldValue">
+		#{PRO_MANAGE_NAME},
 		#{PAY_AMOUNT},	
 		#{PAY_GOLD},
 		#{CONVER_GOLD},	
@@ -58,6 +60,7 @@
 		update
 		<include refid="tableName"></include>
 		set 
+			PRO_MANAGE_NAME=#{PRO_MANAGE_NAME},
 			PAY_AMOUNT = #{PAY_AMOUNT},
 			PAY_GOLD   =#{PAY_GOLD},
 			CONVER_GOLD = #{CONVER_GOLD},
@@ -101,6 +104,7 @@
 	<!-- 列表(全部) -->
 	<select id="listAll"  resultType="pd">
 		select
+		PRO_MANAGE_NAME,
 		PRO_MANAGE_ID,
 		PAY_AMOUNT,	
 		PAY_GOLD,

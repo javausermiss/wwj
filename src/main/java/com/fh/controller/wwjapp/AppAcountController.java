@@ -48,7 +48,7 @@ public class AppAcountController extends BaseController {
      * 获取用户余额
      * @return
      */
-    @RequestMapping(value = "/getUserAccBalCount", produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/getUserAccBalCount", method = RequestMethod.POST,produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject getUserAccBalCount(HttpServletRequest request) {
     	String userId=request.getParameter("userId");
@@ -61,7 +61,7 @@ public class AppAcountController extends BaseController {
     	   String accBal=accountInfService.getAccountCountByUserId(userId);
 	    	
 	    	Map dataMap=new HashMap<>();
-	    	dataMap.put("accBal", accBal);
+	    	dataMap.put("accBal", NumberUtils.RMBCentToYuan(accBal));
             return RespStatus.successs().element("data", dataMap);
 		} catch (Exception e) {
 			logger.info(e.getMessage());
@@ -73,7 +73,7 @@ public class AppAcountController extends BaseController {
      * 获取用户的推广的收益明细
      * @return
      */
-    @RequestMapping(value = "/getUserPromoteList", produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/getUserPromoteList",method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject getUserPromoteList(HttpServletRequest request) {
     	String userId=request.getParameter("userId");
@@ -102,7 +102,7 @@ public class AppAcountController extends BaseController {
      * 获取用户收支明细
      * @return
      */
-    @RequestMapping(value = "/getUserAccountDetailPage", produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/getUserAccountDetailPage",method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject getUserAccountDetailPage(HttpServletRequest request) {
     	String userId=request.getParameter("userId");

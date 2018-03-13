@@ -88,5 +88,12 @@ public class PromoteAppUserService implements PromoteAppUserManager{
 	public PageData findByUserId(String userId)throws Exception{
 		return (PageData)dao.findForObject("PromoteAppUserMapper.findByUserId", userId);
 	}
+
+	/**
+	 * 根据推广码查询
+	 */
+	public PageData findByProCode(String proCode) throws Exception {
+		return (PageData)dao.findForObject("PromoteAppUserMapper.findByProCode", proCode);
+	}
 }
 
