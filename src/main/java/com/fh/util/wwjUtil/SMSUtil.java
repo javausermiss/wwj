@@ -6,10 +6,14 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 
+import com.fh.util.Logger;
+
 /**
  * 短信发送工具类
  */
 public class SMSUtil {
+	private static Logger logger = Logger.getLogger(SMSUtil.class);
+	
     public static String sendPost(String url, String param) {
         PrintWriter out = null;
         BufferedReader in = null;
@@ -40,7 +44,7 @@ public class SMSUtil {
                 result += line;
             }
         } catch (Exception e) {
-            System.out.println("发送 POST 请求出现异常！" + e);
+        	logger.error("发送短信异常：", e);
             e.printStackTrace();
         }
         //使用finally块来关闭输出流、输入流
@@ -59,24 +63,20 @@ public class SMSUtil {
         return result;
     }
 
-    public static void veriCode1(String phone, String Code) {
+    public static void veriCode1(String phone, String code) {
         try{
             String url = "http://jk.106api.cn/smsUTF8.aspx?";
             String username = "38580643";
             String password = "E142620406F41F48B7311561F8B96CD3";
             String gwid = "85ab540";
-            String content = URLEncoder.encode("【弘休网络】您的验证码是","UTF-8") + Code;
+            String content = URLEncoder.encode("【弘休网络】您的验证码是","UTF-8") + code;
             String postData = "type=send&username=" + username + "&password=" + password + "&gwid=" + gwid + "&mobile=" + phone + "&message=" + content + "";
             //SMSUtil.sendPost(url, postData);
-            System.out.println("========================");
+            logger.info("发送短信开始：mobile=" + phone +",code==>"+code);
             System.out.println(SMSUtil.sendPost(url, postData));
-            System.out.println("========================");
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
-
-
     }
 }

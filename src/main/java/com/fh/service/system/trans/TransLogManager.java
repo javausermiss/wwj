@@ -55,5 +55,11 @@ public interface TransLogManager{
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception;
 	
+	/**修订单返回状态
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void editOrderResp(TransLog transLog)throws Exception;
+	
 }
 

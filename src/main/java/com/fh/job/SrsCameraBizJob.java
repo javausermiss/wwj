@@ -64,7 +64,5 @@ public class SrsCameraBizJob{
 		}catch(Exception e){
 			logger.error("getCameraStateJob error is :", e);
 		}
-
 	}
-
 }

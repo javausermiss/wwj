@@ -55,5 +55,20 @@ public interface AccountLogManager{
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception;
 	
+	/**获取用户的账户日志
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> getAccountLogByTypelistAll(PageData pd)throws Exception;
+	
+	
+	/**
+	 * 用户 账户收支明细
+	 * @param page
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> findAccountPage(Page page)throws Exception;
+	
 }
 
