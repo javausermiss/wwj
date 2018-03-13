@@ -148,7 +148,8 @@ public class TransOrderService implements TransOrderManager{
 	    transLog.setTransSt("0");
 	    transLog.setTransAmt(transOrder.getTransAmt());
 	    transLog.setOrgTransAmt(transOrder.getOrgTransAmt()); //订单充值金额
-	    transLog.setAddInfo(transOrder.getUserId()); //当前操作的用户ID
+	    transLog.setDmsUserId(transOrder.getUserId()); //当前操作的用户ID
+	    transLog.setDmsUserUnionId(transOrder.getUserId()); //执行账户的USER_ID
 	 	translogService.save(transLog);
 		 	
 	 	//账户提现操作
@@ -160,7 +161,7 @@ public class TransOrderService implements TransOrderManager{
 		  }
 		  transLog.setTransSt("1");
 		  transLog.setRespCode(txnResp.getResultCode());
-		  translogService.editOrderResp(transLog);
+		  translogService.editOrderLogResp(transLog); //交易明细
 		
 		if("00".equals(txnResp.getResultCode())){
 			transOrder.setOrderSt("3"); //订单处理中

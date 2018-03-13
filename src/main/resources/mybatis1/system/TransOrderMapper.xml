@@ -97,7 +97,7 @@
 		#{addInfo},
 		#{remarks},
 		#{createUser},
-		#{createDate},
+		now(),
 		#{updateUser},
 		#{updateDate},
 		0,
