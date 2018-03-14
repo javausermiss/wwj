@@ -71,5 +71,12 @@ public interface TransOrderManager{
 	public TxnResp doAppWithdrawCash(TransOrder transOrder) throws Exception;
 	
 
+	/**
+	 * 用户 账户收支明细
+	 * @param page
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> findAccountOrderPage(Page page)throws Exception;
 }
 

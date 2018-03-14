@@ -16,11 +16,13 @@ public class TransOrder implements java.io.Serializable {
 	private String orgOrderId;
 	private String dmsRelatedKey;
 	private String orgDmsRelatedKey;
-	private String userId;
+	private String userId; //执行用户Id
 	private String transType;
 	private String orderSt;
 	private String transCode;
 	private String priAccId;
+	private String dmsUserId;	//当前操作的用户Id
+	private String dmsUserUnionId; //当前账户的userId
 	private String transAmt;
 	private String orgTransAmt;
 	private String transCurrCd;
@@ -213,5 +215,17 @@ public class TransOrder implements java.io.Serializable {
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+	public String getDmsUserId() {
+		return dmsUserId;
+	}
+	public void setDmsUserId(String dmsUserId) {
+		this.dmsUserId = dmsUserId;
+	}
+	public String getDmsUserUnionId() {
+		return dmsUserUnionId;
+	}
+	public void setDmsUserUnionId(String dmsUserUnionId) {
+		this.dmsUserUnionId = dmsUserUnionId;
 	}
 }

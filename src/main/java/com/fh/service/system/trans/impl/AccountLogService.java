@@ -90,14 +90,5 @@ public class AccountLogService implements AccountLogManager{
 	public List<PageData> getAccountLogByTypelistAll(PageData pd)throws Exception{
 		return (List<PageData>)dao.findForList("AccountLogMapper.getAccountLogByTypelistAll", pd);
 	}
-	
-	/**用户 账户收支明细
-	 * @param page
-	 * @throws Exception
-	 */
-	@SuppressWarnings("unchecked")
-	public List<PageData> findAccountPage(Page page)throws Exception{
-		return (List<PageData>)dao.findForList("AccountLogMapper.findAccountDetaillistPage", page);
-	}
 }
 

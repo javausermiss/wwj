@@ -90,9 +90,11 @@ public class OrderTestService  implements OrderTestManager{
 		    				
 		    				/***添加交易订单**/
 		    				TransOrder transOrder=new TransOrder();
-		    				transOrder.setOrderSt("0"); //创建订单
+		    				transOrder.setOrderSt("1"); //创建订单
 		    				transOrder.setUserId(order.getPRO_USER_ID());
 		    				transOrder.setPriAccId(txnResp.getPriAccId()); //用户的主账户ID
+		    				transOrder.setDmsUserId(order.getUSER_ID());
+		    				transOrder.setDmsUserUnionId(order.getPRO_USER_ID());
 		    				transOrder.setTransType(AccountTransType.TRANS_1001.getValue());
 		    				transOrder.setTransAmt(String.valueOf(NumberUtils.mul(order.getREGAMOUNT(), promotepd.getString("RETURN_RATIO"))));
 		    				transOrder.setOrgTransAmt(order.getREGAMOUNT()); //订单充值金额
@@ -123,7 +125,7 @@ public class OrderTestService  implements OrderTestManager{
 			       		  translogService.editOrderLogResp(transLog);
 			       		  
 			       		  if("00".equals(txnResp.getResultCode())){
-				    			transOrder.setOrderSt("9"); //订单处理中
+				    			transOrder.setOrderSt("9"); //订单已处理完成
 				    			transOrderService.editTransOrderSt(transOrder);
 			      			}
 		    			}

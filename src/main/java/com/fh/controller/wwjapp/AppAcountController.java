@@ -113,7 +113,9 @@ public class AppAcountController extends BaseController {
     	
         //获取前端分类
         PageData pd = new PageData();
-        pd.put("userId", userId);
+        pd.put("USER_ID", userId);
+        
+        
         //获取当前页
         Page page = new Page();
         int currentPage = NumberUtils.parseInt(request.getParameter("nextPage"), 1);
@@ -123,7 +125,7 @@ public class AppAcountController extends BaseController {
         page.setPd(pd);
         
     	try{
-    	    List<PageData> varList=accountLogService.findAccountPage(page);
+    	    List<PageData> varList=transOrderService.findAccountOrderPage(page);
 	    	Map dataMap=new HashMap<>();
 	    	
 	    	for (PageData pageData : varList) {
@@ -196,6 +198,8 @@ public class AppAcountController extends BaseController {
 		    	transOrder.setTransAmt(transAmt);
 		    	transOrder.setOrgTransAmt(transAmt);
 		    	transOrder.setTransType(AccountTransType.TRANS_5000.getValue()); //提现
+		    	transOrder.setDmsUserId(userId);
+		    	transOrder.setDmsUserUnionId(userId);
 		    	//提现订单请求
 		    	TxnResp txnResp=transOrderService.doAppWithdrawCash(transOrder);
 		    	

@@ -171,5 +171,15 @@ public class TransOrderService implements TransOrderManager{
 
 		return txnResp;
 	}
+	
+	
+	/**用户 账户收支明细
+	 * @param page
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> findAccountOrderPage(Page page)throws Exception{
+		return (List<PageData>)dao.findForList("TransOrderMapper.findAccountOrderlistPage", page);
+	}
 }
 

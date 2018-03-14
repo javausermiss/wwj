@@ -249,5 +249,29 @@
 		</foreach>
 	</delete>
 	
+	
+		<select id="findAccountOrderlistPage" parameterType="page" resultType="pd">
+		SELECT
+			ORDER_ID,
+			DMS_RELATED_KEY,
+			USER_ID,
+			TRANS_TYPE,
+			ORDER_ST,
+			PRI_ACC_ID,
+			DMS_USER_ID,
+			DMS_USER_UNION_ID,
+			TRANS_AMT,
+			ORG_TRANS_AMT,
+			RES_COLUMN1,
+			date_format(CREATE_DATE, '%Y%m%d%H%i%s') as CREATE_DATE
+			from tb_trans_order
+			where
+				USER_ID=#{pd.USER_ID}
+				 <if test="pd.TRANS_TYPE != null and pd.TRANS_TYPE != ''"><!-- 关键词检索 -->
+				 	TRANS_TYPE=#{TRANS_TYPE}
+				 </if>
+			ORDER BY CREATE_DATE DESC
+	</select>
+	
 	<!-- fh313596790qq(青苔) -->
 </mapper>
