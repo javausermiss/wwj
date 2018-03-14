@@ -124,7 +124,7 @@ public class OrderTestService  implements OrderTestManager{
 			       		  
 			       		  if("00".equals(txnResp.getResultCode())){
 				    			transOrder.setOrderSt("9"); //订单处理中
-				    			transOrderService.editOrderSt(transOrder);
+				    			transOrderService.editTransOrderSt(transOrder);
 			      			}
 		    			}
 		    		}

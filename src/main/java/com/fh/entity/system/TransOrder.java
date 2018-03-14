@@ -21,8 +21,6 @@ public class TransOrder implements java.io.Serializable {
 	private String orderSt;
 	private String transCode;
 	private String priAccId;
-	private String dmsUserId;
-	private String dmsUserUnionId;
 	private String transAmt;
 	private String orgTransAmt;
 	private String transCurrCd;
@@ -77,18 +75,7 @@ public class TransOrder implements java.io.Serializable {
 	public void setPriAccId(String priAccId) {
 		this.priAccId = priAccId;
 	}
-	public String getDmsUserId() {
-		return dmsUserId;
-	}
-	public void setDmsUserId(String dmsUserId) {
-		this.dmsUserId = dmsUserId;
-	}
-	public String getDmsUserUnionId() {
-		return dmsUserUnionId;
-	}
-	public void setDmsUserUnionId(String dmsUserUnionId) {
-		this.dmsUserUnionId = dmsUserUnionId;
-	}
+
 	public String getTransAmt() {
 		return transAmt;
 	}

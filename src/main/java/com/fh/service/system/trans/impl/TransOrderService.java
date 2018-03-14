@@ -113,8 +113,8 @@ public class TransOrderService implements TransOrderManager{
 	 * @throws Exception
 	 */
 
-	public void editOrderSt(TransOrder transOrder) throws Exception {
-		dao.update("TransOrderMapper.editOrderSt", transOrder);
+	public void editTransOrderSt(TransOrder transOrder) throws Exception {
+		dao.update("TransOrderMapper.editTransOrderSt", transOrder);
 	}
 	
 	/**
@@ -165,7 +165,7 @@ public class TransOrderService implements TransOrderManager{
 		
 		if("00".equals(txnResp.getResultCode())){
 			transOrder.setOrderSt("3"); //订单处理中
-			this.editOrderSt(transOrder);
+			this.editTransOrderSt(transOrder);
 			txnResp.setOrderId(transOrder.getOrderId());
 		}
 

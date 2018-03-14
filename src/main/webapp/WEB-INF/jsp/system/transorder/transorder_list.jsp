@@ -31,7 +31,7 @@
 						<div class="col-xs-12">
 							
 						<!-- 检索  -->
-						<form action="/trans/order/queryWithdrawCashlist.do" method="post" name="Form" id="Form">
+						<form action="trans/order/queryWithdrawCashlist.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;">
 							<tr>
 								<td>
@@ -42,19 +42,22 @@
 										</span>
 									</div>
 								</td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期" title="开始日期"/></td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期" title="结束日期"/></td>
+								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="${pd.lastStart}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期" title="开始日期"/></td>
+								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="${pd.lastEnd}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期" title="结束日期"/></td>
 								
 								<td style="vertical-align:top;padding-left:2px;">
-                                        <select class="chosen-select form-control" name="RELEASE_STATUS" id="RELEASE_STATUS"
-                                                data-placeholder="请选择发布状态" style="vertical-align:top;width: 120px;">
+                                        <select class="chosen-select form-control" name="ORDER_ST" id="ORDER_ST"
+                                                data-placeholder="请选择订单状态" style="vertical-align:top;width: 120px;">
                                             <option value=""></option>
                                             <option value="">全部</option>
-                                            <option value="0"
-                                                    <c:if test="${pd.RELEASE_STATUS == '0' }">selected</c:if> >未发布
+                                            <option value="3"
+                                                    <c:if test="${pd.ORDER_ST == '3' }">selected</c:if> >待打款
                                             </option>
-                                            <option value="1"
-                                                    <c:if test="${pd.RELEASE_STATUS == '1' }">selected</c:if> >已发布
+                                            <option value="4"
+                                                    <c:if test="${pd.ORDER_ST == '4' }">selected</c:if> >已取消
+                                            </option>
+                                            <option value="9"
+                                                    <c:if test="${pd.ORDER_ST == '9' }">selected</c:if> >已完成
                                             </option>
                                         </select>
                                     </td>
@@ -72,17 +75,12 @@
 									<th class="center" style="width:35px;">
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
-									<th class="center">娃娃机编号</th>
-									<th class="center">网关SN</th>
-									<th class="center">网关状态</th>
-									<th class="center">DOLL_ID</th>
-									<th class="center">H5可见</th>
-									<th class="center">DOLL_NAME</th>
-									<th class="center">摄像头编号</th>
-									<th class="center">推流服务名称</th>
-									<th class="center">流媒体名称</th>
-									<th class="center">状态</th>
-									<th class="center">摄像头位置</th>
+									<th class="center">订单ID</th>
+									<th class="center">提现金额</th>
+									<th class="center">申请时间</th>
+									<th class="center">订单状态</th>
+									<th class="center">交易类型</th>
+									<th class="center">银行流水</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -95,54 +93,35 @@
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
 											<td class='center'>
-												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.CAMERA_ID}" class="ace" /><span class="lbl"></span></label>
+												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.ORDER_ID}" class="ace" /><span class="lbl"></span></label>
 											</td>
-											<td class='center'>${var.ROOM_ID}</td>
-											<td class='center'>${var.DOLL_SN}</td>
-											<td class='center'>${var.DOLL_STATE}</td>
-											<td class='center'>${var.DOLL_ID}</td>
-											<td class='center'>${var.DOLL_TYPE}</td>
-											<td class='center'>${var.DOLL_NAME}</td>
-											<td class='center'>${var.CAMERA_NUM}</td>
-											<td class='center'>${var.SERVER_NAME}</td>
-											<td class='center'>${var.LIVESTREAM}</td>
+											<td class='center'>${var.ORDER_ID}</td>
+											<td class='center'>${var.TRANS_AMT/100}</td>
+											<td class='center'>${var.CREATE_DATE}</td>
 											<td style="width: 100px;" class='center'>
-                                                        <c:if test="${var.DEVICE_STATE == '1' }"><span
-                                                                class="label label-important arrowed-in">不可用</span></c:if>
-                                                        
-                                                        <c:if test="${var.DEVICE_STATE == '0' }"><span
-                                                                class="label label-success arrowed-in">正常</span></c:if>
-                                                    </td>
-											<td style="width: 100px;" class='center'>
-                                                        <c:if test="${var.CAMERA_TYPE == 'S' }"><span
-                                                                class="label label-success arrowed">S</span></c:if>
-                                                        
-                                                        <c:if test="${var.CAMERA_TYPE == 'M' }"><span
-                                                                class="label label-success arrowed-in">M</span></c:if>
-                                                    </td>
+                                                 <c:if test="${var.ORDER_ST == '3' }"><span
+                                                         class="label label-important arrowed-in">待打款</span></c:if>
+                                                 <c:if test="${var.ORDER_ST == '4' }"><span
+                                                         class="label label-important arrowed">已取消</span></c:if>
+                                                  <c:if test="${var.ORDER_ST == '9' }"><span
+                                                         class="label label-success arrowed">已完成</span></c:if>
+                                             </td>
+											<td class='center'><span class="label label-important arrowed-in">提现申请</span></td>
+											<td class='center'>${var.DMS_RELATED_KEY}</td>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i 
 													class="ace-icon fa fa-lock" title="无权限"></i></span>
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group" >
-												
-													<a class="btn btn-xs btn-success" title="推流TOKEN" onclick="getToken('${var.LIVESTREAM}');">
-														TOKEN
-													</a>
-													
 													<c:if test="${QX.edit == 1 }">
 													<a class="btn btn-xs btn-success" title="编辑" 
-														onclick="edit('${var.CAMERA_ID}');">
+														onclick="goEditOrder('${var.ORDER_ID}');">
 														<i class="ace-icon fa fa-pencil-square-o bigger-120" 
 															title="编辑"></i>
 													</a>
 													</c:if>
-													<c:if test="${QX.del == 1 }">
-													<a class="btn btn-xs btn-danger" onclick="del('${var.CAMERA_ID}');">
-														<i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i>
-													</a>
-													</c:if>
+													
 												</div>
 											</td>
 										</tr>
@@ -167,15 +146,6 @@
 						<div class="page-header position-relative">
 						<table style="width:100%;">
 							<tr>
-								<td style="vertical-align:top;">
-									<c:if test="${QX.add == 1 }">
-									<a class="btn btn-mini btn-success" onclick="add();">新增</a>
-									</c:if>
-									<c:if test="${QX.del == 1 }">
-									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" 
-										title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
-									</c:if>
-								</td>
 								<td style="vertical-align:top;">
 								<div class="pagination" 
 									 style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
@@ -255,91 +225,18 @@
 					 else $('#form-field-select-4').removeClass('tag-input-style');
 				});
 			}
-			
-			
-			//复选框全选控制
-			var active_class = 'active';
-			$('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function(){
-				var th_checked = this.checked;//checkbox inside "TH" table header
-				$(this).closest('table').find('tbody > tr').each(function(){
-					var row = this;
-					if(th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
-					else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
-				});
-			});
+
 		});
 		
-		//新增
-		function add(){
-			 top.jzts();
-			 var diag = new top.Dialog();
-			 diag.Drag=true;
-			 diag.Title ="新增";
-			 diag.URL = '<%=basePath%>camera/goAdd.do';
-			 diag.Width = 650;
-			 diag.Height = 555;
-			 diag.Modal = true;				//有无遮罩窗口
-			 diag. ShowMaxButton = true;	//最大化按钮
-		     diag.ShowMinButton = true;		//最小化按钮
-			 diag.CancelEvent = function(){ //关闭事件
-				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-					 if('${page.currentPage}' == '0'){
-						 tosearch();
-					 }else{
-						 tosearch();
-					 }
-				}
-				diag.close();
-			 };
-			 diag.show();
-		}
-		
-		//删除
-		function del(Id){
-			bootbox.confirm("确定要删除吗?", function(result) {
-				if(result) {
-					top.jzts();
-					var url = "<%=basePath%>camera/delete.do?CAMERA_ID="+Id+"&tm="+new Date().getTime();
-					$.get(url,function(data){
-						tosearch();
-					});
-				}
-			});
-		}
-		
-		
 		//修改
-		function edit(Id){
+		function goEditOrder(orderId){
 			 top.jzts();
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
-			 diag.Title ="编辑";
-			 diag.URL = '<%=basePath%>camera/goEdit.do?CAMERA_ID='+Id;
-			 diag.Width = 650;
-			 diag.Height = 555;
-			 diag.Modal = true;				//有无遮罩窗口
-			 diag. ShowMaxButton = true;	//最大化按钮
-		     diag.ShowMinButton = true;		//最小化按钮 
-			 diag.CancelEvent = function(){ //关闭事件
-				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-					 tosearch();
-				}
-				diag.close();
-			 };
-			 diag.show();
-		}
-		
-		
-		
-		//修改
-		function getToken(LIVESTREAM){
-			 top.jzts();
-			 var diag = new top.Dialog();
-			 diag.Drag=true;
-			 diag.Title ="编辑";
-			 diag.URL = '<%=basePath%>camera/getToken.do?LIVESTREAM='+LIVESTREAM;
+			 diag.Title ="打款";
+			 diag.URL = '<%=basePath%>trans/order/goEditOrder.do?orderId='+orderId;
 			 diag.Width = 800;
-			 diag.Height = 200;
+			 diag.Height = 750;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮 
@@ -350,57 +247,6 @@
 				diag.close();
 			 };
 			 diag.show();
-		}
-		
-		//批量操作
-		function makeAll(msg){
-			bootbox.confirm(msg, function(result) {
-				if(result) {
-					var str = '';
-					for(var i=0;i < document.getElementsByName('ids').length;i++){
-					  if(document.getElementsByName('ids')[i].checked){
-					  	if(str=='') str += document.getElementsByName('ids')[i].value;
-					  	else str += ',' + document.getElementsByName('ids')[i].value;
-					  }
-					}
-					if(str==''){
-						bootbox.dialog({
-							message: "<span class='bigger-110'>您没有选择任何内容!</span>",
-							buttons: 			
-							{ "button":{ "label":"确定", "className":"btn-sm btn-success"}}
-						});
-						$("#zcheckbox").tips({
-							side:1,
-				            msg:'点这里全选',
-				            bg:'#AE81FF',
-				            time:8
-				        });
-						return;
-					}else{
-						if(msg == '确定要删除选中的数据吗?'){
-							top.jzts();
-							$.ajax({
-								type: "POST",
-								url: '<%=basePath%>camera/deleteAll.do?tm='+new Date().getTime(),
-						    	data: {DATA_IDS:str},
-								dataType:'json',
-								//beforeSend: validateData,
-								cache: false,
-								success: function(data){
-									 $.each(data.list, function(i, list){
-											tosearch();
-									 });
-								}
-							});
-						}
-					}
-				}
-			});
-		};
-		
-		//导出excel
-		function toExcel(){
-			window.location.href='<%=basePath%>camera/excel.do';
 		}
 	</script>
 

@@ -60,7 +60,7 @@ public interface TransOrderManager{
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void editOrderSt(TransOrder transOrder)throws Exception;
+	public void editTransOrderSt(TransOrder transOrder)throws Exception;
 	
 	/**
 	 * App 提交提现申请
@@ -70,5 +70,6 @@ public interface TransOrderManager{
 	 */
 	public TxnResp doAppWithdrawCash(TransOrder transOrder) throws Exception;
 	
+
 }
 
