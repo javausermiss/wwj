@@ -67,7 +67,7 @@
 			ID_NUMBER = #{ID_NUMBER},
 			USER_REA_NAME = #{USER_REA_NAME},
 			BANK_PHONE = #{BANK_PHONE},
-			IS_DEFAULT = #{IS_DEFAULT},
+			IS_DEFAULT = #{IS_DEFAULT}
 		where 
 		BANKCARD_ID = #{BANKCARD_ID}
 	</update>
@@ -131,7 +131,7 @@
 	</insert>
 
 	<select id="getBankInfByUserId" parameterType="String" resultType="com.fh.entity.system.BankCard">
-		select <include refid="Field"/> from <include refid="tableName"/> where user_Id = #{USER_ID};
+		select <include refid="Field"/> from <include refid="tableName"/> where user_Id = #{USER_ID}
 	</select>
 	<update id="updateBankInfByUserId" parameterType="com.fh.entity.system.BankCard">
 		update

@@ -78,6 +78,14 @@ public interface BankCardManager{
 	 * @throws Exception
 	 */
 	public int updateBankInfByUserId(BankCard bankCard)throws Exception;
+	
+	/**
+	 * APP通过用户ID修改用户的银行卡信息
+	 * @param bankCard
+	 * @return
+	 * @throws Exception
+	 */
+	public BankCard getBankInfForAppByUserId(String userId)throws Exception;
 
 	
 }

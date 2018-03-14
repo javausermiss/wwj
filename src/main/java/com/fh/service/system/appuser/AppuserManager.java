@@ -343,5 +343,22 @@ public interface AppuserManager {
      * @throws Exception
      */
     public int updateProUserId(AppUser appUser)throws Exception;
+    
+    /**
+     * 获取用户信息 返回给前端
+     * @param userid
+     * @return
+     * @throws Exception
+     */
+    public PageData getAppUserForAppByUserId(String userid)throws Exception;
+    
+    
+    /**
+     * 修改用户手机号码
+     * @param appUser
+     * @return
+     * @throws Exception
+     */
+    public int updateAppUserPhone(AppUser appUser)throws Exception;
 }
 

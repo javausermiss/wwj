@@ -26,6 +26,7 @@ import com.fh.util.PageData;
 import com.fh.util.StringUtils;
 import com.fh.util.Const.AccountTransType;
 import com.fh.util.resp.TxnResp;
+import com.fh.util.wwjUtil.RedisUtil;
 import com.fh.util.wwjUtil.RespStatus;
 
 import net.sf.json.JSONObject;
@@ -59,7 +60,6 @@ public class AppAcountController extends BaseController {
     	
     	try{
     	   String accBal=accountInfService.getAccountCountByUserId(userId);
-	    	
 	    	Map dataMap=new HashMap<>();
 	    	dataMap.put("accBal", NumberUtils.RMBCentToYuan(accBal));
             return RespStatus.successs().element("data", dataMap);
@@ -170,8 +170,9 @@ public class AppAcountController extends BaseController {
     public JSONObject doWithdrawCash(
     		HttpServletRequest request,
     		@RequestParam(value="userId" ,required = true) String userId,
-    		@RequestParam(value="orderAmt" ,required = true) String orderAmt,
+    		@RequestParam(value="smsType" ,required = true) String smsType,
     		@RequestParam(value="phoneCode" ,required = false) String phoneCode,
+    		@RequestParam(value="orderAmt" ,required = true) String orderAmt,
             @RequestParam(value="ctype" ,required = false) String ctype,
             @RequestParam(value = "channel" ,required = false) String channel,
             @RequestParam(value = "deviceType" ,required = false) String deviceType,
@@ -182,6 +183,13 @@ public class AppAcountController extends BaseController {
     		try{
 		    	
 		    	//验证手机短信
+            	if(StringUtils.isEmpty(smsType) || StringUtils.isEmpty(phoneCode)){
+            		return RespStatus.fail("验证码不存在");
+            	}
+            	
+            	if(!phoneCode.equals( RedisUtil.getRu().get(Const.getReidsSmsKey(userId, smsType)))){
+            		return RespStatus.fail("验证码错误");
+            	}
 		    	
 		    	//验证账户余额
 	    		AccountInf accountInf=accountInfService.findByUserId(userId);

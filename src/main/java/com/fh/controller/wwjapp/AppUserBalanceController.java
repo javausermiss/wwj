@@ -526,7 +526,8 @@ public class AppUserBalanceController extends BaseController {
                 if (o.getSTATUS().equals("1")) {
                     return "SUCCESS";
                 }
-                Paycard paycard = paycardService.getGold(String.valueOf(amount / 100));
+//                Paycard paycard = paycardService.getGold(String.valueOf(amount / 100));
+              Paycard paycard = paycardService.getGold(NumberUtils.RMBCentToYuan(amount));
                 if (paycard == null) {
                     AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
                     int reggold = Integer.valueOf(o.getREGAMOUNT()) / 10;
@@ -697,7 +698,9 @@ public class AppUserBalanceController extends BaseController {
                 if (o.getSTATUS().equals("1")) {
                     return "SUCCESS";
                 }
-                Paycard paycard = paycardService.getGold(String.valueOf(amount / 100));
+//                Paycard paycard = paycardService.getGold(String.valueOf(amount / 100));
+//              Paycard paycard = paycardService.getGold(String.valueOf(amount / 100));
+              Paycard paycard = paycardService.getGold(NumberUtils.RMBCentToYuan(amount));
                 if (paycard == null) {
                     AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
                     int reggold = Integer.valueOf(o.getREGAMOUNT()) / 10;
@@ -943,75 +946,5 @@ public class AppUserBalanceController extends BaseController {
 
 
     }
-    /**
-     * 用户推广加盟提现银行卡信息
-     * @param select "0" 查询 "1" 修改
-     * @param userId 用户ID
-     * @param bankAddress 银行地址
-     * @param bankName 银行名称
-     * @param bankBranch 支行名称
-     * @param bankCardNo 银行卡号
-     * @param idNumber 身份证号码
-     * @param userName 用户真实姓名
-     * @param bankPhone 手机号码
-     * @param isDefault 是否默认
-     * @return
-     */
-    @RequestMapping(value = "/regBankInf",method = RequestMethod.POST,produces = "application/json;charset=UTF-8")
-    @ResponseBody
-    public JSONObject regBankInf(
-            @RequestParam("select") String select,
-            @RequestParam("userId") String userId,
-            @RequestParam("bankAddress") String bankAddress,
-            @RequestParam("bankName") String bankName,
-            @RequestParam("bankBranch") String bankBranch,
-            @RequestParam("bankCardNo") String bankCardNo,
-            @RequestParam("idNumber") String idNumber,
-            @RequestParam("userName") String userName,
-            @RequestParam("bankPhone") String bankPhone,
-            @RequestParam(value = "isDefault",required = false) String isDefault,
-            HttpServletRequest httpServletRequest
-    ) {
-        try {
-            AppUser appUser = appuserService.getUserByID(userId);
-            if (appUser == null) {
-                return RespStatus.fail("无此用户");
-            }
-            if (select.equals("0")) {
-                BankCard bankCard = bankcardService.getBankInfByUserId(userId);
-                if (bankCard == null) {
-                    BankCard bankCardnew = new BankCard();
-                    bankCardnew.setBANKCARD_ID(MyUUID.getUUID32());
-                    bankCardnew.setUSER_ID(userId);
-                    bankcardService.regBankInf(bankCardnew);
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("bankCard", bankCardnew);
-                    return RespStatus.successs().element("data", map);
-                } else {
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("bankCard", bankCard);
-                    return RespStatus.successs().element("data", map);
-                }
-
-            } else {
-                BankCard bankCard = new BankCard();
-                bankCard.setBANK_ADDRESS(bankAddress);
-                bankCard.setUSER_ID(userId);
-                bankCard.setBANK_BRANCH(bankBranch);
-                bankCard.setBANK_CARD_NO(bankCardNo);
-                bankCard.setBANK_PHONE(bankPhone);
-                bankCard.setBANK_NAME(bankName);
-                bankCard.setUSER_REA_NAME(userName);
-                bankCard.setID_NUMBER(idNumber);
-                bankcardService.updateBankInfByUserId(bankCard);
-                Map<String, Object> map = new HashMap<>();
-                map.put("bankCard", bankCard);
-                return RespStatus.successs().element("data", map);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return RespStatus.fail();
-        }
-
-    }
+ 
 }

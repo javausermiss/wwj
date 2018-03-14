@@ -9,7 +9,7 @@ import org.springframework.context.ApplicationContext;
 public class Const {
 	
 	//redis sessionId key:sessionId:appUser:			
-	public static final String REDIS_APPUSER_PHONCE_TYPE="SMS_PHONE_TYPE_";
+	public static final String REDIS_APPUSER_PHONCE_TYPE="REDIS_SMS_PHONE_TYPE_";
 	
 	//redis sessionId key:sessionId:appUser:			
 	public static final String REDIS_APPUSER_SESSIONID="sessionId:appUser:";
@@ -76,7 +76,9 @@ public class Const {
 		
 		
 		PHONE_SMS_TYPE_1000("注册短信码","1000",60*30),
-		PHONE_SMS_TYPE_2000("提现短信码","2000",60*30);
+		PHONE_SMS_TYPE_2000("绑定手机号","2000",60*30),
+		PHONE_SMS_TYPE_3000("修改银行卡信息","3000",60*30),
+		PHONE_SMS_TYPE_4000("提现短信码","4000",60*30);
 		
 		private  String name;
 		private  String code;
@@ -401,5 +403,15 @@ public class Const {
 			}
 			return TRANS_OTHER;
 		}
+	}
+	
+	/**
+	 * 获取redis 存储手机验证的kEY
+	 * @param userId
+	 * @param smsType
+	 * @return
+	 */
+	public static String getReidsSmsKey(String userId,String smsType){
+		return Const.REDIS_APPUSER_PHONCE_TYPE+userId+userId+smsType;
 	}
 }
