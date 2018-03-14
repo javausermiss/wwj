@@ -9,6 +9,9 @@ import org.springframework.context.ApplicationContext;
 public class Const {
 	
 	//redis sessionId key:sessionId:appUser:			
+	public static final String REDIS_APPUSER_PHONCE_TYPE="SMS_PHONE_TYPE_";
+	
+	//redis sessionId key:sessionId:appUser:			
 	public static final String REDIS_APPUSER_SESSIONID="sessionId:appUser:";
 	
 	//redis sessionId key:sessionId:appUser:					 
@@ -62,6 +65,60 @@ public class Const {
 	public static final String[] APP_LOGIN_PARAM_ARRAY = new String[]{"USERNAME","PASSWORD"};
 	public static final String[] APP_LOGIN_VALUE_ARRAY = new String[]{"用户名","密码"};
 	
+	
+	
+	/**
+	 * 
+	 * @author JAVA_DEV
+	 *
+	 */
+	public enum AppPhoneSmsMenu{
+		
+		
+		PHONE_SMS_TYPE_1000("注册短信码","1000",60*30),
+		PHONE_SMS_TYPE_2000("提现短信码","2000",60*30);
+		
+		private  String name;
+		private  String code;
+		private  long expirytime; //失效时间
+
+		AppPhoneSmsMenu(String name, String code,long expirytime) {
+			this.name = name;
+			this.code = code;
+			this.expirytime=expirytime;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+		public String getCode() {
+			return code;
+		}
+		public void setCode(String code) {
+			this.code = code;
+		}
+
+		public long getExpirytime() {
+			return expirytime;
+		}
+
+		public void setExpirytime(long expirytime) {
+			this.expirytime = expirytime;
+		}
+
+		public static AppPhoneSmsMenu findByCode(String code) {
+			for (AppPhoneSmsMenu t : AppPhoneSmsMenu.values()) {
+				if (t.code.equalsIgnoreCase(code)) {
+					return t;
+				}
+			}
+			return null;
+		}
+	}
 	
 	/**
 	 * 

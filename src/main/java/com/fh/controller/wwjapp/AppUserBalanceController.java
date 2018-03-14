@@ -39,6 +39,7 @@ import com.fh.service.system.promote.PromoteAppUserManager;
 import com.fh.service.system.promotemanage.PromoteManageManager;
 import com.fh.service.system.trans.AccountOperManager;
 import com.fh.util.Const;
+import com.fh.util.NumberUtils;
 import com.fh.util.PageData;
 import com.fh.util.PropertiesUtils;
 import com.fh.util.wwjUtil.MyUUID;
@@ -277,7 +278,7 @@ public class AppUserBalanceController extends BaseController {
                 return null;
             }
             String glodNum = paycard.getGOLD();//金币数量
-            int amount = Integer.valueOf(paycard.getAMOUNT());//金额
+            String amount = paycard.getAMOUNT();//金额
             boolean a = RedisUtil.getRu().exists("tradeOrder");
             
             //=======创建订单号 begin=======
@@ -303,7 +304,7 @@ public class AppUserBalanceController extends BaseController {
             Order order = new Order();
             order.setUSER_ID(userId);
             order.setREC_ID(newOrder);
-            order.setREGAMOUNT(String.valueOf(amount*100));
+            order.setREGAMOUNT(NumberUtils.RMBYuanToCent(amount)); //元转分
             order.setORDER_ID(newOrder);
             order.setREGGOLD(glodNum); //充值的金币数量
             order.setCHANNEL(channel);

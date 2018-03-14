@@ -174,6 +174,6 @@ public class NumberUtils {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(mul("600","0.02"));
+		System.out.println(RMBYuanToCent("0.02"));
 	}
 }
