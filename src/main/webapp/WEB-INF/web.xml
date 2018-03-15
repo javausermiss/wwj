@@ -11,7 +11,7 @@
 			classpath:spring/ApplicationContext-dataSource.xml,
 			classpath:spring/ApplicationContext-dubbo.xml,
 			classpath:spring/ApplicationContext-srs-dubbo-service.xml,
-			classpath:spring/ApplicationContext-job.xml,
+ 			classpath:spring/ApplicationContext-job.xml,
 			classpath:spring/ApplicationContext-shiro.xml
 			<!--classpath:spring/ApplicationContext-redis.xml-->
 		</param-value>
@@ -29,6 +29,7 @@
 	<filter>
 		<filter-name>encodingFilter</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		 <async-supported>true</async-supported>  
 		<init-param>
 			<param-name>encoding</param-name>
 			<param-value>utf-8</param-value>
@@ -82,6 +83,7 @@
 			<param-value>classpath:spring/ApplicationContext-mvc.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
+		 <async-supported>true</async-supported>  
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>springMvc</servlet-name>
@@ -100,6 +102,7 @@
 			<param-name>targetFilterLifecycle</param-name>
 			<param-value>true</param-value>
 		</init-param>
+		 <async-supported>true</async-supported>
 	</filter>
 	<filter-mapping>
 		<filter-name>shiroFilter</filter-name>

@@ -2,7 +2,6 @@ package com.fh.rpc;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -27,7 +26,6 @@ import com.iot.game.pooh.server.rpc.interfaces.LotteryServerRpcService;
 import com.iot.game.pooh.server.rpc.interfaces.bean.RpcCommandResult;
 import com.iot.game.pooh.server.rpc.interfaces.bean.RpcReturnCode;
 import com.iot.game.pooh.web.rpc.interfaces.LotteryWebRpcService;
-import com.iot.game.pooh.web.rpc.interfaces.entity.GuessDetail;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -57,7 +55,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
     	
     	 RpcCommandResult rpcCommandResult = new RpcCommandResult();
         try {
-            log.info("start时间-------------->"+ DateUtil.getTime());
+            log.info("start时间-------------->"+ DateUtil.getTime()+",dollId-->"+dollId+",userId-->"+userId);
             
         	//查找娃娃机信息
             Doll doll= dollService.getDollByID(dollId);
@@ -82,7 +80,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
             if (Integer.valueOf(userBalance) < dollGold) {
             	 rpcCommandResult.setRpcReturnCode(RpcReturnCode.FAILURE);
                  rpcCommandResult.setInfo("余额不足"); ///这里写期号
-                return null;
+                return rpcCommandResult;
             }
             
             
@@ -185,7 +183,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
             
             rpcCommandResult.setRpcReturnCode(RpcReturnCode.FAILURE);
             rpcCommandResult.setInfo("设备异常"); ///这里写期号
-            return null;
+            return rpcCommandResult;
         }
 
     }
