@@ -213,7 +213,7 @@
 	 </select>
 	 
 	 <!-- 月充值统计 -->
-	 <select id="findRegTotallistMonthPage" parameterType="page" resultType="pd">
+	 <select id="findRegTotalMonthlistPage" parameterType="page" resultType="pd">
 		SELECT
 		s1.CREATETIME, 
 		s1.dateTime,
@@ -252,13 +252,10 @@
 		) s3 on s3.CREATETIME= s1.CREATETIME
   		
   		WHERE 1=1
-		<if test="pd.lastStart != null and pd.lastStart != ''">
-             and s1.CREATETIME &gt;= str_to_date(#{pd.lastStart}, '%Y-%m-%d')
-         </if>
-         <if test="pd.lastEnd != null and pd.lastEnd != ''">
-             and s1.CREATETIME &lt;= str_to_date(#{pd.lastEnd}, '%Y-%m-%d')
-         </if>
-         ORDER BY MONTH(s1.CREATETIME)
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and s1.dateTime LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')		
+        </if>
+         ORDER BY s1.dateTime DESC
 	 </select>
 	 
 </mapper>

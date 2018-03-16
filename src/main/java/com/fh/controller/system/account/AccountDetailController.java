@@ -107,7 +107,7 @@ public class AccountDetailController extends BaseController {
 		return mv;
 	}
 	//月充值统计
-		@RequestMapping(value="/appUserOrderStatisticsMonth")
+		@RequestMapping(value="/appUserOrderMonthStatistics")
 		public ModelAndView appUserOrderMonthStatistics(Page page){
 			ModelAndView mv = this.getModelAndView();
 			PageData pd = new PageData();
@@ -120,9 +120,7 @@ public class AccountDetailController extends BaseController {
 				page.setPd(pd);
 				
 				List<PageData> monthlist=paymentService.findRegTotallistMonthPage(page);
-//				List<PageData> total = paymentService.getUserTotal(page);	
 				mv.setViewName("system/account/appuser_order_statistics_month");
-//				mv.addObject("total",total);
 				
 				mv.addObject("monthlist", monthlist);
 				mv.addObject("pd", pd);
