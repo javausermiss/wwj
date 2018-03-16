@@ -216,7 +216,6 @@
 	 <select id="findRegTotalMonthlistPage" parameterType="page" resultType="pd">
 		SELECT
 		s1.CREATETIME, 
-		s1.dateTime,
 		IFNULL(s1.ALLREGAMOUNT,0)/100 AS ALLREGAMOUNT,
 		IFNULL(s1.ALLCOUNT,0) as ALLCOUNT,
 		IFNULL(s2.SUCREGAMOUNT,0)/100 as SUCREGAMOUNT,
@@ -224,38 +223,38 @@
 		IFNULL(s3.FAILREGAMOUNT,0)/100 as FAILREGAMOUNT,
 		IFNULL(s3.FAILCOUNT,0) as FAILCOUNT
 		 FROM (
-			SELECT MONTH(a1.CREATETIME) as CREATETIME,YEAR(a1.CREATETIME) as dateTime,
+			SELECT date_format(a1.CREATETIME,'%Y-%m') as CREATETIME,
 			SUM(a1.REGAMOUNT) as ALLREGAMOUNT,
 			COUNT(1) as ALLCOUNT
-			from sys_app_order a1  GROUP BY MONTH(a1.CREATETIME)
+			from sys_app_order a1  GROUP BY date_format(a1.CREATETIME,'%Y-%m')
 		)  s1
 		LEFT JOIN
 		(
 		SELECT 
 		
-			MONTH( a2.CREATETIME) as CREATETIME, YEAR(a2.CREATETIME) as dateTime, 
+			date_format( a2.CREATETIME,'%Y-%m') as CREATETIME, 
 			SUM(a2.REGAMOUNT) as SUCREGAMOUNT,
 			COUNT(1) as SUCCOUNT 
 			from sys_app_order a2 WHERE 
 			a2.`STATUS`='1' 
-			GROUP BY MONTH(a2.CREATETIME)
+			GROUP BY date_format(a2.CREATETIME,'%Y-%m')
 		) s2 on s2.CREATETIME= s1.CREATETIME
 		LEFT JOIN
 		(
 		SELECT 
-			MONTH( a3.CREATETIME) as CREATETIME,YEAR(a3.CREATETIME) as dateTime, 
+			date_format( a3.CREATETIME,'%Y-%m') as CREATETIME,
 			SUM(a3.REGAMOUNT) as FAILREGAMOUNT,
 			COUNT(1) as FAILCOUNT
 			from sys_app_order a3 
 			WHERE a3.`STATUS`='0' 
-			GROUP BY MONTH(a3.CREATETIME)
+			GROUP BY date_format(a3.CREATETIME,'%Y-%m')
 		) s3 on s3.CREATETIME= s1.CREATETIME
   		
   		WHERE 1=1
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and s1.dateTime LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')		
         </if>
-         ORDER BY s1.dateTime DESC
+         ORDER BY s1.CREATETIME DESC
 	 </select>
 	 
 </mapper>

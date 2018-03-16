@@ -31,7 +31,7 @@
                     <div class="col-xs-12">
 
                         <!-- 检索  -->
-                        <form action="account/detail/appUserOrderStatisticsMonth.do" method="post" name="Form" id="Form">
+                        <form action="account/detail/appUserOrderMonthStatistics.do" method="post" name="Form" id="Form">
                             <table style="margin-top:5px;">
                                 <tr>
                                     <td>
@@ -101,7 +101,7 @@
                                     <c:when test="${not empty monthlist}">
                                             <c:forEach items="${monthlist}" var="var" varStatus="vs">
                                                 <tr>
-                                                    <td class='center'>${var.dateTime}年${var.CREATETIME}月</td>
+                                                    <td class='center'>${var.CREATETIME}</td>
                                                     <td class='center'>${var.ALLREGAMOUNT}</td>
                                                     <td class='center'>${var.ALLCOUNT}</td>
                                                     
