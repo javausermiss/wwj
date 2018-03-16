@@ -154,6 +154,10 @@ public class AppPromoteManageController extends BaseController {
 				return RespStatus.fail("推广码不存在");
 			}
 			
+			if(userId.equals(proUserPd.getString("USER_ID"))){
+				return RespStatus.fail("不能输入自己的推广码");
+			}
+			
 			//更改用户所属的推广用户
 			appUser.setPRO_USER_ID(proUserPd.getString("USER_ID"));
 			appuserService.updateProUserId(appUser);
