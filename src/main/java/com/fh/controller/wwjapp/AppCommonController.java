@@ -82,6 +82,7 @@ public class AppCommonController {
             return RespStatus.exception();
         }
     }
+    
 	
     /**
      * 用户推广加盟提现银行卡信息
