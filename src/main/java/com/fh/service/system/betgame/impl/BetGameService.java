@@ -4,6 +4,7 @@ import com.fh.controller.base.BaseController;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.entity.system.*;
+import com.fh.service.system.afterVoting.AfterVotingManager;
 import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.betgame.BetGameManager;
 import com.fh.service.system.doll.DollManager;
@@ -51,6 +52,8 @@ public class BetGameService extends BaseController implements BetGameManager {
     private PaymentManager paymentService;
     @Resource
     private LotteryServerRpcService lotteryServerRpcService;
+    @Resource(name = "afterVotingService")
+    private AfterVotingManager afterVotingService;
 
 
     /**
@@ -192,7 +195,7 @@ public class BetGameService extends BaseController implements BetGameManager {
     }
 
     @Override
-    public JSONObject doBet(String userId, String dollId, int wager, String guessId, String guessKey) throws Exception {
+    public JSONObject doBet(String userId, String dollId, int wager, String guessId, String guessKey, Integer afterVoting) throws Exception {
         //判断用户是否竞猜过
         GuessDetailL gs = new GuessDetailL();
         gs.setAPP_USER_ID(userId);
@@ -202,7 +205,29 @@ public class BetGameService extends BaseController implements BetGameManager {
         if (guessDetailL1 != null) {
             return RespStatus.fail("该用户已经竞猜过");
         }
+        //增加该用户追投信息
+        if (afterVoting != 0) {
+            AfterVoting afterVoting1 = new AfterVoting();
+            afterVoting1.setROOM_ID(dollId);
+            afterVoting1.setUSER_ID(userId);
+            AfterVoting afterVoting2 = afterVotingService.getAfterVoting(afterVoting1);
+            if (afterVoting2 == null) {
+                AfterVoting afterVoting3 = new AfterVoting();
+                afterVoting1.setAFTER_VOTING(afterVoting);
+                afterVoting1.setUSER_ID(userId);
+                afterVoting1.setROOM_ID(dollId);
+                afterVoting1.setLOTTERY_NUM(guessKey);
+                afterVotingService.regAfterVoting(afterVoting3);
+            }else {
+                int a = afterVoting2.getAFTER_VOTING();
+                int new_af = a + afterVoting;
+                afterVoting2.setAFTER_VOTING(new_af);
+                //更新本房间已存在记录的追投期数
+                afterVotingService.updateAfterVoting_Num(afterVoting2);
 
+            }
+
+        }
         PlayDetail p1 = new PlayDetail();
         p1.setDOLLID(dollId);
         p1.setGUESS_ID(guessId);

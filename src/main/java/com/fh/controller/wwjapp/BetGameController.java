@@ -1,5 +1,6 @@
 package com.fh.controller.wwjapp;
 
+import com.fh.controller.base.BaseController;
 import com.fh.entity.system.*;
 import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.betgame.BetGameManager;
@@ -28,7 +29,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/app")
-public class BetGameController {
+public class BetGameController extends BaseController{
 
     @Resource(name = "betGameService")
     private BetGameManager betGameService;
@@ -127,8 +128,10 @@ public class BetGameController {
      * @param wager    投注金额
      * @param guessId  场次ID
      * @param guessKey 竞猜 中 或者 不中
+     * @param afterVoting
      * @return
      */
+
     @RequestMapping(value = "/bets", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public JSONObject bets(
@@ -136,12 +139,13 @@ public class BetGameController {
             @RequestParam("dollId") String dollId,
             @RequestParam("wager") int wager,
             @RequestParam("guessId") String guessId,
-            @RequestParam("guessKey") String guessKey
+            @RequestParam("guessKey") String guessKey,
+            @RequestParam(value = "atrerVoting",required = false,defaultValue = "0") Integer afterVoting
             )
     {
 
         try {
-          return  betGameService.doBet(userId,dollId,wager,guessId,guessKey);
+          return  betGameService.doBet(userId,dollId,wager,guessId,guessKey,afterVoting);
         } catch (Exception e) {
             e.printStackTrace();
             return RespStatus.fail();
