@@ -82,6 +82,7 @@ public class AppCommonController {
             return RespStatus.exception();
         }
     }
+    
 	
     /**
      * 用户推广加盟提现银行卡信息
@@ -102,7 +103,7 @@ public class AppCommonController {
     public JSONObject regBankInf(
             @RequestParam(value ="userId",required = true) String userId,
             @RequestParam(value ="smsType",required = true) String smsType,
-            @RequestParam(value ="phoneNumber",required = true) String phoneNumber,
+            @RequestParam(value ="phoneNumber",required = false) String phoneNumber,
             @RequestParam(value ="phoneCode",required = true) String phoneCode,
             @RequestParam(value ="bankAddress",required = false) String bankAddress,
             @RequestParam(value ="bankName",required = false) String bankName,
@@ -115,7 +116,7 @@ public class AppCommonController {
     ) {
         try {
         	
-        	if(StringUtils.isEmpty(smsType) || StringUtils.isEmpty(phoneCode) ||  StringUtils.isEmpty(phoneNumber)){
+        	if(StringUtils.isEmpty(smsType) || StringUtils.isEmpty(phoneCode)){
         		return RespStatus.fail("验证码不存在");
         	}
         	

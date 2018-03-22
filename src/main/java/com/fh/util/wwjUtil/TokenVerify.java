@@ -186,17 +186,17 @@ public class TokenVerify {
     	String cid="aed34f22d80e430a868c083da0e4de07";
     	
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("chid", "20180309141358295000003");
-        map.put("order_no", "20180309141358295000003");
+        map.put("chid", "20180320171737403000009");
+        map.put("order_no", "20180320171737403000009");
         map.put("subject", "s1");
         map.put("cid", "aed34f22d80e430a868c083da0e4de07");
-        map.put("amount", "600");
-        map.put("money", "600");
-        map.put("balance", "600");
-        map.put("vmoney", "600");
+        map.put("amount", "10");
+        map.put("money", "10");
+        map.put("balance", "10");
+        map.put("vmoney", "10");
         map.put("time", "1520578242775");
         map.put("user_id", "f905a833349e4b999ddbea21b3567223");
-        map.put("out_trade_no", "20180309141358295000003");
+        map.put("out_trade_no", "20180320171737403000009");
         map.put("trade_status", "SUCCESS");
         map.put("payment_id", "gf_wechat");
         map.put("extra", "test1");
@@ -218,7 +218,7 @@ public class TokenVerify {
         System.out.println(basestring.toString());
         String ss = TokenVerify.md5(basestring.toString());
         
-        System.out.println(ss);
+        System.out.println("sign_type=MD5&sign="+ss);
     }
 
 

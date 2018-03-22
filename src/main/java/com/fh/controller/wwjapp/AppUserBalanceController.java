@@ -528,64 +528,51 @@ public class AppUserBalanceController extends BaseController {
                 }
 //                Paycard paycard = paycardService.getGold(String.valueOf(amount / 100));
               Paycard paycard = paycardService.getGold(NumberUtils.RMBCentToYuan(amount));
-                if (paycard == null) {
-                    AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
-                    int reggold = Integer.valueOf(o.getREGAMOUNT()) / 10;
-                    int a = Integer.valueOf(appUser.getBALANCE()) + reggold;
-                    appUser.setBALANCE(String.valueOf(a));
-                    appuserService.updateAppUserBalanceById(appUser);
-                    Payment payment = new Payment();
-                    payment.setGOLD(String.valueOf(reggold));
-                    payment.setUSERID(o.getUSER_ID());
-                    payment.setDOLLID(null);
-                    payment.setCOST_TYPE("5");
-                    payment.setREMARK("充值测试");
-                    paymentService.reg(payment);
-                    o.setORDER_NO(order_no);
-                    o.setREGGOLD(String.valueOf(reggold));
-                    o.setSTATUS("1");
-                    orderTestService.update(o);
-                    return "SUCCESS";
-                }
-
-                int gold = Integer.valueOf(paycard.getGOLD());
-                String award = paycard.getAWARD();
-                String rechare = paycard.getRECHARE();
-
-                AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
-                int a = Integer.valueOf(appUser.getBALANCE()) + gold;
-                appUser.setBALANCE(String.valueOf(a));
-                appuserService.updateAppUserBalanceById(appUser);
-                //更新收支表
-                Payment payment = new Payment();
-                payment.setGOLD("+" + rechare);
-                payment.setUSERID(o.getUSER_ID());
-                payment.setDOLLID(null);
-                payment.setCOST_TYPE("5");
-                payment.setREMARK("充值" + rechare);
-                paymentService.reg(payment);
-                //奖励记录
-                Payment payment1 = new Payment();
-                payment1.setGOLD("+" + award);
-                payment1.setUSERID(o.getUSER_ID());
-                payment1.setDOLLID(null);
-                payment1.setCOST_TYPE("9");
-                payment1.setREMARK("奖励" + award);
-                paymentService.reg(payment1);
-                o.setREGGOLD(String.valueOf(gold));
-                o.setORDER_NO(order_no);
-                o.setSTATUS("1");
-                orderTestService.update(o);
-            } else {
-                o.setSTATUS("-1");//支付失败
-                orderTestService.update(o);
-            }
-            return "SUCCESS";
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "SYSTEM ERROR";
-        }
-    }
+              
+              //用户充值 增加用户金币
+              if(Const.OrderPayType.R_TYPE.getValue().equals(o.getPAY_TYPE())){
+              
+	                int gold = Integer.valueOf(paycard.getGOLD());
+	                String award = paycard.getAWARD();
+	                String rechare = paycard.getRECHARE();
+	
+	                AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
+	                int a = Integer.valueOf(appUser.getBALANCE()) + gold;
+	                appUser.setBALANCE(String.valueOf(a));
+	                appuserService.updateAppUserBalanceById(appUser);
+	                //更新收支表
+	                Payment payment = new Payment();
+	                payment.setGOLD("+" + rechare);
+	                payment.setUSERID(o.getUSER_ID());
+	                payment.setDOLLID(null);
+	                payment.setCOST_TYPE("5");
+	                payment.setREMARK("充值" + rechare);
+	                paymentService.reg(payment);
+	                //奖励记录
+	                Payment payment1 = new Payment();
+	                payment1.setGOLD("+" + award);
+	                payment1.setUSERID(o.getUSER_ID());
+	                payment1.setDOLLID(null);
+	                payment1.setCOST_TYPE("9");
+	                payment1.setREMARK("奖励" + award);
+	                paymentService.reg(payment1);
+	                
+	                //当前订单的用户昵称
+	                o.setUserNickName(appUser.getNICKNAME());
+              }
+              o.setORDER_NO(order_no);
+              o.setSTATUS("1");
+              orderTestService.doRegCallbackUpdateOrder(o);
+          } else {
+              o.setSTATUS("-1");//支付失败
+              orderTestService.update(o);
+          }
+          return "SUCCESS";
+      } catch (Exception e) {
+          e.printStackTrace();
+          return "SYSTEM ERROR";
+      }
+  }
 
 
 
@@ -698,67 +685,53 @@ public class AppUserBalanceController extends BaseController {
                 if (o.getSTATUS().equals("1")) {
                     return "SUCCESS";
                 }
-//                Paycard paycard = paycardService.getGold(String.valueOf(amount / 100));
-//              Paycard paycard = paycardService.getGold(String.valueOf(amount / 100));
-              Paycard paycard = paycardService.getGold(NumberUtils.RMBCentToYuan(amount));
-                if (paycard == null) {
-                    AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
-                    int reggold = Integer.valueOf(o.getREGAMOUNT()) / 10;
-                    int a = Integer.valueOf(appUser.getBALANCE()) + reggold;
-                    appUser.setBALANCE(String.valueOf(a));
-                    appuserService.updateAppUserBalanceById(appUser);
-                    Payment payment = new Payment();
-                    payment.setGOLD(String.valueOf(reggold));
-                    payment.setUSERID(o.getUSER_ID());
-                    payment.setDOLLID(null);
-                    payment.setCOST_TYPE("5");
-                    payment.setREMARK("充值测试");
-                    paymentService.reg(payment);
-                    o.setORDER_NO(order_no);
-                    o.setREGGOLD(String.valueOf(reggold));
-                    o.setSTATUS("1");
-                    orderTestService.update(o);
-                    return "SUCCESS";
-                }
+          Paycard paycard = paycardService.getGold(NumberUtils.RMBCentToYuan(amount));
 
-                int gold = Integer.valueOf(paycard.getGOLD());
-                String award = paycard.getAWARD();
-                String rechare = paycard.getRECHARE();
+		//用户充值 增加用户金币
+		if(Const.OrderPayType.R_TYPE.getValue().equals(o.getPAY_TYPE())){
+		
+		      int gold = Integer.valueOf(paycard.getGOLD());
+		      String award = paycard.getAWARD();
+		      String rechare = paycard.getRECHARE();
+		
+		      AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
+		      int a = Integer.valueOf(appUser.getBALANCE()) + gold;
+		      appUser.setBALANCE(String.valueOf(a));
+		      appuserService.updateAppUserBalanceById(appUser);
+		      //更新收支表
+		      Payment payment = new Payment();
+		      payment.setGOLD("+" + rechare);
+		      payment.setUSERID(o.getUSER_ID());
+		      payment.setDOLLID(null);
+		      payment.setCOST_TYPE("5");
+		      payment.setREMARK("充值" + rechare);
+		      paymentService.reg(payment);
+		      //奖励记录
+		      Payment payment1 = new Payment();
+		      payment1.setGOLD("+" + award);
+		      payment1.setUSERID(o.getUSER_ID());
+		      payment1.setDOLLID(null);
+		      payment1.setCOST_TYPE("9");
+		      payment1.setREMARK("奖励" + award);
+		      paymentService.reg(payment1);
+		      
+		      //当前订单的用户昵称
+		      o.setUserNickName(appUser.getNICKNAME());
+			}
+				o.setORDER_NO(order_no);
+				o.setSTATUS("1");
+				orderTestService.doRegCallbackUpdateOrder(o);
+			} else {
+			o.setSTATUS("-1");//支付失败
+			orderTestService.update(o);
+			}
+			return "SUCCESS";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "SYSTEM ERROR";
+		}
+		}
 
-                AppUser appUser = appuserService.getUserByID(o.getUSER_ID());
-                int a = Integer.valueOf(appUser.getBALANCE()) + gold;
-                appUser.setBALANCE(String.valueOf(a));
-                appuserService.updateAppUserBalanceById(appUser);
-                //更新收支表
-                Payment payment = new Payment();
-                payment.setGOLD("+" + rechare);
-                payment.setUSERID(o.getUSER_ID());
-                payment.setDOLLID(null);
-                payment.setCOST_TYPE("5");
-                payment.setREMARK("充值" + rechare);
-                paymentService.reg(payment);
-                //奖励记录
-                Payment payment1 = new Payment();
-                payment1.setGOLD("+" + award);
-                payment1.setUSERID(o.getUSER_ID());
-                payment1.setDOLLID(null);
-                payment1.setCOST_TYPE("9");
-                payment1.setREMARK("奖励" + award);
-                paymentService.reg(payment1);
-                o.setREGGOLD(String.valueOf(gold));
-                o.setORDER_NO(order_no);
-                o.setSTATUS("1");
-                orderTestService.update(o);
-            } else {
-                o.setSTATUS("-1");//支付失败
-                orderTestService.update(o);
-            }
-            return "SUCCESS";
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "SYSTEM ERROR";
-        }
-    }
 
     
     
@@ -820,7 +793,8 @@ public class AppUserBalanceController extends BaseController {
                 return "SUCCESS";
             }
             
-
+            //用户充值 增加用户金币
+            if(Const.OrderPayType.R_TYPE.getValue().equals(o.getPAY_TYPE())){
             	//充值的金币数量
                 int gold = Integer.valueOf(o.getREGGOLD());
                 String award = "";
@@ -876,11 +850,14 @@ public class AppUserBalanceController extends BaseController {
                 payment1.setREMARK("奖励" + award);
                 paymentService.reg(payment1);
       
-                //step7 更新订单
-                o.setORDER_NO(orderid);
-                o.setREGGOLD(String.valueOf(gold));
-                o.setSTATUS("1");
-                orderTestService.update(o);
+	                //step7 更新订单
+	                o.setORDER_NO(orderid);
+	                o.setREGGOLD(String.valueOf(gold));
+	                o.setSTATUS("1");
+	                //当前订单的用户昵称
+	                o.setUserNickName(appUser.getNICKNAME());
+	            }
+                orderTestService.doRegCallbackUpdateOrder(o);
                 
             return "SUCCESS";
         } catch (Exception e) {
