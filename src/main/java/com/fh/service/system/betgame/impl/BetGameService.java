@@ -205,6 +205,29 @@ public class BetGameService extends BaseController implements BetGameManager {
         if (guessDetailL1 != null) {
             return RespStatus.fail("该用户已经竞猜过");
         }
+
+        PlayDetail p1 = new PlayDetail();
+        p1.setDOLLID(dollId);
+        p1.setGUESS_ID(guessId);
+        PlayDetail p = playDetailService.getPlayDetailByGuessID(p1);
+        String s = p.getSTOP_FLAG();
+        //默认0可以投注，-1 机器已经下抓，禁止投注
+        if (!s.equals("0")) {
+            return RespStatus.fail("禁止投注！");
+        }
+        AppUser appUser = appuserService.getUserByID(userId);
+        if (appUser == null) {
+            return null;
+        }
+
+        String balance = appUser.getBALANCE();
+        if (Integer.parseInt(balance) > wager) {
+            int n = Integer.parseInt(balance) - wager;
+            appUser.setBALANCE(String.valueOf(n));
+            appuserService.updateAppUserBalanceById(appUser);
+        } else {
+            return RespStatus.fail("余额不足无法竞猜");
+        }
         //增加该用户追投信息
         if (afterVoting != 0) {
             AfterVoting afterVoting1 = new AfterVoting();
@@ -227,28 +250,6 @@ public class BetGameService extends BaseController implements BetGameManager {
 
             }
 
-        }
-        PlayDetail p1 = new PlayDetail();
-        p1.setDOLLID(dollId);
-        p1.setGUESS_ID(guessId);
-        PlayDetail p = playDetailService.getPlayDetailByGuessID(p1);
-        String s = p.getSTOP_FLAG();
-        //默认0可以投注，-1 机器已经下抓，禁止投注
-        if (!s.equals("0")) {
-            return RespStatus.fail("禁止投注！");
-        }
-        AppUser appUser = appuserService.getUserByID(userId);
-        if (appUser == null) {
-            return null;
-        }
-
-        String balance = appUser.getBALANCE();
-        if (Integer.parseInt(balance) > wager) {
-            int n = Integer.parseInt(balance) - wager;
-            appUser.setBALANCE(String.valueOf(n));
-            appuserService.updateAppUserBalanceById(appUser);
-        } else {
-            return RespStatus.fail("余额不足无法竞猜");
         }
         //增加消费记录
         Payment payment = new Payment();
@@ -314,6 +315,8 @@ public class BetGameService extends BaseController implements BetGameManager {
             return null;
         }
 
+        logger.info("机器复位，房间号为--->" + dollId+"玩家抓娃娃状态--->"+gifinumber);
+
         //更新玩家抓取记录
         playDetail.setSTATE(String.valueOf(gifinumber));//是否抓中
         playDetail.setPOST_STATE("0"); //初始化娃娃状态
@@ -335,6 +338,8 @@ public class BetGameService extends BaseController implements BetGameManager {
         guessDetailL.setPLAYBACK_ID(playDetail.getGUESS_ID());
         guessDetailL.setGUESS_KEY(reward_num);
         List<GuessDetailL> list = this.getWinByNum(guessDetailL);
+
+        logger.info("场次ID："+playDetail.getGUESS_ID()+",中奖用户数为："+list.size());
 
         List<GuessDetail> guessDetail_list = new LinkedList<>();
 
@@ -359,7 +364,7 @@ public class BetGameService extends BaseController implements BetGameManager {
                 AppUser appUser = appuserService.getUserByID(guess_win_user);
                 String old_balance = appUser.getBALANCE();
                 Integer guessNum = appUser.getBET_NUM();
-                Integer new_betnum = gifinumber + 1;
+                Integer new_betnum = guessNum + 1;
                 String new_balance = String.valueOf(Integer.valueOf(old_balance) + reword);
                 appUser.setBALANCE(new_balance);
                 appUser.setBET_NUM(new_betnum);

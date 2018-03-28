@@ -168,6 +168,7 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
                     int af = afterVoting.getAFTER_VOTING();
                     if (af != 0) {
                         int new_af = af - 1;
+                        afterVoting.setAFTER_VOTING(new_af);
                         afterVotingService.updateAfterVoting_Num(afterVoting);
 
                         //增加竞猜记录
@@ -183,7 +184,6 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
             return rpcCommandResult;
         } catch (Exception e) {
             e.printStackTrace();
-
             rpcCommandResult.setRpcReturnCode(RpcReturnCode.FAILURE);
             rpcCommandResult.setInfo("设备异常"); ///这里写期号
             return rpcCommandResult;

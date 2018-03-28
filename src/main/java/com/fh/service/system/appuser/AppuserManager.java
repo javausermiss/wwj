@@ -318,7 +318,7 @@ public interface AppuserManager {
      * @return
      * @throws Exception
      */
-	public AppUser updateAppUserBlAndBnById(AppUser appUser)throws Exception;
+	public int updateAppUserBlAndBnById(AppUser appUser)throws Exception;
 
     /**
      * 竞猜获胜排行榜

@@ -36,7 +36,8 @@
 		CNEE_PHONE,
 		CNEE_ADDRESS,
 		CNEE_NAME,
-		PRO_USER_ID
+		PRO_USER_ID,
+		BET_NUM
 	</sql>
 
     <!-- 字段值 -->
@@ -67,7 +68,8 @@
 		#{CNEE_PHONE},
 		#{CNEE_ADDRESS},
 		#{CNEE_NAME},
-		#{PRO_USER_ID}
+		#{PRO_USER_ID},
+		#{BET_NUM}
 	</sql>
 
     <!-- 角色表 -->
