@@ -23,7 +23,7 @@ public interface AfterVotingManager {
      * @return
      * @throws Exception
      */
-    public List<AfterVoting> getListAfterVoting (String dollId)throws Exception;
+    public List<AfterVoting> getListAfterVoting(String dollId)throws Exception;
 
 
     /**

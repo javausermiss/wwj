@@ -12,6 +12,7 @@ import com.fh.service.system.payment.PaymentManager;
 import com.fh.service.system.playback.PlayBackManage;
 import com.fh.service.system.playdetail.PlayDetailManage;
 import com.fh.service.system.pond.PondManager;
+import com.fh.util.Const;
 import com.fh.util.DateUtil;
 import com.fh.util.PageData;
 
@@ -195,16 +196,7 @@ public class BetGameService extends BaseController implements BetGameManager {
     }
 
     @Override
-    public JSONObject doBet(String userId, String dollId, int wager, String guessId, String guessKey, Integer afterVoting) throws Exception {
-        //判断用户是否竞猜过
-        GuessDetailL gs = new GuessDetailL();
-        gs.setAPP_USER_ID(userId);
-        gs.setPLAYBACK_ID(guessId);
-        gs.setDOLL_ID(dollId);
-        GuessDetailL guessDetailL1 = this.getGuessDetail(gs);
-        if (guessDetailL1 != null) {
-            return RespStatus.fail("该用户已经竞猜过");
-        }
+    public JSONObject doBet(String userId, String dollId, int wager, String guessId, String guessKey,Integer multiple, Integer afterVotingNum) throws Exception {
 
         PlayDetail p1 = new PlayDetail();
         p1.setDOLLID(dollId);
@@ -219,38 +211,56 @@ public class BetGameService extends BaseController implements BetGameManager {
         if (appUser == null) {
             return null;
         }
-
+        //总消费金额的判断
         String balance = appUser.getBALANCE();
-        if (Integer.parseInt(balance) > wager) {
-            int n = Integer.parseInt(balance) - wager;
+        if (Integer.parseInt(balance) > wager * (1+afterVotingNum)) {
+            int n = Integer.parseInt(balance) - (wager * (1+afterVotingNum));
             appUser.setBALANCE(String.valueOf(n));
             appuserService.updateAppUserBalanceById(appUser);
         } else {
             return RespStatus.fail("余额不足无法竞猜");
         }
+
+
+        int dollgold = dollService.getDollByID(dollId).getDOLL_GOLD();
         //增加该用户追投信息
-        if (afterVoting != 0) {
+        if (afterVotingNum != 0) {
+            //增加追投消费记录
+            Payment payment = new Payment();
+            payment.setCOST_TYPE(Const.PlayMentCostType.cost_type15.getValue());
+            payment.setDOLLID(dollId);
+            payment.setUSERID(userId);
+            payment.setGOLD("-" + String.valueOf(dollgold * multiple * afterVotingNum));
+            payment.setREMARK(Const.PlayMentCostType.cost_type15.getName()+String.valueOf(afterVotingNum)+"期");
+            paymentService.reg(payment);
+
             AfterVoting afterVoting1 = new AfterVoting();
             afterVoting1.setROOM_ID(dollId);
             afterVoting1.setUSER_ID(userId);
-            AfterVoting afterVoting2 = afterVotingService.getAfterVoting(afterVoting1);
-            if (afterVoting2 == null) {
+            afterVoting1.setMULTIPLE(multiple);
+            afterVoting1.setLOTTERY_NUM(guessKey);
+            //查询该用户的追投记录集合
+            AfterVoting afterVoting = afterVotingService.getAfterVoting(afterVoting1);
+            //如果没有符合条件的记录，则新加一条
+            if (afterVoting == null) {
                 AfterVoting afterVoting3 = new AfterVoting();
-                afterVoting1.setAFTER_VOTING(afterVoting);
-                afterVoting1.setUSER_ID(userId);
-                afterVoting1.setROOM_ID(dollId);
-                afterVoting1.setLOTTERY_NUM(guessKey);
+                afterVoting3.setAFTER_VOTING(afterVotingNum);
+                afterVoting3.setUSER_ID(userId);
+                afterVoting3.setROOM_ID(dollId);
+                afterVoting3.setMULTIPLE(multiple);
+                afterVoting3.setLOTTERY_NUM(guessKey);
                 afterVotingService.regAfterVoting(afterVoting3);
-            }else {
-                int a = afterVoting2.getAFTER_VOTING();
-                int new_af = a + afterVoting;
-                afterVoting2.setAFTER_VOTING(new_af);
+            } else {
+                //若有符合的，则直接修改期数
+                int a = afterVoting.getAFTER_VOTING();
+                int new_af = a + afterVotingNum;
+                afterVoting.setAFTER_VOTING(new_af);
                 //更新本房间已存在记录的追投期数
-                afterVotingService.updateAfterVoting_Num(afterVoting2);
-
+                afterVotingService.updateAfterVoting_Num(afterVoting);
             }
 
         }
+
         //增加消费记录
         Payment payment = new Payment();
         payment.setCOST_TYPE("1");

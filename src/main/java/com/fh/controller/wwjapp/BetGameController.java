@@ -140,12 +140,13 @@ public class BetGameController extends BaseController{
             @RequestParam("wager") int wager,
             @RequestParam("guessId") String guessId,
             @RequestParam("guessKey") String guessKey,
+            @RequestParam(value = "multiple",required = false,defaultValue = "1") Integer multiple,
             @RequestParam(value = "atrerVoting",required = false,defaultValue = "0") Integer afterVoting
             )
     {
 
         try {
-          return  betGameService.doBet(userId,dollId,wager,guessId,guessKey,afterVoting);
+          return  betGameService.doBet(userId,dollId,wager,guessId,guessKey,multiple,afterVoting);
         } catch (Exception e) {
             e.printStackTrace();
             return RespStatus.fail();
