@@ -198,23 +198,26 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
     @Override
     public RpcCommandResult endLottery(String roomId, String userName) {
         try {
-            //获取下爪毫秒最后一位作为开奖数字
-            String catch_time = DateUtil.getTimeSSS();
-            log.info(roomId + "--------下爪");
-            String reword_num = catch_time.substring(catch_time.length() - 1, catch_time.length());
+            //获取服务器时间戳最后一位毫秒作为开奖数字
+            String catch_time = String.valueOf(System.currentTimeMillis());
+            log.info(roomId+"--------下爪");
+            String reword_num = catch_time.substring(catch_time.length()-1,catch_time.length());
 
             PlayDetail playDetail = playDetailService.getPlayIdForPeople(roomId);//根据房间取得最新的游戏记录
+            if (!playDetail.getSTOP_FLAG().equals("0") || !playDetail.getPOST_STATE().equals("-1")) {
+                return null;
+            }
             String gold = playDetail.getGOLD();//获取下注金币，即竞猜用户扣除的金币数
             //设置游戏列表中的开奖数字
             playDetail.setSTOP_FLAG("-1");
             playDetail.setREWARD_NUM(reword_num);
             int a = playDetailService.updatePlayDetailStopFlag(playDetail);
-            if (a == 1) {
+            if (a==1){
                 log.info("机器下抓--------->获得开奖数存储成功");
             }
-            List<GuessDetailL> guessDetailLS = betGameService.getAllGuesser(playDetail.getGUESS_ID());
+            List<GuessDetailL> guessDetailLS =  betGameService.getAllGuesser(playDetail.getGUESS_ID());
             for (int i = 0; i < guessDetailLS.size(); i++) {
-                GuessDetailL guessDetailL = guessDetailLS.get(i);
+                GuessDetailL guessDetailL =  guessDetailLS.get(i);
                 guessDetailL.setGUESS_TYPE(reword_num);
                 guessDetailL.setSETTLEMENT_FLAG("Y");//此标签已不具有结算意义
                 betGameService.updateGuessDetailGuessType(guessDetailL);
@@ -228,9 +231,9 @@ public class LotteryWebServiceImpl implements LotteryWebRpcService {
             Pond pond = pondService.getPondByPlayId(p);//查询对应奖池信息
             pond.setGUESS_STATE(reword_num);
             pond.setPOND_FLAG("-1");//此标签代表禁止再次结算
-            pond.setALLPEOPLE(pond.getGUESS_N() + pond.getGUESS_Y());//获取竞猜总人数
-            int an = pond.getGUESS_N() * Integer.valueOf(gold);
-            int ay = pond.getGUESS_Y() * Integer.valueOf(gold);
+            pond.setALLPEOPLE(pond.getGUESS_N()+pond.getGUESS_Y());//获取竞猜总人数
+            int an = pond.getGUESS_N()*Integer.valueOf(gold);
+            int ay = pond.getGUESS_Y()*Integer.valueOf(gold);
             pond.setGOLD_N(an);//猜不中人下注总金额
             pond.setGOLD_Y(ay);//猜中的人下注总金额
             pond.setGUESS_STATE(reword_num);//本局抓中状态
