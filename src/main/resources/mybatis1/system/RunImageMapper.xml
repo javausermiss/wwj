@@ -14,7 +14,13 @@
 		RUNIMAGE_ID,
 		TIME,
 		HREF_ST,
-		CONTENT
+		CONTENT,
+		LIVESTREAM,
+		SERVER_NAME,
+		RTMP_URL,
+		H5_URL,
+		DEVICE_STATE,
+		STATE
 	</sql>
 	
 	<!-- 字段值 -->
@@ -24,7 +30,13 @@
 		#{RUNIMAGE_ID},
 		#{TIME},
 		#{HREF_ST},
-		#{CONTENT}
+		#{CONTENT},
+		#{LIVESTREAM},
+		#{SERVER_NAME},
+		#{RTMP_URL},
+		#{H5_URL},
+		#{DEVICE_STATE},
+		#{STATE}
 	</sql>
 	
 	<!-- 新增-->
@@ -54,7 +66,13 @@
 			IMAGE_URL = #{IMAGE_URL},
 			RUN_NAME = #{RUN_NAME},
 			HREF_ST = #{HREF_ST},
-		    CONTENT = #{CONTENT}
+		    CONTENT = #{CONTENT},
+		    LIVESTREAM = #{LIVESTREAM},
+		    SERVER_NAME = #{SERVER_NAME},
+		    RTMP_URL = #{RTMP_URL},
+		    H5_URL = #{H5_URL},
+		    DEVICE_STATE = #{DEVICE_STATE},
+			STATE = #{STATE}
 		where 
 		RUNIMAGE_ID = #{RUNIMAGE_ID}
 	</update>
@@ -109,7 +127,14 @@
 		RUN_NAME,
 		RUNIMAGE_ID,
 		TIME,
-		HREF_ST
+		HREF_ST,
+		CONTENT,
+		LIVESTREAM,
+		SERVER_NAME,
+		RTMP_URL,
+		H5_URL,
+		DEVICE_STATE,
+		STATE
 		FROM <include refid="tableName"/>
 	</select>
 
