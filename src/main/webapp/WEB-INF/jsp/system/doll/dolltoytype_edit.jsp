@@ -37,7 +37,8 @@
                                             <c:forEach items="${typeList}" var="var" varStatus="vs">
                                             <input type="checkbox" name="TOY_TYPE_ID" value="${var.ID}">${var.TOY_TYPE}<br>
                                             </c:forEach>
-                                        <input type="hidden" value="${pd.TOY_TYPE}" id="meidaHidden">
+                                            <input type="hidden" value="${pd.TOY_TYPE}" id="meidaHidden"/>
+                                        </td>
                                     </tr>
                                     <tr ></tr>
 
