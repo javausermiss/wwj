@@ -25,21 +25,26 @@
 
     <select id="getListAfterVoting" parameterType="String" resultType="com.fh.entity.system.AfterVoting">
         SELECT
-        ID,
-        USER_ID,
-        ROOM_ID,
-        AFTER_VOTING,
-        LOTTERY_NUM,
-        MULTIPLE
-        FROM
-        TB_QUIZZES_CHASE
-        WHERE
-        ROOM_ID = #{ROOM_ID}
-        AND
-        AFTER_VOTING != 0
-        GROUP BY
-        USER_ID
-
+	c.USER_ID,
+	c.ID,
+	c.AFTER_VOTING,
+	c.ROOM_ID,
+	c.LOTTERY_NUM,
+	c.MULTIPLE
+FROM
+	tb_quizzes_chase AS c
+WHERE
+	c.ID IN (
+		SELECT
+			min(ID)
+		FROM
+			TB_QUIZZES_CHASE
+		WHERE
+			ROOM_ID = #{ROOM_ID}
+		AND AFTER_VOTING != 0
+		GROUP BY
+			USER_ID
+	)
     </select>
 
     <update id="updateAfterVoting_Num" parameterType="com.fh.entity.system.AfterVoting">
