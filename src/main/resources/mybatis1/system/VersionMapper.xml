@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VersionMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		SYS_APP_VERSION
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		ID,
+		APP_ID,
+		APP_NAME,
+		VERSION_CODE,
+		VERSION_NAME,
+		USERAGENT,
+		DOWNLOAD_URL,
+		LOG,
+		UPDATE_INSTALL,
+		CREATER,
+		CREATE_DATE,
+		UPDATE_DATE,
+		MODIFIER
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{ID},	
+		#{APP_ID},	
+		#{APP_NAME},
+		#{VERSION_CODE},
+		#{VERSION_NAME},
+		#{USERAGENT},
+		#{DOWNLOAD_URL},
+		#{LOG},
+		#{UPDATE_INSTALL},
+		#{CREATER},
+		#{CREATE_DATE},
+		#{UPDATE_DATE},
+		#{MODIFIER}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			ID = #{ID}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			APP_ID = #{APP_ID},	
+			APP_NAME = #{APP_NAME},
+			VERSION_CODE = #{VERSION_CODE},
+			VERSION_NAME = #{VERSION_NAME},
+			USERAGENT = #{USERAGENT},
+			DOWNLOAD_URL = #{DOWNLOAD_URL},
+			LOG = #{LOG},
+			UPDATE_INSTALL = #{UPDATE_INSTALL},
+			CREATER = #{CREATER},
+			CREATE_DATE = #{CREATE_DATE},
+			UPDATE_DATE = #{UPDATE_DATE},
+			MODIFIER = #{MODIFIER}
+		where 
+		ID = #{ID}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			ID = #{ID}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+</mapper>
