@@ -170,8 +170,8 @@ public class BetGameService extends BaseController implements BetGameManager {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<GuessDetailL> getAllGuesser(String guessid) throws Exception {
-        return (List<GuessDetailL>) dao.findForList("GuessDetailMapper.getAllGuesser", guessid);
+    public List<GuessDetailL> getAllGuesser(GuessDetailL guessDetailL) throws Exception {
+        return (List<GuessDetailL>) dao.findForList("GuessDetailMapper.getAllGuesser", guessDetailL);
     }
 
     @Override

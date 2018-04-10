@@ -96,7 +96,7 @@ public interface BetGameManager {
      * @return
      * @throws Exception
      */
-    public List<GuessDetailL> getAllGuesser(String guessid) throws Exception;
+    public List<GuessDetailL> getAllGuesser(GuessDetailL guessDetailL) throws Exception;
 
     /**
      * 更新竞猜结果
