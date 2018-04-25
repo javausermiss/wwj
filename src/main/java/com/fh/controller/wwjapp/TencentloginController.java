@@ -88,7 +88,6 @@ public class TencentloginController extends BaseController {
      *
      * @param userId
      * @param token
-     * @param imageUrl
      * @param nickname
      * @return
      */
@@ -122,9 +121,13 @@ public class TencentloginController extends BaseController {
                 if (sign.equals(token)) {
                     code = "SUCCESS";
                 }
-            } else {
+            }else if (Const.SDKMenuType.SSDK.getValue().equals(ctype)){
+                code = TokenVerify.verifyForScan(token);//二维码验证
+
+            }else {
                 code = TokenVerify.verifyForALL(token); //官方验证
             }
+
             if (!"SUCCESS".equals(code)) {
                 return RespStatus.fail("token不合法");
             }
@@ -139,21 +142,36 @@ public class TencentloginController extends BaseController {
                 } else {
                     newFace = FaceImageUtil.downloadImage(imageUrl);
                 }
+                //扫码用户注册赠送10金币
+                if (Const.SDKMenuType.SSDK.getValue().equals(ctype)){
+                    appUser.setNICKNAME(nickname);
+                    appUser.setIMAGE_URL(newFace);
+                    appUser.setUSER_ID(userId);
+                    appUser.setBALANCE("10");
+                    appuserService.regwx(appUser);
+                    Payment payment = new Payment();
+                    payment.setREMARK(Const.PlayMentCostType.cost_type16.getName());
+                    payment.setGOLD("+10");
+                    payment.setCOST_TYPE(Const.PlayMentCostType.cost_type16.getValue());
+                    payment.setUSERID(userId);
+                    paymentService.reg(payment);
+                }else {
+                   //手机端注册用户赠送3金币
+                    appUser.setNICKNAME(nickname);
+                    appUser.setIMAGE_URL(newFace);
+                    appUser.setUSER_ID(userId);
+                    appUser.setBALANCE("3");
+                    appuserService.regwx(appUser);
 
-                //未注册用户 先注册用户
-                appUser.setNICKNAME(nickname);
-                appUser.setIMAGE_URL(newFace);
-                appUser.setUSER_ID(userId);
-                appuserService.regwx(appUser);
-
-                logger.info("tencentLogin--> userId=" + userId + ",首次登陆，注册赠送金币...");
-                //增加赠送金币明细
-                Payment payment = new Payment();
-                payment.setREMARK(Const.PlayMentCostType.cost_type14.getName());
-                payment.setGOLD("+3");
-                payment.setCOST_TYPE(Const.PlayMentCostType.cost_type14.getValue());
-                payment.setUSERID(userId);
-                paymentService.reg(payment);
+                    logger.info("tencentLogin--> userId=" + userId + ",首次登陆，注册赠送金币...");
+                    //增加赠送金币明细
+                    Payment payment = new Payment();
+                    payment.setREMARK(Const.PlayMentCostType.cost_type14.getName());
+                    payment.setGOLD("+3");
+                    payment.setCOST_TYPE(Const.PlayMentCostType.cost_type14.getValue());
+                    payment.setUSERID(userId);
+                    paymentService.reg(payment);
+                }
             } else {
                 if (imageUrl == null || imageUrl.equals("")) {
                     newFace = PropertiesUtils.getCurrProperty("user.default.header.url"); //默认头像

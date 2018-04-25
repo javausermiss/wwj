@@ -118,6 +118,40 @@ public class TokenVerify {
 
     }
 
+    public static String verifyForScan(String acctoken) {
+
+        String ckey = PropertiesUtils.getCurrProperty("api.sancode.sdk.ckey");
+        String cid =  PropertiesUtils.getCurrProperty("api.sancode,sdk.cid");
+
+        try {
+            CloseableHttpClient httpClient = HttpClients.createDefault();
+            String code = null;
+            String timestamp = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
+            String signatrue = md5(TokenVerify.getSignature(timestamp, ckey, cid, acctoken));
+            //HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost(PropertiesUtils.getCurrProperty("api.app.sdk.url") + "cid=" + cid +
+                    "&timestamp=" + timestamp + "&access_token=" + acctoken + "&signatrue=" + signatrue);
+            httpPost.addHeader("Content-type", "application/x-www-form-urlencoded");
+            CloseableHttpResponse response = httpClient.execute(httpPost);
+            if (response.getStatusLine().getStatusCode() == 200) {
+                //读返回数据
+                String conResult = EntityUtils.toString(response.getEntity());
+                JSONObject object = new JSONObject();
+                object = object.fromObject(conResult);//将字符串转化为json对象
+                code = String.valueOf(object.get("msg"));
+            } else {
+                return RespStatus.fail().toString();
+            }
+            response.close();
+            httpClient.close();
+            return code;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
     public static String getSignature(String timestamp, String secret, String cid, String access_token) throws IOException {
         // 先将参数以其参数名的字典序升序进行排序
         HashMap<String, String> h = new HashMap<>();

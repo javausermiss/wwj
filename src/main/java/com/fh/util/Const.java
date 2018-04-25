@@ -145,6 +145,7 @@ public class Const {
 		cost_type13("推广收入","13"),
 		cost_type14("注册赠送","14"),
 		cost_type15("竞猜追投","15"),
+		cost_type16("扫码注册","16"),
 		cost_type20("输入加盟码","20");
 		
 		private  String name;
@@ -191,7 +192,9 @@ public class Const {
 		
 		YSDK("YSDK"),
 		ASDK("ASDK"),
+		SSDK("SSDK"),
 		W8SDK("W8SDK");
+
 		
 		private String value;
 		

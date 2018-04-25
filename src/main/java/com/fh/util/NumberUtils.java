@@ -174,6 +174,6 @@ public class NumberUtils {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(RMBCentToYuan("1"));
+		System.out.println(RMBYuanToCent("1.5"));
 	}
 }

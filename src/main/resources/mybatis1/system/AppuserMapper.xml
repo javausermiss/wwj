@@ -466,13 +466,15 @@
         USER_ID,
         CREATETIME,
         NICKNAME,
-        IMAGE_URL
+        IMAGE_URL,
+        BALANCE
 
         ) values (
         #{USER_ID},
         now(),
         #{NICKNAME},
-        #{IMAGE_URL}
+        #{IMAGE_URL},
+        #{BALANCE}
         )
     </insert>
 
