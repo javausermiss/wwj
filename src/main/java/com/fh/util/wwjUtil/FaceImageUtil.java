@@ -30,12 +30,16 @@ public class FaceImageUtil {
         	//请求远程图片
         	httpget.setURI(URI.create(url));
             response = httpClient.execute(httpget);
-            
-            //获取文件流
-            HttpEntity entity = response.getEntity();
-            if (entity != null) {
-                byte[] byteArray = EntityUtils.toByteArray(entity);
-                faceName=FastDFSClient.uploadFile(byteArray, "default.png"); //上传到文件服务器
+            int code=  response.getStatusLine().getStatusCode();
+            if (code == 200){
+                //获取文件流
+                HttpEntity entity = response.getEntity();
+                if (entity != null) {
+                    byte[] byteArray = EntityUtils.toByteArray(entity);
+                    faceName = FastDFSClient.uploadFile(byteArray, "default.png"); //上传到文件服务器
+                }
+            }else {
+                faceName = null;
             }
         }catch(Exception ex){
         	ex.printStackTrace();
@@ -46,3 +50,6 @@ public class FaceImageUtil {
         return faceName;
     }
 }
+
+
+

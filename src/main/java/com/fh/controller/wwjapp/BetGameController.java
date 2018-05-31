@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -138,15 +139,21 @@ public class BetGameController extends BaseController{
             @RequestParam("userId") String userId,
             @RequestParam("dollId") String dollId,
             @RequestParam("wager") int wager,
-            @RequestParam("guessId") String guessId,
+            @RequestParam(value = "guessId",required = false,defaultValue = "null") String guessId,
             @RequestParam("guessKey") String guessKey,
             @RequestParam(value = "multiple",required = false,defaultValue = "1") Integer multiple,
-            @RequestParam(value = "afterVoting",required = false,defaultValue = "0") Integer afterVoting
+            @RequestParam(value = "afterVoting",required = false,defaultValue = "0") Integer afterVoting,
+            HttpServletRequest httpServletRequest
             )
     {
 
         try {
-          return  betGameService.doBet(userId,dollId,wager,guessId,guessKey,multiple,afterVoting);
+            //是否开始游戏标签，在游戏中true 不在游戏中false，此处兼容旧版本APP
+            String flag = httpServletRequest.getParameter("flag");
+            if (flag==null){
+                flag = "true";
+            }
+          return  betGameService.doBet(userId,dollId,wager,guessId,guessKey,multiple,afterVoting,flag);
         } catch (Exception e) {
             e.printStackTrace();
             return RespStatus.fail();

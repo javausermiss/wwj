@@ -141,8 +141,8 @@ public class DollService implements DollManager {
 	 * @throws Exception
 	 */
 	@Override
-	public int regDollBySN(String sn) throws Exception {
-		return (int)dao.save("DollMapper.regDollBySN",new Doll("room_"+MyUUID.getUUID(),sn));
+	public int regDollBySN(Doll doll) throws Exception {
+		return (int)dao.save("DollMapper.regDollBySN",doll);
 	}
 
 	/**

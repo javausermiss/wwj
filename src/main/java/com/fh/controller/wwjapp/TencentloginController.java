@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import com.fh.entity.system.Payment;
+import com.sun.istack.internal.NotNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -108,6 +109,7 @@ public class TencentloginController extends BaseController {
             String code = "fail";
             if (Const.SDKMenuType.YSDK.getValue().equals(ctype) || (ctype == null || "".equals(ctype))) {
                 code = TokenVerify.verify(token); //应用宝SDK验证
+                logger.info("应用宝SDK验证code---------->"+code);
             } else if (Const.SDKMenuType.W8SDK.getValue().equals(ctype)) {
 
                 //token 验证
@@ -140,7 +142,11 @@ public class TencentloginController extends BaseController {
                 if (imageUrl == null || imageUrl.equals("")) {
                     newFace = PropertiesUtils.getCurrProperty("user.default.header.url"); //默认头像
                 } else {
+                    if (newFace==null){
+                        newFace = PropertiesUtils.getCurrProperty("user.default.header.url");
+                    }
                     newFace = FaceImageUtil.downloadImage(imageUrl);
+
                 }
                 //扫码用户注册赠送10金币
                 if (Const.SDKMenuType.SSDK.getValue().equals(ctype)){
@@ -225,7 +231,8 @@ public class TencentloginController extends BaseController {
             return RespStatus.successs().element("data", map);
         } catch (Exception e) {
             e.printStackTrace();
-            return RespStatus.fail();
+            logger.error(e.getMessage(),e);
+            return RespStatus.fail("程序异常");
         }
 
     }
@@ -252,6 +259,7 @@ public class TencentloginController extends BaseController {
             String code = "";
             if (Const.SDKMenuType.YSDK.getValue().equals(ctype) || (ctype == null || "".equals(ctype))) {
                 code = TokenVerify.verify(accessToken); //应用宝SDK验证
+                logger.info("应用宝SDK验证code---------->"+code);
             } else if (Const.SDKMenuType.W8SDK.getValue().equals(ctype)) {
                 //token 验证
                 SortedMap<String, String> paramsMap = new TreeMap<String, String>();

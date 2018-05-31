@@ -60,6 +60,10 @@ public class DollRegUtil {
         System.out.println(newSn);
         System.out.println(s2);
         System.out.println(s3);
+        //B0:A3:51:2E:D8:6C
+        String c  =  DollRegUtil.getCode("B0:A3:51:2E:D8:6C");
+        System.out.print(c);
+
 
 
     }

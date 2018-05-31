@@ -185,6 +185,11 @@ public class AppDollController extends BaseController {
 
     }
 
+    /**
+     * 获取推币机网关信息
+     */
+
+
 
 }
 

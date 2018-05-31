@@ -22,7 +22,15 @@ public class DollVo {
     private String prob;//娃娃机概率
     private String dollType; //娃娃显示渠道类型
 	private String reward;//奖金
+	private String deviceType;//网关类型
 
+
+	public String getDeviceType() {
+		return deviceType;
+	}
+	public void setDeviceType(String deviceType) {
+		this.deviceType = deviceType;
+	}
 	public String getReward() {
 		return reward;
 	}

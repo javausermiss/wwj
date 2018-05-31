@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -27,7 +28,8 @@ public class DollLoginController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public JSONObject dollLogin(@RequestParam("sn") String sn, @RequestParam("code") String code) {
+    public JSONObject dollLogin(@RequestParam("sn") String sn, @RequestParam("code") String code ,
+                                @RequestParam(value = "deviceType" ,required = false ,defaultValue = "1") String deviceType) {
 
         try {
             Doll doll = dollService.getDollBySN(sn);
@@ -36,7 +38,8 @@ public class DollLoginController {
                 return RespStatus.fail("fail");
             }
             if (doll == null) {
-                int a = dollService.regDollBySN(sn);
+                Doll doll1 =  new Doll("room_"+MyUUID.getUUID(),sn,deviceType);
+                int a = dollService.regDollBySN(doll1);
                 if (a != 1) {
                     return RespStatus.fail("fail");
                 }

@@ -1871,7 +1871,7 @@ public class RedisUtil {
      *
      * @param jedis
      */
-    public static void returnResource(Jedis jedis) {
+    public static void  returnResource(Jedis jedis) {
         jedis.close();
     }
 

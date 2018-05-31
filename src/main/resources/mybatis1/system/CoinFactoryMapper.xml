@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CoinFactoryMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		SYS_APP_COINFACTORY
+	</sql>
+
+	<resultMap id="coinFactoryResultMap" type="CoinFactoryVo">
+		<result column="COINFACTORY_ID" property="coinfactoryId"/>
+		<result column="COIN_SN" property="coinSn"/>
+		<result column="COIN_STATE" property="coinState"/>
+		<result column="ROOM_ID" property="roomId"/>
+		<result column="COIN_GOLD" property="coinGold"/>
+		<result column="IMAGE_URL" property="imageUrl"/>
+		<result column="CONVERSIONGOLD" property="conversionGold"/>
+		<result column="CAMERA_NAME_01" property="cameraName01"/>
+		<result column="CAMERA_NAME_02" property="cameraName02"/>
+		<result column="RES_01" property="res01"/>
+		<result column="RES_02" property="res02"/>
+		<collection property="cameras" column="COINFACTORY_ID" ofType="com.fh.vo.system.CameraVo">
+			<id property="cameraId" column="CAMERA_ID"/>
+			<result property="rtmpUrl" column="RTMP_URL"/>
+			<result property="h5Url" column="H5_URL"/>
+			<result property="serverName" column="SERVER_NAME"/>
+			<result property="livestream" column="LIVESTREAM"/>
+			<result property="cameraType" column="CAMERA_TYPE"/>
+			<result property="deviceState" column="DEVICE_STATE"/>
+		</collection>
+	</resultMap>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		COIN_SN,	
+		COIN_NAME,	
+		COIN_STATE,	
+		ROOM_ID,	
+		COIN_GOLD,	
+		IMAGE_URL,	
+		CONVERSIONGOLD,	
+		CAMERA_NAME_01,
+		CAMERA_NAME_02,	
+		RES_01,	
+		RES_02,	
+		COINFACTORY_ID
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{COIN_SN},	
+		#{COIN_NAME},	
+		#{COIN_STATE},	
+		#{ROOM_ID},	
+		#{COIN_GOLD},	
+		#{IMAGE_URL},	
+		#{CONVERSIONGOLD},	
+		#{CAMERA_NAME_01},	
+		#{CAMERA_NAME_02},	
+		#{RES_01},	
+		#{RES_02},	
+		#{COINFACTORY_ID}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			COINFACTORY_ID = #{COINFACTORY_ID}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			COIN_SN = #{COIN_SN},
+			COIN_NAME = #{COIN_NAME},
+			COIN_STATE = #{COIN_STATE},
+			ROOM_ID = #{ROOM_ID},
+			COIN_GOLD = #{COIN_GOLD},
+			IMAGE_URL = #{IMAGE_URL},
+			CONVERSIONGOLD = #{CONVERSIONGOLD},
+			CAMERA_NAME_01 = #{CAMERA_NAME_01},
+			CAMERA_NAME_02 = #{CAMERA_NAME_02},
+			RES_01 = #{RES_01},
+			RES_02 = #{RES_02}
+		where 
+		COINFACTORY_ID = #{COINFACTORY_ID}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			COINFACTORY_ID = #{COINFACTORY_ID}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+				<!--	根据需求自己加检索条件
+					字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or 
+					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+				-->
+				)
+		</if>
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			COINFACTORY_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+
+	<insert id="insert" parameterType="CoinFactoryVo">
+		insert into <include refid="tableName"/>
+		(COINFACTORY_ID, COIN_SN)values (#{coinfactoryId},#{coinSn})
+
+	</insert>
+
+	<select id="getCoinFactoryBySn" parameterType="String" resultMap="coinFactoryResultMap">
+		select <include refid="Field"/> from <include refid="tableName"/> where COIN_SN = #{COIN_SN}
+	</select>
+
+
+	
+
+</mapper>

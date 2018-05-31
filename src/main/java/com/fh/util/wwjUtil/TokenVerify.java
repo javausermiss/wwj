@@ -88,7 +88,7 @@ public class TokenVerify {
     	
          String ckey = PropertiesUtils.getCurrProperty("api.app.sdk.ckey");
          String cid =  PropertiesUtils.getCurrProperty("api.app.skd.cid");
-
+         int a = 0 ;
         try {
             CloseableHttpClient httpClient = HttpClients.createDefault();
             String code = null;
@@ -99,21 +99,25 @@ public class TokenVerify {
                     "&timestamp=" + timestamp + "&access_token=" + acctoken + "&signatrue=" + signatrue);
             httpPost.addHeader("Content-type", "application/x-www-form-urlencoded");
             CloseableHttpResponse response = httpClient.execute(httpPost);
-            if (response.getStatusLine().getStatusCode() == 200) {
+            a = response.getStatusLine().getStatusCode();
+            String conResult = EntityUtils.toString(response.getEntity());
+            logger.info("response.getEntity()------->"+conResult);
+            JSONObject object = JSONObject.fromObject(conResult);//将字符串转化为json对象
+            code = String.valueOf(object.get("msg"));
+         /*   if ( a == 200) {
                 //读返回数据
-                String conResult = EntityUtils.toString(response.getEntity());
-                JSONObject object = new JSONObject();
-                object = object.fromObject(conResult);//将字符串转化为json对象
-                code = String.valueOf(object.get("msg"));
+
             } else {
-                return RespStatus.fail().toString();
-            }
+                logger.info("请求失败"+a);
+                return String.valueOf(a);
+            }*/
             response.close();
             httpClient.close();
             return code;
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            logger.error(e.getMessage(),e);
+            return String.valueOf(a);
         }
 
     }

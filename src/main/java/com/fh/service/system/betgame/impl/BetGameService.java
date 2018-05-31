@@ -191,21 +191,24 @@ public class BetGameService extends BaseController implements BetGameManager {
      * @return
      * @throws Exception
      */
+    @Override
     public List<PageData> getGuessDetailTop10ByUserId(String userId) throws Exception {
         return (List<PageData>) dao.findForList("GuessDetailMapper.getGuessDetailTop10ByUserId", userId);
     }
 
     @Override
-    public JSONObject doBet(String userId, String dollId, int wager, String guessId, String guessKey,Integer multiple, Integer afterVotingNum) throws Exception {
-
-        PlayDetail p1 = new PlayDetail();
-        p1.setDOLLID(dollId);
-        p1.setGUESS_ID(guessId);
-        PlayDetail p = playDetailService.getPlayDetailByGuessID(p1);
-        String s = p.getSTOP_FLAG();
-        //默认0可以投注，-1 机器已经下抓，禁止投注
-        if (!s.equals("0")) {
-            return RespStatus.fail("禁止投注！");
+    public JSONObject doBet(String userId, String dollId, int wager, String guessId, String guessKey,Integer multiple, Integer afterVotingNum,String flag) throws Exception {
+        String f = "false";
+        if (!flag.equals(f)){
+            PlayDetail p1 = new PlayDetail();
+            p1.setDOLLID(dollId);
+            p1.setGUESS_ID(guessId);
+            PlayDetail p = playDetailService.getPlayDetailByGuessID(p1);
+            String s = p.getSTOP_FLAG();
+            //默认0可以投注，-1 机器已经下抓，禁止投注
+            if (!s.equals("0")) {
+                return RespStatus.fail("禁止投注！");
+            }
         }
         AppUser appUser = appuserService.getUserByID(userId);
         if (appUser == null) {
@@ -213,14 +216,25 @@ public class BetGameService extends BaseController implements BetGameManager {
         }
         //总消费金额的判断
         String balance = appUser.getBALANCE();
-        if (Integer.parseInt(balance) > wager * (1+afterVotingNum)) {
-            int n = Integer.parseInt(balance) - (wager * (1+afterVotingNum));
-            appUser.setBALANCE(String.valueOf(n));
-            appuserService.updateAppUserBalanceById(appUser);
-        } else {
-            return RespStatus.fail("余额不足无法竞猜");
+        if (f.equals(flag)){
+            //不在游戏中
+            if (Integer.parseInt(balance) > wager * (afterVotingNum)) {
+                int n = Integer.parseInt(balance) - (wager * (afterVotingNum));
+                appUser.setBALANCE(String.valueOf(n));
+                appuserService.updateAppUserBalanceById(appUser);
+            } else {
+                return RespStatus.fail("余额不足无法竞猜");
+            }
+        }else {
+            //游戏中的竞猜，此时可能包括追投
+            if (Integer.parseInt(balance) > wager * (1+afterVotingNum)) {
+                int n = Integer.parseInt(balance) - (wager * (1+afterVotingNum));
+                appUser.setBALANCE(String.valueOf(n));
+                appuserService.updateAppUserBalanceById(appUser);
+            } else {
+                return RespStatus.fail("余额不足无法竞猜");
+            }
         }
-
 
         int dollgold = dollService.getDollByID(dollId).getDOLL_GOLD();
         //增加该用户追投信息
@@ -260,7 +274,12 @@ public class BetGameService extends BaseController implements BetGameManager {
             }
 
         }
-
+        //房间处于空闲状态，用户可进行预投注
+        if (flag.equals(f)){
+            Map<String, Object> map = new HashMap<>();
+            map.put("appUser", getAppUserInfo(appUser.getUSER_ID()));
+            return RespStatus.successs().element("data", map);
+        }
         //增加消费记录
         Payment payment = new Payment();
         payment.setCOST_TYPE("1");

@@ -16,8 +16,8 @@
 		<result column="CAMERA_NAME_01" property="cameraName01"/>
 		<result column="CAMERA_NAME_02" property="cameraName02"/>
         <result column="DOLL_TAG" property="dollTag"/>
-		<!-- <result column="TOY_ID" property="toy_id"/> -->
-		<result column="DOLL_TYPE" property="DOLL_TYPE"/>	
+		<result column="TOY_ID" property="toy_id"/>
+		<result column="DEVICE_TYPE" property="deviceType"/>
 		<collection property="cameras" column="DOLL_ID" ofType="com.fh.vo.system.CameraVo">
 	        <id property="cameraId" column="CAMERA_ID"/>
 	        <result property="rtmpUrl" column="RTMP_URL"/>
@@ -53,7 +53,8 @@
 		TOY_ID,
 		RELEASE_STATUS,
 		DOLL_TAG,
-		DOLL_TYPE
+		DOLL_TYPE,
+		DEVICE_TYPE
 	</sql>
 
     <!-- 字段值 -->
@@ -71,7 +72,8 @@
 		#{TOY_ID},
 		#{RELEASE_STATUS},
 		#{DOLL_TAG},
-		#{DOLL_TYPE}
+		#{DOLL_TYPE},
+		#{DEVICE_TYPE}
 	</sql>
 
     <!-- 新增-->
@@ -239,12 +241,15 @@
 	        DOLL_ID,
 	        DOLL_SN,
 	        RELEASE_STATUS,
-	        DOLL_TYPE
+	        DOLL_TYPE,
+            DEVICE_TYPE
+
         ) values (
 	        #{DOLL_ID},
 	        #{DOLL_SN},
 	        '0',
-	        'N'
+	        'N',
+            #{DEVICE_TYPE}
         )
 
     </insert>
@@ -313,6 +318,7 @@
 			d.DOLL_GOLD,
 			d.DOLL_URL,
 			d.DOLL_CONVERSIONGOLD,
+            d.DEVICE_TYPE,
 			c.CAMERA_ID,
 			c.CAMERA_TYPE,
 			c.RTMP_URL,
