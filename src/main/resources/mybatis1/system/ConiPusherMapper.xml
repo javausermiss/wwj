@@ -127,6 +127,7 @@
 		into
 		<include refid="tableName"/>
 		(
+		COINPUSHER_ID,
 		ROOMID,
 		USER_ID,
 		COSTGOLD,
@@ -134,20 +135,71 @@
 		)
 		values
 		(
+		#{id},
 		#{roomId},
 		#{userId},
 		#{costGold},
 		now()
 		)
 	</insert>
+	
+	<select id="getLatestRecord" parameterType="CoinPusherVo" resultMap="CoinPusherResultMap">
+			SELECT
+		C.COINPUSHER_ID,
+		C.ROOMID,
+		C.USER_ID,
+		C.COSTGOLD,
+		C.RETURNGOLD,
+		C.FINISH_FLAG,
+		C.CREATE_DATE,
+		C.UPDATE_DATE
+	FROM
+		tb_coinpusher_play_detail AS C
+	WHERE
+		C.ROOMID = #{roomId} AND
+		C.USER_ID = #{userId} AND
+		C.FINISH_FLAG = 'N'
+	ORDER BY
+		C.CREATE_DATE DESC
+	LIMIT 0,
+	 1
+	</select>
 
-	<update id="updateFlag" parameterType="CoinPusherVo">
+	<update id="updateOutCoin" parameterType="CoinPusherVo">
 		update
 		<include refid="tableName"/>
 		set
 		RETURNGOLD = #{returnGold},
 		FINISH_FLAG = #{finishFlag}
 		where
-		COINPUSHER_ID = #{COINPUSHER_ID}
+		COINPUSHER_ID = #{id}
 	</update>
+
+	<select id="getLatestRecordForId" parameterType="String" resultMap="CoinPusherResultMap">
+		SELECT
+		C.COINPUSHER_ID
+	FROM
+		tb_coinpusher_play_detail AS C
+	WHERE
+		C.ROOMID = #{roomId}
+	ORDER BY
+		C.CREATE_DATE DESC
+	LIMIT 0,
+	 1
+	</select>
+
+	<select id="getCoinPusherRecondList" parameterType="String" resultMap="CoinPusherResultMap">
+			SELECT
+		tb_coinpusher_play_detail.COINPUSHER_ID,
+		tb_coinpusher_play_detail.COSTGOLD,
+		tb_coinpusher_play_detail.RETURNGOLD
+	FROM
+		tb_coinpusher_play_detail
+	WHERE
+		tb_coinpusher_play_detail.USER_ID = #{userId}
+	ORDER BY
+		tb_coinpusher_play_detail.CREATE_DATE DESC
+	LIMIT 0,
+	 10
+	</select>
 </mapper>

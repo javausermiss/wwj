@@ -411,3 +411,35 @@ CREATE TABLE `TB_QUIZZES_CHASE` (
 PRIMARY KEY (`ID`)
 )
 ;
+
+/* 2018 05 11*/
+CREATE TABLE `NewTable` (
+`COINFACTORY_ID`  varchar(50) NOT NULL ,
+`COIN_SN`  varchar(255) NULL ,
+`COIN_NAME`  varchar(255) NULL ,
+`COIN_STATE`  varchar(255) NULL ,
+`ROOM_ID`  varchar(20) NULL ,
+`COIN_GOLD`  varchar(255) NULL ,
+`IMAGE_URL`  varchar(255) NULL ,
+`CONVERSIONGOLD`  varchar(255) NULL ,
+`CAMERA_NAME_01`  varchar(255) NULL ,
+`CAMERA_NAME_02`  varchar(255) NULL ,
+`RES_01`  varchar(255) NULL ,
+`RES_02`  varchar(255) NULL ,
+PRIMARY KEY (`COINFACTORY_ID`)
+)
+;
+
+/* 2018 05 31*/
+CREATE TABLE `NewTable` (
+`COINPUSHER_ID`  bigint(20) NOT NULL AUTO_INCREMENT ,
+`ROOMID`  varchar(32) NULL ,
+`USER_ID`  varchar(32) NULL ,
+`COSTGOLD`  varchar(32) NULL ,
+`RETURNGOLD`  varchar(32) NULL DEFAULT '0' ,
+`FINISH_FLAG`  varchar(4) NULL DEFAULT 'N' ,
+`CREATE_DATE`  varchar(32) NULL ,
+`UPDATE_DATE`  timestamp NULL ON UPDATE CURRENT_TIMESTAMP ,
+PRIMARY KEY (`COINPUSHER_ID`)
+)
+;

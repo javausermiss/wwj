@@ -1,4 +1,4 @@
-package com.fh.service.system.conipusher;
+package com.fh.service.system.coinpusher;
 
 import java.util.List;
 import com.fh.entity.Page;
@@ -62,6 +62,38 @@ public interface CoinPusherManager {
 	 * @throws Exception
 	 */
 	public int reg(CoinPusher coinPusher)throws Exception;
+
+	/**
+	 * 查询最新的一期游戏记录
+	 * @param coinPusher
+	 * @return
+	 * @throws Exception
+	 */
+	public CoinPusher getLatestRecord(CoinPusher coinPusher)throws Exception;
+
+	/**
+	 * 修改出币数
+	 * @param coinPusher
+	 * @return
+	 * @throws Exception
+	 */
+	public int updateOutCoin(CoinPusher coinPusher)throws Exception;
+
+	/**
+	 * 查询最新的一条已完成的记录
+	 * @param roomId
+	 * @return
+	 * @throws Exception
+	 */
+	public CoinPusher getLatestRecordForId(String roomId)throws Exception;
+
+	/**
+	 * 查询出该用户的投币记录
+	 * @param userId
+	 * @return
+	 * @throws Exception
+	 */
+	public List<CoinPusher> getCoinPusherRecondList(String userId)throws Exception;
 	
 }
 

@@ -6,15 +6,18 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.fh.entity.system.*;
+import com.fh.service.system.coinpusher.CoinPusherManager;
+import com.fh.service.system.payment.PaymentManager;
+import com.fh.util.Const;
+import com.iot.game.pooh.server.rpc.interfaces.bean.RpcReturnCode;
+import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fh.entity.system.AppUser;
-import com.fh.entity.system.PlayBack;
-import com.fh.entity.system.PlayDetail;
 import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.betgame.BetGameManager;
 import com.fh.service.system.doll.DollManager;
@@ -28,6 +31,7 @@ import net.sf.json.JSONObject;
 /**
  * 视频回放记录存储&游戏记录&竞猜结算
  */
+@Log4j
 @Controller
 @RequestMapping(value = "/play")
 public class PlayBackController {
@@ -44,6 +48,8 @@ public class PlayBackController {
     private BetGameManager betGameService;
     @Resource(name = "playDetailService")
     private PlayDetailManage playDetailService;
+    @Resource(name = "coinpusherService")
+    private CoinPusherManager coinpusherService;
 
     /**
      * 增加视频记录

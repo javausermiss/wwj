@@ -1,4 +1,4 @@
-package com.fh.service.system.conipusher.impl;
+package com.fh.service.system.coinpusher.impl;
 
 import java.util.List;
 import javax.annotation.Resource;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
-import com.fh.service.system.conipusher.CoinPusherManager;
+import com.fh.service.system.coinpusher.CoinPusherManager;
 
 /** 
  * 说明： 推币机游戏记录
@@ -89,7 +89,27 @@ public class CoinPusherService implements CoinPusherManager {
 
 	@Override
 	public int reg(CoinPusher coinPusher)throws Exception {
-		return (int)dao.save("CoinPusherMapper.deleteAll",coinPusher);
+		return (int)dao.save("CoinPusherMapper.reg",coinPusher);
+	}
+
+	@Override
+	public CoinPusher getLatestRecord(CoinPusher coinPusher) throws Exception{
+		return (CoinPusher) dao.findForObject("CoinPusherMapper.getLatestRecord",coinPusher);
+	}
+
+	@Override
+	public int updateOutCoin(CoinPusher coinPusher) throws Exception{
+		return (int)dao.update("CoinPusherMapper.updateOutCoin",coinPusher);
+	}
+
+	@Override
+	public CoinPusher getLatestRecordForId(String roomId)throws Exception {
+		return (CoinPusher) dao.findForObject("CoinPusherMapper.getLatestRecordForId",roomId);
+	}
+
+	@Override
+	public List<CoinPusher> getCoinPusherRecondList(String userId)throws Exception {
+		return (List<CoinPusher>) dao.findForList("CoinPusherMapper.getCoinPusherRecondList",userId);
 	}
 }
 
